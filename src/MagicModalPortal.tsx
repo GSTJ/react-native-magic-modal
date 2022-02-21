@@ -1,0 +1,79 @@
+import React, {
+  useState,
+  useImperativeHandle,
+  useCallback,
+  useRef,
+} from 'react';
+import { ANIMATION_DURATION_IN_MS } from './constants/animations';
+import { Dimensions, ViewProps } from 'react-native';
+import { styles } from './MagicModalPortal.styles';
+import ModalContainer, { ModalProps } from 'react-native-modal';
+import { modalAnimationTimeout } from './utils/modalAnimationTimeout';
+import {
+  type ModalChildren,
+  type IModal,
+  magicModalRef,
+} from './utils/magicModalHandler';
+
+const { width, height } = Dimensions.get('screen');
+
+type GenericFunction = (props: any) => any;
+
+export enum MagicModalHideTypes {
+  BACKDROP_PRESSED = 'BACKDROP_PRESSED',
+  SWIPE_COMPLETED = 'SWIPE_COMPLETED',
+  BACK_BUTTON_PRESSED = 'BACK_BUTTON_PRESSED',
+  MODAL_OVERRIDE = 'MODAL_OVERRIDE',
+}
+
+export const MagicModalPortal: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [config, setConfig] = useState<ViewProps>({});
+  const [modalContent, setModalContent] = useState<ModalChildren>(() => <></>);
+
+  const onHideRef = useRef<GenericFunction>(() => {});
+
+  const hide = useCallback<IModal['hide']>(async (props) => {
+    setIsVisible(false);
+    await modalAnimationTimeout();
+    onHideRef.current(props);
+  }, []);
+
+  useImperativeHandle(magicModalRef, () => ({
+    hide,
+    show: async (
+      newComponent: ModalChildren,
+      newConfig: Partial<ModalProps> = {}
+    ) => {
+      if (isVisible) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
+
+      setModalContent(newComponent);
+      setConfig(newConfig);
+      setIsVisible(true);
+
+      return new Promise((resolve) => {
+        onHideRef.current = resolve;
+      });
+    },
+  }));
+
+  return (
+    <ModalContainer
+      backdropTransitionOutTiming={0}
+      avoidKeyboard={true}
+      swipeDirection={'down'}
+      deviceHeight={height}
+      deviceWidth={width}
+      animationOutTiming={ANIMATION_DURATION_IN_MS}
+      statusBarTranslucent={true}
+      onBackdropPress={() => hide(MagicModalHideTypes.BACKDROP_PRESSED)}
+      onSwipeComplete={() => hide(MagicModalHideTypes.SWIPE_COMPLETED)}
+      onBackButtonPress={() => hide(MagicModalHideTypes.BACK_BUTTON_PRESSED)}
+      isVisible={isVisible}
+      {...config}
+      style={[styles.container, config?.style]}
+    >
+      {modalContent}
+    </ModalContainer>
+  );
+};
