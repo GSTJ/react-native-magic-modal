@@ -1,4 +1,8 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "paths": {
+      "react-native-magic-modal": ["../src/index"]
+    }
+  },
   "extends": "expo/tsconfig.base"
 }
