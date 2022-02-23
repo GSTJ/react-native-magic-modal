@@ -1,4 +1,4 @@
-# react-native-magic-modal 🦄
+# 🦄 react-native-magic-modal
 
 A modal component that can be used imperatively from anywhere!
 
@@ -6,13 +6,13 @@ A modal component that can be used imperatively from anywhere!
 | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | <img src="https://user-images.githubusercontent.com/50031755/155215573-df8f20fb-9b3f-4ce6-9d48-2afa8cb41daa.gif" height=600/> | <img src="https://user-images.githubusercontent.com/50031755/155215547-d2b45f33-264e-4c90-8ff1-e33b72e2c3b1.gif" height=600/> |
 
-## Installation
+## 🛠 Installation
 
 ```sh
 yarn add react-native-magic-modal
 ```
 
-## Usage
+## ⚙️ Usage
 
 First, insert a `MagicModalPortal` in the top of the application.
 
@@ -48,14 +48,14 @@ console.log(result); // Returns 'hey' when the modal is closed by the TouchableO
 
 See [example](example/src) to understand in practice.
 
-## Docs
+## 📖 Documentation
 
-The docs are located in the project's [Github Pages](https://github.com/willgm/web-crypto-tools/blob/master/README.md)
+The docs are located [here](https://gstj.github.io/react-native-magic-modal/) in the project's [Github Pages](https://gstj.github.io/react-native-magic-modal/)
 
-## Contributing
+## 👨‍🏫 Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
-## License
+## ⚖️ License
 
-MIT
+[MIT](LICENSE)
