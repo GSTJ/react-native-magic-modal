@@ -50,7 +50,7 @@ See [example](example/src) to understand in practice.
 
 ## Docs
 
-The docs are located in the project's [Github Pages]()
+The docs are located in the project's [Github Pages](https://github.com/willgm/web-crypto-tools/blob/master/README.md)
 
 ## Contributing
 
