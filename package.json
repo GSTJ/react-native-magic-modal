@@ -31,7 +31,7 @@
     "pods": "cd example && pod-install --quiet",
     "bootstrap": "yarn example && yarn && yarn pods",
     "predocs": "shx rm -rf docs",
-    "docs": "typedoc --excludeInternal --out docs ./src/index",
+    "docs": "typedoc --excludeInternal --out docs ./src/index.ts",
     "postdocs": "shx touch ./docs/.nojekyll"
   },
   "keywords": [
