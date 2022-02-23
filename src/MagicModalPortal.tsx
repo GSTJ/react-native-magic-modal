@@ -26,6 +26,22 @@ export enum MagicModalHideTypes {
   MODAL_OVERRIDE = 'MODAL_OVERRIDE',
 }
 
+/**
+ * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
+ * @example
+ * ```js
+ * import { MagicModalPortal } from 'react-native-magic-modal';
+ *
+ * export default function App() {
+ *   return (
+ *     <SomeRandomProvider>
+ *       <MagicModalPortal />  // <-- On the top of the app component hierarchy
+ *       <Router /> // Your app router or something could follow below
+ *     </SomeRandomProvider>
+ *   );
+ * }
+ * ```
+ */
 export const MagicModalPortal: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [config, setConfig] = useState<ViewProps>({});

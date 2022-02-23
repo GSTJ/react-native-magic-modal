@@ -12,7 +12,6 @@ A modal component that can be used imperatively from anywhere!
 yarn add react-native-magic-modal
 ```
 
-
 ## Usage
 
 First, insert a `MagicModalPortal` in the top of the application.
@@ -22,10 +21,10 @@ import { MagicModalPortal } from 'react-native-magic-modal';
 
 export default function App() {
   return (
-    <View>
-      <MagicModalPortal />
-      // <Router />
-    </View>
+    <SomeRandomProvider>
+      <MagicModalPortal />  // <-- On the top of the app component hierarchy
+      <Router /> // Your app router or something could follow below
+    </SomeRandomProvider>
   );
 }
 ```
@@ -33,14 +32,25 @@ export default function App() {
 Then, you are free to use the `magicModal` as shown from anywhere you want.
 
 ```js
+// ...
 import { magicModal } from 'react-native-magic-toast';
 
 // ...
+const ExampleModal = () => (
+  <TouchableOpacity onPress={() => magicModal.hide('hey')}>
+    <Text>Test!</Text>
+  </TouchableOpacity>
+);
 
-const ExampleModal = () => <Text testID={testId}>Test!</Text>
-magicModal.show(() => <ExampleModal />);
+const result = await magicModal.show(ExampleModal);
+console.log(result); // Returns 'hey' when the modal is closed by the TouchableOpacity.
 ```
-See [example](example/src) to understand more complex uses.
+
+See [example](example/src) to understand in practice.
+
+## Docs
+
+The docs are located in the project's [Github Pages]()
 
 ## Contributing
 

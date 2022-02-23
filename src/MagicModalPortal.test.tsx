@@ -2,7 +2,7 @@ import React from 'react';
 import { render, act, waitFor } from '@testing-library/react-native';
 import { Text } from 'react-native';
 import { MagicModalPortal } from './MagicModalPortal';
-import { magicModalHandler } from './utils/magicModalHandler';
+import { magicModal } from './utils/magicModalHandler';
 
 describe('MagicModal', () => {
   it('renders correctly', async () => {
@@ -19,7 +19,7 @@ describe('MagicModal', () => {
     expect(component.queryByTestId(testId)).toBeFalsy();
 
     act(() => {
-      magicModalHandler.show(() => <Text testID={testId}>Taveira</Text>);
+      magicModal.show(() => <Text testID={testId}>Taveira</Text>);
     });
 
     expect(component.queryByTestId(testId)).toBeTruthy();
@@ -30,11 +30,9 @@ describe('MagicModal', () => {
     render(<MagicModalPortal />);
 
     await act(async () => {
-      const modalResultPromise = magicModalHandler.show(() => (
-        <Text>Taveira</Text>
-      ));
+      const modalResultPromise = magicModal.show(() => <Text>Taveira</Text>);
 
-      magicModalHandler.hide('some-result-2');
+      magicModal.hide('some-result-2');
 
       const modalResult = await modalResultPromise;
       expect(modalResult).toBe('some-result-2');
@@ -45,7 +43,7 @@ describe('MagicModal', () => {
     const component = render(<MagicModalPortal />);
 
     act(() => {
-      magicModalHandler.show(() => <Text testID="old-modal">Taveira</Text>);
+      magicModal.show(() => <Text testID="old-modal">Taveira</Text>);
     });
 
     await waitFor(() => {
@@ -54,7 +52,7 @@ describe('MagicModal', () => {
     });
 
     act(() => {
-      magicModalHandler.show(() => <Text testID="new-modal">Taveira</Text>);
+      magicModal.show(() => <Text testID="new-modal">Taveira</Text>);
     });
 
     await waitFor(() => {
