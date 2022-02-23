@@ -1,4 +1,4 @@
-# 🦄 react-native-magic-modal
+# react-native-magic-modal 🦄
 
 A modal component that can be used imperatively from anywhere!
 
