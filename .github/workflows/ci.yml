@@ -33,7 +33,7 @@ jobs:
         run: yarn test
 
       - name: Build
-        run: yarn preprare
+        run: yarn prepare
 
       - name: Generate Docs
         run: yarn docs
