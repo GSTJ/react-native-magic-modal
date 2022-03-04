@@ -36,20 +36,9 @@ jobs:
       - name: Check Commit Type
         uses: gsactions/commit-message-checker@v1
         with:
-          pattern: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)'
-          flags: 'gm'
-          error: 'Your commits should follow cz-conventional-changelog's pattern.'
-          excludeDescription: 'true' 
-          excludeTitle: 'true' 
-          checkAllCommitMessages: 'true' 
-          accessToken: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Check Line Length
-        uses: gsactions/commit-message-checker@v1
-        with:
-          pattern: '^[^#].{150}'
-          error: 'The maximum line length of 150 characters is exceeded.'
-          excludeDescription: 'true' 
-          excludeTitle: 'true' 
-          checkAllCommitMessages: 'true' 
+          pattern: '^((build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)|Merge (pull request|branch) .* (into|from) .*)'
+          error: 'Your commits should follow cz-conventional-changelog.'
+          excludeDescription: 'true'
+          excludeTitle: 'true'
+          checkAllCommitMessages: 'true'
           accessToken: ${{ secrets.GITHUB_TOKEN }}
