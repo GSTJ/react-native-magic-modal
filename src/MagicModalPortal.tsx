@@ -5,14 +5,14 @@ import React, {
   useRef,
 } from 'react';
 import { ANIMATION_DURATION_IN_MS } from './constants/animations';
-import { Dimensions, ViewProps } from 'react-native';
+import { Dimensions } from 'react-native';
 import { styles } from './MagicModalPortal.styles';
 import ModalContainer, { ModalProps } from 'react-native-modal';
-import { modalAnimationTimeout } from './utils/modalAnimationTimeout';
 import {
   type ModalChildren,
   type IModal,
   magicModalRef,
+  NewConfigProps,
 } from './utils/magicModalHandler';
 
 const { width, height } = Dimensions.get('screen');
@@ -46,16 +46,23 @@ export const modalRefForTests = React.createRef<any>();
  */
 export const MagicModalPortal: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [config, setConfig] = useState<ViewProps>({});
+  const [config, setConfig] = useState<NewConfigProps>({});
   const [modalContent, setModalContent] = useState<ModalChildren>(() => <></>);
 
   const onHideRef = useRef<GenericFunction>(() => {});
 
-  const hide = useCallback<IModal['hide']>(async (props) => {
-    setIsVisible(false);
-    await modalAnimationTimeout();
-    onHideRef.current(props);
-  }, []);
+  const hide = useCallback<IModal['hide']>(
+    async (props) => {
+      setIsVisible(false);
+
+      const timeoutDuration =
+        config?.animationOutTiming ?? ANIMATION_DURATION_IN_MS;
+
+      await new Promise((resolve) => setTimeout(resolve, timeoutDuration));
+      onHideRef.current(props);
+    },
+    [config?.animationOutTiming]
+  );
 
   useImperativeHandle(magicModalRef, () => ({
     hide,
