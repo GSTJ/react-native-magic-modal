@@ -19,6 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: actions/checkout@v2
 
       - name: Test coverage
@@ -33,6 +38,11 @@ jobs:
     name: Check Commit Message
     runs-on: ubuntu-latest
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check Commit Type
         uses: gsactions/commit-message-checker@v1
         with:
