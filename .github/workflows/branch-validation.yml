@@ -1,0 +1,44 @@
+name: Unit Tests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+jobs:
+  unit_tests:
+    runs-on: ubuntu-latest
+    if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Test coverage
+        uses: artiomtr/jest-coverage-report-action@v2.0-rc.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          annotations: none
+          package-manager: yarn
+          test-script: yarn jest --silent --ci --coverage --testLocationInResults --json --outputFile="report.json"
+
+  check-commit-message:
+    name: Check Commit Message
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Commit Type
+        uses: gsactions/commit-message-checker@v1
+        with:
+          pattern: '^((build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)|Merge (pull request|branch) .* (into|from) .*)'
+          error: 'Your commits should follow cz-conventional-changelog.'
+          excludeDescription: 'true'
+          excludeTitle: 'true'
+          checkAllCommitMessages: 'true'
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
