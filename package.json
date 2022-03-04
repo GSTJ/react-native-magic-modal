@@ -82,8 +82,12 @@
   },
   "jest": {
     "preset": "react-native",
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx,js,jsx}"
+    ],
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
+      "<rootDir>/node_modules",
       "<rootDir>/lib/"
     ]
   },
