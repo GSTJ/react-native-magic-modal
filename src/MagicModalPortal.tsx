@@ -26,6 +26,8 @@ export enum MagicModalHideTypes {
   MODAL_OVERRIDE = 'MODAL_OVERRIDE',
 }
 
+export const modalRefForTests = React.createRef<any>();
+
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
  * @example
@@ -75,6 +77,7 @@ export const MagicModalPortal: React.FC = () => {
 
   return (
     <ModalContainer
+      ref={modalRefForTests}
       backdropTransitionOutTiming={0}
       avoidKeyboard={true}
       swipeDirection={'down'}
