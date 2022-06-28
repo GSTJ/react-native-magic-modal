@@ -33,7 +33,7 @@ Then, you are free to use the `magicModal` as shown from anywhere you want.
 
 ```js
 // ...
-import { magicModal } from 'react-native-magic-toast';
+import { magicModal } from 'react-native-magic-modal';
 
 // ...
 const ExampleModal = () => (
