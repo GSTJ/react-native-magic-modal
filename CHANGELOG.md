@@ -1,3 +1,5 @@
+## 0.2.10 (2022-06-28)
+
 ## [0.2.9](https://github.com/GSTJ/react-native-magic-modal/compare/v0.2.8...v0.2.9) (2022-03-06)
 
 ## [0.2.8](https://github.com/GSTJ/react-native-magic-modal/compare/v0.2.6...v0.2.8) (2022-03-04)
