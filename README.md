@@ -1,5 +1,5 @@
 ![MagicModal](https://user-images.githubusercontent.com/50031755/182190421-708be214-503e-4aeb-9311-0a7151805072.png)
-_A modal component that can be used imperatively from anywhere!_
+_A modal library that can be called imperatively from anywhere!_
 
 ## React Native Magic Modal 🦄
 
