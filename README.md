@@ -1,6 +1,8 @@
-# react-native-magic-modal 🦄
+![MagicModal](https://user-images.githubusercontent.com/50031755/182190421-708be214-503e-4aeb-9311-0a7151805072.png)
 
-A modal component that can be used imperatively from anywhere!
+#### A modal component that can be used imperatively from anywhere!
+
+## 📸 Examples
 
 | IOS                                                                                                                           | Android                                                                                                                       |
 | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
