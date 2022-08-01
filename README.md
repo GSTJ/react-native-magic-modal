@@ -7,7 +7,7 @@ Do you find using modals in React Native to be a bit of a pain? Trying to keep c
 
 And the problem only gets worse when you try to create complex flows, where one modal opens another with conditionals in place. Once you get past two modals, your main component is a mess, and the state is all over the place.
 
-This library thoughtfully encapsulates complex concepts to provide a smooth experience when using React modals, inside or outside components (In Sagas, for example!)
+This library thoughtfully encapsulates complex concepts to provide a smooth experience when using React modals, inside or outside components (In [Sagas](https://redux-saga.js.org/), for example!)
 
 Take a look to a in-depth explanation of its concepts on its [Medium article](https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96).
 
