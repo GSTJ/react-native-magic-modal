@@ -1,6 +1,15 @@
 ![MagicModal](https://user-images.githubusercontent.com/50031755/182190421-708be214-503e-4aeb-9311-0a7151805072.png)
+_A modal component that can be used imperatively from anywhere!_
 
-#### A modal component that can be used imperatively from anywhere!
+## React Native Magic Modal 🦄
+
+Do you find using modals in React Native to be a bit of a pain? Trying to keep control of its open state and repeating the code everywhere you want to use it can be pretty tedious.
+
+And the problem only gets worse when you try to create complex flows, where one modal opens another with conditionals in place. Once you get past two modals, your main component is a mess, and the state is all over the place.
+
+This library thoughtfully encapsulates complex concepts to provide a smooth experience when using React modals, inside or outside components (In Sagas, for example!)
+
+Take a look to a in-depth explanation of its concepts on its [Medium article](https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96).
 
 ## 📸 Examples
 
