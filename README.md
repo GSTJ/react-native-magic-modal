@@ -43,21 +43,51 @@ export default function App() {
 Then, you are free to use the `magicModal` as shown from anywhere you want.
 
 ```js
-// ...
-import { magicModal } from 'react-native-magic-modal';
+import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { MagicModalPortal, magicModal } from 'react-native-magic-modal';
 
-// ...
-const ExampleModal = () => (
-  <TouchableOpacity onPress={() => magicModal.hide('hey')}>
-    <Text>Test!</Text>
-  </TouchableOpacity>
+const ConfirmationModal = () => (
+  <View>
+    <TouchableOpacity onPress={() => magicModal.hide({ success: true })}>
+      <Text>Click here to confirm</Text>
+    </TouchableOpacity>
+  </View>
 );
 
-const result = await magicModal.show(ExampleModal);
-console.log(result); // Returns 'hey' when the modal is closed by the TouchableOpacity.
+const ResponseModal = ({ text }) => (
+  <View>
+    <Text>{text}</Text>
+    <TouchableOpacity onPress={() => magicModal.hide()}>
+      <Text>Close</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+const handleConfirmationFlow = async () => {
+  // We can call it with or without props, depending on the requirements of the modal.
+  const result = await magicModal.show(ConfirmationModal);
+
+  if (result.success) {
+    return magicModal.show(() => <ResponseModal text="Success!" />);
+  }
+
+  return magicModal.show(() => <ResponseModal text="Failure :(" />);
+};
+
+export const MainScreen = () => {
+  return (
+    <View>
+      <TouchableOpacity onPress={handleConfirmationFlow}>
+        <Text>Start the modal flow!</Text>
+      </TouchableOpacity>
+      <MagicModalPortal />
+    </View>
+  );
+};
 ```
 
-See [example](example/src) to understand in practice.
+See [example](example/src) to see it in practice.
 
 ## 📖 Documentation
 
