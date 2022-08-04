@@ -1,4 +1,4 @@
-![GH_Cover_Magic_Modal](https://user-images.githubusercontent.com/50031755/182896227-c35bf018-04c3-43c7-836a-1dc9de429809.png)
+![React Native Magic Modal Cover](https://user-images.githubusercontent.com/50031755/182908192-f30eca9a-50d9-4c36-96f0-cea7d7d3e94d.png)
 
 _A modal library that can be called imperatively from anywhere!_
 
