@@ -8,12 +8,8 @@ import { ANIMATION_DURATION_IN_MS } from './constants/animations';
 import { Dimensions } from 'react-native';
 import { styles } from './MagicModalPortal.styles';
 import ModalContainer, { ModalProps } from 'react-native-modal';
-import {
-  type ModalChildren,
-  type IModal,
-  magicModalRef,
-  NewConfigProps,
-} from './utils/magicModalHandler';
+import { magicModalRef, NewConfigProps } from './utils/magicModalHandler';
+import type { ModalChildren, IModal } from './utils/magicModalHandler';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -86,12 +82,12 @@ export const MagicModalPortal: React.FC = () => {
     <ModalContainer
       ref={modalRefForTests}
       backdropTransitionOutTiming={0}
-      avoidKeyboard={true}
-      swipeDirection={'down'}
+      avoidKeyboard
+      swipeDirection="down"
       deviceHeight={height}
       deviceWidth={width}
       animationOutTiming={ANIMATION_DURATION_IN_MS}
-      statusBarTranslucent={true}
+      statusBarTranslucent
       onBackdropPress={() => hide(MagicModalHideTypes.BACKDROP_PRESSED)}
       onSwipeComplete={() => hide(MagicModalHideTypes.SWIPE_COMPLETED)}
       onBackButtonPress={() => hide(MagicModalHideTypes.BACK_BUTTON_PRESSED)}
