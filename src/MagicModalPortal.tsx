@@ -14,6 +14,7 @@ import type { ModalChildren, IModal } from './utils/magicModalHandler';
 const { width, height } = Dimensions.get('screen');
 
 type GenericFunction = (props: any) => any;
+type MagicPortalProps = Partial<Omit<ModalProps, 'ref' | 'index'>>;
 
 export enum MagicModalHideTypes {
   BACKDROP_PRESSED = 'BACKDROP_PRESSED',
@@ -40,7 +41,7 @@ export const modalRefForTests = React.createRef<any>();
  * }
  * ```
  */
-export const MagicModalPortal: React.FC = () => {
+export const MagicModalPortal: React.FC<MagicPortalProps> = (portalProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [config, setConfig] = useState<NewConfigProps>({});
   const [modalContent, setModalContent] = useState<ModalChildren>(() => <></>);
@@ -92,8 +93,9 @@ export const MagicModalPortal: React.FC = () => {
       onSwipeComplete={() => hide(MagicModalHideTypes.SWIPE_COMPLETED)}
       onBackButtonPress={() => hide(MagicModalHideTypes.BACK_BUTTON_PRESSED)}
       isVisible={isVisible}
+      {...portalProps}
       {...config}
-      style={[styles.container, config?.style]}
+      style={[styles.container, portalProps?.style, config?.style]}
     >
       {modalContent}
     </ModalContainer>
