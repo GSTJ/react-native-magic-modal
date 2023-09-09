@@ -1,0 +1,7 @@
+{
+  "extends": ["expo/tsconfig.base", "./base.json"],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo-expo.json"
+  }
+}

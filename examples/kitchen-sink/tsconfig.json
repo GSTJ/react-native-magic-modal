@@ -1,0 +1,5 @@
+{
+  "extends": "@magic-modal/tsconfig/expo.json",
+  "include": ["."],
+  "exclude": ["node_modules"]
+}

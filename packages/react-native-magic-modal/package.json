@@ -1,0 +1,68 @@
+{
+  "name": "@magic-modal/react-native-magic-modal",
+  "version": "0.2.20",
+  "private": true,
+  "keywords": [
+    "react-native",
+    "ios",
+    "android"
+  ],
+  "repository": "https://github.com/GSTJ/react-native-magic-modal",
+  "license": "MIT",
+  "description": "A magic modal that can be used imperatively from anywhere! 🦄",
+  "main": "./src/index",
+  "author": "Gabriel Taveira <gabrielstaveira@gmail.com> (https://github.com/GSTJ)",
+  "bugs": {
+    "url": "https://github.com/GSTJ/react-native-magic-modal/issues"
+  },
+  "homepage": "https://github.com/GSTJ/react-native-magic-modal#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "pnpm lint --fix"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@magic-modal/eslint/base"
+    ]
+  },
+  "jest": {
+    "preset": "react-native",
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx,js,jsx}"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules",
+      "<rootDir>/node_modules",
+      "<rootDir>/lib/"
+    ]
+  },
+  "dependencies": {
+    "react-native-modal": "^13.0.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@magic-modal/tsconfig": "^0.0.0",
+    "@magic-modal/eslint": "^0.0.0",
+    "@testing-library/react-native": "^9.0.0",
+    "@types/jest": "^26.0.0",
+    "@types/react": "^16.9.19",
+    "@types/react-native": "0.62.13",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^6.0.0",
+    "jest": "^26.0.1",
+    "pod-install": "^0.1.0",
+    "prettier": "3.0.3",
+    "react": "16.13.1",
+    "react-native": "0.63.4",
+    "react-test-renderer": "^17.0.2"
+  }
+}
