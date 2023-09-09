@@ -20,7 +20,7 @@ const config = {
             '@testing-library/react-native',
           ],
           // Monorepo imports.
-          ['^@magic-modal(/.*)?$'],
+          ['^@magic(/.*)?$'],
 
           /** General imports https://github.com/lydell/eslint-plugin-simple-import-sort/blob/main/examples/.eslintrc.js */
           // Packages.

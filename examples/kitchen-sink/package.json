@@ -1,5 +1,5 @@
 {
-  "name": "@magic-modal/kitchen-sink",
+  "name": "@magic/kitchen-sink",
   "description": "Example app for react-native-magic-modal",
   "version": "0.0.1",
   "private": true,
@@ -14,7 +14,7 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@magic-modal/eslint-config/base"
+      "@magic/eslint-config/base"
     ]
   },
   "dependencies": {
@@ -25,7 +25,7 @@
     "react-native": "0.63.4",
     "react-native-unimodules": "~0.14.5",
     "react-native-web": "~0.13.12",
-    "@magic-modal/react-native-magic-modal": "*"
+    "@magic/react-native-magic-modal": "*"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
@@ -33,7 +33,7 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-preset-expo": "8.3.0",
     "expo-cli": "^4.0.13",
-    "@magic-modal/tsconfig": "0.0.0",
-    "@magic-modal/eslint-config": "0.0.0"
+    "@magic/tsconfig": "0.0.0",
+    "@magic/eslint-config": "0.0.0"
   }
 }

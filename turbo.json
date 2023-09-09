@@ -2,13 +2,20 @@
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
     "lint": {
-      "outputs": ["node_modules/.cache/.eslintcache"]
+      "outputs": [
+        "node_modules/.cache/.eslintcache"
+      ]
     },
     "lint:fix": {
-      "outputs": ["node_modules/.cache/.eslintcache"]
+      "outputs": [
+        "node_modules/.cache/.eslintcache"
+      ]
     },
     "typecheck": {
-      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
-    }
+      "outputs": [
+        "node_modules/.cache/tsbuildinfo.json"
+      ]
+    },
+    "test": {}
   }
 }

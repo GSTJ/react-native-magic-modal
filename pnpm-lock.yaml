@@ -23,7 +23,7 @@ importers:
 
   examples/kitchen-sink:
     dependencies:
-      '@magic-modal/react-native-magic-modal':
+      '@magic/react-native-magic-modal':
         specifier: '*'
         version: link:../../packages/react-native-magic-modal
       expo:
@@ -54,10 +54,10 @@ importers:
       '@babel/runtime':
         specifier: ^7.9.6
         version: 7.22.15
-      '@magic-modal/eslint-config':
+      '@magic/eslint-config':
         specifier: 0.0.0
         version: link:../../tools/eslint
-      '@magic-modal/tsconfig':
+      '@magic/tsconfig':
         specifier: 0.0.0
         version: link:../../tools/tsconfig
       babel-plugin-module-resolver:
@@ -76,10 +76,10 @@ importers:
         specifier: ^13.0.0
         version: 13.0.0(react-native@0.63.4)(react@16.13.1)
     devDependencies:
-      '@magic-modal/eslint-config':
+      '@magic/eslint-config':
         specifier: 0.0.0
         version: link:../../tools/eslint
-      '@magic-modal/tsconfig':
+      '@magic/tsconfig':
         specifier: 0.0.0
         version: link:../../tools/tsconfig
       '@testing-library/react-native':

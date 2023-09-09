@@ -1,5 +1,5 @@
 {
-  "name": "@magic-modal/tsconfig",
+  "name": "@magic/tsconfig",
   "version": "0.0.0",
   "private": true,
   "files": [

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { MagicModalPortal, magicModal } from '@magic-modal/react-native-magic-modal';
+import { MagicModalPortal, magicModal } from '@magic/react-native-magic-modal';
 import { ExampleModal } from './components/ExampleModal/ExampleModal';
 
 export default function App() {

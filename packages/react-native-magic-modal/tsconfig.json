@@ -1,5 +1,5 @@
 {
-  "extends": "@magic-modal/tsconfig/base.json",
+  "extends": "@magic/tsconfig/base.json",
   "include": ["."],
   "exclude": ["node_modules"]
 }

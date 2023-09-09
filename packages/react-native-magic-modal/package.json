@@ -1,5 +1,5 @@
 {
-  "name": "@magic-modal/react-native-magic-modal",
+  "name": "@magic/react-native-magic-modal",
   "version": "0.2.20",
   "private": true,
   "keywords": [
@@ -28,7 +28,7 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@magic-modal/eslint-config/base"
+      "@magic/eslint-config/base"
     ]
   },
   "jest": {
@@ -50,8 +50,8 @@
     "react-native": "*"
   },
   "devDependencies": {
-    "@magic-modal/tsconfig": "0.0.0",
-    "@magic-modal/eslint-config": "0.0.0",
+    "@magic/tsconfig": "0.0.0",
+    "@magic/eslint-config": "0.0.0",
     "@testing-library/react-native": "^9.0.0",
     "@types/jest": "^26.0.0",
     "@types/react": "^16.9.19",

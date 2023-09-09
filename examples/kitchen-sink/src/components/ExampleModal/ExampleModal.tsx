@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { magicModal } from '@magic-modal/react-native-magic-modal';
+import { magicModal } from '@magic/react-native-magic-modal';
 
 export const ExampleModal = () => {
   return (
