@@ -54,7 +54,7 @@ importers:
       '@babel/runtime':
         specifier: ^7.9.6
         version: 7.22.15
-      '@magic-modal/eslint':
+      '@magic-modal/eslint-config':
         specifier: 0.0.0
         version: link:../../tools/eslint
       '@magic-modal/tsconfig':
@@ -76,11 +76,11 @@ importers:
         specifier: ^13.0.0
         version: 13.0.0(react-native@0.63.4)(react@16.13.1)
     devDependencies:
-      '@magic-modal/eslint':
-        specifier: ^0.0.0
+      '@magic-modal/eslint-config':
+        specifier: 0.0.0
         version: link:../../tools/eslint
       '@magic-modal/tsconfig':
-        specifier: ^0.0.0
+        specifier: 0.0.0
         version: link:../../tools/tsconfig
       '@testing-library/react-native':
         specifier: ^9.0.0
