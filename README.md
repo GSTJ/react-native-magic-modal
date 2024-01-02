@@ -62,7 +62,7 @@ import { MagicModalPortal } from 'react-native-magic-modal';
 export default function App() {
   return (
     <>
-      <MagicModalPortal />  // At the top of your app component hierarchy
+      <MagicModalPortal /> {/** At the top of your app component hierarchy */}
       <YourAppContent />
     </>
   );
@@ -79,13 +79,49 @@ Showcasing modal management on iOS and Android platforms:
 
 ## Usage
 
-Use `magicModal` from anywhere in your app:
+```js
+import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { MagicModalPortal, magicModal } from 'react-native-magic-modal';
 
-```javascript
-import { magicModal } from 'react-native-magic-modal';
+const ConfirmationModal = () => (
+  <View>
+    <TouchableOpacity onPress={() => magicModal.hide({ success: true })}>
+      <Text>Click here to confirm</Text>
+    </TouchableOpacity>
+  </View>
+);
 
-// Example modal usage
-magicModal.show(YourModalComponent);
+const ResponseModal = ({ text }) => (
+  <View>
+    <Text>{text}</Text>
+    <TouchableOpacity onPress={() => magicModal.hide()}>
+      <Text>Close</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+const handleConfirmationFlow = async () => {
+  // You can call `show` with or without props, depending on the requirements of the modal.
+  const result = await magicModal.show(ConfirmationModal);
+
+  if (result.success) {
+    return magicModal.show(() => <ResponseModal text="Success!" />);
+  }
+
+  return magicModal.show(() => <ResponseModal text="Failure :(" />);
+};
+
+export const MainScreen = () => {
+  return (
+    <View>
+      <TouchableOpacity onPress={handleConfirmationFlow}>
+        <Text>Start the modal flow!</Text>
+      </TouchableOpacity>
+      <MagicModalPortal />
+    </View>
+  );
+};
 ```
 
 Refer to the [example](example/src) for detailed usage scenarios.
@@ -103,6 +139,8 @@ Access the complete documentation [here](https://gstj.github.io/react-native-mag
 ## Contributors
 
 Special thanks to everyone who contributed to making React Native Magic Modal a robust and user-friendly library. [See the full list](https://github.com/GSTJ/react-native-magic-modal/graphs/contributors).
+
+See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository.
 
 ## License
 
