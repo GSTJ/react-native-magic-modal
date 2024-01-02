@@ -1,21 +1,81 @@
-<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>react-native-magic-modal</title><meta name="description" content="Documentation for react-native-magic-modal"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">react-native-magic-modal</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>react-native-magic-modal</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><p><img src="https://user-images.githubusercontent.com/50031755/182908700-6b94a470-0e5c-4af2-acba-b20acaffa0b8.png" alt="React Native Magic Modal Cover"></p>
-<p><em>A modal library that can be called imperatively from anywhere!</em></p>
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>react-native-magic-modal</title><meta name="description" content="Documentation for react-native-magic-modal"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">react-native-magic-modal</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>react-native-magic-modal</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><h1 align="center">React Native Magic Modal 🦄</h1>
 
-<a href="#react-native-magic-modal-🦄" id="react-native-magic-modal-🦄" style="color: inherit; text-decoration: none;">
-  <h2>React Native Magic Modal 🦄</h2>
-</a>
-<p>Do you find using modals in React Native to be a bit of a pain? Trying to keep control of its open state and repeating the code everywhere you want to use it can be pretty tedious.</p>
-<p>And the problem only gets worse when you try to create complex flows, where one modal opens another with conditionals in place. Once you get past two modals, your main component is a mess, and the state is all over the place.</p>
-<p>This library thoughtfully encapsulates complex concepts to provide a smooth experience when using React modals, inside or outside components (In <a href="https://redux-saga.js.org/">Sagas</a>, for example!)</p>
-<p>Take a look to a in-depth explanation of its concepts on its <a href="https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96">Medium article</a>.</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/50031755/182908700-6b94a470-0e5c-4af2-acba-b20acaffa0b8.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/50031755/182908700-6b94a470-0e5c-4af2-acba-b20acaffa0b8.png">
+  <img alt="React Native Magic Modal Banner" src="https://user-images.githubusercontent.com/50031755/182908700-6b94a470-0e5c-4af2-acba-b20acaffa0b8.png">
+</picture>
+<p align="center">
+  <a aria-label="NPM Version" href="https://www.npmjs.com/package/react-native-magic-modal">
+    <img alt="" src="https://img.shields.io/npm/v/react-native-magic-modal.svg?label=NPM&logo=npm&style=for-the-badge&color=0470FF&logoColor=white">
+  </a>
+  <a aria-label="NPM Download Count" href="https://www.npmjs.com/package/react-native-magic-modal">
+    <img alt="" src="https://img.shields.io/npm/dt/react-native-magic-modal?label=Downloads&style=for-the-badge&color=67ACF3">
+  </a>
+  <a aria-label="License" href="https://www.npmjs.com/package/react-native-magic-modal">
+    <img alt="" src="https://img.shields.io/npm/l/react-native-magic-modal?style=for-the-badge&color=F9DBBC">
+  </a>
+</p>
+<p align="center">
+  <a href="#documentation">Docs</a> | <a href="https://github.com/gstj/react-native-magic-modal">GitHub</a> | <a href="#faq">FAQ</a> | <a href="https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96">Article</a>
+</p>
 
-<a href="#📸-examples" id="📸-examples" style="color: inherit; text-decoration: none;">
-  <h2>📸 Examples</h2>
+<blockquote>
+<p>[!NOTE]<br>Simplify your modal management in React Native with the <strong>React Native Magic Modal</strong> library. Effortlessly control modals, streamline complex flows, and create a seamless user experience.</p>
+</blockquote>
+
+<a href="#features" id="features" style="color: inherit; text-decoration: none;">
+  <h2>Features</h2>
 </a>
+<ul>
+<li>📲 <a href="#quickstart"><strong>Easy Integration</strong></a>: Seamlessly integrate with your React Native app.</li>
+<li>🔄 <a href="#examples"><strong>Complex Flow Management</strong></a>: Manage intricate modal sequences effortlessly.</li>
+<li>🔧 <a href="#usage"><strong>Customizable</strong></a>: Tailor modals to fit your app&#39;s unique requirements.</li>
+</ul>
+
+<a href="#highlights" id="highlights" style="color: inherit; text-decoration: none;">
+  <h2>Highlights</h2>
+</a>
+<p>React Native Magic Modal offers a superior experience compared to traditional modal implementations:</p>
+<ul>
+<li>🎨 <a href="#examples"><strong>Stylish and Responsive</strong></a>: Designed to look great on both iOS and Android.</li>
+<li>🚀 <a href="#quickstart"><strong>Developer Friendly</strong></a>: Simple to use, with a focus on developer experience.</li>
+<li>🧩 <a href="#documentation"><strong>Versatile</strong></a>: Adaptable to a wide range of modal scenarios.</li>
+</ul>
+
+<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
+  <h2>Table of Contents</h2>
+</a>
+<ul>
+<li><a href="#installation"><strong>Installation</strong></a></li>
+<li><a href="#quickstart"><strong>Quickstart</strong></a></li>
+<li><a href="#examples"><strong>Examples</strong></a></li>
+<li><a href="#documentation"><strong>Documentation</strong></a></li>
+<li><a href="#faq"><strong>FAQ</strong></a></li>
+<li><a href="#contributors"><strong>Contributors</strong></a></li>
+</ul>
+
+<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+  <h2>Installation</h2>
+</a>
+<pre><code class="language-bash"><span class="hl-1">yarn add react-native-magic-modal</span>
+</code></pre>
+
+<a href="#quickstart" id="quickstart" style="color: inherit; text-decoration: none;">
+  <h2>Quickstart</h2>
+</a>
+<p>Insert a <code>MagicModalPortal</code> at the top of your application structure:</p>
+<pre><code class="language-javascript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">MagicModalPortal</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react-native-magic-modal&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-0">default</span><span class="hl-1"> </span><span class="hl-4">function</span><span class="hl-1"> </span><span class="hl-5">App</span><span class="hl-1">() {</span><br/><span class="hl-1">  </span><span class="hl-0">return</span><span class="hl-1"> (</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;&gt;</span><br/><span class="hl-1">      </span><span class="hl-6">&lt;</span><span class="hl-7">MagicModalPortal</span><span class="hl-1"> </span><span class="hl-6">/&gt;</span><span class="hl-1">  // At the top of your app component hierarchy</span><br/><span class="hl-1">      </span><span class="hl-6">&lt;</span><span class="hl-7">YourAppContent</span><span class="hl-1"> </span><span class="hl-6">/&gt;</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;/&gt;</span><br/><span class="hl-1">  );</span><br/><span class="hl-1">}</span>
+</code></pre>
+
+<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+  <h2>Examples</h2>
+</a>
+<p>Showcasing modal management on iOS and Android platforms:</p>
 <table>
 <thead>
 <tr>
-<th>IOS</th>
+<th>iOS</th>
 <th>Android</th>
 </tr>
 </thead>
@@ -25,35 +85,32 @@
 </tr>
 </tbody></table>
 
-<a href="#🛠-installation" id="🛠-installation" style="color: inherit; text-decoration: none;">
-  <h2>🛠 Installation</h2>
+<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+  <h2>Usage</h2>
 </a>
-<pre><code class="language-sh"><span class="hl-1">yarn add react-native-magic-modal</span>
+<p>Use <code>magicModal</code> from anywhere in your app:</p>
+<pre><code class="language-javascript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">magicModal</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react-native-magic-modal&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-8">// Example modal usage</span><br/><span class="hl-2">magicModal</span><span class="hl-1">.</span><span class="hl-5">show</span><span class="hl-1">(</span><span class="hl-2">YourModalComponent</span><span class="hl-1">);</span>
 </code></pre>
+<p>Refer to the <a href="example/src">example</a> for detailed usage scenarios.</p>
 
-<a href="#⚙️-usage" id="⚙️-usage" style="color: inherit; text-decoration: none;">
-  <h2>⚙️ Usage</h2>
+<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+  <h2>Documentation</h2>
 </a>
-<p>First, insert a <code>MagicModalPortal</code> in the top of the application.</p>
-<pre><code class="language-js"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">MagicModalPortal</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react-native-magic-modal&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-0">default</span><span class="hl-1"> </span><span class="hl-4">function</span><span class="hl-1"> </span><span class="hl-5">App</span><span class="hl-1">() {</span><br/><span class="hl-1">  </span><span class="hl-0">return</span><span class="hl-1"> (</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;</span><span class="hl-7">SomeRandomProvider</span><span class="hl-6">&gt;</span><br/><span class="hl-1">      </span><span class="hl-6">&lt;</span><span class="hl-7">MagicModalPortal</span><span class="hl-1"> </span><span class="hl-6">/&gt;</span><span class="hl-1">  // &lt;-- On the top of the app component hierarchy</span><br/><span class="hl-1">      </span><span class="hl-6">&lt;</span><span class="hl-7">Router</span><span class="hl-1"> </span><span class="hl-6">/&gt;</span><span class="hl-1"> // Your app router or something could follow below</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;/</span><span class="hl-7">SomeRandomProvider</span><span class="hl-6">&gt;</span><br/><span class="hl-1">  );</span><br/><span class="hl-1">}</span>
-</code></pre>
-<p>Then, you are free to use the <code>magicModal</code> as shown from anywhere you want.</p>
-<pre><code class="language-js"><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">React</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">View</span><span class="hl-1">, </span><span class="hl-2">Text</span><span class="hl-1">, </span><span class="hl-2">TouchableOpacity</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react-native&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">MagicModalPortal</span><span class="hl-1">, </span><span class="hl-2">magicModal</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react-native-magic-modal&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">ConfirmationModal</span><span class="hl-1"> = () </span><span class="hl-4">=&gt;</span><span class="hl-1"> (</span><br/><span class="hl-1">  </span><span class="hl-6">&lt;</span><span class="hl-7">View</span><span class="hl-6">&gt;</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;</span><span class="hl-7">TouchableOpacity</span><span class="hl-1"> </span><span class="hl-9">onPress</span><span class="hl-1">=</span><span class="hl-4">{</span><span class="hl-10">() </span><span class="hl-4">=&gt;</span><span class="hl-10"> </span><span class="hl-2">magicModal</span><span class="hl-10">.</span><span class="hl-5">hide</span><span class="hl-10">({ </span><span class="hl-2">success:</span><span class="hl-10"> </span><span class="hl-4">true</span><span class="hl-10"> })</span><span class="hl-4">}</span><span class="hl-6">&gt;</span><br/><span class="hl-1">      </span><span class="hl-6">&lt;</span><span class="hl-7">Text</span><span class="hl-6">&gt;</span><span class="hl-1">Click here to confirm</span><span class="hl-6">&lt;/</span><span class="hl-7">Text</span><span class="hl-6">&gt;</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;/</span><span class="hl-7">TouchableOpacity</span><span class="hl-6">&gt;</span><br/><span class="hl-1">  </span><span class="hl-6">&lt;/</span><span class="hl-7">View</span><span class="hl-6">&gt;</span><br/><span class="hl-1">);</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">ResponseModal</span><span class="hl-1"> = ({ </span><span class="hl-2">text</span><span class="hl-1"> }) </span><span class="hl-4">=&gt;</span><span class="hl-1"> (</span><br/><span class="hl-1">  </span><span class="hl-6">&lt;</span><span class="hl-7">View</span><span class="hl-6">&gt;</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;</span><span class="hl-7">Text</span><span class="hl-6">&gt;</span><span class="hl-4">{</span><span class="hl-2">text</span><span class="hl-4">}</span><span class="hl-6">&lt;/</span><span class="hl-7">Text</span><span class="hl-6">&gt;</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;</span><span class="hl-7">TouchableOpacity</span><span class="hl-1"> </span><span class="hl-9">onPress</span><span class="hl-1">=</span><span class="hl-4">{</span><span class="hl-10">() </span><span class="hl-4">=&gt;</span><span class="hl-10"> </span><span class="hl-2">magicModal</span><span class="hl-10">.</span><span class="hl-5">hide</span><span class="hl-10">()</span><span class="hl-4">}</span><span class="hl-6">&gt;</span><br/><span class="hl-1">      </span><span class="hl-6">&lt;</span><span class="hl-7">Text</span><span class="hl-6">&gt;</span><span class="hl-1">Close</span><span class="hl-6">&lt;/</span><span class="hl-7">Text</span><span class="hl-6">&gt;</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;/</span><span class="hl-7">TouchableOpacity</span><span class="hl-6">&gt;</span><br/><span class="hl-1">  </span><span class="hl-6">&lt;/</span><span class="hl-7">View</span><span class="hl-6">&gt;</span><br/><span class="hl-1">);</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">handleConfirmationFlow</span><span class="hl-1"> = </span><span class="hl-4">async</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-8">// We can call it with or without props, depending on the requirements of the modal.</span><br/><span class="hl-1">  </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-11">result</span><span class="hl-1"> = </span><span class="hl-0">await</span><span class="hl-1"> </span><span class="hl-2">magicModal</span><span class="hl-1">.</span><span class="hl-5">show</span><span class="hl-1">(</span><span class="hl-2">ConfirmationModal</span><span class="hl-1">);</span><br/><br/><span class="hl-1">  </span><span class="hl-0">if</span><span class="hl-1"> (</span><span class="hl-2">result</span><span class="hl-1">.</span><span class="hl-2">success</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-2">magicModal</span><span class="hl-1">.</span><span class="hl-5">show</span><span class="hl-1">(() </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-6">&lt;</span><span class="hl-7">ResponseModal</span><span class="hl-1"> </span><span class="hl-9">text</span><span class="hl-1">=</span><span class="hl-3">&quot;Success!&quot;</span><span class="hl-1"> </span><span class="hl-6">/&gt;</span><span class="hl-1">);</span><br/><span class="hl-1">  }</span><br/><br/><span class="hl-1">  </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-2">magicModal</span><span class="hl-1">.</span><span class="hl-5">show</span><span class="hl-1">(() </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-6">&lt;</span><span class="hl-7">ResponseModal</span><span class="hl-1"> </span><span class="hl-9">text</span><span class="hl-1">=</span><span class="hl-3">&quot;Failure :(&quot;</span><span class="hl-1"> </span><span class="hl-6">/&gt;</span><span class="hl-1">);</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">MainScreen</span><span class="hl-1"> = () </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-0">return</span><span class="hl-1"> (</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;</span><span class="hl-7">View</span><span class="hl-6">&gt;</span><br/><span class="hl-1">      </span><span class="hl-6">&lt;</span><span class="hl-7">TouchableOpacity</span><span class="hl-1"> </span><span class="hl-9">onPress</span><span class="hl-1">=</span><span class="hl-4">{</span><span class="hl-2">handleConfirmationFlow</span><span class="hl-4">}</span><span class="hl-6">&gt;</span><br/><span class="hl-1">        </span><span class="hl-6">&lt;</span><span class="hl-7">Text</span><span class="hl-6">&gt;</span><span class="hl-1">Start the modal flow!</span><span class="hl-6">&lt;/</span><span class="hl-7">Text</span><span class="hl-6">&gt;</span><br/><span class="hl-1">      </span><span class="hl-6">&lt;/</span><span class="hl-7">TouchableOpacity</span><span class="hl-6">&gt;</span><br/><span class="hl-1">      </span><span class="hl-6">&lt;</span><span class="hl-7">MagicModalPortal</span><span class="hl-1"> </span><span class="hl-6">/&gt;</span><br/><span class="hl-1">    </span><span class="hl-6">&lt;/</span><span class="hl-7">View</span><span class="hl-6">&gt;</span><br/><span class="hl-1">  );</span><br/><span class="hl-1">};</span>
-</code></pre>
-<p>See <a href="example/src">example</a> to see it in practice.</p>
+<p>Access the complete documentation <a href="https://gstj.github.io/react-native-magic-modal/">here</a>.</p>
 
-<a href="#📖-documentation" id="📖-documentation" style="color: inherit; text-decoration: none;">
-  <h2>📖 Documentation</h2>
+<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
+  <h2>FAQ</h2>
 </a>
-<p>The docs are located <a href="https://gstj.github.io/react-native-magic-modal/">here</a> in the project&#39;s <a href="https://gstj.github.io/react-native-magic-modal/">Github Pages</a></p>
+<p><strong>Q:</strong> Can I have two modals showing up at the same time?</p>
+<p><strong>A:</strong> No, this library is based on react-native-modal, which does not support this functionality.</p>
 
-<a href="#👨🏫-contributing" id="👨🏫-contributing" style="color: inherit; text-decoration: none;">
-  <h2>👨‍🏫 Contributing</h2>
+<a href="#contributors" id="contributors" style="color: inherit; text-decoration: none;">
+  <h2>Contributors</h2>
 </a>
-<p>See the <a href="CONTRIBUTING.md">contributing guide</a> to learn how to contribute to the repository and the development workflow.</p>
+<p>Special thanks to everyone who contributed to making React Native Magic Modal a robust and user-friendly library. <a href="https://github.com/GSTJ/react-native-magic-modal/graphs/contributors">See the full list</a>.</p>
 
-<a href="#⚖️-license" id="⚖️-license" style="color: inherit; text-decoration: none;">
-  <h2>⚖️ License</h2>
+<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+  <h2>License</h2>
 </a>
-<p><a href="LICENSE">MIT</a></p>
+<p>React Native Magic Modal is licensed under the <a href="LICENSE">MIT License</a>.</p>
 </div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-enum"><a href="enums/MagicModalHideTypes.html" class="tsd-kind-icon">Magic<wbr/>Modal<wbr/>Hide<wbr/>Types</a></li><li class="tsd-kind-type-alias"><a href="modules.html#NewConfigProps" class="tsd-kind-icon">New<wbr/>Config<wbr/>Props</a></li><li class="tsd-kind-variable"><a href="modules.html#MagicModalPortal" class="tsd-kind-icon">Magic<wbr/>Modal<wbr/>Portal</a></li><li class="tsd-kind-variable"><a href="modules.html#magicModal" class="tsd-kind-icon">magic<wbr/>Modal</a></li><li class="tsd-kind-variable"><a href="modules.html#modalRefForTests" class="tsd-kind-icon">modal<wbr/>Ref<wbr/>For<wbr/>Tests</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
