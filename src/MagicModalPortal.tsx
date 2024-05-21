@@ -5,13 +5,11 @@ import React, {
   useRef,
 } from 'react';
 import { ANIMATION_DURATION_IN_MS } from './constants/animations';
-import { Dimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import { styles } from './MagicModalPortal.styles';
 import ModalContainer, { ModalProps } from 'react-native-modal';
 import { magicModalRef, NewConfigProps } from './utils/magicModalHandler';
 import type { ModalChildren, IModal } from './utils/magicModalHandler';
-
-const { width, height } = Dimensions.get('screen');
 
 type GenericFunction = (props: any) => any;
 
@@ -43,7 +41,8 @@ export const modalRefForTests = React.createRef<any>();
 export const MagicModalPortal: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [config, setConfig] = useState<NewConfigProps>({});
-  const [modalContent, setModalContent] = useState<ModalChildren>(() => <></>);
+  const [ModalContent, setModalContent] = useState<ModalChildren>(() => <></>);
+  const { height, width } = useWindowDimensions();
 
   const onHideRef = useRef<GenericFunction>(() => {});
 
@@ -95,7 +94,7 @@ export const MagicModalPortal: React.FC = () => {
       {...config}
       style={[styles.container, config?.style]}
     >
-      {modalContent}
+      <ModalContent />
     </ModalContainer>
   );
 };

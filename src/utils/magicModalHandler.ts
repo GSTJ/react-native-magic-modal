@@ -1,7 +1,7 @@
 import React from 'react';
 import type { ModalProps } from 'react-native-modal';
 
-export type ModalChildren = React.FC;
+export type ModalChildren = () => React.ReactNode;
 
 export type NewConfigProps = Partial<ModalProps>;
 
