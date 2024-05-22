@@ -3,25 +3,25 @@ import React, {
   useImperativeHandle,
   useRef,
   useState,
-} from 'react';
-import { Dimensions } from 'react-native';
+} from "react";
+import { Dimensions } from "react-native";
 
-import ModalContainer, { ModalProps } from 'react-native-modal';
+import ModalContainer, { ModalProps } from "react-native-modal";
 
-import { ANIMATION_DURATION_IN_MS } from './constants/animations';
-import type { IModal,ModalChildren } from './utils/magicModalHandler';
-import { magicModalRef, NewConfigProps } from './utils/magicModalHandler';
-import { styles } from './MagicModalPortal.styles';
+import { ANIMATION_DURATION_IN_MS } from "./constants/animations";
+import type { IModal, ModalChildren } from "./utils/magicModalHandler";
+import { magicModalRef, NewConfigProps } from "./utils/magicModalHandler";
+import { styles } from "./MagicModalPortal.styles";
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get("screen");
 
 type GenericFunction = (props: any) => any;
 
 export enum MagicModalHideTypes {
-  BACKDROP_PRESSED = 'BACKDROP_PRESSED',
-  SWIPE_COMPLETED = 'SWIPE_COMPLETED',
-  BACK_BUTTON_PRESSED = 'BACK_BUTTON_PRESSED',
-  MODAL_OVERRIDE = 'MODAL_OVERRIDE',
+  BACKDROP_PRESSED = "BACKDROP_PRESSED",
+  SWIPE_COMPLETED = "SWIPE_COMPLETED",
+  BACK_BUTTON_PRESSED = "BACK_BUTTON_PRESSED",
+  MODAL_OVERRIDE = "MODAL_OVERRIDE",
 }
 
 export const modalRefForTests = React.createRef<any>();
@@ -49,7 +49,7 @@ export const MagicModalPortal: React.FC = () => {
 
   const onHideRef = useRef<GenericFunction>(() => {});
 
-  const hide = useCallback<IModal['hide']>(
+  const hide = useCallback<IModal["hide"]>(
     async (props) => {
       setIsVisible(false);
 
@@ -59,14 +59,14 @@ export const MagicModalPortal: React.FC = () => {
       await new Promise((resolve) => setTimeout(resolve, timeoutDuration));
       onHideRef.current(props);
     },
-    [config?.animationOutTiming]
+    [config?.animationOutTiming],
   );
 
   useImperativeHandle(magicModalRef, () => ({
     hide,
     show: async (
       newComponent: ModalChildren,
-      newConfig: Partial<ModalProps> = {}
+      newConfig: Partial<ModalProps> = {},
     ) => {
       if (isVisible) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 

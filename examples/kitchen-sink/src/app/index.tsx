@@ -1,15 +1,18 @@
+/* eslint-disable react-native/no-color-literals */
 import React, { useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { magicModal } from "@magic/react-native-magic-modal";
 import { ExampleModal } from "@/components/ExampleModal";
 
 const showModal = async () => {
+  // eslint-disable-next-line no-console
   console.log("Opening modal");
   const modalResponse = await magicModal.show(() => <ExampleModal />);
+  // eslint-disable-next-line no-console
   console.log("Modal closed with response:", modalResponse);
 };
 
-export default function App() {
+export default () => {
   useEffect(() => {
     showModal();
   }, []);
@@ -24,7 +27,7 @@ export default function App() {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

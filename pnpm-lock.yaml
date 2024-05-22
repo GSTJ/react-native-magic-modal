@@ -16,7 +16,7 @@ importers:
     dependencies:
       '@magic/react-native-magic-modal':
         specifier: ^0.2.20
-        version: link:../../packages/react-native-magic-modal
+        version: link:../../packages/modal
       expo:
         specifier: ^51.0.8
         version: 51.0.8(@babel/core@7.24.5)(@babel/preset-env@7.24.5)
@@ -61,7 +61,7 @@ importers:
         specifier: ^6.3.10
         version: 6.3.10(expo@51.0.8)
 
-  packages/react-native-magic-modal:
+  packages/modal:
     dependencies:
       react-native-modal:
         specifier: ^13.0.1

@@ -1,10 +1,10 @@
-import React from 'react'
+import React from "react";
 
-import type { ModalProps } from 'react-native-modal'
+import type { ModalProps } from "react-native-modal";
 
-export type ModalChildren = React.FC
+export type ModalChildren = React.FC;
 
-export type NewConfigProps = Partial<ModalProps>
+export type NewConfigProps = Partial<ModalProps>;
 
 /**
  * @description Show a modal. If a modal is already present, it will close it first before displaying.
@@ -14,9 +14,9 @@ export type NewConfigProps = Partial<ModalProps>
  */
 const show = async <T = any>(
   newComponent: ModalChildren,
-  newConfig?: NewConfigProps
+  newConfig?: NewConfigProps,
 ): Promise<T | undefined> =>
-  magicModalRef.current?.show?.(newComponent, newConfig)
+  magicModalRef.current?.show?.(newComponent, newConfig);
 
 /**
  * @description Hide the current modal.
@@ -24,14 +24,14 @@ const show = async <T = any>(
  * @returns {Promise<void>} Returns a promise that resolves when the close animation is finished.
  */
 const hide = async (props?: any): Promise<void> =>
-  magicModalRef.current?.hide?.(props)
+  magicModalRef.current?.hide?.(props);
 
 export interface IModal {
-  show: typeof show
-  hide: typeof hide
+  show: typeof show;
+  hide: typeof hide;
 }
 
-export const magicModalRef = React.createRef<IModal>()
+export const magicModalRef = React.createRef<IModal>();
 
 /**
  * @example
@@ -53,4 +53,4 @@ export const magicModalRef = React.createRef<IModal>()
 export const magicModal = {
   show,
   hide,
-}
+};

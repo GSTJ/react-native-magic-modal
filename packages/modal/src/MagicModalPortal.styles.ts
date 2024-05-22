@@ -1,4 +1,4 @@
-import { StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet, ViewStyle } from "react-native";
 
 interface IModalStyles {
   container: ViewStyle;

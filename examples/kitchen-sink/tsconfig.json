@@ -1,22 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": [
-    "expo/tsconfig.base",
-    "@magic/tsconfig/base.json"
-  ],
+  "extends": ["expo/tsconfig.base", "@magic/tsconfig/base.json"],
   "compilerOptions": {
     "jsx": "react-native",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "exclude": [
     "node_modules",
     "android",
