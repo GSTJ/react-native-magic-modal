@@ -1,5 +1,5 @@
 {
-  "extends": "@magic/tsconfig/base.json",
+  "extends": "@magic/tsconfig/internal-package.json",
   "include": ["."],
   "exclude": ["node_modules"]
 }
