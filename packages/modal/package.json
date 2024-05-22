@@ -46,15 +46,16 @@
     ]
   },
   "dependencies": {
-    "react-native-modal": "^13.0.1"
+    "react-native-reanimated": "~3.10.1"
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-reanimated": "*"
   },
   "devDependencies": {
-    "@magic/prettier-config": "workspace:*",
     "@magic/eslint-config": "workspace:*",
+    "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
     "@testing-library/react-native": "^12.5.0",
     "@types/jest": "^29.5.12",

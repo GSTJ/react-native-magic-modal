@@ -4,15 +4,51 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { magicModal } from "@magic/react-native-magic-modal";
 import { ExampleModal } from "@/components/ExampleModal";
 import { router } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 const showModal = async () => {
   // eslint-disable-next-line no-console
   console.log("Opening modal");
-  const modalResponse = await magicModal.show(() => <ExampleModal />, {
-    forceFullScreen: true,
-  });
+  const modalResponse = await magicModal.show(() => <ExampleModal />);
   // eslint-disable-next-line no-console
   console.log("Modal closed with response:", modalResponse);
+};
+
+const Toast = () => {
+  const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      magicModal.hide();
+    }, 2000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  return (
+    <View style={[styles.toastContainer, { paddingTop: insets.top }]}>
+      <StatusBar style="light" />
+      <Text style={styles.toastText}>This is a toast!</Text>
+    </View>
+  );
+};
+
+const showToast = async () => {
+  // eslint-disable-next-line no-console
+  console.log("Opening toast");
+  const toastResponse = await magicModal.show(() => <Toast />, {
+    direction: "top",
+    hideBackdrop: true,
+    style: {
+      justifyContent: "flex-start",
+    },
+  });
+
+  // eslint-disable-next-line no-console
+  console.log("Toast closed with response:", toastResponse);
 };
 
 export default () => {
@@ -24,13 +60,13 @@ export default () => {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
-          magicModal.show(() => <ExampleModal />, {
-            forceFullScreen: true,
-          })
-        }
+        onPress={() => magicModal.show(() => <ExampleModal />)}
       >
-        <Text style={styles.buttonText}>Press me!</Text>
+        <Text style={styles.buttonText}>Show Modal</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={showToast}>
+        <Text style={styles.buttonText}>Show Toast</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -44,6 +80,14 @@ export default () => {
 };
 
 const styles = StyleSheet.create({
+  toastContainer: {
+    backgroundColor: "#000000",
+    padding: 10,
+  },
+  toastText: {
+    color: "#ffffff",
+  },
+
   container: {
     flex: 1,
     alignItems: "center",

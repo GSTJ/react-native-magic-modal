@@ -9,11 +9,7 @@ export default () => {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
-          magicModal.show(() => <ExampleModal />, {
-            forceFullScreen: true,
-          })
-        }
+        onPress={() => magicModal.show(() => <ExampleModal />)}
       >
         <Text style={styles.buttonText}>Press me!</Text>
       </TouchableOpacity>

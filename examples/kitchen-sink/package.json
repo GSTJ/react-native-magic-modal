@@ -23,6 +23,7 @@
     ]
   },
   "dependencies": {
+    "react-native-reanimated": "~3.10.1",
     "@magic/react-native-magic-modal": "^0.2.20",
     "expo": "^51.0.8",
     "expo-router": "^3.5.14",

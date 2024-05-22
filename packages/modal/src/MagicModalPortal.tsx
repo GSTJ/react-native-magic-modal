@@ -1,20 +1,42 @@
 import React, {
   useCallback,
+  useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
-import { Dimensions, View } from "react-native";
-
-import ModalContainer, { ModalProps } from "react-native-modal";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeInLeft,
+  FadeInRight,
+  FadeInUp,
+  FadeOut,
+  FadeOutDown,
+} from "react-native-reanimated";
 
 import { ANIMATION_DURATION_IN_MS } from "./constants/animations";
 import type { IModal, ModalChildren } from "./utils/magicModalHandler";
-import { magicModalRef, NewConfigProps } from "./utils/magicModalHandler";
+import {
+  magicModal,
+  magicModalRef,
+  NewConfigProps,
+} from "./utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
 import { FullWindowOverlay } from "react-native-screens";
+import { BackHandler, Pressable, StyleSheet, View } from "react-native";
 
-const { width, height } = Dimensions.get("screen");
+export type ModalProps = {
+  animationInTiming: number;
+  animationOutTiming: number;
+  hideBackdrop: boolean;
+  backdropColor: string;
+  onBackButtonPress: () => void;
+  onBackdropPress: () => void;
+  style: Record<string, unknown>;
+  direction: "top" | "bottom" | "left" | "right";
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type GenericFunction = (props: any) => any;
@@ -28,6 +50,8 @@ export enum MagicModalHideTypes {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const modalRefForTests = React.createRef<any>();
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
@@ -54,17 +78,21 @@ export const MagicModalPortal: React.FC = () => {
 
   const onHideRef = useRef<GenericFunction>(() => {});
 
+  const animationOutTiming =
+    config?.animationOutTiming ?? ANIMATION_DURATION_IN_MS;
+
+  const animationInTiming =
+    config?.animationInTiming ?? ANIMATION_DURATION_IN_MS;
+
   const hide = useCallback<IModal["hide"]>(
     async (props) => {
       setIsVisible(false);
 
-      const timeoutDuration =
-        config?.animationOutTiming ?? ANIMATION_DURATION_IN_MS;
+      await new Promise((resolve) => setTimeout(resolve, animationOutTiming));
 
-      await new Promise((resolve) => setTimeout(resolve, timeoutDuration));
       onHideRef.current(props);
     },
-    [config?.animationOutTiming]
+    [animationOutTiming]
   );
 
   useImperativeHandle(magicModalRef, () => ({
@@ -85,32 +113,84 @@ export const MagicModalPortal: React.FC = () => {
     },
   }));
 
+  const direction = config?.direction ?? "bottom";
+
+  const enteringAnimation = useMemo(() => {
+    switch (direction) {
+      case "top":
+        return FadeInUp;
+      case "bottom":
+        return FadeInDown;
+      case "left":
+        return FadeInLeft;
+      case "right":
+        return FadeInRight;
+    }
+  }, [config?.direction]);
+
+  const exitingAnimation = useMemo(() => {
+    switch (direction) {
+      case "top":
+        return FadeOut;
+      case "bottom":
+        return FadeOutDown;
+      case "left":
+        return FadeOut;
+      case "right":
+        return FadeOut;
+    }
+  }, [config?.direction]);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        if (config?.onBackButtonPress) {
+          config.onBackButtonPress();
+        } else {
+          magicModal.hide(MagicModalHideTypes.BACK_BUTTON_PRESSED);
+        }
+
+        return true;
+      }
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
-    <ModalContainer
-      ref={modalRefForTests}
-      backdropTransitionOutTiming={0}
-      avoidKeyboard
-      swipeDirection="down"
-      deviceHeight={height}
-      deviceWidth={width}
-      animationOutTiming={ANIMATION_DURATION_IN_MS}
-      statusBarTranslucent
-      onBackdropPress={() => hide(MagicModalHideTypes.BACKDROP_PRESSED)}
-      onSwipeComplete={() => hide(MagicModalHideTypes.SWIPE_COMPLETED)}
-      onBackButtonPress={() => hide(MagicModalHideTypes.BACK_BUTTON_PRESSED)}
-      isVisible={isVisible}
-      {...config}
-      style={[styles.container, config?.style]}
-    >
-      {config.forceFullScreen && isVisible ? (
-        <FullWindowOverlay>
-          <View style={[styles.overlay, styles.container, config?.style]}>
-            {modalContent}
-          </View>
-        </FullWindowOverlay>
-      ) : (
-        modalContent
-      )}
-    </ModalContainer>
+    <FullWindowOverlay>
+      <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+        {isVisible ? (
+          <AnimatedPressable
+            disabled={config?.hideBackdrop}
+            pointerEvents={config?.hideBackdrop ? "none" : "auto"}
+            entering={FadeIn.duration(animationInTiming)}
+            exiting={FadeOut.duration(animationInTiming)}
+            style={[
+              styles.backdrop,
+              {
+                backgroundColor: config.hideBackdrop
+                  ? "transparent"
+                  : config?.backdropColor ?? styles.backdrop.backgroundColor,
+              },
+            ]}
+            onPress={
+              config?.onBackdropPress ??
+              (() => magicModal.hide(MagicModalHideTypes.BACKDROP_PRESSED))
+            }
+          >
+            <Animated.View
+              pointerEvents="box-none"
+              entering={enteringAnimation.duration(animationInTiming)}
+              exiting={exitingAnimation.duration(animationOutTiming)}
+              style={[styles.overlay, styles.container, config?.style]}
+            >
+              {modalContent}
+            </Animated.View>
+          </AnimatedPressable>
+        ) : null}
+      </View>
+    </FullWindowOverlay>
   );
 };

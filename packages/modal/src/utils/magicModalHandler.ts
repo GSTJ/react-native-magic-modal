@@ -1,13 +1,9 @@
+import { type ModalProps } from "@/MagicModalPortal";
 import React from "react";
-
-import type { ModalProps } from "react-native-modal";
 
 export type ModalChildren = React.FC;
 
-export type NewConfigProps = Partial<ModalProps> & {
-  forceFullScreen?: boolean;
-};
-
+export type NewConfigProps = Partial<ModalProps>;
 /**
  * @description Show a modal. If a modal is already present, it will close it first before displaying.
  * @param newComponent Recieves a function that returns a modal component.

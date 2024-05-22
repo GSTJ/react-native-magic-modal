@@ -3,6 +3,7 @@ import { StyleSheet, ViewStyle } from "react-native";
 interface IModalStyles {
   container: ViewStyle;
   overlay: ViewStyle;
+  backdrop: ViewStyle;
 }
 
 export const styles = StyleSheet.create<IModalStyles>({
@@ -10,9 +11,11 @@ export const styles = StyleSheet.create<IModalStyles>({
     margin: 0,
   },
   overlay: {
-    width: "100%",
-    height: "100%",
+    flex: 1,
     justifyContent: "center",
+  },
+  backdrop: {
+    flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
