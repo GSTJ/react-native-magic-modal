@@ -4,7 +4,9 @@ import type { ModalProps } from "react-native-modal";
 
 export type ModalChildren = React.FC;
 
-export type NewConfigProps = Partial<ModalProps>;
+export type NewConfigProps = Partial<ModalProps> & {
+  forceFullScreen?: boolean;
+};
 
 /**
  * @description Show a modal. If a modal is already present, it will close it first before displaying.
@@ -12,9 +14,9 @@ export type NewConfigProps = Partial<ModalProps>;
  * @param newConfig Recieves {@link NewConfigProps}  to override the default configs.
  * @returns {Promise<any>} Returns a Promise that resolves with the {@link hide} props when the Modal is closed. If it were closed automatically, without the manual use of  {@link hide}, the return would be one of {@link MagicModalHideTypes}
  */
-const show = async <T = any>(
+const show = async <T>(
   newComponent: ModalChildren,
-  newConfig?: NewConfigProps,
+  newConfig?: NewConfigProps
 ): Promise<T | undefined> =>
   magicModalRef.current?.show?.(newComponent, newConfig);
 
@@ -23,7 +25,7 @@ const show = async <T = any>(
  * @param props Those props will be passed to the {@link show} resolve function.
  * @returns {Promise<void>} Returns a promise that resolves when the close animation is finished.
  */
-const hide = async (props?: any): Promise<void> =>
+const hide = async (props?: unknown): Promise<void> =>
   magicModalRef.current?.hide?.(props);
 
 export interface IModal {

@@ -1,5 +1,13 @@
 {
-  "extends": "@magic/tsconfig/internal-package.json",
-  "include": ["."],
-  "exclude": ["node_modules"]
+  "extends": ["expo/tsconfig.base", "@magic/tsconfig/base.json"],
+  "exclude": ["node_modules"],
+  "include": ["src"],
+  "compilerOptions": {
+    "jsx": "react-native",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+  }
 }

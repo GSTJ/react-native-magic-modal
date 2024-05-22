@@ -4,7 +4,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, View } from "react-native";
 
 import ModalContainer, { ModalProps } from "react-native-modal";
 
@@ -12,9 +12,11 @@ import { ANIMATION_DURATION_IN_MS } from "./constants/animations";
 import type { IModal, ModalChildren } from "./utils/magicModalHandler";
 import { magicModalRef, NewConfigProps } from "./utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
+import { FullWindowOverlay } from "react-native-screens";
 
 const { width, height } = Dimensions.get("screen");
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type GenericFunction = (props: any) => any;
 
 export enum MagicModalHideTypes {
@@ -24,6 +26,7 @@ export enum MagicModalHideTypes {
   MODAL_OVERRIDE = "MODAL_OVERRIDE",
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const modalRefForTests = React.createRef<any>();
 
 /**
@@ -45,7 +48,9 @@ export const modalRefForTests = React.createRef<any>();
 export const MagicModalPortal: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [config, setConfig] = useState<NewConfigProps>({});
-  const [modalContent, setModalContent] = useState<ModalChildren>(() => <></>);
+  const [modalContent, setModalContent] = useState<React.ReactNode>(() => (
+    <></>
+  ));
 
   const onHideRef = useRef<GenericFunction>(() => {});
 
@@ -59,18 +64,18 @@ export const MagicModalPortal: React.FC = () => {
       await new Promise((resolve) => setTimeout(resolve, timeoutDuration));
       onHideRef.current(props);
     },
-    [config?.animationOutTiming],
+    [config?.animationOutTiming]
   );
 
   useImperativeHandle(magicModalRef, () => ({
     hide,
     show: async (
       newComponent: ModalChildren,
-      newConfig: Partial<ModalProps> = {},
+      newConfig: Partial<ModalProps> = {}
     ) => {
       if (isVisible) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
-      setModalContent(newComponent);
+      setModalContent(newComponent as unknown as React.ReactNode);
       setConfig(newConfig);
       setIsVisible(true);
 
@@ -97,7 +102,15 @@ export const MagicModalPortal: React.FC = () => {
       {...config}
       style={[styles.container, config?.style]}
     >
-      {modalContent}
+      {config.forceFullScreen && isVisible ? (
+        <FullWindowOverlay>
+          <View style={[styles.overlay, styles.container, config?.style]}>
+            {modalContent}
+          </View>
+        </FullWindowOverlay>
+      ) : (
+        modalContent
+      )}
     </ModalContainer>
   );
 };
