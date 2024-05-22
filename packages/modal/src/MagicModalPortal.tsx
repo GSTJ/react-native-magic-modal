@@ -158,6 +158,14 @@ export const MagicModalPortal: React.FC = () => {
     return () => backHandler.remove();
   }, []);
 
+  const onBackdropPress = useMemo(() => {
+    if (config?.onBackdropPress) {
+      return config.onBackdropPress;
+    }
+
+    return () => magicModal.hide(MagicModalHideTypes.BACKDROP_PRESSED);
+  }, [config?.onBackdropPress]);
+
   return (
     <FullWindowOverlay>
       <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
@@ -175,10 +183,7 @@ export const MagicModalPortal: React.FC = () => {
                   : config?.backdropColor ?? styles.backdrop.backgroundColor,
               },
             ]}
-            onPress={
-              config?.onBackdropPress ??
-              (() => magicModal.hide(MagicModalHideTypes.BACKDROP_PRESSED))
-            }
+            onPress={onBackdropPress}
           >
             <Animated.View
               pointerEvents="box-none"
