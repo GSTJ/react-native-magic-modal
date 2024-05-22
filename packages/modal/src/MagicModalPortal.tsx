@@ -9,6 +9,7 @@ import React, {
 import Animated, {
   Extrapolation,
   interpolate,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -111,18 +112,22 @@ export const MagicModalPortal: React.FC = () => {
         height
       );
 
-      translationX.value = withSpring(
-        directionTranslation.translationX,
-        springConfig
-      );
-      translationY.value = withSpring(
-        directionTranslation.translationY,
-        springConfig
-      );
+      await new Promise<void>((resolve) => {
+        if (directionTranslation.translationX !== 0) {
+          translationX.value = withSpring(
+            directionTranslation.translationX,
+            springConfig,
+            () => runOnJS(resolve)()
+          );
+          return;
+        }
 
-      await new Promise((resolve) =>
-        setTimeout(resolve, config.animationOutTiming)
-      );
+        translationY.value = withSpring(
+          directionTranslation.translationY,
+          springConfig,
+          () => runOnJS(resolve)()
+        );
+      });
 
       setIsVisible(false);
 
