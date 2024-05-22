@@ -7,7 +7,8 @@ import React, {
   useState,
 } from "react";
 import Animated, {
-  clamp,
+  Extrapolation,
+  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -20,11 +21,7 @@ import {
 
 import { ANIMATION_DURATION_IN_MS } from "./constants/animations";
 import type { IModal, ModalChildren } from "./utils/magicModalHandler";
-import {
-  magicModal,
-  magicModalRef,
-  NewConfigProps,
-} from "./utils/magicModalHandler";
+import { magicModalRef } from "./utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
 import { FullWindowOverlay } from "react-native-screens";
 import {
@@ -34,18 +31,21 @@ import {
   useWindowDimensions,
 } from "react-native";
 
+type Direction = "top" | "bottom" | "left" | "right";
+
 export type ModalProps = {
   animationInTiming: number;
   animationOutTiming: number;
   hideBackdrop: boolean;
   backdropColor: string;
-  onBackButtonPress: () => void;
-  onBackdropPress: () => void;
+  onBackButtonPress: (() => void) | undefined;
+  onBackdropPress: (() => void) | undefined;
   style: Record<string, unknown>;
-  direction: "top" | "bottom" | "left" | "right";
+  dampingFactor: number;
+  direction: Direction;
+  swipeVelocityThreshold: number;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type GenericFunction = (props: any) => any;
 
 export enum MagicModalHideTypes {
@@ -55,17 +55,27 @@ export enum MagicModalHideTypes {
   MODAL_OVERRIDE = "MODAL_OVERRIDE",
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const modalRefForTests = React.createRef<any>();
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
+const defaultConfig = {
+  animationInTiming: ANIMATION_DURATION_IN_MS,
+  animationOutTiming: ANIMATION_DURATION_IN_MS,
+  hideBackdrop: false,
+  backdropColor: "rgba(0, 0, 0, 0.5)",
+  dampingFactor: 0.2,
+  direction: "bottom",
+  swipeVelocityThreshold: 500,
+  onBackButtonPress: undefined,
+  onBackdropPress: undefined,
+  style: {},
+} satisfies ModalProps;
+
 export const MagicModalPortal: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [config, setConfig] = useState<NewConfigProps>({});
-  const [modalContent, setModalContent] = useState<React.ReactNode>(() => (
-    <></>
-  ));
+  const [config, setConfig] = useState<ModalProps>(defaultConfig);
+  const [modalContent, setModalContent] = useState<React.ReactNode>(<></>);
 
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
@@ -74,49 +84,57 @@ export const MagicModalPortal: React.FC = () => {
 
   const onHideRef = useRef<GenericFunction>(() => {});
 
-  const animationOutTiming =
-    config?.animationOutTiming ?? ANIMATION_DURATION_IN_MS;
+  const { width, height } = useWindowDimensions();
 
-  const animationInTiming =
-    config?.animationInTiming ?? ANIMATION_DURATION_IN_MS;
+  const getDirectionTranslation = (direction: Direction, value: number) => {
+    switch (direction) {
+      case "left":
+        return { translationX: -value, translationY: 0 };
+      case "right":
+        return { translationX: value, translationY: 0 };
+      case "top":
+        return { translationX: 0, translationY: -value };
+      case "bottom":
+        return { translationX: 0, translationY: value };
+    }
+  };
 
   const hide = useCallback<IModal["hide"]>(
     async (props) => {
-      if (direction === "left") {
-        translationX.value = withSpring(width, {
-          duration: animationOutTiming,
-          dampingRatio: 3,
-        });
-      }
+      const springConfig = {
+        duration: config.animationOutTiming,
+        dampingRatio: 3,
+      };
 
-      if (direction === "right") {
-        translationX.value = withSpring(-width, {
-          duration: animationOutTiming,
-          dampingRatio: 3,
-        });
-      }
+      const directionTranslation = getDirectionTranslation(
+        config.direction,
+        height
+      );
 
-      if (direction === "top") {
-        translationY.value = withSpring(-height, {
-          duration: animationOutTiming,
-          dampingRatio: 3,
-        });
-      }
+      translationX.value = withSpring(
+        directionTranslation.translationX,
+        springConfig
+      );
+      translationY.value = withSpring(
+        directionTranslation.translationY,
+        springConfig
+      );
 
-      if (direction === "bottom") {
-        translationY.value = withSpring(height, {
-          duration: animationOutTiming,
-          dampingRatio: 3,
-        });
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, animationOutTiming));
+      await new Promise((resolve) =>
+        setTimeout(resolve, config.animationOutTiming)
+      );
 
       setIsVisible(false);
 
       onHideRef.current(props);
     },
-    [animationOutTiming]
+    [
+      config.animationOutTiming,
+      config.direction,
+      height,
+      translationX,
+      translationY,
+    ]
   );
 
   useImperativeHandle(magicModalRef, () => ({
@@ -127,7 +145,6 @@ export const MagicModalPortal: React.FC = () => {
     ) => {
       if (isVisible) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
-      // Reset the translation values
       translationX.value = 0;
       translationY.value = 0;
 
@@ -135,7 +152,7 @@ export const MagicModalPortal: React.FC = () => {
       prevTranslationY.value = 0;
 
       setModalContent(newComponent as unknown as React.ReactNode);
-      setConfig(newConfig);
+      setConfig({ ...defaultConfig, ...newConfig });
       setIsVisible(true);
 
       return new Promise((resolve) => {
@@ -144,16 +161,14 @@ export const MagicModalPortal: React.FC = () => {
     },
   }));
 
-  const direction = config?.direction ?? "bottom";
-
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
-        if (config?.onBackButtonPress) {
+        if (config.onBackButtonPress) {
           config.onBackButtonPress();
         } else {
-          magicModal.hide(MagicModalHideTypes.BACK_BUTTON_PRESSED);
+          hide(MagicModalHideTypes.BACK_BUTTON_PRESSED);
         }
 
         return true;
@@ -161,17 +176,14 @@ export const MagicModalPortal: React.FC = () => {
     );
 
     return () => backHandler.remove();
-  }, []);
+  }, [config.onBackButtonPress, hide]);
 
   const onBackdropPress = useMemo(() => {
-    if (config?.onBackdropPress) {
-      return config.onBackdropPress;
-    }
-
-    return () => magicModal.hide(MagicModalHideTypes.BACKDROP_PRESSED);
-  }, [config?.onBackdropPress]);
-
-  const { width, height } = useWindowDimensions();
+    return (
+      config.onBackdropPress ??
+      (() => hide(MagicModalHideTypes.BACKDROP_PRESSED))
+    );
+  }, [config.onBackdropPress, hide]);
 
   const pan = Gesture.Pan()
     .minDistance(1)
@@ -180,65 +192,64 @@ export const MagicModalPortal: React.FC = () => {
       prevTranslationY.value = translationY.value;
     })
     .onUpdate((event) => {
-      const maxTranslateX = width / 2 - 50;
-      const maxTranslateY = height / 2 - 50;
+      const direction = config.direction;
+      const translationValue =
+        direction.includes("left") || direction.includes("right")
+          ? event.translationX
+          : event.translationY;
 
-      if (direction === "left") {
-        translationX.value = clamp(
-          prevTranslationX.value + event.translationX,
-          -maxTranslateX,
-          0
-        );
-      }
+      const prevTranslationValue =
+        direction.includes("left") || direction.includes("right")
+          ? prevTranslationX.value
+          : prevTranslationY.value;
 
-      if (direction === "right") {
-        translationX.value = clamp(
-          prevTranslationX.value + event.translationX,
-          0,
-          maxTranslateX
-        );
-      }
+      const shouldDamp =
+        (direction === "bottom" && translationValue < 0) ||
+        (direction === "top" && translationValue > 0) ||
+        (direction === "left" && translationValue < 0) ||
+        (direction === "right" && translationValue > 0);
 
-      if (direction === "top") {
-        translationY.value = clamp(
-          prevTranslationY.value + event.translationY,
-          -maxTranslateY,
-          0
-        );
-      }
+      const dampedTranslation = shouldDamp
+        ? prevTranslationValue + translationValue * config.dampingFactor
+        : prevTranslationValue + translationValue;
 
-      if (direction === "bottom") {
-        translationY.value = clamp(
-          prevTranslationY.value + event.translationY,
-          0,
-          maxTranslateY
-        );
+      const maxTranslate =
+        direction.includes("left") || direction.includes("right")
+          ? width / 2 - 50
+          : height / 2 - 50;
+
+      const limitedTranslation =
+        Math.abs(dampedTranslation) > Math.abs(maxTranslate)
+          ? maxTranslate * Math.sign(dampedTranslation)
+          : dampedTranslation;
+
+      if (direction.includes("left") || direction.includes("right")) {
+        translationX.value = limitedTranslation;
+      } else {
+        translationY.value = limitedTranslation;
       }
     })
     .onEnd((event) => {
-      // Check the direction and velocity of the swipe
-      if (direction === "right" && event.velocityX > 500) {
-        magicModal.hide(MagicModalHideTypes.SWIPE_COMPLETED);
-        return;
-      } else if (direction === "left" && event.velocityX < 500) {
-        magicModal.hide(MagicModalHideTypes.SWIPE_COMPLETED);
-        return;
-      } else if (direction === "top" && event.velocityY < 500) {
-        magicModal.hide(MagicModalHideTypes.SWIPE_COMPLETED);
-        return;
-      } else if (direction === "bottom" && event.velocityY > 500) {
-        magicModal.hide(MagicModalHideTypes.SWIPE_COMPLETED);
+      const velocityThreshold = config.swipeVelocityThreshold;
+
+      const shouldHide =
+        (config.direction === "right" && event.velocityX > velocityThreshold) ||
+        (config.direction === "left" && event.velocityX < -velocityThreshold) ||
+        (config.direction === "top" && event.velocityY < -velocityThreshold) ||
+        (config.direction === "bottom" && event.velocityY > velocityThreshold);
+
+      if (shouldHide) {
+        hide(MagicModalHideTypes.SWIPE_COMPLETED);
         return;
       }
 
-      // Reset the translation values
       translationX.value = withSpring(0, {
         velocity: event.velocityX,
-        damping: 15,
+        damping: 75,
       });
       translationY.value = withSpring(0, {
         velocity: event.velocityY,
-        damping: 15,
+        damping: 75,
       });
     })
     .runOnJS(true);
@@ -250,39 +261,56 @@ export const MagicModalPortal: React.FC = () => {
     ],
   }));
 
+  const animatedBackdropStyles = useAnimatedStyle(() => {
+    const translationValue =
+      config.direction.includes("left") || config.direction.includes("right")
+        ? translationX.value
+        : translationY.value;
+
+    return {
+      opacity: interpolate(
+        translationValue,
+        [-width, 0],
+        [0, 1],
+        Extrapolation.CLAMP
+      ),
+    };
+  });
+
   return (
     <FullWindowOverlay>
       <GestureHandlerRootView
         pointerEvents="box-none"
         style={StyleSheet.absoluteFill}
       >
-        {isVisible ? (
+        {isVisible && (
           <>
             <AnimatedPressable
-              pointerEvents={config?.hideBackdrop ? "none" : "auto"}
+              pointerEvents={config.hideBackdrop ? "none" : "auto"}
               style={[
                 styles.backdrop,
+                animatedBackdropStyles,
                 {
                   backgroundColor: config.hideBackdrop
                     ? "transparent"
-                    : config?.backdropColor ?? styles.backdrop.backgroundColor,
+                    : config.backdropColor ?? styles.backdrop.backgroundColor,
                 },
               ]}
               onPress={onBackdropPress}
             />
             <Animated.View
-              pointerEvents={"box-none"}
+              pointerEvents="box-none"
               style={[
                 animatedStyles,
                 styles.overlay,
                 styles.container,
-                config?.style,
+                config.style,
               ]}
             >
               <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
             </Animated.View>
           </>
-        ) : null}
+        )}
       </GestureHandlerRootView>
     </FullWindowOverlay>
   );

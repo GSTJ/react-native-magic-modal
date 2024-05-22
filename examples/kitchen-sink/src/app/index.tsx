@@ -42,6 +42,7 @@ const showToast = async () => {
   const toastResponse = await magicModal.show(() => <Toast />, {
     direction: "top",
     hideBackdrop: true,
+    dampingFactor: 0,
     style: {
       justifyContent: "flex-start",
     },
