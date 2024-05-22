@@ -18,22 +18,22 @@
     ]
   },
   "dependencies": {
-    "expo": "^42.0.0",
-    "expo-splash-screen": "~0.11.2",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native": "0.63.4",
-    "react-native-unimodules": "~0.14.5",
-    "react-native-web": "~0.13.12",
-    "@magic/react-native-magic-modal": "*"
+    "@magic/react-native-magic-modal": "^0.2.20",
+    "expo": "^51.0.8",
+    "expo-splash-screen": "~0.27.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.74.1",
+    "react-native-unimodules": "~0.14.10",
+    "react-native-web": "~0.19.12"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0",
-    "@babel/runtime": "^7.9.6",
-    "babel-plugin-module-resolver": "^4.0.0",
-    "babel-preset-expo": "8.3.0",
-    "expo-cli": "^4.0.13",
+    "@babel/core": "~7.24.5",
+    "@babel/runtime": "^7.24.5",
+    "@magic/eslint-config": "0.0.0",
     "@magic/tsconfig": "0.0.0",
-    "@magic/eslint-config": "0.0.0"
+    "babel-plugin-module-resolver": "^5.0.2",
+    "babel-preset-expo": "11.0.6",
+    "expo-cli": "^6.3.10"
   }
 }

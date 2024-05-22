@@ -12,9 +12,8 @@
     }
   },
   "devDependencies": {
-    "lint-staged": "^12.3.4",
-    "turbo": "^1.10.13",
-    "typescript": "^5.2.2",
-    "prettier": "3.0.3"
+    "prettier": "3.2.5",
+    "turbo": "^1.13.3",
+    "typescript": "^5.4.5"
   }
 }
