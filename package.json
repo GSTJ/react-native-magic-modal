@@ -6,7 +6,8 @@
     "lint:fix": "turbo lint:fix",
     "format": "turbo format",
     "format:fix": "turbo format:fix",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "start": "pnpm -F @magic/kitchen-sink start"
   },
   "config": {
     "commitizen": {

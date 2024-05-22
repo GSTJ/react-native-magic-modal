@@ -1,5 +1,11 @@
 {
-  "extends": "@magic/tsconfig/expo.json",
+  "compilerOptions": {
+    "jsx": "react"
+  },
+  "compilerOptions": {
+    "jsx": "react"
+  },
+  "extends": "@magic/tsconfig/base.json",
   "include": ["."],
   "exclude": ["node_modules"]
 }
