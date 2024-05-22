@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { MagicModalPortal, magicModal } from "@magic/react-native-magic-modal";
-import { ExampleModal } from "../components/ExampleModal/ExampleModal";
+import { magicModal } from "@magic/react-native-magic-modal";
+import { ExampleModal } from "@/components/ExampleModal/ExampleModal";
 
 export default function App() {
   useEffect(() => {
@@ -18,7 +18,6 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <MagicModalPortal />
       <TouchableOpacity
         style={styles.button}
         onPress={() => magicModal.show(() => <ExampleModal />)}

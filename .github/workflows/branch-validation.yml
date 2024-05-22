@@ -1,54 +1,68 @@
-name: Unit Tests
-
+name: Branch Checkup
 on:
-  pull_request:
-    types:
-      - opened
-      - edited
-      - reopened
-      - synchronize
-  pull_request_target:
-    types:
-      - opened
-      - edited
-      - reopened
-      - synchronize
+  push:
+    branches-ignore:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  unit_tests:
-    runs-on: ubuntu-latest
-    if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.8.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/checkout@v2
-
-      - name: Test coverage
-        uses: artiomtr/jest-coverage-report-action@v2.0-rc.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          annotations: none
-          package-manager: yarn
-          test-script: yarn jest --silent --ci --coverage --testLocationInResults --json --outputFile="report.json"
-
-  check-commit-message:
-    name: Check Commit Message
+  checkup:
+    name: Typecheck, Lint and Format
     runs-on: ubuntu-latest
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.8.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🏗 Setup Repo
+        uses: actions/checkout@v4
 
-      - name: Check Commit Type
-        uses: gsactions/commit-message-checker@v1
+      - name: 🏗 Setup PNPM
+        uses: pnpm/action-setup@v2
         with:
-          pattern: '^((build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)|Merge (pull request|branch) .* (into|from) .*)'
-          error: 'Your commits should follow cz-conventional-changelog.'
-          excludeDescription: 'true'
-          excludeTitle: 'true'
-          checkAllCommitMessages: 'true'
-          accessToken: ${{ secrets.GITHUB_TOKEN }}
+          version: 8
+
+      - name: 🏗 Get PNPM store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: 🏗 Setup PNPM cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: "📦 Cache Node Modules"
+        uses: actions/cache@v3.3.3
+        id: cache-node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: 📦 Install Dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: pnpm install
+
+      - name: 🏗 Setup Turborepo Cache
+        uses: dtinth/setup-github-actions-caching-for-turbo@v1
+
+      - name: 🧹 Dedupe
+        run: pnpm dedupe --check
+
+      - name: 🧪 Typecheck
+        run: pnpm run typecheck
+
+      - name: 🧹 Lint
+        run: pnpm run lint
+
+      - name: 💅 Format
+        run: pnpm run format
