@@ -243,8 +243,8 @@ export const MagicModalPortal: React.FC = () => {
       const shouldDamp =
         (direction === "bottom" && translationValue < 0) ||
         (direction === "top" && translationValue > 0) ||
-        (direction === "left" && translationValue < 0) ||
-        (direction === "right" && translationValue > 0);
+        (direction === "left" && translationValue > 0) ||
+        (direction === "right" && translationValue < 0);
 
       const dampedTranslation = shouldDamp
         ? prevTranslationValue + translationValue * config.dampingFactor

@@ -8,9 +8,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
 const showModal = async () => {
+  const direction = ["top", "bottom", "left", "right"][
+    Math.round(Math.random() * 4)
+  ];
+
   // eslint-disable-next-line no-console
   console.log("Opening modal");
-  const modalResponse = await magicModal.show(() => <ExampleModal />);
+  const modalResponse = await magicModal.show(() => <ExampleModal />, {
+    direction,
+  });
   // eslint-disable-next-line no-console
   console.log("Modal closed with response:", modalResponse);
 };
@@ -59,10 +65,7 @@ export default () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => magicModal.show(() => <ExampleModal />)}
-      >
+      <TouchableOpacity style={styles.button} onPress={showModal}>
         <Text style={styles.buttonText}>Show Modal</Text>
       </TouchableOpacity>
 
