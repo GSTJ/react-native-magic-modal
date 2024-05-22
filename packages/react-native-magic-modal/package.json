@@ -21,9 +21,11 @@
     "access": "public"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "pnpm lint --fix"
+    "lint:fix": "pnpm lint --fix",
+    "format:fix": "prettier --write . --ignore-path ../../.gitignore",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "eslintConfig": {
     "root": true,
@@ -50,8 +52,9 @@
     "react-native": "*"
   },
   "devDependencies": {
-    "@magic/eslint-config": "0.0.0",
-    "@magic/tsconfig": "0.0.0",
+    "@magic/prettier-config": "workspace:*",
+    "@magic/eslint-config": "workspace:*",
+    "@magic/tsconfig": "workspace:*",
     "@testing-library/react-native": "^12.5.0",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.2",

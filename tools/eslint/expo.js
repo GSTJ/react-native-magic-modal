@@ -1,17 +1,13 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
-    rules: {
-        'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
-        'react-hooks/exhaustive-deps': 'error', // Checks effect dependencies
-        'jsx-a11y/no-autofocus': 'off',
-        'react/style-prop-object': 'off',
-        'react/display-name': 'off',
-        'react/self-closing-comp': 'error',
-    },
-    plugins: [
-        'react',
-        'react-hooks',
-    ],
-}
+  extends: ["./react.js"],
+  rules: {
+    "reanimated/js-function-in-worklet": 2,
+    "react-native/no-inline-styles": 1, // TODO: Enforce this rule later
+    "react-native/no-color-literals": 2,
+    "react-native/no-single-element-style-arrays": 2,
+  },
+  plugins: ["react-native", "reanimated"],
+};
 
-module.exports = config
+module.exports = config;

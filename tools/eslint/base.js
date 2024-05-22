@@ -1,77 +1,64 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
-  parser: '@typescript-eslint/parser',
+  parser: "@typescript-eslint/parser",
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
+  extends: ["plugin:@typescript-eslint/recommended"],
   rules: {
-    'no-console': 'error',
-    'import/no-duplicates': 'error',
-    'import/no-anonymous-default-export': 'off',
-    'import/order': 'off',
-    'import/no-mutable-exports': 'off',
-    'line-comment-position': 'off',
-    'simple-import-sort/imports': [
-      'error',
+    "no-restricted-syntax": [
+      "error",
+      "ForInStatement",
+      "LabeledStatement",
+      "WithStatement",
+    ],
+    "no-console": "error",
+    "no-void": 0,
+    "import/no-duplicates": "error",
+    "import/no-anonymous-default-export": "off",
+    "import/order": "off",
+    "import/no-mutable-exports": "off",
+    "line-comment-position": "off",
+    "unused-imports/no-unused-imports": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
       {
-        groups: [
-          // Side effect imports.
-          ['^\\u0000'],
-          [
-            '^react(/.*)?$',
-            '^react-native(/.*)?$',
-            '@testing-library/react-native',
-          ],
-          // Monorepo imports.
-          ['^@magic(/.*)?$'],
-
-          /** General imports https://github.com/lydell/eslint-plugin-simple-import-sort/blob/main/examples/.eslintrc.js */
-          // Packages.
-          // Things that start with a letter (or digit or underscore), or `@` followed by a letter.
-          ['^@?\\w'],
-
-          // Relative imports.
-          ['^@/components(/.*)?$'],
-          ['^./components(/.*)?$'],
-
-          // Anything not matched in another group.
-          ['^.@/(/.*)?$'],
-
-          ['^@/types', '^\\u0000$'],
-
-          // Parent imports. Put `..` last.
-          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
-          // Other relative imports. Put same-folder imports and `.` last.
-          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
-          /** End of general imports */
-          ['../style', '^./styles'],
-        ],
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
       },
     ],
-    'simple-import-sort/exports': 'error',
-    'unused-imports/no-unused-imports': 'error',
-    'prefer-arrow-functions/prefer-arrow-functions': [
-      'error',
+    // '@typescript-eslint/await-thenable': 'error',
+    // '@typescript-eslint/no-floating-promises': 'error',
+    // '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
+    // '@typescript-eslint/return-await': 'error',
+    "@typescript-eslint/no-explicit-any": "warn",
+    "prefer-arrow-functions/prefer-arrow-functions": [
+      "error",
       {
         classPropertiesAllowed: false,
         disallowPrototype: false,
-        returnStyle: 'unchanged',
+        returnStyle: "unchanged",
         singleReturnOnly: false,
       },
     ],
   },
   plugins: [
-    'simple-import-sort',
-    'unused-imports',
-    'import',
-    'prefer-arrow-functions',
-    '@typescript-eslint',
-    'prettier',
-    'eslint-comments'
+    "unused-imports",
+    "import",
+    "prefer-arrow-functions",
+    "@typescript-eslint",
+    "prettier",
+    "eslint-comments",
   ],
   ignorePatterns: [
-    '**/dist/**',
-    '**/node_modules/**',
-    '**/coverage/**',
-    '**/.turbo/**',
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/coverage/**",
+    "**/.turbo/**",
+    "**/eslint/**",
   ],
-}
+};
 
-module.exports = config
+module.exports = config;

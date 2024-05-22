@@ -1,0 +1,26 @@
+{
+  "name": "@magic/prettier-config",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "format:fix": "prettier --write . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "prettier": "^3.2.5",
+    "@ianvs/prettier-plugin-sort-imports": "^4.2.1"
+  },
+  "devDependencies": {
+    "@magic/tsconfig": "workspace:*",
+    "typescript": "^5.4.5"
+  },
+  "prettier": "@magic/prettier-config"
+}

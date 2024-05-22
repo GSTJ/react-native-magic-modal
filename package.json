@@ -4,6 +4,8 @@
   "scripts": {
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
+    "format": "turbo format",
+    "format:fix": "turbo format:fix",
     "typecheck": "turbo typecheck"
   },
   "config": {
@@ -12,8 +14,6 @@
     }
   },
   "devDependencies": {
-    "prettier": "3.2.5",
-    "turbo": "^1.13.3",
-    "typescript": "^5.4.5"
+    "turbo": "^1.13.3"
   }
 }

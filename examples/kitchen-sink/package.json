@@ -9,12 +9,17 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "start": "expo start",
-    "test": "jest"
+    "test": "jest",
+    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "pnpm lint --fix",
+    "format:fix": "prettier --write . --ignore-path ../../.gitignore",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@magic/eslint-config/base"
+      "@magic/eslint-config/expo"
     ]
   },
   "dependencies": {
@@ -30,8 +35,9 @@
   "devDependencies": {
     "@babel/core": "~7.24.5",
     "@babel/runtime": "^7.24.5",
-    "@magic/eslint-config": "0.0.0",
-    "@magic/tsconfig": "0.0.0",
+    "@magic/prettier-config": "workspace:*",
+    "@magic/eslint-config": "workspace:*",
+    "@magic/tsconfig": "workspace:*",
     "babel-plugin-module-resolver": "^5.0.2",
     "babel-preset-expo": "11.0.6",
     "expo-cli": "^6.3.10"
