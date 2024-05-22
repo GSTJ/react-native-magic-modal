@@ -35,6 +35,9 @@ importers:
       react-native:
         specifier: 0.74.1
         version: 0.74.1(@babel/core@7.24.5)(@babel/preset-env@7.24.5)(react@18.2.0)
+      react-native-gesture-handler:
+        specifier: ^2.16.2
+        version: 2.16.2(react-native@0.74.1)(react@18.2.0)
       react-native-reanimated:
         specifier: ~3.10.1
         version: 3.10.1(@babel/core@7.24.5)(react-native@0.74.1)(react@18.2.0)
@@ -66,6 +69,9 @@ importers:
 
   packages/modal:
     dependencies:
+      react-native-gesture-handler:
+        specifier: ^2.16.2
+        version: 2.16.2(react-native@0.74.1)(react@18.3.1)
       react-native-reanimated:
         specifier: ~3.10.1
         version: 3.10.1(@babel/core@7.24.5)(react-native@0.74.1)(react@18.3.1)
@@ -1678,6 +1684,13 @@ packages:
       chalk: 5.3.0
     dev: true
     optional: true
+
+  /@egjs/hammerjs@2.0.17:
+    resolution: {integrity: sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==}
+    engines: {node: '>=0.8.0'}
+    dependencies:
+      '@types/hammerjs': 2.0.45
+    dev: false
 
   /@eslint-community/eslint-utils@4.4.0(eslint@8.57.0):
     resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}
@@ -3544,6 +3557,10 @@ packages:
     dependencies:
       '@types/node': 20.12.12
     dev: true
+
+  /@types/hammerjs@2.0.45:
+    resolution: {integrity: sha512-qkcUlZmX6c4J8q45taBKTL3p+LbITgyx7qhlPYOdOHZB7B31K0mXbP5YA7i7SgDeEGuI9MnumiKPEMrxg8j3KQ==}
+    dev: false
 
   /@types/html-minifier-terser@6.1.0:
     resolution: {integrity: sha512-oh/6byDPnL1zeNXFrDXFLyZjkr1MsBG667IM792caf1L2UPOOMf65NFzjUH/ltyfwjAGfs1rsX1eftK0jC/KIg==}
@@ -7678,6 +7695,12 @@ packages:
     dependencies:
       source-map: 0.7.4
 
+  /hoist-non-react-statics@3.3.2:
+    resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
+    dependencies:
+      react-is: 16.13.1
+    dev: false
+
   /homedir-polyfill@1.0.3:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
     engines: {node: '>=0.10.0'}
@@ -10982,6 +11005,36 @@ packages:
 
   /react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
+
+  /react-native-gesture-handler@2.16.2(react-native@0.74.1)(react@18.2.0):
+    resolution: {integrity: sha512-vGFlrDKlmyI+BT+FemqVxmvO7nqxU33cgXVsn6IKAFishvlG3oV2Ds67D5nPkHMea8T+s1IcuMm0bF8ntZtAyg==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+    dependencies:
+      '@egjs/hammerjs': 2.0.17
+      hoist-non-react-statics: 3.3.2
+      invariant: 2.2.4
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-native: 0.74.1(@babel/core@7.24.5)(@babel/preset-env@7.24.5)(react@18.2.0)
+    dev: false
+
+  /react-native-gesture-handler@2.16.2(react-native@0.74.1)(react@18.3.1):
+    resolution: {integrity: sha512-vGFlrDKlmyI+BT+FemqVxmvO7nqxU33cgXVsn6IKAFishvlG3oV2Ds67D5nPkHMea8T+s1IcuMm0bF8ntZtAyg==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+    dependencies:
+      '@egjs/hammerjs': 2.0.17
+      hoist-non-react-statics: 3.3.2
+      invariant: 2.2.4
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-native: 0.74.1(@babel/core@7.24.5)(@babel/preset-env@7.24.5)(@types/react@18.3.2)(react@18.3.1)
+    dev: false
 
   /react-native-helmet-async@2.0.4(react@18.2.0):
     resolution: {integrity: sha512-m3CkXWss6B1dd6mCMleLpzDCJJGGaHOLQsUzZv8kAASJmMfmVT4d2fx375iXKTRWT25ThBfae3dECuX5cq/8hg==}

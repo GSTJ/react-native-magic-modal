@@ -18,15 +18,15 @@ const showModal = async () => {
 const Toast = () => {
   const insets = useSafeAreaInsets();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      magicModal.hide();
-    }, 2000);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     magicModal.hide();
+  //   }, 2000);
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
+  //   return () => {
+  //     clearTimeout(timeout);
+  //   };
+  // }, []);
 
   return (
     <View style={[styles.toastContainer, { paddingTop: insets.top }]}>

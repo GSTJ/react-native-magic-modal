@@ -7,14 +7,16 @@ import React, {
   useState,
 } from "react";
 import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeInLeft,
-  FadeInRight,
-  FadeInUp,
-  FadeOut,
-  FadeOutDown,
+  clamp,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
 } from "react-native-reanimated";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 
 import { ANIMATION_DURATION_IN_MS } from "./constants/animations";
 import type { IModal, ModalChildren } from "./utils/magicModalHandler";
@@ -25,7 +27,12 @@ import {
 } from "./utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
 import { FullWindowOverlay } from "react-native-screens";
-import { BackHandler, Pressable, StyleSheet, View } from "react-native";
+import {
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 
 export type ModalProps = {
   animationInTiming: number;
@@ -53,28 +60,17 @@ export const modalRefForTests = React.createRef<any>();
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-/**
- * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
- * @example
- * ```js
- * import { MagicModalPortal } from 'react-native-magic-modal';
- *
- * export default function App() {
- *   return (
- *     <SomeRandomProvider>
- *       <MagicModalPortal />  // <-- On the top of the app component hierarchy
- *       <Router /> // Your app router or something could follow below
- *     </SomeRandomProvider>
- *   );
- * }
- * ```
- */
 export const MagicModalPortal: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [config, setConfig] = useState<NewConfigProps>({});
   const [modalContent, setModalContent] = useState<React.ReactNode>(() => (
     <></>
   ));
+
+  const translationX = useSharedValue(0);
+  const translationY = useSharedValue(0);
+  const prevTranslationX = useSharedValue(0);
+  const prevTranslationY = useSharedValue(0);
 
   const onHideRef = useRef<GenericFunction>(() => {});
 
@@ -86,9 +82,37 @@ export const MagicModalPortal: React.FC = () => {
 
   const hide = useCallback<IModal["hide"]>(
     async (props) => {
-      setIsVisible(false);
+      if (direction === "left") {
+        translationX.value = withSpring(width, {
+          duration: animationOutTiming,
+          dampingRatio: 3,
+        });
+      }
+
+      if (direction === "right") {
+        translationX.value = withSpring(-width, {
+          duration: animationOutTiming,
+          dampingRatio: 3,
+        });
+      }
+
+      if (direction === "top") {
+        translationY.value = withSpring(-height, {
+          duration: animationOutTiming,
+          dampingRatio: 3,
+        });
+      }
+
+      if (direction === "bottom") {
+        translationY.value = withSpring(height, {
+          duration: animationOutTiming,
+          dampingRatio: 3,
+        });
+      }
 
       await new Promise((resolve) => setTimeout(resolve, animationOutTiming));
+
+      setIsVisible(false);
 
       onHideRef.current(props);
     },
@@ -103,6 +127,13 @@ export const MagicModalPortal: React.FC = () => {
     ) => {
       if (isVisible) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
+      // Reset the translation values
+      translationX.value = 0;
+      translationY.value = 0;
+
+      prevTranslationX.value = 0;
+      prevTranslationY.value = 0;
+
       setModalContent(newComponent as unknown as React.ReactNode);
       setConfig(newConfig);
       setIsVisible(true);
@@ -114,32 +145,6 @@ export const MagicModalPortal: React.FC = () => {
   }));
 
   const direction = config?.direction ?? "bottom";
-
-  const enteringAnimation = useMemo(() => {
-    switch (direction) {
-      case "top":
-        return FadeInUp;
-      case "bottom":
-        return FadeInDown;
-      case "left":
-        return FadeInLeft;
-      case "right":
-        return FadeInRight;
-    }
-  }, [config?.direction]);
-
-  const exitingAnimation = useMemo(() => {
-    switch (direction) {
-      case "top":
-        return FadeOut;
-      case "bottom":
-        return FadeOutDown;
-      case "left":
-        return FadeOut;
-      case "right":
-        return FadeOut;
-    }
-  }, [config?.direction]);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -166,36 +171,119 @@ export const MagicModalPortal: React.FC = () => {
     return () => magicModal.hide(MagicModalHideTypes.BACKDROP_PRESSED);
   }, [config?.onBackdropPress]);
 
+  const { width, height } = useWindowDimensions();
+
+  const pan = Gesture.Pan()
+    .minDistance(1)
+    .onStart(() => {
+      prevTranslationX.value = translationX.value;
+      prevTranslationY.value = translationY.value;
+    })
+    .onUpdate((event) => {
+      const maxTranslateX = width / 2 - 50;
+      const maxTranslateY = height / 2 - 50;
+
+      if (direction === "left") {
+        translationX.value = clamp(
+          prevTranslationX.value + event.translationX,
+          -maxTranslateX,
+          0
+        );
+      }
+
+      if (direction === "right") {
+        translationX.value = clamp(
+          prevTranslationX.value + event.translationX,
+          0,
+          maxTranslateX
+        );
+      }
+
+      if (direction === "top") {
+        translationY.value = clamp(
+          prevTranslationY.value + event.translationY,
+          -maxTranslateY,
+          0
+        );
+      }
+
+      if (direction === "bottom") {
+        translationY.value = clamp(
+          prevTranslationY.value + event.translationY,
+          0,
+          maxTranslateY
+        );
+      }
+    })
+    .onEnd((event) => {
+      // Check the direction and velocity of the swipe
+      if (direction === "right" && event.velocityX > 500) {
+        magicModal.hide(MagicModalHideTypes.SWIPE_COMPLETED);
+        return;
+      } else if (direction === "left" && event.velocityX < 500) {
+        magicModal.hide(MagicModalHideTypes.SWIPE_COMPLETED);
+        return;
+      } else if (direction === "top" && event.velocityY < 500) {
+        magicModal.hide(MagicModalHideTypes.SWIPE_COMPLETED);
+        return;
+      } else if (direction === "bottom" && event.velocityY > 500) {
+        magicModal.hide(MagicModalHideTypes.SWIPE_COMPLETED);
+        return;
+      }
+
+      // Reset the translation values
+      translationX.value = withSpring(0, {
+        velocity: event.velocityX,
+        damping: 15,
+      });
+      translationY.value = withSpring(0, {
+        velocity: event.velocityY,
+        damping: 15,
+      });
+    })
+    .runOnJS(true);
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translationX.value },
+      { translateY: translationY.value },
+    ],
+  }));
+
   return (
     <FullWindowOverlay>
-      <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+      <GestureHandlerRootView
+        pointerEvents="box-none"
+        style={StyleSheet.absoluteFill}
+      >
         {isVisible ? (
-          <AnimatedPressable
-            disabled={config?.hideBackdrop}
-            pointerEvents={config?.hideBackdrop ? "none" : "auto"}
-            entering={FadeIn.duration(animationInTiming)}
-            exiting={FadeOut.duration(animationInTiming)}
-            style={[
-              styles.backdrop,
-              {
-                backgroundColor: config.hideBackdrop
-                  ? "transparent"
-                  : config?.backdropColor ?? styles.backdrop.backgroundColor,
-              },
-            ]}
-            onPress={onBackdropPress}
-          >
+          <>
+            <AnimatedPressable
+              pointerEvents={config?.hideBackdrop ? "none" : "auto"}
+              style={[
+                styles.backdrop,
+                {
+                  backgroundColor: config.hideBackdrop
+                    ? "transparent"
+                    : config?.backdropColor ?? styles.backdrop.backgroundColor,
+                },
+              ]}
+              onPress={onBackdropPress}
+            />
             <Animated.View
-              pointerEvents="box-none"
-              entering={enteringAnimation.duration(animationInTiming)}
-              exiting={exitingAnimation.duration(animationOutTiming)}
-              style={[styles.overlay, styles.container, config?.style]}
+              pointerEvents={"box-none"}
+              style={[
+                animatedStyles,
+                styles.overlay,
+                styles.container,
+                config?.style,
+              ]}
             >
-              {modalContent}
+              <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
             </Animated.View>
-          </AnimatedPressable>
+          </>
         ) : null}
-      </View>
+      </GestureHandlerRootView>
     </FullWindowOverlay>
   );
 };

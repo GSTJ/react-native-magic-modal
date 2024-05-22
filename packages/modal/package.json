@@ -46,12 +46,14 @@
     ]
   },
   "dependencies": {
+    "react-native-gesture-handler": "^2.16.2",
     "react-native-reanimated": "~3.10.1"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-reanimated": "*"
+    "react-native-reanimated": "*",
+    "react-native-gesture-handler": "*"
   },
   "devDependencies": {
     "@magic/eslint-config": "workspace:*",
