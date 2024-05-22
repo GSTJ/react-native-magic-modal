@@ -145,14 +145,46 @@ export const MagicModalPortal: React.FC = () => {
     ) => {
       if (isVisible) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
-      translationX.value = 0;
-      translationY.value = 0;
+      const springConfig = {
+        duration: config.animationInTiming,
+        dampingRatio: 1,
+      };
+
+      const startPosition = {
+        bottom: {
+          translationX: 0,
+          translationY: height,
+        },
+        top: {
+          translationX: 0,
+          translationY: -height,
+        },
+        left: {
+          translationX: -width,
+          translationY: 0,
+        },
+        right: {
+          translationX: width,
+          translationY: 0,
+        },
+      };
+
+      const mergedConfig = {
+        ...defaultConfig,
+        ...newConfig,
+      };
+
+      translationX.value = startPosition[mergedConfig.direction].translationX;
+      translationY.value = startPosition[mergedConfig.direction].translationY;
+
+      translationX.value = withSpring(0, springConfig);
+      translationY.value = withSpring(0, springConfig);
 
       prevTranslationX.value = 0;
       prevTranslationY.value = 0;
 
       setModalContent(newComponent as unknown as React.ReactNode);
-      setConfig({ ...defaultConfig, ...newConfig });
+      setConfig(mergedConfig);
       setIsVisible(true);
 
       return new Promise((resolve) => {
@@ -267,10 +299,17 @@ export const MagicModalPortal: React.FC = () => {
         ? translationX.value
         : translationY.value;
 
+    const rangeMap = {
+      left: [-width, 0],
+      right: [width, 0],
+      top: [-height, 0],
+      bottom: [height, 0],
+    };
+
     return {
       opacity: interpolate(
         translationValue,
-        [-width, 0],
+        rangeMap[config.direction],
         [0, 1],
         Extrapolation.CLAMP
       ),
