@@ -42,9 +42,6 @@ importers:
       '@babel/core':
         specifier: ~7.24.5
         version: 7.24.5
-      '@babel/runtime':
-        specifier: ^7.24.5
-        version: 7.24.5
       '@magic/eslint-config':
         specifier: workspace:*
         version: link:../../tools/eslint
@@ -54,9 +51,6 @@ importers:
       '@magic/tsconfig':
         specifier: workspace:*
         version: link:../../tools/tsconfig
-      babel-preset-expo:
-        specifier: 11.0.6
-        version: 11.0.6(@babel/core@7.24.5)(@babel/preset-env@7.24.5)
       expo-cli:
         specifier: ^6.3.10
         version: 6.3.10(expo@51.0.8)

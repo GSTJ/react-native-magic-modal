@@ -1,18 +1,16 @@
 import React, { useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { magicModal } from "@magic/react-native-magic-modal";
-import { ExampleModal } from "@/components/ExampleModal/ExampleModal";
+import { ExampleModal } from "@/components/ExampleModal";
+
+const showModal = async () => {
+  console.log("Opening modal");
+  const modalResponse = await magicModal.show(() => <ExampleModal />);
+  console.log("Modal closed with response:", modalResponse);
+};
 
 export default function App() {
   useEffect(() => {
-    const showModal = async () => {
-      console.log("opening modal");
-
-      const modalResponse = await magicModal.show(() => <ExampleModal />);
-
-      console.log("modal closed with response:", modalResponse);
-    };
-
     showModal();
   }, []);
 
