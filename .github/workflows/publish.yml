@@ -2,7 +2,7 @@ name: Publish
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   publish:
@@ -73,4 +73,4 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-          pnpm run release --npm.skipChecks
+          pnpm run release
