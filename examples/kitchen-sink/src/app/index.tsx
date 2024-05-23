@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-color-literals */
 import React, { useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { magicModal, Direction } from "@magic/react-native-magic-modal";
+import { magicModal, Direction } from "react-native-magic-modal";
 import { ExampleModal } from "@/components/ExampleModal";
 import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

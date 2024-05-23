@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-color-literals */
 import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { magicModal } from "@magic/react-native-magic-modal";
+import { magicModal } from "react-native-magic-modal";
 import { ExampleModal } from "@/components/ExampleModal";
 
 export default () => {

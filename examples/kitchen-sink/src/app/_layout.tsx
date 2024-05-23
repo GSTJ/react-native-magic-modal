@@ -1,4 +1,4 @@
-import { MagicModalPortal } from "@magic/react-native-magic-modal";
+import { MagicModalPortal } from "react-native-magic-modal";
 import { Stack } from "expo-router";
 import React from "react";
 
