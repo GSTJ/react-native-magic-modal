@@ -53,10 +53,10 @@ jobs:
         uses: dtinth/setup-github-actions-caching-for-turbo@v1
 
       - name: 🛠️ Build
-        run: yarn prepare
+        run: pnpm run build
 
       - name: 📚 Generate Docs
-        run: yarn docs
+        run: pnpm run docs
 
       - name: 📚 Commit Docs
         env:
@@ -73,4 +73,4 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-          yarn release --npm.skipChecks
+          pnpm run release --npm.skipChecks

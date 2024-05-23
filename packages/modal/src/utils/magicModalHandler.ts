@@ -1,4 +1,4 @@
-import { type ModalProps } from "@/MagicModalPortal";
+import { type ModalProps } from "../MagicModalPortal";
 import React from "react";
 
 export type ModalChildren = React.FC;
