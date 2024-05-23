@@ -11,8 +11,8 @@
     "start": "expo start",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "pnpm lint --fix",
-    "format:fix": "prettier --write . --ignore-path ../../.prettierignore",
-    "format": "prettier --check . --ignore-path ../../.prettierignore",
+    "format:fix": "prettier --write . --ignore-path ../../.gitignore",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "eslintConfig": {
