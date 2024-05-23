@@ -35,15 +35,68 @@ import {
 type Direction = "top" | "bottom" | "left" | "right";
 
 export type ModalProps = {
+  /**
+   * Duration of the animation when the modal is shown.
+   * @default 300
+   */
   animationInTiming: number;
+
+  /**
+   * Duration of the animation when the modal is hidden.
+   * @default 300
+   */
   animationOutTiming: number;
+
+  /**
+   * If true, the backdrop will be hidden.
+   * @default false
+   */
   hideBackdrop: boolean;
+
+  /**
+   * The color of the backdrop.
+   * @default "rgba(0, 0, 0, 0.5)"
+   */
   backdropColor: string;
+
+  /**
+   * Function to be called when the back button is pressed.
+   * @default undefined
+   * @example () => console.log('Back button pressed')
+   */
   onBackButtonPress: (() => void) | undefined;
+
+  /**
+   * Function to be called when the backdrop is pressed.
+   * @default undefined
+   * @example () => { console.log('Backdrop pressed'); magicModal.hide(); }
+   */
   onBackdropPress: (() => void) | undefined;
+
+  /**
+   * Custom style for the modal.
+   * @default {}
+   * @example { backgroundColor: 'red', padding: 10 }
+   */
   style: Record<string, unknown>;
+
+  /**
+   * Damping factor for the swipe gesture.
+   * @default 0.2
+   */
   dampingFactor: number;
+
+  /**
+   * Direction of the modal animation.
+   * @default "bottom"
+   * @example "top"
+   */
   direction: Direction;
+
+  /**
+   * Velocity threshold for the swipe gesture.
+   * @default 500
+   */
   swipeVelocityThreshold: number;
 };
 
@@ -73,6 +126,22 @@ const defaultConfig = {
   style: {},
 } satisfies ModalProps;
 
+/**
+ * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
+ * @example
+ * ```js
+ * import { MagicModalPortal } from 'react-native-magic-modal';
+ *
+ * export default function App() {
+ *   return (
+ *     <SomeRandomProvider>
+ *       <MagicModalPortal />  // <-- On the top of the app component hierarchy
+ *       <Router /> // Your app router or something could follow below
+ *     </SomeRandomProvider>
+ *   );
+ * }
+ * ```
+ */
 export const MagicModalPortal: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [config, setConfig] = useState<ModalProps>(defaultConfig);
