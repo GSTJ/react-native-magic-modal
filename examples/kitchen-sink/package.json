@@ -1,0 +1,45 @@
+{
+  "name": "@magic/kitchen-sink",
+  "description": "Example app for react-native-magic-modal",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "start": "expo start",
+    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "pnpm lint --fix",
+    "format:fix": "prettier --write . --ignore-path ../../.prettierignore",
+    "format": "prettier --check . --ignore-path ../../.prettierignore",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@magic/eslint-config/expo"
+    ]
+  },
+  "dependencies": {
+    "react-native-magic-modal": "workspace:*",
+    "expo": "^51.0.8",
+    "expo-router": "^3.5.14",
+    "expo-splash-screen": "~0.27.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.74.1",
+    "react-native-gesture-handler": "^2.16.2",
+    "react-native-reanimated": "~3.10.1",
+    "react-native-web": "~0.19.12"
+  },
+  "devDependencies": {
+    "@babel/core": "~7.24.5",
+    "@babel/runtime": "^7.24.5",
+    "@magic/eslint-config": "workspace:*",
+    "@magic/prettier-config": "workspace:*",
+    "@magic/tsconfig": "workspace:*",
+    "babel-preset-expo": "11.0.6",
+    "expo-cli": "^6.3.10"
+  }
+}

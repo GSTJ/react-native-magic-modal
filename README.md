@@ -48,6 +48,15 @@ React Native Magic Modal offers a superior experience compared to traditional mo
 
 ## Installation
 
+Add peer dependencies to your project, if you haven't already:
+
+```bash
+yarn add react-native-reanimated
+yarn add react-native-gesture-handler
+```
+
+Install the package:
+
 ```bash
 yarn add react-native-magic-modal
 ```
@@ -57,7 +66,7 @@ yarn add react-native-magic-modal
 Insert a `MagicModalPortal` at the top of your application structure:
 
 ```javascript
-import { MagicModalPortal } from 'react-native-magic-modal';
+import { MagicModalPortal } from "react-native-magic-modal";
 
 export default function App() {
   return (
@@ -80,9 +89,9 @@ Showcasing modal management on iOS and Android platforms:
 ## Usage
 
 ```js
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { MagicModalPortal, magicModal } from 'react-native-magic-modal';
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { MagicModalPortal, magicModal } from "react-native-magic-modal";
 
 const ConfirmationModal = () => (
   <View>
@@ -134,7 +143,7 @@ Access the complete documentation [here](https://gstj.github.io/react-native-mag
 
 **Q:** Can I have two modals showing up at the same time?
 
-**A:** No, this library is based on react-native-modal, which does not support this functionality.
+**A:** No, we only allow one modal to be shown at a time. If you try to show a modal while another is already visible, the previous modal will be hidden.
 
 ## Contributors
 

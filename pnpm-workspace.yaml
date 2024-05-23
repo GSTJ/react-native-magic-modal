@@ -1,0 +1,4 @@
+packages:
+  - tools/*
+  - packages/*
+  - examples/*

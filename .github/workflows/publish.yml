@@ -10,30 +10,55 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: 🏗 Setup Repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v1
+      - name: 🏗 Setup PNPM
+        uses: pnpm/action-setup@v2
         with:
-          node-version: '12.x'
+          version: 8
 
-      - uses: actions/cache@v2
+      - name: 🏗 Get PNPM store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: 🏗 Setup PNPM cache
+        uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-      - name: Install
-        run: yarn install --frozen-lockfile
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
 
-      - name: Tests
-        run: yarn test --silent --ci
+      - name: "📦 Cache Node Modules"
+        uses: actions/cache@v3.3.3
+        id: cache-node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
 
-      - name: Build
-        run: yarn prepare
+      - name: 📦 Install Dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: pnpm install
 
-      - name: Generate Docs
-        run: yarn docs
+      - name: 🏗 Setup Turborepo Cache
+        uses: dtinth/setup-github-actions-caching-for-turbo@v1
 
-      - name: Publish Docs
+      - name: 🛠️ Build
+        run: pnpm run build
+
+      - name: 📚 Generate Docs
+        run: pnpm run docs
+
+      - name: 📚 Commit Docs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -42,10 +67,10 @@ jobs:
           git add .
           git commit -m "docs: automatically update docs 🤖 [skip-ci]"
 
-      - name: Release
+      - name: 🚀 Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-          yarn release --npm.skipChecks
+          pnpm run release --npm.skipChecks
