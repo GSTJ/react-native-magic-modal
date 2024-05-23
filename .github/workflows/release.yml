@@ -1,4 +1,4 @@
-name: Publish
+name: 🚀 Publish
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   release:
+    name: 🎉 Release
     if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     runs-on: ubuntu-latest
 
