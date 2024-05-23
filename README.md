@@ -63,20 +63,23 @@ yarn add react-native-magic-modal
 
 ## Quickstart
 
-Insert a `MagicModalPortal` at the top of your application structure:
+Insert a `MagicModalPortal` at the top of your application structure, and a GestureHandlerRootView if you haven't already:
 
 ```javascript
 import { MagicModalPortal } from "react-native-magic-modal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
   return (
-    <>
+    <GestureHandlerRootView>
       <MagicModalPortal /> {/** At the top of your app component hierarchy */}
       <YourAppContent />
-    </>
+    </GestureHandlerRootView>
   );
 }
 ```
+
+Tip: the root `_layout.tsx` is usually the best place to put it in a project using expo-router.
 
 ## Examples
 
@@ -92,6 +95,7 @@ Showcasing modal management on iOS and Android platforms:
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MagicModalPortal, magicModal } from "react-native-magic-modal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const ConfirmationModal = () => (
   <View>
@@ -123,12 +127,12 @@ const handleConfirmationFlow = async () => {
 
 export const MainScreen = () => {
   return (
-    <View>
+    <GestureHandlerRootView>
       <TouchableOpacity onPress={handleConfirmationFlow}>
         <Text>Start the modal flow!</Text>
       </TouchableOpacity>
       <MagicModalPortal />
-    </View>
+    </GestureHandlerRootView>
   );
 };
 ```

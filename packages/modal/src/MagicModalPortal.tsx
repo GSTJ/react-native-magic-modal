@@ -14,7 +14,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { Gesture, GestureHandlerRootView } from "react-native-gesture-handler";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { ANIMATION_DURATION_IN_MS } from "./constants/animations";
 import type { IModal, ModalChildren } from "./utils/magicModalHandler";
@@ -25,6 +25,7 @@ import {
   BackHandler,
   Pressable,
   StyleSheet,
+  View,
   useWindowDimensions,
 } from "react-native";
 
@@ -391,7 +392,7 @@ export const MagicModalPortal: React.FC = () => {
   return (
     <FullWindowOverlay>
       {isVisible && (
-        <GestureHandlerRootView style={StyleSheet.absoluteFill}>
+        <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
           <AnimatedPressable
             pointerEvents={config.hideBackdrop ? "none" : "auto"}
             style={[
@@ -414,9 +415,9 @@ export const MagicModalPortal: React.FC = () => {
               config.style,
             ]}
           >
-            {modalContent}
+            <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
           </Animated.View>
-        </GestureHandlerRootView>
+        </View>
       )}
     </FullWindowOverlay>
   );
