@@ -47,7 +47,6 @@ jobs:
             ${{ runner.os }}-node-modules-
 
       - name: 📦 Install Dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: pnpm install
 
       - name: 🏗 Setup Turborepo Cache
