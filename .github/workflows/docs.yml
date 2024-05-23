@@ -71,7 +71,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: 📚 Generate Docs
-        run: pnpm run build:docs
+        run: pnpm run docs
 
       - name: 📩 Upload artifact
         uses: actions/upload-pages-artifact@v3
