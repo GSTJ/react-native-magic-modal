@@ -8,6 +8,34 @@ import {
   MagicModalPortal,
   modalRefForTests,
 } from "./MagicModalPortal";
+import { setUpTests } from "react-native-reanimated";
+
+jest.mock("react-native-reanimated");
+
+jest.mock("react-native-gesture-handler", () => {
+  const newPan: unknown = jest.fn(() => ({
+    minDistance: newPan,
+    onStart: newPan,
+    onUpdate: newPan,
+    onEnd: newPan,
+  }));
+
+  return {
+    Gesture: {
+      Pan: newPan,
+    },
+    GestureDetector: require("react-native/Libraries/Components/View/View"),
+    GestureHandlerRootView: require("react-native/Libraries/Components/View/View"),
+  };
+});
+
+jest.mock("react-native-screens", () => ({
+  FullWindowOverlay: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
+
+setUpTests();
 
 describe("MagicModal", () => {
   it("renders correctly", async () => {
@@ -77,7 +105,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onBackButtonPress();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACK_BUTTON_PRESSED,
+        MagicModalHideTypes.BACK_BUTTON_PRESSED
       );
     });
 
@@ -85,7 +113,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onBackdropPress();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACKDROP_PRESSED,
+        MagicModalHideTypes.BACKDROP_PRESSED
       );
     });
 
@@ -93,7 +121,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onSwipeComplete();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.SWIPE_COMPLETED,
+        MagicModalHideTypes.SWIPE_COMPLETED
       );
     });
   });

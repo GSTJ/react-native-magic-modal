@@ -25,6 +25,7 @@
     "format:fix": "turbo format:fix",
     "typecheck": "turbo typecheck",
     "start": "pnpm -F @magic/kitchen-sink start",
+    "test": "turbo test",
     "build": "turbo build",
     "release": "turbo release",
     "docs": "turbo docs"

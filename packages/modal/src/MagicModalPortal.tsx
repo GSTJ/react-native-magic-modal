@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -25,12 +24,7 @@ import type { IModal, ModalChildren } from "./utils/magicModalHandler";
 import { magicModalRef } from "./utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
 import { FullWindowOverlay } from "react-native-screens";
-import {
-  BackHandler,
-  Pressable,
-  StyleSheet,
-  useWindowDimensions,
-} from "react-native";
+import { Pressable, StyleSheet, useWindowDimensions } from "react-native";
 
 export type Direction = "top" | "bottom" | "left" | "right";
 
@@ -266,23 +260,6 @@ export const MagicModalPortal: React.FC = () => {
       });
     },
   }));
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        if (config.onBackButtonPress) {
-          config.onBackButtonPress();
-        } else {
-          hide(MagicModalHideTypes.BACK_BUTTON_PRESSED);
-        }
-
-        return true;
-      }
-    );
-
-    return () => backHandler.remove();
-  }, [config.onBackButtonPress, hide]);
 
   const onBackdropPress = useMemo(() => {
     return (
