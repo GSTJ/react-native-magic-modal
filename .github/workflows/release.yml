@@ -60,5 +60,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          git config --global user.email "gabrielstaveira@gmail.com"
+          git config --global user.name "Gabriel Taveira"
           npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
           pnpm run release
