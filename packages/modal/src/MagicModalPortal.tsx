@@ -62,7 +62,7 @@ export type ModalProps = {
   /**
    * Function to be called when the back button is pressed.
    * @default undefined
-   * @example () => console.log('Back button pressed')
+   * @example () => { console.log('Back button pressed'); magicModal.hide(); }
    */
   onBackButtonPress: (() => void) | undefined;
 
