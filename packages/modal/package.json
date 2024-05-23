@@ -56,7 +56,8 @@
     ]
   },
   "dependencies": {
-    "jest-expo": "^51.0.2",
+    "react": "^18.3.1",
+    "react-native": "^0.74.1",
     "react-native-gesture-handler": "^2.16.2",
     "react-native-reanimated": "~3.10.1"
   },
@@ -67,6 +68,7 @@
     "react-native-reanimated": "*"
   },
   "devDependencies": {
+    "jest-expo": "^51.0.2",
     "@magic/eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
@@ -81,8 +83,6 @@
     "jest-junit": "^16.0.0",
     "pod-install": "^0.2.2",
     "prettier": "3.2.5",
-    "react": "18.3.1",
-    "react-native": "0.74.1",
     "react-test-renderer": "^18.3.1",
     "release-it": "^17.3.0",
     "shx": "^0.3.4",
