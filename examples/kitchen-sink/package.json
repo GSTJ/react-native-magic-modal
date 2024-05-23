@@ -23,7 +23,7 @@
     ]
   },
   "dependencies": {
-    "@magic/react-native-magic-modal": "^0.2.20",
+    "react-native-magic-modal": "workspace:*",
     "expo": "^51.0.8",
     "expo-router": "^3.5.14",
     "expo-splash-screen": "~0.27.4",
