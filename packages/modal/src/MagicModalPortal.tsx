@@ -325,7 +325,7 @@ export const MagicModalPortal: React.FC = () => {
         (config.direction === "bottom" && event.velocityY > velocityThreshold);
 
       if (shouldHide) {
-        hide(MagicModalHideTypes.SWIPE_COMPLETED);
+        runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED);
         return;
       }
 
@@ -337,8 +337,7 @@ export const MagicModalPortal: React.FC = () => {
         velocity: event.velocityY,
         damping: 75,
       });
-    })
-    .runOnJS(true);
+    });
 
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [
@@ -349,7 +348,7 @@ export const MagicModalPortal: React.FC = () => {
 
   const animatedBackdropStyles = useAnimatedStyle(() => {
     const translationValue =
-      config.direction.includes("left") || config.direction.includes("right")
+      config.direction === "left" || config.direction === "right"
         ? translationX.value
         : translationY.value;
 
