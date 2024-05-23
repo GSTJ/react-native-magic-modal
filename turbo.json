@@ -23,6 +23,12 @@
     "build": {
       "outputs": ["node_modules/.cache/build.json"]
     },
+    "release": {
+      "outputs": ["node_modules/.cache/release.json"]
+    },
+    "docs": {
+      "outputs": ["node_modules/.cache/docs.json"]
+    },
     "clean": {
       "cache": false
     },

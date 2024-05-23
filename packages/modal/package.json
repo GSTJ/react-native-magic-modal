@@ -20,13 +20,33 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular",
+        "infile": "CHANGELOG.md"
+      }
+    }
+  },
   "scripts": {
     "build": "tsc",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "pnpm lint --fix",
     "format:fix": "prettier --write . --ignore-path ../../.gitignore",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "docs": "typedoc --excludeInternal --out docs ./src/index.ts",
+    "release": "release-it"
   },
   "eslintConfig": {
     "root": true,
@@ -46,14 +66,18 @@
     ]
   },
   "dependencies": {
+    "@release-it/conventional-changelog": "^8.0.1",
     "react-native-gesture-handler": "^2.16.2",
-    "react-native-reanimated": "~3.10.1"
+    "react-native-reanimated": "~3.10.1",
+    "release-it": "^17.3.0",
+    "shx": "^0.3.4",
+    "typedoc": "^0.25.13"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-reanimated": "*",
-    "react-native-gesture-handler": "*"
+    "react-native-gesture-handler": "*",
+    "react-native-reanimated": "*"
   },
   "devDependencies": {
     "@magic/eslint-config": "workspace:*",

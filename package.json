@@ -1,6 +1,23 @@
 {
   "name": "magic-modal",
+  "version": "0.2.22",
   "packageManager": "pnpm@8.7.4",
+  "repository": "https://github.com/GSTJ/react-native-magic-modal",
+  "author": "Gabriel Taveira <gabrielstaveira@gmail.com> (https://github.com/GSTJ)",
+  "license": "MIT",
+  "keywords": [
+    "react-native",
+    "ios",
+    "android"
+  ],
+  "bugs": {
+    "url": "https://github.com/GSTJ/react-native-magic-modal/issues"
+  },
+  "homepage": "https://github.com/GSTJ/react-native-magic-modal#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "scripts": {
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
@@ -8,7 +25,9 @@
     "format:fix": "turbo format:fix",
     "typecheck": "turbo typecheck",
     "start": "pnpm -F @magic/kitchen-sink start",
-    "build": "turbo build"
+    "build": "turbo build",
+    "release": "turbo release",
+    "docs": "turbo docs"
   },
   "config": {
     "commitizen": {
