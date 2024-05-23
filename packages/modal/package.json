@@ -1,7 +1,6 @@
 {
   "name": "react-native-magic-modal",
   "version": "0.3.1",
-  "private": true,
   "keywords": [
     "react-native",
     "ios",
@@ -42,8 +41,8 @@
     "build": "tsc",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "pnpm lint --fix",
-    "format:fix": "prettier --write . --ignore-path ../../.prettierignore --ignorePatterns 'docs'",
-    "format": "prettier --check . --ignore-path ../../.prettierignore",
+    "format:fix": "prettier --write . --ignore-path ./.prettierignore",
+    "format": "prettier --check . --ignore-path ./.prettierignore",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "docs": "typedoc --excludeInternal --out docs ./src/index.ts",
     "test": "jest",

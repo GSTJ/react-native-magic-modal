@@ -1,5 +1,4 @@
 {
-  "enableManagers": ["pnpm"],
   "rebaseWhen": "behind-base-branch",
   "packageRules": [
     {
