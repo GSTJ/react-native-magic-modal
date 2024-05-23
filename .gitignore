@@ -73,6 +73,7 @@ web-build/
 .turbo
 dist
 junit.xml
+docs
 
 
 .pnp.*
