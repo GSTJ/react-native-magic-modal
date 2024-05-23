@@ -1,0 +1,81 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: 📚 Docs
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🏗 Setup Repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: 🏗 Get PNPM store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: 🏗 Setup PNPM cache
+        uses: actions/cache@v3
+        with:
+            path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+            key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+            restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v3
+        with:
+            node-version: 20.x
+
+      - name: "📦 Cache Node Modules"
+        uses: actions/cache@v3.3.3
+        id: cache-node-modules
+        with:
+            path: node_modules
+            key: ${{ runner.os }}-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+            restore-keys: |
+                ${{ runner.os }}-node-modules-
+
+      - name: 📦 Install Dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: pnpm install
+
+      - name: 🏗 Setup Turborepo Cache
+        uses: dtinth/setup-github-actions-caching-for-turbo@v1
+
+      - name: 🛠️ Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: 📚 Generate Docs
+        run: pnpm run build:docs
+
+      - name: 📩 Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./packages/modal/docs"
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

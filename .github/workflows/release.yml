@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  publish:
+  release:
     if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     runs-on: ubuntu-latest
 
@@ -54,18 +54,6 @@ jobs:
 
       - name: 🛠️ Build
         run: pnpm run build
-
-      - name: 📚 Generate Docs
-        run: pnpm run docs
-
-      - name: 📚 Commit Docs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git add .
-          git commit -m "docs: automatically update docs 🤖 [skip-ci]"
 
       - name: 🚀 Release
         env:
