@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-      - more-fixes
+      - gstj/more-fixes
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
