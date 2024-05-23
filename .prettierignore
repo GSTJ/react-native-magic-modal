@@ -1,0 +1,8 @@
+node_modules
+dist
+docs
+coverage
+ios
+android
+*.xml
+*.log

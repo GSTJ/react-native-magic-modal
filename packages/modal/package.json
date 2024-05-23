@@ -42,8 +42,8 @@
     "build": "tsc",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "pnpm lint --fix",
-    "format:fix": "prettier --write . --ignore-path ../../.gitignore",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "format:fix": "prettier --write . --ignore-path ../../.prettierignore --ignorePatterns 'docs'",
+    "format": "prettier --check . --ignore-path ../../.prettierignore",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "docs": "typedoc --excludeInternal --out docs ./src/index.ts",
     "test": "jest",
@@ -53,6 +53,12 @@
     "root": true,
     "extends": [
       "@magic/eslint-config/base"
+    ],
+    "ignorePatterns": [
+      "dist",
+      "node_modules",
+      "docs",
+      "coverage"
     ]
   },
   "dependencies": {

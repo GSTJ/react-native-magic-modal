@@ -172,7 +172,7 @@ export const MagicModalPortal: React.FC = () => {
 
       const directionTranslation = getDirectionTranslation(
         config.direction,
-        height
+        height,
       );
 
       await new Promise<void>((resolve) => {
@@ -180,7 +180,7 @@ export const MagicModalPortal: React.FC = () => {
           translationX.value = withSpring(
             directionTranslation.translationX,
             springConfig,
-            () => runOnJS(resolve)()
+            () => runOnJS(resolve)(),
           );
           return;
         }
@@ -188,7 +188,7 @@ export const MagicModalPortal: React.FC = () => {
         translationY.value = withSpring(
           directionTranslation.translationY,
           springConfig,
-          () => runOnJS(resolve)()
+          () => runOnJS(resolve)(),
         );
       });
 
@@ -202,14 +202,14 @@ export const MagicModalPortal: React.FC = () => {
       height,
       translationX,
       translationY,
-    ]
+    ],
   );
 
   useImperativeHandle(magicModalRef, () => ({
     hide,
     show: async (
       newComponent: ModalChildren,
-      newConfig: Partial<ModalProps> = {}
+      newConfig: Partial<ModalProps> = {},
     ) => {
       if (isVisible) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
@@ -362,7 +362,7 @@ export const MagicModalPortal: React.FC = () => {
         translationValue,
         rangeMap[config.direction],
         [0, 1],
-        Extrapolation.CLAMP
+        Extrapolation.CLAMP,
       ),
     };
   });

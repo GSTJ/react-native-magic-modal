@@ -13,7 +13,7 @@
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "pnpm lint --fix",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "format:fix": "prettier --write . --ignore-path ../../.gitignore"
+    "format:fix": "prettier --write . --ignore-path ../../.prettierignore"
   },
   "eslintConfig": {
     "root": true,
