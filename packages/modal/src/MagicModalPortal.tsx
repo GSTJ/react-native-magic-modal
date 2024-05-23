@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -13,18 +14,19 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
+import { Gesture, GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { ANIMATION_DURATION_IN_MS } from "./constants/animations";
 import type { IModal, ModalChildren } from "./utils/magicModalHandler";
 import { magicModalRef } from "./utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
-import { FullWindowOverlay } from "react-native-screens";
-import { Pressable, StyleSheet, useWindowDimensions } from "react-native";
+import { FullWindowOverlay } from "./FullWindowOverlay";
+import {
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 
 export type Direction = "top" | "bottom" | "left" | "right";
 
@@ -172,7 +174,7 @@ export const MagicModalPortal: React.FC = () => {
 
       const directionTranslation = getDirectionTranslation(
         config.direction,
-        height,
+        height
       );
 
       await new Promise<void>((resolve) => {
@@ -180,7 +182,7 @@ export const MagicModalPortal: React.FC = () => {
           translationX.value = withSpring(
             directionTranslation.translationX,
             springConfig,
-            () => runOnJS(resolve)(),
+            () => runOnJS(resolve)()
           );
           return;
         }
@@ -188,7 +190,7 @@ export const MagicModalPortal: React.FC = () => {
         translationY.value = withSpring(
           directionTranslation.translationY,
           springConfig,
-          () => runOnJS(resolve)(),
+          () => runOnJS(resolve)()
         );
       });
 
@@ -202,14 +204,14 @@ export const MagicModalPortal: React.FC = () => {
       height,
       translationX,
       translationY,
-    ],
+    ]
   );
 
   useImperativeHandle(magicModalRef, () => ({
     hide,
     show: async (
       newComponent: ModalChildren,
-      newConfig: Partial<ModalProps> = {},
+      newConfig: Partial<ModalProps> = {}
     ) => {
       if (isVisible) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
@@ -362,46 +364,60 @@ export const MagicModalPortal: React.FC = () => {
         translationValue,
         rangeMap[config.direction],
         [0, 1],
-        Extrapolation.CLAMP,
+        Extrapolation.CLAMP
       ),
     };
   });
 
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        if (config.onBackButtonPress) {
+          config.onBackButtonPress();
+        } else {
+          hide(MagicModalHideTypes.BACK_BUTTON_PRESSED);
+        }
+
+        return true;
+      }
+    );
+
+    return () => backHandler.remove();
+  }, [config.onBackButtonPress, hide, isVisible]);
+
   return (
     <FullWindowOverlay>
-      <GestureHandlerRootView
-        pointerEvents="box-none"
-        style={StyleSheet.absoluteFill}
-      >
-        {isVisible && (
-          <>
-            <AnimatedPressable
-              pointerEvents={config.hideBackdrop ? "none" : "auto"}
-              style={[
-                styles.backdrop,
-                animatedBackdropStyles,
-                {
-                  backgroundColor: config.hideBackdrop
-                    ? "transparent"
-                    : config.backdropColor ?? styles.backdrop.backgroundColor,
-                },
-              ]}
-              onPress={onBackdropPress}
-            />
-            <Animated.View
-              pointerEvents="box-none"
-              style={[
-                animatedStyles,
-                styles.overlay,
-                styles.container,
-                config.style,
-              ]}
-            >
-              <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
-            </Animated.View>
-          </>
-        )}
-      </GestureHandlerRootView>
+      {isVisible && (
+        <GestureHandlerRootView style={StyleSheet.absoluteFill}>
+          <AnimatedPressable
+            pointerEvents={config.hideBackdrop ? "none" : "auto"}
+            style={[
+              styles.backdrop,
+              animatedBackdropStyles,
+              {
+                backgroundColor: config.hideBackdrop
+                  ? "transparent"
+                  : config.backdropColor ?? styles.backdrop.backgroundColor,
+              },
+            ]}
+            onPress={onBackdropPress}
+          />
+          <Animated.View
+            pointerEvents="box-none"
+            style={[
+              animatedStyles,
+              styles.overlay,
+              styles.container,
+              config.style,
+            ]}
+          >
+            {modalContent}
+          </Animated.View>
+        </GestureHandlerRootView>
+      )}
     </FullWindowOverlay>
   );
 };
