@@ -1,6 +1,6 @@
 {
   "name": "react-native-magic-modal",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "type": "module",
   "description": "A magic modal that can be used imperatively from anywhere! 🦄",
   "main": "./dist/index.cjs",
@@ -64,7 +64,6 @@
     "build": "bunchee --tsconfig tsconfig.build.json",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "prepack": "bun ../../.github/replace-workspace-protocol.ts",
     "format": "prettier --check . --ignore-path ./.prettierignore",
     "format:fix": "prettier --write . --ignore-path ./.prettierignore",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
