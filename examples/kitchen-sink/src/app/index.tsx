@@ -9,7 +9,7 @@ import { StatusBar } from "expo-status-bar";
 
 const showModal = async () => {
   const direction = ["top", "bottom", "left", "right"][
-    Math.round(Math.random() * 4)
+    Math.round(Math.random() * 3)
   ] as Direction;
 
   // eslint-disable-next-line no-console

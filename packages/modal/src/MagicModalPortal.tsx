@@ -12,10 +12,11 @@ import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
+  withSequence,
   withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-
 import { ANIMATION_DURATION_IN_MS } from "./constants/animations";
 import type { IModal, ModalChildren } from "./utils/magicModalHandler";
 import { magicModalRef } from "./utils/magicModalHandler";
@@ -110,7 +111,7 @@ export const modalRefForTests = React.createRef<any>();
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-const defaultConfig = {
+const defaultConfig: ModalProps = {
   animationInTiming: ANIMATION_DURATION_IN_MS,
   animationOutTiming: ANIMATION_DURATION_IN_MS,
   hideBackdrop: false,
@@ -139,10 +140,10 @@ const defaultConfig = {
  * }
  * ```
  */
+
 export const MagicModalPortal: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [config, setConfig] = useState<ModalProps>(defaultConfig);
-  const [modalContent, setModalContent] = useState<React.ReactNode>(<></>);
+  const [modalContent, setModalContent] = useState<React.ReactNode>(undefined);
 
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
@@ -153,19 +154,6 @@ export const MagicModalPortal: React.FC = () => {
 
   const { width, height } = useWindowDimensions();
 
-  const getDirectionTranslation = (direction: Direction, value: number) => {
-    switch (direction) {
-      case "left":
-        return { translationX: -value, translationY: 0 };
-      case "right":
-        return { translationX: value, translationY: 0 };
-      case "top":
-        return { translationX: 0, translationY: -value };
-      case "bottom":
-        return { translationX: 0, translationY: value };
-    }
-  };
-
   const hide = useCallback<IModal["hide"]>(
     async (props) => {
       const springConfig = {
@@ -173,30 +161,32 @@ export const MagicModalPortal: React.FC = () => {
         dampingRatio: 3,
       };
 
-      const directionTranslation = getDirectionTranslation(
-        config.direction,
-        height
-      );
+      const translationMap = {
+        left: { translationX: -width, translationY: 0 },
+        right: { translationX: width, translationY: 0 },
+        top: { translationX: 0, translationY: -height },
+        bottom: { translationX: 0, translationY: height },
+      };
+
+      const directionTranslation = translationMap[config.direction];
 
       await new Promise<void>((resolve) => {
         if (directionTranslation.translationX !== 0) {
           translationX.value = withSpring(
             directionTranslation.translationX,
             springConfig,
-            () => runOnJS(resolve)()
+            () => runOnJS(resolve)(),
           );
           return;
         }
-
         translationY.value = withSpring(
           directionTranslation.translationY,
           springConfig,
-          () => runOnJS(resolve)()
+          () => runOnJS(resolve)(),
         );
       });
 
-      setIsVisible(false);
-
+      setModalContent(undefined);
       onHideRef.current(props);
     },
     [
@@ -205,58 +195,55 @@ export const MagicModalPortal: React.FC = () => {
       height,
       translationX,
       translationY,
-    ]
+    ],
   );
 
   useImperativeHandle(magicModalRef, () => ({
     hide,
     show: async (
       newComponent: ModalChildren,
-      newConfig: Partial<ModalProps> = {}
+      newConfig: Partial<ModalProps> = {},
     ) => {
-      if (isVisible) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
+      if (modalContent) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
       const springConfig = {
         duration: config.animationInTiming,
         dampingRatio: 1,
       };
-
       const startPosition = {
-        bottom: {
-          translationX: 0,
-          translationY: height,
-        },
-        top: {
-          translationX: 0,
-          translationY: -height,
-        },
-        left: {
-          translationX: -width,
-          translationY: 0,
-        },
-        right: {
-          translationX: width,
-          translationY: 0,
-        },
+        bottom: { translationX: 0, translationY: height },
+        top: { translationX: 0, translationY: -height },
+        left: { translationX: -width, translationY: 0 },
+        right: { translationX: width, translationY: 0 },
       };
+      const mergedConfig = { ...defaultConfig, ...newConfig };
 
-      const mergedConfig = {
-        ...defaultConfig,
-        ...newConfig,
-      };
-
-      translationX.value = startPosition[mergedConfig.direction].translationX;
-      translationY.value = startPosition[mergedConfig.direction].translationY;
-
-      translationX.value = withSpring(0, springConfig);
-      translationY.value = withSpring(0, springConfig);
-
-      prevTranslationX.value = 0;
-      prevTranslationY.value = 0;
-
-      setModalContent(newComponent as unknown as React.ReactNode);
       setConfig(mergedConfig);
-      setIsVisible(true);
+
+      Promise.allSettled([
+        new Promise<void>((resolve) => {
+          translationX.value = withSequence(
+            withTiming(
+              startPosition[mergedConfig.direction].translationX,
+              { duration: 0 },
+              () => runOnJS(resolve)(),
+            ),
+            withSpring(0, springConfig),
+          );
+        }),
+        new Promise<void>((resolve) => {
+          translationY.value = withSequence(
+            withTiming(
+              startPosition[mergedConfig.direction].translationY,
+              { duration: 0 },
+              () => runOnJS(resolve)(),
+            ),
+            withSpring(0, springConfig),
+          );
+        }),
+      ]).finally(() => {
+        setModalContent(newComponent as unknown as React.ReactNode);
+      });
 
       return new Promise((resolve) => {
         onHideRef.current = resolve;
@@ -271,6 +258,9 @@ export const MagicModalPortal: React.FC = () => {
     );
   }, [config.onBackdropPress, hide]);
 
+  const isHorizontal =
+    config.direction === "left" || config.direction === "right";
+
   const pan = Gesture.Pan()
     .minDistance(1)
     .onStart(() => {
@@ -278,46 +268,31 @@ export const MagicModalPortal: React.FC = () => {
       prevTranslationY.value = translationY.value;
     })
     .onUpdate((event) => {
-      const direction = config.direction;
-      const translationValue =
-        direction.includes("left") || direction.includes("right")
-          ? event.translationX
-          : event.translationY;
-
-      const prevTranslationValue =
-        direction.includes("left") || direction.includes("right")
-          ? prevTranslationX.value
-          : prevTranslationY.value;
+      const translationValue = isHorizontal
+        ? event.translationX
+        : event.translationY;
+      const prevTranslationValue = isHorizontal
+        ? prevTranslationX.value
+        : prevTranslationY.value;
 
       const shouldDamp =
-        (direction === "bottom" && translationValue < 0) ||
-        (direction === "top" && translationValue > 0) ||
-        (direction === "left" && translationValue > 0) ||
-        (direction === "right" && translationValue < 0);
+        (config.direction === "bottom" && translationValue < 0) ||
+        (config.direction === "top" && translationValue > 0) ||
+        (config.direction === "left" && translationValue > 0) ||
+        (config.direction === "right" && translationValue < 0);
 
       const dampedTranslation = shouldDamp
         ? prevTranslationValue + translationValue * config.dampingFactor
         : prevTranslationValue + translationValue;
 
-      const maxTranslate =
-        direction.includes("left") || direction.includes("right")
-          ? width / 2 - 50
-          : height / 2 - 50;
-
-      const limitedTranslation =
-        Math.abs(dampedTranslation) > Math.abs(maxTranslate)
-          ? maxTranslate * Math.sign(dampedTranslation)
-          : dampedTranslation;
-
-      if (direction.includes("left") || direction.includes("right")) {
-        translationX.value = limitedTranslation;
+      if (isHorizontal) {
+        translationX.value = dampedTranslation;
       } else {
-        translationY.value = limitedTranslation;
+        translationY.value = dampedTranslation;
       }
     })
     .onEnd((event) => {
       const velocityThreshold = config.swipeVelocityThreshold;
-
       const shouldHide =
         (config.direction === "right" && event.velocityX > velocityThreshold) ||
         (config.direction === "left" && event.velocityX < -velocityThreshold) ||
@@ -325,7 +300,7 @@ export const MagicModalPortal: React.FC = () => {
         (config.direction === "bottom" && event.velocityY > velocityThreshold);
 
       if (shouldHide) {
-        hide(MagicModalHideTypes.SWIPE_COMPLETED);
+        runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED);
         return;
       }
 
@@ -337,8 +312,7 @@ export const MagicModalPortal: React.FC = () => {
         velocity: event.velocityY,
         damping: 75,
       });
-    })
-    .runOnJS(true);
+    });
 
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [
@@ -348,31 +322,27 @@ export const MagicModalPortal: React.FC = () => {
   }));
 
   const animatedBackdropStyles = useAnimatedStyle(() => {
-    const translationValue =
-      config.direction.includes("left") || config.direction.includes("right")
-        ? translationX.value
-        : translationY.value;
-
+    const translationValue = isHorizontal
+      ? translationX.value
+      : translationY.value;
     const rangeMap = {
       left: [-width, 0],
       right: [width, 0],
       top: [-height, 0],
       bottom: [height, 0],
     };
-
     return {
       opacity: interpolate(
         translationValue,
         rangeMap[config.direction],
         [0, 1],
-        Extrapolation.CLAMP
+        Extrapolation.CLAMP,
       ),
     };
   });
 
   useEffect(() => {
-    if (!isVisible) return;
-
+    if (!modalContent) return;
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
@@ -381,31 +351,31 @@ export const MagicModalPortal: React.FC = () => {
         } else {
           hide(MagicModalHideTypes.BACK_BUTTON_PRESSED);
         }
-
         return true;
-      }
+      },
     );
-
     return () => backHandler.remove();
-  }, [config.onBackButtonPress, hide, isVisible]);
+  }, [config.onBackButtonPress, hide, modalContent]);
+
+  const isBackdropVisible = modalContent && !config.hideBackdrop;
 
   return (
     <FullWindowOverlay>
-      {isVisible && (
-        <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-          <AnimatedPressable
-            pointerEvents={config.hideBackdrop ? "none" : "auto"}
-            style={[
-              styles.backdrop,
-              animatedBackdropStyles,
-              {
-                backgroundColor: config.hideBackdrop
-                  ? "transparent"
-                  : config.backdropColor ?? styles.backdrop.backgroundColor,
-              },
-            ]}
-            onPress={onBackdropPress}
-          />
+      <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+        <AnimatedPressable
+          pointerEvents={isBackdropVisible ? "auto" : "none"}
+          style={[
+            styles.backdrop,
+            animatedBackdropStyles,
+            {
+              backgroundColor: isBackdropVisible
+                ? config.backdropColor
+                : "transparent",
+            },
+          ]}
+          onPress={onBackdropPress}
+        />
+        {modalContent ? (
           <Animated.View
             pointerEvents="box-none"
             style={[
@@ -417,8 +387,8 @@ export const MagicModalPortal: React.FC = () => {
           >
             <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
           </Animated.View>
-        </View>
-      )}
+        ) : null}
+      </View>
     </FullWindowOverlay>
   );
 };
