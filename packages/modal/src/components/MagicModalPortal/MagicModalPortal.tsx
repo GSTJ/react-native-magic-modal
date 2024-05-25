@@ -8,13 +8,21 @@ import React, {
 } from "react";
 import Animated, {
   Extrapolation,
+  FadeIn,
+  FadeInDown,
+  FadeInLeft,
+  FadeInRight,
+  FadeInUp,
+  FadeOut,
+  FadeOutDown,
+  FadeOutLeft,
+  FadeOutRight,
+  FadeOutUp,
   interpolate,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
-  withSequence,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import type { IModal } from "../../utils/magicModalHandler";
@@ -39,6 +47,20 @@ import { defaultConfig } from "../../constants/defaultConfig";
 export const modalRefForTests = React.createRef<any>();
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+const defaultAnimationInMap = {
+  bottom: FadeInDown,
+  top: FadeInUp,
+  left: FadeInLeft,
+  right: FadeInRight,
+};
+
+const defaultAnimationOutMap = {
+  bottom: FadeOutDown,
+  top: FadeOutUp,
+  left: FadeOutLeft,
+  right: FadeOutRight,
+};
 
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
@@ -71,36 +93,6 @@ export const MagicModalPortal: React.FC = () => {
 
   const hide = useCallback<IModal["hide"]>(
     async (props) => {
-      const springConfig = {
-        duration: config.animationOutTiming,
-        dampingRatio: 3,
-      };
-
-      const translationMap = {
-        left: { translationX: -width, translationY: 0 },
-        right: { translationX: width, translationY: 0 },
-        top: { translationX: 0, translationY: -height },
-        bottom: { translationX: 0, translationY: height },
-      };
-
-      const directionTranslation = translationMap[config.direction];
-
-      await new Promise<void>((resolve) => {
-        if (directionTranslation.translationX !== 0) {
-          translationX.value = withSpring(
-            directionTranslation.translationX,
-            springConfig,
-            () => runOnJS(resolve)()
-          );
-          return;
-        }
-        translationY.value = withSpring(
-          directionTranslation.translationY,
-          springConfig,
-          () => runOnJS(resolve)()
-        );
-      });
-
       setModalContent(undefined);
       onHideRef.current(props);
     },
@@ -121,44 +113,13 @@ export const MagicModalPortal: React.FC = () => {
     ) => {
       if (modalContent) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
-      const springConfig = {
-        duration: config.animationInTiming,
-        dampingRatio: 1,
-      };
-      const startPosition = {
-        bottom: { translationX: 0, translationY: height },
-        top: { translationX: 0, translationY: -height },
-        left: { translationX: -width, translationY: 0 },
-        right: { translationX: width, translationY: 0 },
-      };
       const mergedConfig = { ...defaultConfig, ...newConfig };
 
-      setConfig(mergedConfig);
+      translationX.value = 0;
+      translationY.value = 0;
 
-      Promise.allSettled([
-        new Promise<void>((resolve) => {
-          translationX.value = withSequence(
-            withTiming(
-              startPosition[mergedConfig.direction].translationX,
-              { duration: 0 },
-              () => runOnJS(resolve)()
-            ),
-            withSpring(0, springConfig)
-          );
-        }),
-        new Promise<void>((resolve) => {
-          translationY.value = withSequence(
-            withTiming(
-              startPosition[mergedConfig.direction].translationY,
-              { duration: 0 },
-              () => runOnJS(resolve)()
-            ),
-            withSpring(0, springConfig)
-          );
-        }),
-      ]).finally(() => {
-        setModalContent(newComponent as unknown as React.ReactNode);
-      });
+      setConfig(mergedConfig);
+      setModalContent(newComponent as unknown as React.ReactNode);
 
       return new Promise((resolve) => {
         onHideRef.current = resolve;
@@ -279,30 +240,51 @@ export const MagicModalPortal: React.FC = () => {
   return (
     <FullWindowOverlay>
       <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-        <AnimatedPressable
+        <Animated.View
           pointerEvents={isBackdropVisible ? "auto" : "none"}
-          style={[
-            styles.backdrop,
-            animatedBackdropStyles,
-            {
-              backgroundColor: isBackdropVisible
-                ? config.backdropColor
-                : "transparent",
-            },
-          ]}
-          onPress={onBackdropPress}
-        />
+          entering={FadeIn}
+          exiting={FadeOut}
+          style={styles.backdropContainer}
+        >
+          <AnimatedPressable
+            style={[
+              styles.backdrop,
+              animatedBackdropStyles,
+              {
+                backgroundColor: isBackdropVisible
+                  ? config.backdropColor
+                  : "transparent",
+              },
+            ]}
+            onPress={onBackdropPress}
+          />
+        </Animated.View>
         {modalContent ? (
           <Animated.View
             pointerEvents="box-none"
             style={[
-              animatedStyles,
               styles.overlay,
               styles.container,
               config.style,
+              animatedStyles,
             ]}
           >
-            <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
+            <Animated.View
+              entering={
+                config.entering ??
+                defaultAnimationInMap[config.direction].duration(
+                  config.animationInTiming
+                )
+              }
+              exiting={
+                config.exiting ??
+                defaultAnimationOutMap[config.direction].duration(
+                  config.animationOutTiming
+                )
+              }
+            >
+              <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
+            </Animated.View>
           </Animated.View>
         ) : null}
       </View>

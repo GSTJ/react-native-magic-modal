@@ -1,3 +1,5 @@
+import Animated from "react-native-reanimated";
+
 export type ModalChildren = React.FC;
 
 export type Direction = "top" | "bottom" | "left" | "right";
@@ -66,7 +68,8 @@ export type ModalProps = {
    * @default 500
    */
   swipeVelocityThreshold: number;
-};
+} & Pick<React.ComponentProps<typeof Animated.View>, "entering" | "exiting">;
+
 export type GenericFunction = (props: any) => any;
 
 export enum MagicModalHideTypes {
