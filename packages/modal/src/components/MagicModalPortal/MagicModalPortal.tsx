@@ -287,14 +287,11 @@ export const MagicModalPortal: React.FC = memo(() => {
             </Animated.View>
             <Animated.View
               pointerEvents="box-none"
-              style={[
-                styles.overlay,
-                styles.container,
-                config.style,
-                animatedStyles,
-              ]}
+              style={[styles.overlay, animatedStyles]}
             >
               <Animated.View
+                pointerEvents="box-none"
+                style={[styles.overlay, config.style]}
                 entering={
                   config.entering ??
                   defaultAnimationInMap[

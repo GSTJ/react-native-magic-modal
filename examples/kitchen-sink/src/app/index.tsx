@@ -7,6 +7,7 @@ import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
+import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
 
 const showModal = async () => {
   const swipeDirection = ["up", "down", "left", "right"][
@@ -86,6 +87,16 @@ export default () => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={showUndismissableModal}>
         <Text style={styles.buttonText}>Show Undismissable Modal</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() =>
+          showKeyboardAvoidingModal({
+            initialText: "Hello, World!",
+          })
+        }
+      >
+        <Text style={styles.buttonText}>Show Keyboard Avoiding Modal</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={showZoomInModal}>
         <Text style={styles.buttonText}>Show Zoom In Modal</Text>
