@@ -6,19 +6,38 @@ import { ExampleModal } from "@/components/ExampleModal";
 import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { ZoomIn, ZoomOut } from "react-native-reanimated";
 
 const showModal = async () => {
-  const direction = ["top", "bottom", "left", "right"][
+  const swipeDirection = ["top", "bottom", "left", "right"][
     Math.round(Math.random() * 3)
   ] as Direction;
 
   // eslint-disable-next-line no-console
   console.log("Opening modal");
   const modalResponse = await magicModal.show(() => <ExampleModal />, {
-    direction,
+    swipeDirection,
   });
   // eslint-disable-next-line no-console
   console.log("Modal closed with response:", modalResponse);
+};
+
+const showUndismissableModal = async () => {
+  magicModal.show(() => <ExampleModal />, {
+    onBackButtonPress: () => {},
+    onBackdropPress: () => {},
+    swipeDirection: undefined,
+  });
+};
+
+const showZoomInModal = async () => {
+  magicModal.show(() => <ExampleModal />, {
+    entering: ZoomIn,
+    exiting: ZoomOut,
+    swipeDirection: undefined,
+    animationInTiming: 1000,
+    animationOutTiming: 1000,
+  });
 };
 
 const Toast = () => {
@@ -45,8 +64,9 @@ const Toast = () => {
 const showToast = async () => {
   // eslint-disable-next-line no-console
   console.log("Opening toast");
+
   const toastResponse = await magicModal.show(() => <Toast />, {
-    direction: "top",
+    swipeDirection: "top",
     hideBackdrop: true,
     dampingFactor: 0,
     style: {
@@ -59,20 +79,20 @@ const showToast = async () => {
 };
 
 export default () => {
-  useEffect(() => {
-    showModal();
-  }, []);
-
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={showModal}>
         <Text style={styles.buttonText}>Show Modal</Text>
       </TouchableOpacity>
-
+      <TouchableOpacity style={styles.button} onPress={showUndismissableModal}>
+        <Text style={styles.buttonText}>Show Undismissable Modal</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={showZoomInModal}>
+        <Text style={styles.buttonText}>Show Zoom In Modal</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={showToast}>
         <Text style={styles.buttonText}>Show Toast</Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("/modal")}

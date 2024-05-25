@@ -1,12 +1,25 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "globalDependencies": ["**/.env"],
+  "experimentalUI": false,
   "pipeline": {
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", ".svelte-kit/**"]
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
     "lint": {
-      "outputs": ["node_modules/.cache/.eslintcache"]
+      "dependsOn": ["^topo", "^build"],
+      "outputs": []
     },
     "lint:fix": {
-      "outputs": ["node_modules/.cache/.eslintcache"]
+      "dependsOn": ["^topo", "^build"],
+      "outputs": []
     },
     "format": {
       "outputs": ["node_modules/.cache/.formatcache"]
@@ -15,13 +28,11 @@
       "outputs": ["node_modules/.cache/.formatcache"]
     },
     "test": {
-      "outputs": ["node_modules/.cache/.testcache"]
+      "dependsOn": ["^topo"],
+      "cache": false
     },
     "typecheck": {
-      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
-    },
-    "build": {
-      "outputs": ["node_modules/.cache/build.json"]
+      "dependsOn": ["^topo", "^build"]
     },
     "release": {
       "outputs": ["node_modules/.cache/release.json"]

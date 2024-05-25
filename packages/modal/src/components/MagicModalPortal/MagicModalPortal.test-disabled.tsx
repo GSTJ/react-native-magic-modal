@@ -3,19 +3,10 @@ import React from "react";
 import { Text } from "react-native";
 import { render, waitFor } from "@testing-library/react-native";
 
-import { magicModal } from "./utils/magicModalHandler";
-import {
-  MagicModalHideTypes,
-  MagicModalPortal,
-  modalRefForTests,
-} from "./MagicModalPortal";
+import { magicModal } from "../../utils/magicModalHandler";
+import { MagicModalPortal, modalRefForTests } from "./MagicModalPortal";
+import { MagicModalHideTypes } from "../../constants/types";
 import { setUpTests } from "react-native-reanimated";
-
-jest.mock("react-native-screens", () => ({
-  FullWindowOverlay: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
-}));
 
 setUpTests();
 

@@ -1,4 +1,4 @@
-name: Branch Checkup
+name: 🛠️ Branch Checkup
 on:
   push:
     branches-ignore:
@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   checkup:
-    name: Typecheck, Lint and Format
+    name: 👮‍♂️ Typecheck, Lint and Format
     runs-on: ubuntu-latest
     steps:
       - name: 🏗 Setup Repo
