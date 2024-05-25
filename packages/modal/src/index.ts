@@ -4,6 +4,7 @@ export {
 } from "./components/MagicModalPortal/MagicModalPortal";
 export {
   MagicModalHideTypes,
+  type ModalChildren,
   type Direction,
   type ModalProps,
 } from "./constants/types";

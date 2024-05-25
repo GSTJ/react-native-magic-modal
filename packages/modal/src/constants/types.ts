@@ -1,3 +1,5 @@
+export type ModalChildren = React.FC;
+
 export type Direction = "top" | "bottom" | "left" | "right";
 
 export type ModalProps = {

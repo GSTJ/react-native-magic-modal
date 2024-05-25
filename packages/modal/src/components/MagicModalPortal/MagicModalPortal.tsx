@@ -17,7 +17,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import type { IModal, ModalChildren } from "../../utils/magicModalHandler";
+import type { IModal } from "../../utils/magicModalHandler";
 import { magicModalRef } from "../../utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
 import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
@@ -32,6 +32,7 @@ import {
   ModalProps,
   GenericFunction,
   MagicModalHideTypes,
+  ModalChildren,
 } from "../../constants/types";
 import { defaultConfig } from "../../constants/defaultConfig";
 

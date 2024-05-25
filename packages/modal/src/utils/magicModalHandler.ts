@@ -1,7 +1,5 @@
 import React from "react";
-import { ModalProps } from "../constants/types";
-
-export type ModalChildren = React.FC;
+import { ModalChildren, ModalProps } from "../constants/types";
 
 export type NewConfigProps = Partial<ModalProps>;
 /**
