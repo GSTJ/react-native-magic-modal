@@ -78,7 +78,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onBackButtonPress();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACK_BUTTON_PRESSED
+        MagicModalHideTypes.BACK_BUTTON_PRESSED,
       );
     });
 
@@ -86,7 +86,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onBackdropPress();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACKDROP_PRESSED
+        MagicModalHideTypes.BACKDROP_PRESSED,
       );
     });
 
@@ -94,7 +94,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onSwipeComplete();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.SWIPE_COMPLETED
+        MagicModalHideTypes.SWIPE_COMPLETED,
       );
     });
   });

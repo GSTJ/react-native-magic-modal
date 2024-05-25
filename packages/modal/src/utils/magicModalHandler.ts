@@ -10,7 +10,7 @@ export type NewConfigProps = Partial<ModalProps>;
  */
 const show = async <T>(
   newComponent: ModalChildren,
-  newConfig?: NewConfigProps
+  newConfig?: NewConfigProps,
 ): Promise<T | undefined> =>
   magicModalRef.current?.show?.(newComponent, newConfig);
 
