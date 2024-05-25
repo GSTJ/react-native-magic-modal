@@ -60,10 +60,11 @@ export type ModalProps = {
 
   /**
    * Direction of the modal animation.
+   * Set to undefined to disable the swipe gesture.
    * @default "bottom"
    * @example "top"
    */
-  direction: Direction;
+  swipeDirection: Direction | undefined;
 
   /**
    * Velocity threshold for the swipe gesture.

@@ -42,7 +42,7 @@ import {
   MagicModalHideTypes,
   ModalChildren,
 } from "../../constants/types";
-import { defaultConfig } from "../../constants/defaultConfig";
+import { defaultConfig, defaultDirection } from "../../constants/defaultConfig";
 
 export const modalRefForTests = React.createRef<any>();
 
@@ -126,9 +126,10 @@ export const MagicModalPortal: React.FC = () => {
   }, [config.onBackdropPress, hide]);
 
   const isHorizontal =
-    config.direction === "left" || config.direction === "right";
+    config.swipeDirection === "left" || config.swipeDirection === "right";
 
   const pan = Gesture.Pan()
+    .enabled(!!config.swipeDirection)
     .minDistance(1)
     .onStart(() => {
       prevTranslationX.value = translationX.value;
@@ -143,10 +144,10 @@ export const MagicModalPortal: React.FC = () => {
         : prevTranslationY.value;
 
       const shouldDamp =
-        (config.direction === "bottom" && translationValue < 0) ||
-        (config.direction === "top" && translationValue > 0) ||
-        (config.direction === "left" && translationValue > 0) ||
-        (config.direction === "right" && translationValue < 0);
+        (config.swipeDirection === "bottom" && translationValue < 0) ||
+        (config.swipeDirection === "top" && translationValue > 0) ||
+        (config.swipeDirection === "left" && translationValue > 0) ||
+        (config.swipeDirection === "right" && translationValue < 0);
 
       const dampedTranslation = shouldDamp
         ? prevTranslationValue + translationValue * config.dampingFactor
@@ -161,10 +162,14 @@ export const MagicModalPortal: React.FC = () => {
     .onEnd((event) => {
       const velocityThreshold = config.swipeVelocityThreshold;
       const shouldHide =
-        (config.direction === "right" && event.velocityX > velocityThreshold) ||
-        (config.direction === "left" && event.velocityX < -velocityThreshold) ||
-        (config.direction === "top" && event.velocityY < -velocityThreshold) ||
-        (config.direction === "bottom" && event.velocityY > velocityThreshold);
+        (config.swipeDirection === "right" &&
+          event.velocityX > velocityThreshold) ||
+        (config.swipeDirection === "left" &&
+          event.velocityX < -velocityThreshold) ||
+        (config.swipeDirection === "top" &&
+          event.velocityY < -velocityThreshold) ||
+        (config.swipeDirection === "bottom" &&
+          event.velocityY > velocityThreshold);
 
       if (shouldHide) {
         runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED);
@@ -203,7 +208,7 @@ export const MagicModalPortal: React.FC = () => {
     return {
       opacity: interpolate(
         translationValue,
-        rangeMap[config.direction],
+        rangeMap[config.swipeDirection ?? defaultDirection],
         [0, 1],
         Extrapolation.CLAMP
       ),
@@ -263,15 +268,15 @@ export const MagicModalPortal: React.FC = () => {
             <Animated.View
               entering={
                 config.entering ??
-                defaultAnimationInMap[config.direction].duration(
-                  config.animationInTiming
-                )
+                defaultAnimationInMap[
+                  config.swipeDirection ?? defaultDirection
+                ].duration(config.animationInTiming)
               }
               exiting={
                 config.exiting ??
-                defaultAnimationOutMap[config.direction].duration(
-                  config.animationOutTiming
-                )
+                defaultAnimationOutMap[
+                  config.swipeDirection ?? defaultDirection
+                ].duration(config.animationOutTiming)
               }
             >
               <GestureDetector gesture={pan}>{modalContent}</GestureDetector>

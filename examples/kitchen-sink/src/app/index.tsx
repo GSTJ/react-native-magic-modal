@@ -8,17 +8,25 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
 const showModal = async () => {
-  const direction = ["top", "bottom", "left", "right"][
+  const swipeDirection = ["top", "bottom", "left", "right"][
     Math.round(Math.random() * 3)
   ] as Direction;
 
   // eslint-disable-next-line no-console
   console.log("Opening modal");
   const modalResponse = await magicModal.show(() => <ExampleModal />, {
-    direction,
+    swipeDirection,
   });
   // eslint-disable-next-line no-console
   console.log("Modal closed with response:", modalResponse);
+};
+
+const showUndismissableModal = async () => {
+  magicModal.show(() => <ExampleModal />, {
+    onBackButtonPress: () => {},
+    onBackdropPress: () => {},
+    swipeDirection: undefined,
+  });
 };
 
 const Toast = () => {
@@ -46,7 +54,7 @@ const showToast = async () => {
   // eslint-disable-next-line no-console
   console.log("Opening toast");
   const toastResponse = await magicModal.show(() => <Toast />, {
-    direction: "top",
+    swipeDirection: "top",
     hideBackdrop: true,
     dampingFactor: 0,
     style: {
@@ -67,6 +75,10 @@ export default () => {
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={showModal}>
         <Text style={styles.buttonText}>Show Modal</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={showUndismissableModal}>
+        <Text style={styles.buttonText}>Show Undismissable Modal</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={showToast}>
