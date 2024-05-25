@@ -55,24 +55,8 @@
     },
     "plugins": {
       "@release-it/conventional-changelog": {
-        "infile": "CHANGELOG.md",
-        "context": {
-          "linkCompare": true
-        },
-        "preset": {
-          "name": "conventionalcommits",
-          "types": [
-            {
-              "type": "feat",
-              "section": "Features"
-            },
-            {
-              "type": "fix",
-              "section": "Bug Fixes"
-            },
-            {}
-          ]
-        }
+        "preset": "angular",
+        "infile": "CHANGELOG.md"
       }
     }
   },
