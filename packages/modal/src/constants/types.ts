@@ -31,6 +31,7 @@ export type ModalProps = {
 
   /**
    * Function to be called when the back button is pressed.
+   * You can override it to prevent the modal from closing on back button press.
    * @default undefined
    * @example () => { console.log('Back button pressed'); magicModal.hide(); }
    */
@@ -38,6 +39,7 @@ export type ModalProps = {
 
   /**
    * Function to be called when the backdrop is pressed.
+   * You can override it to prevent the modal from closing on backdrop press.
    * @default undefined
    * @example () => { console.log('Backdrop pressed'); magicModal.hide(); }
    */
