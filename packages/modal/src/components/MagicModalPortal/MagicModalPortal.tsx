@@ -42,6 +42,7 @@ import {
   GenericFunction,
   MagicModalHideTypes,
   ModalChildren,
+  Direction,
 } from "../../constants/types";
 import { defaultConfig, defaultDirection } from "../../constants/defaultConfig";
 
@@ -50,18 +51,18 @@ export const modalRefForTests = React.createRef<any>();
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const defaultAnimationInMap = {
-  bottom: FadeInDown,
-  top: FadeInUp,
+  up: FadeInUp,
+  down: FadeInDown,
   left: FadeInLeft,
   right: FadeInRight,
-};
+} satisfies Record<Direction, unknown>;
 
 const defaultAnimationOutMap = {
-  bottom: FadeOutDown,
-  top: FadeOutUp,
+  up: FadeOutUp,
+  down: FadeOutDown,
   left: FadeOutLeft,
   right: FadeOutRight,
-};
+} satisfies Record<Direction, unknown>;
 
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
@@ -135,7 +136,13 @@ export const MagicModalPortal: React.FC = memo(() => {
     config.swipeDirection === "left" || config.swipeDirection === "right";
 
   const rangeMap = useMemo(
-    () => ({ left: -width, right: width, top: -height, bottom: height }),
+    () =>
+      ({
+        up: -height,
+        down: height,
+        left: -width,
+        right: width,
+      }) satisfies Record<Direction, number>,
     [height, width],
   );
 
@@ -156,11 +163,11 @@ export const MagicModalPortal: React.FC = memo(() => {
         : prevTranslationY.value;
 
       const shouldDampMap = {
-        bottom: translationValue < 0,
-        top: translationValue > 0,
+        up: translationValue > 0,
+        down: translationValue < 0,
         left: translationValue > 0,
         right: translationValue < 0,
-      };
+      } satisfies Record<Direction, boolean>;
 
       const shouldDamp =
         shouldDampMap[config.swipeDirection ?? defaultDirection];
@@ -179,11 +186,11 @@ export const MagicModalPortal: React.FC = memo(() => {
       const velocityThreshold = config.swipeVelocityThreshold;
 
       const shouldHideMap = {
+        up: event.velocityY < -velocityThreshold,
+        down: event.velocityY > velocityThreshold,
         right: event.velocityX > velocityThreshold,
         left: event.velocityX < -velocityThreshold,
-        top: event.velocityY < -velocityThreshold,
-        bottom: event.velocityY > velocityThreshold,
-      };
+      } satisfies Record<Direction, boolean>;
 
       const shouldHide =
         shouldHideMap[config.swipeDirection ?? defaultDirection];

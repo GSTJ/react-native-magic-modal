@@ -1,7 +1,7 @@
 import { ANIMATION_DURATION_IN_MS } from "./animations";
 import { ModalProps } from "./types";
 
-export const defaultDirection = "bottom";
+export const defaultDirection = "down";
 
 export const defaultConfig: ModalProps = {
   animationInTiming: ANIMATION_DURATION_IN_MS,
