@@ -249,55 +249,59 @@ export const MagicModalPortal: React.FC = memo(() => {
 
   return (
     <FullWindowOverlay>
-      {modalContent ? (
-        <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-          <Animated.View
-            pointerEvents={isBackdropVisible ? "auto" : "none"}
-            entering={FadeIn.duration(config.animationInTiming)}
-            exiting={FadeOut.duration(config.animationOutTiming)}
-            style={styles.backdropContainer}
-          >
-            <AnimatedPressable
-              style={[
-                styles.backdrop,
-                animatedBackdropStyles,
-                {
-                  backgroundColor: isBackdropVisible
-                    ? config.backdropColor
-                    : "transparent",
-                },
-              ]}
-              onPress={onBackdropPress}
-            />
-          </Animated.View>
-          <Animated.View
-            pointerEvents="box-none"
-            style={[
-              styles.overlay,
-              styles.container,
-              config.style,
-              animatedStyles,
-            ]}
-          >
+      {/* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
+          the modal will have zIndex issues on react-navigation modals. */}
+      <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+        {modalContent ? (
+          <>
             <Animated.View
-              entering={
-                config.entering ??
-                defaultAnimationInMap[
-                  config.swipeDirection ?? defaultDirection
-                ].duration(config.animationInTiming)
-              }
-              exiting={
-                config.exiting ??
-                defaultAnimationOutMap[
-                  config.swipeDirection ?? defaultDirection
-                ].duration(config.animationOutTiming)
-              }
+              pointerEvents={isBackdropVisible ? "auto" : "none"}
+              entering={FadeIn.duration(config.animationInTiming)}
+              exiting={FadeOut.duration(config.animationOutTiming)}
+              style={styles.backdropContainer}
             >
-              <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
+              <AnimatedPressable
+                style={[
+                  styles.backdrop,
+                  animatedBackdropStyles,
+                  {
+                    backgroundColor: isBackdropVisible
+                      ? config.backdropColor
+                      : "transparent",
+                  },
+                ]}
+                onPress={onBackdropPress}
+              />
             </Animated.View>
-          </Animated.View>
-        </View>
-      ) : null}
+            <Animated.View
+              pointerEvents="box-none"
+              style={[
+                styles.overlay,
+                styles.container,
+                config.style,
+                animatedStyles,
+              ]}
+            >
+              <Animated.View
+                entering={
+                  config.entering ??
+                  defaultAnimationInMap[
+                    config.swipeDirection ?? defaultDirection
+                  ].duration(config.animationInTiming)
+                }
+                exiting={
+                  config.exiting ??
+                  defaultAnimationOutMap[
+                    config.swipeDirection ?? defaultDirection
+                  ].duration(config.animationOutTiming)
+                }
+              >
+                <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
+              </Animated.View>
+            </Animated.View>
+          </>
+        ) : null}
+      </View>
     </FullWindowOverlay>
   );
 });
