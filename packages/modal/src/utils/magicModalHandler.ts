@@ -1,4 +1,4 @@
-import { type ModalProps } from "@/components/MagicModalPortal/MagicModalPortal";
+import { type ModalProps } from "../components/MagicModalPortal/MagicModalPortal";
 import React from "react";
 
 export type ModalChildren = React.FC;
@@ -12,7 +12,7 @@ export type NewConfigProps = Partial<ModalProps>;
  */
 const show = async <T>(
   newComponent: ModalChildren,
-  newConfig?: NewConfigProps,
+  newConfig?: NewConfigProps
 ): Promise<T | undefined> =>
   magicModalRef.current?.show?.(newComponent, newConfig);
 

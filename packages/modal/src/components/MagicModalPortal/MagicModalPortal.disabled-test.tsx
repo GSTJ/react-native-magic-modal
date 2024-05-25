@@ -3,7 +3,7 @@ import React from "react";
 import { Text } from "react-native";
 import { render, waitFor } from "@testing-library/react-native";
 
-import { magicModal } from "@/utils/magicModalHandler";
+import { magicModal } from "../../utils/magicModalHandler";
 import {
   MagicModalHideTypes,
   MagicModalPortal,
@@ -87,7 +87,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onBackButtonPress();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACK_BUTTON_PRESSED,
+        MagicModalHideTypes.BACK_BUTTON_PRESSED
       );
     });
 
@@ -95,7 +95,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onBackdropPress();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACKDROP_PRESSED,
+        MagicModalHideTypes.BACKDROP_PRESSED
       );
     });
 
@@ -103,7 +103,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onSwipeComplete();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.SWIPE_COMPLETED,
+        MagicModalHideTypes.SWIPE_COMPLETED
       );
     });
   });

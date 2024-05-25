@@ -5,7 +5,9 @@
     "jsx": "react-native",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "react-native-magic-modal": ["../../packages/modal/src"],
+      "react-native-magic-modal/*": ["../../packages/modal/src/*"]
     },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },

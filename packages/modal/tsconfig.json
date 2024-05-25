@@ -6,9 +6,6 @@
     "jsx": "react-native",
     "outDir": "dist",
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   }
 }
