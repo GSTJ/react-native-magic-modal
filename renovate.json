@@ -1,5 +1,6 @@
 {
   "rebaseWhen": "behind-base-branch",
+  "postUpdateOptions": ["pnpmDedupe"],
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
