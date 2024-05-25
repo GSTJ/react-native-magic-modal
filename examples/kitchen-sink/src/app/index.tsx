@@ -53,6 +53,7 @@ const Toast = () => {
 const showToast = async () => {
   // eslint-disable-next-line no-console
   console.log("Opening toast");
+
   const toastResponse = await magicModal.show(() => <Toast />, {
     swipeDirection: "top",
     hideBackdrop: true,
@@ -67,10 +68,6 @@ const showToast = async () => {
 };
 
 export default () => {
-  useEffect(() => {
-    showModal();
-  }, []);
-
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={showModal}>
