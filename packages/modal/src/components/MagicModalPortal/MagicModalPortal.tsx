@@ -17,11 +17,11 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { ANIMATION_DURATION_IN_MS } from "./constants/animations";
-import type { IModal, ModalChildren } from "./utils/magicModalHandler";
-import { magicModalRef } from "./utils/magicModalHandler";
+import { ANIMATION_DURATION_IN_MS } from "../../constants/animations";
+import type { IModal, ModalChildren } from "../../utils/magicModalHandler";
+import { magicModalRef } from "../../utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
-import { FullWindowOverlay } from "./FullWindowOverlay";
+import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
 import {
   BackHandler,
   Pressable,
@@ -29,6 +29,8 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+
+console.log("here", `${FullWindowOverlay}`);
 
 export type Direction = "top" | "bottom" | "left" | "right";
 
@@ -140,7 +142,6 @@ const defaultConfig: ModalProps = {
  * }
  * ```
  */
-
 export const MagicModalPortal: React.FC = () => {
   const [config, setConfig] = useState<ModalProps>(defaultConfig);
   const [modalContent, setModalContent] = useState<React.ReactNode>(undefined);
@@ -175,14 +176,14 @@ export const MagicModalPortal: React.FC = () => {
           translationX.value = withSpring(
             directionTranslation.translationX,
             springConfig,
-            () => runOnJS(resolve)(),
+            () => runOnJS(resolve)()
           );
           return;
         }
         translationY.value = withSpring(
           directionTranslation.translationY,
           springConfig,
-          () => runOnJS(resolve)(),
+          () => runOnJS(resolve)()
         );
       });
 
@@ -195,14 +196,14 @@ export const MagicModalPortal: React.FC = () => {
       height,
       translationX,
       translationY,
-    ],
+    ]
   );
 
   useImperativeHandle(magicModalRef, () => ({
     hide,
     show: async (
       newComponent: ModalChildren,
-      newConfig: Partial<ModalProps> = {},
+      newConfig: Partial<ModalProps> = {}
     ) => {
       if (modalContent) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
@@ -226,9 +227,9 @@ export const MagicModalPortal: React.FC = () => {
             withTiming(
               startPosition[mergedConfig.direction].translationX,
               { duration: 0 },
-              () => runOnJS(resolve)(),
+              () => runOnJS(resolve)()
             ),
-            withSpring(0, springConfig),
+            withSpring(0, springConfig)
           );
         }),
         new Promise<void>((resolve) => {
@@ -236,9 +237,9 @@ export const MagicModalPortal: React.FC = () => {
             withTiming(
               startPosition[mergedConfig.direction].translationY,
               { duration: 0 },
-              () => runOnJS(resolve)(),
+              () => runOnJS(resolve)()
             ),
-            withSpring(0, springConfig),
+            withSpring(0, springConfig)
           );
         }),
       ]).finally(() => {
@@ -336,7 +337,7 @@ export const MagicModalPortal: React.FC = () => {
         translationValue,
         rangeMap[config.direction],
         [0, 1],
-        Extrapolation.CLAMP,
+        Extrapolation.CLAMP
       ),
     };
   });
@@ -352,7 +353,7 @@ export const MagicModalPortal: React.FC = () => {
           hide(MagicModalHideTypes.BACK_BUTTON_PRESSED);
         }
         return true;
-      },
+      }
     );
     return () => backHandler.remove();
   }, [config.onBackButtonPress, hide, modalContent]);

@@ -4,6 +4,6 @@ export {
   modalRefForTests,
   type Direction,
   type ModalProps,
-} from "./MagicModalPortal";
+} from "./components/MagicModalPortal/MagicModalPortal";
 export type { NewConfigProps } from "./utils/magicModalHandler";
 export { magicModal } from "./utils/magicModalHandler";
