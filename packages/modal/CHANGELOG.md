@@ -1,5 +1,24 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [2.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/1.0.0...2.0.0) (2024-05-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* To preserve compatibility, swipeDirection "top" and
+"bottom" properties have been renamed back to "up" and "down". It also
+makes more sense overall.
+
+### :stars: New Features :stars:
+
+* rename swipeDirection "top" and "bottom" to "up" and "down" ([#52](https://github.com/GSTJ/react-native-magic-modal/issues/52)) ([c6107ff](https://github.com/GSTJ/react-native-magic-modal/commit/c6107ff49e197eba852cfa0cc0b23d6f2106b1e6))
+
+
+### :curly_loop: Continuous Integrations :curly_loop:
+
+* force docs gen ([633cf09](https://github.com/GSTJ/react-native-magic-modal/commit/633cf09da9c14d52f318315300d6014016312dfc))
+* normalize repository settings ([4a827c5](https://github.com/GSTJ/react-native-magic-modal/commit/4a827c5ffd43c88da278fe81424df96c009ec3f6))
+
 ## 1.0.0 (2024-05-25)
 
 
