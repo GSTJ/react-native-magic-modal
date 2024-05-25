@@ -150,15 +150,20 @@ export const MagicModalPortal: React.FC = memo(() => {
       const translationValue = isHorizontal
         ? event.translationX
         : event.translationY;
+
       const prevTranslationValue = isHorizontal
         ? prevTranslationX.value
         : prevTranslationY.value;
 
+      const shouldDampMap = {
+        bottom: translationValue < 0,
+        top: translationValue > 0,
+        left: translationValue > 0,
+        right: translationValue < 0,
+      };
+
       const shouldDamp =
-        (config.swipeDirection === "bottom" && translationValue < 0) ||
-        (config.swipeDirection === "top" && translationValue > 0) ||
-        (config.swipeDirection === "left" && translationValue > 0) ||
-        (config.swipeDirection === "right" && translationValue < 0);
+        shouldDampMap[config.swipeDirection ?? defaultDirection];
 
       const dampedTranslation = shouldDamp
         ? prevTranslationValue + translationValue * config.dampingFactor
