@@ -17,7 +17,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { ANIMATION_DURATION_IN_MS } from "../../constants/animations";
 import type { IModal, ModalChildren } from "../../utils/magicModalHandler";
 import { magicModalRef } from "../../utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
@@ -29,100 +28,16 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-
-export type Direction = "top" | "bottom" | "left" | "right";
-
-export type ModalProps = {
-  /**
-   * Duration of the animation when the modal is shown.
-   * @default 300
-   */
-  animationInTiming: number;
-
-  /**
-   * Duration of the animation when the modal is hidden.
-   * @default 300
-   */
-  animationOutTiming: number;
-
-  /**
-   * If true, the backdrop will be hidden.
-   * @default false
-   */
-  hideBackdrop: boolean;
-
-  /**
-   * The color of the backdrop.
-   * @default "rgba(0, 0, 0, 0.5)"
-   */
-  backdropColor: string;
-
-  /**
-   * Function to be called when the back button is pressed.
-   * @default undefined
-   * @example () => { console.log('Back button pressed'); magicModal.hide(); }
-   */
-  onBackButtonPress: (() => void) | undefined;
-
-  /**
-   * Function to be called when the backdrop is pressed.
-   * @default undefined
-   * @example () => { console.log('Backdrop pressed'); magicModal.hide(); }
-   */
-  onBackdropPress: (() => void) | undefined;
-
-  /**
-   * Custom style for the modal.
-   * @default {}
-   * @example { backgroundColor: 'red', padding: 10 }
-   */
-  style: Record<string, unknown>;
-
-  /**
-   * Damping factor for the swipe gesture.
-   * @default 0.2
-   */
-  dampingFactor: number;
-
-  /**
-   * Direction of the modal animation.
-   * @default "bottom"
-   * @example "top"
-   */
-  direction: Direction;
-
-  /**
-   * Velocity threshold for the swipe gesture.
-   * @default 500
-   */
-  swipeVelocityThreshold: number;
-};
-
-type GenericFunction = (props: any) => any;
-
-export enum MagicModalHideTypes {
-  BACKDROP_PRESSED = "BACKDROP_PRESSED",
-  SWIPE_COMPLETED = "SWIPE_COMPLETED",
-  BACK_BUTTON_PRESSED = "BACK_BUTTON_PRESSED",
-  MODAL_OVERRIDE = "MODAL_OVERRIDE",
-}
+import {
+  ModalProps,
+  GenericFunction,
+  MagicModalHideTypes,
+} from "../../constants/types";
+import { defaultConfig } from "../../constants/defaultConfig";
 
 export const modalRefForTests = React.createRef<any>();
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-const defaultConfig: ModalProps = {
-  animationInTiming: ANIMATION_DURATION_IN_MS,
-  animationOutTiming: ANIMATION_DURATION_IN_MS,
-  hideBackdrop: false,
-  backdropColor: "rgba(0, 0, 0, 0.5)",
-  dampingFactor: 0.2,
-  direction: "bottom",
-  swipeVelocityThreshold: 500,
-  onBackButtonPress: undefined,
-  onBackdropPress: undefined,
-  style: {},
-} satisfies ModalProps;
 
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
@@ -324,12 +239,14 @@ export const MagicModalPortal: React.FC = () => {
     const translationValue = isHorizontal
       ? translationX.value
       : translationY.value;
+
     const rangeMap = {
       left: [-width, 0],
       right: [width, 0],
       top: [-height, 0],
       bottom: [height, 0],
     };
+
     return {
       opacity: interpolate(
         translationValue,

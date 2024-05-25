@@ -4,11 +4,8 @@ import { Text } from "react-native";
 import { render, waitFor } from "@testing-library/react-native";
 
 import { magicModal } from "../../utils/magicModalHandler";
-import {
-  MagicModalHideTypes,
-  MagicModalPortal,
-  modalRefForTests,
-} from "./MagicModalPortal";
+import { MagicModalPortal, modalRefForTests } from "./MagicModalPortal";
+import { MagicModalHideTypes } from "../../constants/types";
 import { setUpTests } from "react-native-reanimated";
 
 jest.mock("react-native-screens", () => ({
