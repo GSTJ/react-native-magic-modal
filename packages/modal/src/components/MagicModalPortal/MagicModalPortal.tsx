@@ -233,8 +233,8 @@ export const MagicModalPortal: React.FC = () => {
       <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
         <Animated.View
           pointerEvents={isBackdropVisible ? "auto" : "none"}
-          entering={FadeIn}
-          exiting={FadeOut}
+          entering={FadeIn.duration(config.animationInTiming)}
+          exiting={FadeOut.duration(config.animationOutTiming)}
           style={styles.backdropContainer}
         >
           <AnimatedPressable
