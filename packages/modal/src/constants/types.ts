@@ -2,7 +2,7 @@ import Animated from "react-native-reanimated";
 
 export type ModalChildren = React.FC;
 
-export type Direction = "top" | "bottom" | "left" | "right";
+export type Direction = "up" | "down" | "left" | "right";
 
 export type ModalProps = {
   /**
@@ -61,8 +61,8 @@ export type ModalProps = {
   /**
    * Direction of the modal animation.
    * Set to undefined to disable the swipe gesture.
-   * @default "bottom"
-   * @example "top"
+   * @default "down"
+   * @example "up"
    */
   swipeDirection: Direction | undefined;
 
