@@ -7,13 +7,13 @@ export type Direction = "top" | "bottom" | "left" | "right";
 export type ModalProps = {
   /**
    * Duration of the animation when the modal is shown.
-   * @default 300
+   * @default 350
    */
   animationInTiming: number;
 
   /**
    * Duration of the animation when the modal is hidden.
-   * @default 300
+   * @default 350
    */
   animationOutTiming: number;
 
