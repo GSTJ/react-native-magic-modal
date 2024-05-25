@@ -249,27 +249,27 @@ export const MagicModalPortal: React.FC = memo(() => {
 
   return (
     <FullWindowOverlay>
-      <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-        <Animated.View
-          pointerEvents={isBackdropVisible ? "auto" : "none"}
-          entering={FadeIn.duration(config.animationInTiming)}
-          exiting={FadeOut.duration(config.animationOutTiming)}
-          style={styles.backdropContainer}
-        >
-          <AnimatedPressable
-            style={[
-              styles.backdrop,
-              animatedBackdropStyles,
-              {
-                backgroundColor: isBackdropVisible
-                  ? config.backdropColor
-                  : "transparent",
-              },
-            ]}
-            onPress={onBackdropPress}
-          />
-        </Animated.View>
-        {modalContent ? (
+      {modalContent ? (
+        <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+          <Animated.View
+            pointerEvents={isBackdropVisible ? "auto" : "none"}
+            entering={FadeIn.duration(config.animationInTiming)}
+            exiting={FadeOut.duration(config.animationOutTiming)}
+            style={styles.backdropContainer}
+          >
+            <AnimatedPressable
+              style={[
+                styles.backdrop,
+                animatedBackdropStyles,
+                {
+                  backgroundColor: isBackdropVisible
+                    ? config.backdropColor
+                    : "transparent",
+                },
+              ]}
+              onPress={onBackdropPress}
+            />
+          </Animated.View>
           <Animated.View
             pointerEvents="box-none"
             style={[
@@ -296,8 +296,8 @@ export const MagicModalPortal: React.FC = memo(() => {
               <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
             </Animated.View>
           </Animated.View>
-        ) : null}
-      </View>
+        </View>
+      ) : null}
     </FullWindowOverlay>
   );
 });

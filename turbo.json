@@ -27,12 +27,9 @@
     "format:fix": {
       "outputs": ["node_modules/.cache/.formatcache"]
     },
-    "//#test": {
-      "dependsOn": []
-    },
     "test": {
-      "cache": false,
-      "dependsOn": []
+      "dependsOn": ["^topo"],
+      "cache": false
     },
     "typecheck": {
       "dependsOn": ["^topo", "^build"]
