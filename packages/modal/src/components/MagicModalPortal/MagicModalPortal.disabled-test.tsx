@@ -3,7 +3,7 @@ import React from "react";
 import { Text } from "react-native";
 import { render, waitFor } from "@testing-library/react-native";
 
-import { magicModal } from "../../utils/magicModalHandler";
+import { magicModal } from "@/utils/magicModalHandler";
 import {
   MagicModalHideTypes,
   MagicModalPortal,

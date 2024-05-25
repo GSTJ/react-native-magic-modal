@@ -1,7 +1,0 @@
-{
-  "extends": "@magic/tsconfig/base.build",
-  "compilerOptions": {
-    "jsx": "react-native"
-  },
-  "include": ["src/**/*", "*.tsx?"]
-}

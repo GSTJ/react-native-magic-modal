@@ -17,9 +17,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { ANIMATION_DURATION_IN_MS } from "../../constants/animations";
-import type { IModal, ModalChildren } from "../../utils/magicModalHandler";
-import { magicModalRef } from "../../utils/magicModalHandler";
+import { ANIMATION_DURATION_IN_MS } from "@/constants/animations";
+import type { IModal, ModalChildren } from "@/utils/magicModalHandler";
+import { magicModalRef } from "@/utils/magicModalHandler";
 import { styles } from "./MagicModalPortal.styles";
 import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
 import {
@@ -29,8 +29,6 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-
-console.log("here", `${FullWindowOverlay}`);
 
 export type Direction = "top" | "bottom" | "left" | "right";
 
