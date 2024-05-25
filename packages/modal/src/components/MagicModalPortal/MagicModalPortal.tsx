@@ -91,19 +91,10 @@ export const MagicModalPortal: React.FC = () => {
 
   const { width, height } = useWindowDimensions();
 
-  const hide = useCallback<IModal["hide"]>(
-    async (props) => {
-      setModalContent(undefined);
-      onHideRef.current(props);
-    },
-    [
-      config.animationOutTiming,
-      config.direction,
-      height,
-      translationX,
-      translationY,
-    ]
-  );
+  const hide = useCallback<IModal["hide"]>(async (props) => {
+    setModalContent(undefined);
+    onHideRef.current(props);
+  }, []);
 
   useImperativeHandle(magicModalRef, () => ({
     hide,
