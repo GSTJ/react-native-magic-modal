@@ -6,6 +6,7 @@ import { ExampleModal } from "@/components/ExampleModal";
 import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { ZoomIn, ZoomOut } from "react-native-reanimated";
 
 const showModal = async () => {
   const swipeDirection = ["top", "bottom", "left", "right"][
@@ -26,6 +27,16 @@ const showUndismissableModal = async () => {
     onBackButtonPress: () => {},
     onBackdropPress: () => {},
     swipeDirection: undefined,
+  });
+};
+
+const showZoomInModal = async () => {
+  magicModal.show(() => <ExampleModal />, {
+    entering: ZoomIn,
+    exiting: ZoomOut,
+    swipeDirection: undefined,
+    animationInTiming: 1000,
+    animationOutTiming: 1000,
   });
 };
 
@@ -73,15 +84,15 @@ export default () => {
       <TouchableOpacity style={styles.button} onPress={showModal}>
         <Text style={styles.buttonText}>Show Modal</Text>
       </TouchableOpacity>
-
       <TouchableOpacity style={styles.button} onPress={showUndismissableModal}>
         <Text style={styles.buttonText}>Show Undismissable Modal</Text>
       </TouchableOpacity>
-
+      <TouchableOpacity style={styles.button} onPress={showZoomInModal}>
+        <Text style={styles.buttonText}>Show Zoom In Modal</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={showToast}>
         <Text style={styles.buttonText}>Show Toast</Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("/modal")}
