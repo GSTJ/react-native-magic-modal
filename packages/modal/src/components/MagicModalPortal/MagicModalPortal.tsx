@@ -94,6 +94,10 @@ export const MagicModalPortal: React.FC = () => {
   const hide = useCallback<IModal["hide"]>(async (props) => {
     setModalContent(undefined);
     onHideRef.current(props);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, config.animationOutTiming);
+    });
   }, []);
 
   useImperativeHandle(magicModalRef, () => ({
@@ -104,10 +108,10 @@ export const MagicModalPortal: React.FC = () => {
     ) => {
       if (modalContent) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
-      const mergedConfig = { ...defaultConfig, ...newConfig };
-
       translationX.value = 0;
       translationY.value = 0;
+
+      const mergedConfig = { ...defaultConfig, ...newConfig };
 
       setConfig(mergedConfig);
       setModalContent(newComponent as unknown as React.ReactNode);
@@ -127,6 +131,11 @@ export const MagicModalPortal: React.FC = () => {
 
   const isHorizontal =
     config.swipeDirection === "left" || config.swipeDirection === "right";
+
+  const rangeMap = useMemo(
+    () => ({ left: -width, right: width, top: -height, bottom: height }),
+    [height, width]
+  );
 
   const pan = Gesture.Pan()
     .enabled(!!config.swipeDirection)
@@ -161,29 +170,39 @@ export const MagicModalPortal: React.FC = () => {
     })
     .onEnd((event) => {
       const velocityThreshold = config.swipeVelocityThreshold;
-      const shouldHide =
-        (config.swipeDirection === "right" &&
-          event.velocityX > velocityThreshold) ||
-        (config.swipeDirection === "left" &&
-          event.velocityX < -velocityThreshold) ||
-        (config.swipeDirection === "top" &&
-          event.velocityY < -velocityThreshold) ||
-        (config.swipeDirection === "bottom" &&
-          event.velocityY > velocityThreshold);
 
-      if (shouldHide) {
-        runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED);
+      const shouldHideMap = {
+        right: event.velocityX > velocityThreshold,
+        left: event.velocityX < -velocityThreshold,
+        top: event.velocityY < -velocityThreshold,
+        bottom: event.velocityY > velocityThreshold,
+      };
+
+      const shouldHide =
+        shouldHideMap[config.swipeDirection ?? defaultDirection];
+
+      if (!shouldHide) {
+        translationX.value = withSpring(0, {
+          velocity: event.velocityX,
+          damping: 75,
+        });
+        translationY.value = withSpring(0, {
+          velocity: event.velocityY,
+          damping: 75,
+        });
         return;
       }
 
-      translationX.value = withSpring(0, {
-        velocity: event.velocityX,
-        damping: 75,
-      });
-      translationY.value = withSpring(0, {
-        velocity: event.velocityY,
-        damping: 75,
-      });
+      const mainTranslation = isHorizontal ? translationX : translationY;
+
+      mainTranslation.value = withSpring(
+        rangeMap[config.swipeDirection ?? defaultDirection],
+        { velocity: event.velocityX, overshootClamping: true },
+        (success) =>
+          success && runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED)
+      );
+
+      return;
     });
 
   const animatedStyles = useAnimatedStyle(() => ({
@@ -198,17 +217,10 @@ export const MagicModalPortal: React.FC = () => {
       ? translationX.value
       : translationY.value;
 
-    const rangeMap = {
-      left: [-width, 0],
-      right: [width, 0],
-      top: [-height, 0],
-      bottom: [height, 0],
-    };
-
     return {
       opacity: interpolate(
         translationValue,
-        rangeMap[config.swipeDirection ?? defaultDirection],
+        [rangeMap[config.swipeDirection ?? defaultDirection], 0],
         [0, 1],
         Extrapolation.CLAMP
       ),
