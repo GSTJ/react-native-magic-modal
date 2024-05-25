@@ -19,7 +19,7 @@ importers:
         version: 51.0.8(@babel/core@7.24.5)(@babel/preset-env@7.24.5)
       expo-router:
         specifier: ^3.5.14
-        version: 3.5.14(expo-constants@16.0.1)(expo-linking@6.3.1)(expo-modules-autolinking@1.11.1)(expo-status-bar@1.12.1)(expo@51.0.8)(react-native-reanimated@3.10.1)(react-native-safe-area-context@4.10.1)(react-native-screens@3.31.1)(react-native@0.74.1)(react@18.2.0)
+        version: 3.5.14(expo-constants@16.0.1)(expo-linking@6.3.1)(expo-modules-autolinking@1.11.1)(expo-status-bar@1.12.1)(expo@51.0.8)(react-native-reanimated@3.11.0)(react-native-safe-area-context@4.10.1)(react-native-screens@3.31.1)(react-native@0.74.1)(react@18.2.0)
       expo-splash-screen:
         specifier: ~0.27.4
         version: 0.27.4(expo-modules-autolinking@1.11.1)(expo@51.0.8)
@@ -39,8 +39,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/modal
       react-native-reanimated:
-        specifier: ~3.10.1
-        version: 3.10.1(@babel/core@7.24.5)(react-native@0.74.1)(react@18.2.0)
+        specifier: ~3.11.0
+        version: 3.11.0(@babel/core@7.24.5)(react-native@0.74.1)(react@18.2.0)
       react-native-web:
         specifier: ~0.19.12
         version: 0.19.12(react-dom@18.3.1)(react@18.2.0)
@@ -80,7 +80,7 @@ importers:
         version: 2.16.2(react-native@0.74.1)(react@18.2.0)
       react-native-reanimated:
         specifier: '*'
-        version: 3.10.1(@babel/core@7.24.5)(react-native@0.74.1)(react@18.2.0)
+        version: 3.11.0(@babel/core@7.24.5)(react-native@0.74.1)(react@18.2.0)
     devDependencies:
       '@magic/eslint-config':
         specifier: workspace:*
@@ -7997,7 +7997,7 @@ packages:
       - encoding
     dev: true
 
-  /expo-router@3.5.14(expo-constants@16.0.1)(expo-linking@6.3.1)(expo-modules-autolinking@1.11.1)(expo-status-bar@1.12.1)(expo@51.0.8)(react-native-reanimated@3.10.1)(react-native-safe-area-context@4.10.1)(react-native-screens@3.31.1)(react-native@0.74.1)(react@18.2.0):
+  /expo-router@3.5.14(expo-constants@16.0.1)(expo-linking@6.3.1)(expo-modules-autolinking@1.11.1)(expo-status-bar@1.12.1)(expo@51.0.8)(react-native-reanimated@3.11.0)(react-native-safe-area-context@4.10.1)(react-native-screens@3.31.1)(react-native@0.74.1)(react@18.2.0):
     resolution: {integrity: sha512-RVsyJLosZSq89ebA5qfPToRcFZJoTTb+6nwPHk6iESD6KON/Q7ZODt5fvCwXkY86tLNEMGo160QvBPfBZmglaA==}
     peerDependencies:
       '@react-navigation/drawer': ^6.5.8
@@ -8029,7 +8029,7 @@ packages:
       expo-splash-screen: 0.27.4(expo-modules-autolinking@1.11.1)(expo@51.0.8)
       expo-status-bar: 1.12.1
       react-native-helmet-async: 2.0.4(react@18.2.0)
-      react-native-reanimated: 3.10.1(@babel/core@7.24.5)(react-native@0.74.1)(react@18.2.0)
+      react-native-reanimated: 3.11.0(@babel/core@7.24.5)(react-native@0.74.1)(react@18.2.0)
       react-native-safe-area-context: 4.10.1(react-native@0.74.1)(react@18.2.0)
       react-native-screens: 3.31.1(react-native@0.74.1)(react@18.2.0)
       schema-utils: 4.2.0
@@ -13114,8 +13114,8 @@ packages:
       shallowequal: 1.1.0
     dev: false
 
-  /react-native-reanimated@3.10.1(@babel/core@7.24.5)(react-native@0.74.1)(react@18.2.0):
-    resolution: {integrity: sha512-sfxg6vYphrDc/g4jf/7iJ7NRi+26z2+BszPmvmk0Vnrz6FL7HYljJqTf531F1x6tFmsf+FEAmuCtTUIXFLVo9w==}
+  /react-native-reanimated@3.11.0(@babel/core@7.24.5)(react-native@0.74.1)(react@18.2.0):
+    resolution: {integrity: sha512-BNw/XDgUfs8UhfY1X6IniU8kWpnotWGyt8qmQviaHisTi5lvwnaOdXQKfN1KGONx6ekdFRHRP5EFwLi0UajwKA==}
     peerDependencies:
       '@babel/core': ^7.0.0-0
       react: '*'
