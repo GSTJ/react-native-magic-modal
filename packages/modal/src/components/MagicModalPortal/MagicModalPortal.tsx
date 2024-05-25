@@ -93,11 +93,15 @@ export const MagicModalPortal: React.FC = () => {
 
   const hide = useCallback<IModal["hide"]>(async (props) => {
     setModalContent(undefined);
-    onHideRef.current(props);
 
     await new Promise((resolve) => {
       setTimeout(resolve, config.animationOutTiming);
     });
+
+    translationX.value = 0;
+    translationY.value = 0;
+
+    onHideRef.current(props);
   }, []);
 
   useImperativeHandle(magicModalRef, () => ({
@@ -107,9 +111,6 @@ export const MagicModalPortal: React.FC = () => {
       newConfig: Partial<ModalProps> = {}
     ) => {
       if (modalContent) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
-
-      translationX.value = 0;
-      translationY.value = 0;
 
       const mergedConfig = { ...defaultConfig, ...newConfig };
 

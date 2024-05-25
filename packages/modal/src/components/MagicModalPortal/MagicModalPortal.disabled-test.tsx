@@ -8,12 +8,6 @@ import { MagicModalPortal, modalRefForTests } from "./MagicModalPortal";
 import { MagicModalHideTypes } from "../../constants/types";
 import { setUpTests } from "react-native-reanimated";
 
-jest.mock("react-native-screens", () => ({
-  FullWindowOverlay: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
-}));
-
 setUpTests();
 
 describe("MagicModal", () => {
