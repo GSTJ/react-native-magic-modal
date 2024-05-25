@@ -1,5 +1,5 @@
-import { type ModalProps } from "src/components/MagicModalPortal/ModalProps";
 import React from "react";
+import { ModalProps } from "../constants/types";
 
 export type ModalChildren = React.FC;
 
