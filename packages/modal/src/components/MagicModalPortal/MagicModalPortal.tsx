@@ -1,4 +1,5 @@
 import React, {
+  memo,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -78,7 +79,7 @@ const defaultAnimationOutMap = {
  * }
  * ```
  */
-export const MagicModalPortal: React.FC = () => {
+export const MagicModalPortal: React.FC = memo(() => {
   const [config, setConfig] = useState<ModalProps>(defaultConfig);
   const [modalContent, setModalContent] = useState<React.ReactNode>(undefined);
 
@@ -299,4 +300,4 @@ export const MagicModalPortal: React.FC = () => {
       </View>
     </FullWindowOverlay>
   );
-};
+});
