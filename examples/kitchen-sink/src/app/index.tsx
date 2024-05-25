@@ -9,7 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
 
 const showModal = async () => {
-  const swipeDirection = ["top", "bottom", "left", "right"][
+  const swipeDirection = ["up", "down", "left", "right"][
     Math.round(Math.random() * 3)
   ] as Direction;
 
@@ -66,7 +66,7 @@ const showToast = async () => {
   console.log("Opening toast");
 
   const toastResponse = await magicModal.show(() => <Toast />, {
-    swipeDirection: "top",
+    swipeDirection: "up",
     hideBackdrop: true,
     dampingFactor: 0,
     style: {
