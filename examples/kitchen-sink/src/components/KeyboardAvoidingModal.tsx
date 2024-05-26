@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-} from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import {
   View,
   StyleSheet,
@@ -20,14 +14,10 @@ type KeyboardAvoidingModalProps = {
 
 const MAX_TEXT_LENGTH = 50;
 
-const KEYBOARD_FOCUS_DELAY = Platform.OS === "android" ? 250 : 0;
-
 const KeyboardAvoidingModal: React.FC<KeyboardAvoidingModalProps> = ({
   initialText = "",
 }) => {
   const [text, setText] = useState(initialText);
-
-  const inputRef = useRef<TextInput>(null);
 
   const hasText = useMemo(() => text.trim(), [text]);
 
@@ -39,26 +29,18 @@ const KeyboardAvoidingModal: React.FC<KeyboardAvoidingModalProps> = ({
     magicModal.hide();
   }, [hasText]);
 
-  useEffect(() => {
-    // Autofocus doesn't work that great on Modals in Android
-    // Focusing the ref manually here is a workaround.
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, KEYBOARD_FOCUS_DELAY);
-  }, []);
-
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "padding"}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.container}>
         <TextInput
-          ref={inputRef}
           maxLength={MAX_TEXT_LENGTH}
           onSubmitEditing={handleSave}
           returnKeyType="done"
           selectTextOnFocus
           autoCorrect={false}
+          autoFocus
           spellCheck
           enablesReturnKeyAutomatically
           autoCapitalize="words"
@@ -72,7 +54,7 @@ const KeyboardAvoidingModal: React.FC<KeyboardAvoidingModalProps> = ({
 };
 
 export const showKeyboardAvoidingModal = (
-  props: KeyboardAvoidingModalProps,
+  props: KeyboardAvoidingModalProps
 ) => {
   return magicModal.show(() => <KeyboardAvoidingModal {...props} />, {
     style: {
