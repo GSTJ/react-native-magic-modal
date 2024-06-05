@@ -61,8 +61,8 @@ importers:
         specifier: workspace:*
         version: link:../../tools/tsconfig
       babel-preset-expo:
-        specifier: 11.0.6
-        version: 11.0.6(@babel/core@7.24.6)(@babel/preset-env@7.24.6)
+        specifier: 11.0.7
+        version: 11.0.7(@babel/core@7.24.6)(@babel/preset-env@7.24.6)
       expo-cli:
         specifier: ^6.3.10
         version: 6.3.10(expo@51.0.9)
@@ -3168,11 +3168,73 @@ packages:
     resolution: {integrity: sha512-dzUhwyaX04QosWZ8zyaaNB/WYZIdeDN1lcpfQbqiOhZJShRH+FLTDVONE/dqlMQrP+EO7lDqF0RrlIt9lnOCQQ==}
     engines: {node: '>=18'}
 
+  /@react-native/babel-plugin-codegen@0.74.83(@babel/preset-env@7.24.6):
+    resolution: {integrity: sha512-+S0st3t4Ro00bi9gjT1jnK8qTFOU+CwmziA7U9odKyWrCoRJrgmrvogq/Dr1YXlpFxexiGIupGut1VHxr+fxJA==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@react-native/codegen': 0.74.83(@babel/preset-env@7.24.6)
+    transitivePeerDependencies:
+      - '@babel/preset-env'
+      - supports-color
+
   /@react-native/babel-plugin-codegen@0.74.84(@babel/preset-env@7.24.6):
     resolution: {integrity: sha512-UR4uiii5szIJA84mSC6GJOfYKDq7/ThyetOQT62+BBcyGeHVtHlNLNRzgaMeLqIQaT8Fq4pccMI+7QqLOMXzdw==}
     engines: {node: '>=18'}
     dependencies:
       '@react-native/codegen': 0.74.84(@babel/preset-env@7.24.6)
+    transitivePeerDependencies:
+      - '@babel/preset-env'
+      - supports-color
+
+  /@react-native/babel-preset@0.74.83(@babel/core@7.24.6)(@babel/preset-env@7.24.6):
+    resolution: {integrity: sha512-KJuu3XyVh3qgyUer+rEqh9a/JoUxsDOzkJNfRpDyXiAyjDRoVch60X/Xa/NcEQ93iCVHAWs0yQ+XGNGIBCYE6g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@babel/core': '*'
+    dependencies:
+      '@babel/core': 7.24.6
+      '@babel/plugin-proposal-async-generator-functions': 7.20.7(@babel/core@7.24.6)
+      '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.24.6)
+      '@babel/plugin-proposal-export-default-from': 7.24.1(@babel/core@7.24.6)
+      '@babel/plugin-proposal-logical-assignment-operators': 7.20.7(@babel/core@7.24.6)
+      '@babel/plugin-proposal-nullish-coalescing-operator': 7.18.6(@babel/core@7.24.6)
+      '@babel/plugin-proposal-numeric-separator': 7.18.6(@babel/core@7.24.6)
+      '@babel/plugin-proposal-object-rest-spread': 7.20.7(@babel/core@7.24.6)
+      '@babel/plugin-proposal-optional-catch-binding': 7.18.6(@babel/core@7.24.6)
+      '@babel/plugin-proposal-optional-chaining': 7.21.0(@babel/core@7.24.6)
+      '@babel/plugin-syntax-dynamic-import': 7.8.3(@babel/core@7.24.6)
+      '@babel/plugin-syntax-export-default-from': 7.24.1(@babel/core@7.24.6)
+      '@babel/plugin-syntax-flow': 7.24.1(@babel/core@7.24.6)
+      '@babel/plugin-syntax-nullish-coalescing-operator': 7.8.3(@babel/core@7.24.6)
+      '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.24.6)
+      '@babel/plugin-transform-arrow-functions': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-async-to-generator': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-block-scoping': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-classes': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-computed-properties': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-destructuring': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-flow-strip-types': 7.24.1(@babel/core@7.24.6)
+      '@babel/plugin-transform-function-name': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-literals': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-modules-commonjs': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-named-capturing-groups-regex': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-parameters': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-private-methods': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-private-property-in-object': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-react-display-name': 7.24.1(@babel/core@7.24.6)
+      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.6)
+      '@babel/plugin-transform-react-jsx-self': 7.24.5(@babel/core@7.24.6)
+      '@babel/plugin-transform-react-jsx-source': 7.24.1(@babel/core@7.24.6)
+      '@babel/plugin-transform-runtime': 7.24.3(@babel/core@7.24.6)
+      '@babel/plugin-transform-shorthand-properties': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-spread': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-sticky-regex': 7.24.6(@babel/core@7.24.6)
+      '@babel/plugin-transform-typescript': 7.24.5(@babel/core@7.24.6)
+      '@babel/plugin-transform-unicode-regex': 7.24.6(@babel/core@7.24.6)
+      '@babel/template': 7.24.6
+      '@react-native/babel-plugin-codegen': 0.74.83(@babel/preset-env@7.24.6)
+      babel-plugin-transform-flow-enums: 0.0.2(@babel/core@7.24.6)
+      react-refresh: 0.14.2
     transitivePeerDependencies:
       - '@babel/preset-env'
       - supports-color
@@ -3228,6 +3290,23 @@ packages:
       react-refresh: 0.14.2
     transitivePeerDependencies:
       - '@babel/preset-env'
+      - supports-color
+
+  /@react-native/codegen@0.74.83(@babel/preset-env@7.24.6):
+    resolution: {integrity: sha512-GgvgHS3Aa2J8/mp1uC/zU8HuTh8ZT5jz7a4mVMWPw7+rGyv70Ba8uOVBq6UH2Q08o617IATYc+0HfyzAfm4n0w==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@babel/preset-env': ^7.1.6
+    dependencies:
+      '@babel/parser': 7.24.6
+      '@babel/preset-env': 7.24.6(@babel/core@7.24.6)
+      glob: 7.2.3
+      hermes-parser: 0.19.1
+      invariant: 2.2.4
+      jscodeshift: 0.14.0(@babel/preset-env@7.24.6)
+      mkdirp: 0.5.6
+      nullthrows: 1.1.1
+    transitivePeerDependencies:
       - supports-color
 
   /@react-native/codegen@0.74.84(@babel/preset-env@7.24.6):
@@ -5326,8 +5405,8 @@ packages:
       '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.24.6)
     dev: true
 
-  /babel-preset-expo@11.0.6(@babel/core@7.24.6)(@babel/preset-env@7.24.6):
-    resolution: {integrity: sha512-jRi9I5/jT+dnIiNJDjDg+I/pV+AlxrIW/DNbdqYoRWPZA/LHDqD6IJnJXLxbuTcQ+llp+0LWcU7f/kC/PgGpkw==}
+  /babel-preset-expo@11.0.7(@babel/core@7.24.6)(@babel/preset-env@7.24.6):
+    resolution: {integrity: sha512-7RuGTlJmm2d+ut4/hUH33DxGdisC/uA47uBmdTjekdVVk0XNC8yolQH7Hx3xUPvJu+Y1ifxyiOIeV4RZf1unyQ==}
     dependencies:
       '@babel/plugin-proposal-decorators': 7.24.1(@babel/core@7.24.6)
       '@babel/plugin-transform-export-namespace-from': 7.24.6(@babel/core@7.24.6)
@@ -5335,7 +5414,7 @@ packages:
       '@babel/plugin-transform-parameters': 7.24.6(@babel/core@7.24.6)
       '@babel/preset-react': 7.24.1(@babel/core@7.24.6)
       '@babel/preset-typescript': 7.24.1(@babel/core@7.24.6)
-      '@react-native/babel-preset': 0.74.84(@babel/core@7.24.6)(@babel/preset-env@7.24.6)
+      '@react-native/babel-preset': 0.74.83(@babel/core@7.24.6)(@babel/preset-env@7.24.6)
       babel-plugin-react-native-web: 0.19.12
       react-refresh: 0.14.2
     transitivePeerDependencies:
@@ -8060,7 +8139,7 @@ packages:
       '@expo/config-plugins': 8.0.4
       '@expo/metro-config': 0.18.3
       '@expo/vector-icons': 14.0.2
-      babel-preset-expo: 11.0.6(@babel/core@7.24.6)(@babel/preset-env@7.24.6)
+      babel-preset-expo: 11.0.7(@babel/core@7.24.6)(@babel/preset-env@7.24.6)
       expo-asset: 10.0.6(expo@51.0.9)
       expo-file-system: 17.0.1(expo@51.0.9)
       expo-font: 12.0.6(expo@51.0.9)
