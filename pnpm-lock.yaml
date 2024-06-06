@@ -22,7 +22,7 @@ importers:
         version: 3.5.15(expo-constants@16.0.2)(expo-linking@6.3.1)(expo-modules-autolinking@1.11.1)(expo-status-bar@1.12.1)(expo@51.0.11)(react-native-reanimated@3.12.0)(react-native-safe-area-context@4.10.4)(react-native-screens@3.31.1)(react-native@0.74.2)(react@18.3.1)
       expo-splash-screen:
         specifier: ~0.27.4
-        version: 0.27.4(expo-modules-autolinking@1.11.1)(expo@51.0.11)
+        version: 0.27.5(expo-modules-autolinking@1.11.1)(expo@51.0.11)
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -8148,6 +8148,19 @@ packages:
       - supports-color
     dev: false
 
+  /expo-splash-screen@0.27.5(expo-modules-autolinking@1.11.1)(expo@51.0.11):
+    resolution: {integrity: sha512-9rdZuLkFCfgJBxrheUsOEOIW6Rp+9NVlpSE0hgXQwbTCLTncf00IHSE8/L2NbFyeDLNjof1yZBppaV7tXHRUzA==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      '@expo/prebuild-config': 7.0.6(expo-modules-autolinking@1.11.1)
+      expo: 51.0.11(@babel/core@7.24.7)(@babel/preset-env@7.24.7)
+    transitivePeerDependencies:
+      - encoding
+      - expo-modules-autolinking
+      - supports-color
+    dev: false
+
   /expo-status-bar@1.12.1:
     resolution: {integrity: sha512-/t3xdbS8KB0prj5KG5w7z+wZPFlPtkgs95BsmrP/E7Q0xHXTcDcQ6Cu2FkFuRM+PKTb17cJDnLkawyS5vDLxMA==}
     dev: false
@@ -13462,7 +13475,7 @@ packages:
     dependencies:
       find-up: 6.3.0
       read-pkg: 8.1.0
-      type-fest: 4.18.3
+      type-fest: 4.19.0
     dev: true
 
   /read-pkg@8.1.0:
@@ -13472,7 +13485,7 @@ packages:
       '@types/normalize-package-data': 2.4.4
       normalize-package-data: 6.0.1
       parse-json: 7.1.1
-      type-fest: 4.18.3
+      type-fest: 4.19.0
     dev: true
 
   /readable-stream@2.3.8:
@@ -15308,8 +15321,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /type-fest@4.18.3:
-    resolution: {integrity: sha512-Q08/0IrpvM+NMY9PA2rti9Jb+JejTddwmwmVQGskAlhtcrw1wsRzoR6ode6mR+OAabNa75w/dxedSUY2mlphaQ==}
+  /type-fest@4.19.0:
+    resolution: {integrity: sha512-CN2l+hWACRiejlnr68vY0/7734Kzu+9+TOslUXbSCQ1ruY9XIHDBSceVXCcHm/oXrdzhtLMMdJEKfemf1yXiZQ==}
     engines: {node: '>=16'}
     dev: true
 
