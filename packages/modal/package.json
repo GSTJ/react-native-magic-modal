@@ -1,6 +1,6 @@
 {
   "name": "react-native-magic-modal",
-  "version": "2.0.3",
+  "version": "2.0.13",
   "type": "module",
   "description": "A magic modal that can be used imperatively from anywhere! 🦄",
   "main": "./dist/index.cjs",
@@ -87,7 +87,7 @@
     "jest-junit": "^16.0.0",
     "pod-install": "^0.2.2",
     "bunchee": "^5.1.2",
-    "prettier": "3.2.5",
+    "prettier": "3.3.1",
     "react-test-renderer": "^18.3.1",
     "release-it": "^17.3.0",
     "shx": "^0.3.4",
