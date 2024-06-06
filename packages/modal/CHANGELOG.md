@@ -1,5 +1,17 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [2.1.0](https://github.com/GSTJ/react-native-magic-modal/compare/2.0.13...2.1.0) (2024-06-06)
+
+
+### :stars: New Features :stars:
+
+* add web support ([befa910](https://github.com/GSTJ/react-native-magic-modal/commit/befa9105ad2fb5d0e49a128491f12f32c5c755d1))
+
+
+### :curly_loop: Continuous Integrations :curly_loop:
+
+* fix turbo json ([5c50641](https://github.com/GSTJ/react-native-magic-modal/commit/5c506410afc76d1348e414235476db9fa157d950))
+
 ## 2.0.13 (2024-06-04)
 
 ## 2.0.12 (2024-06-04)

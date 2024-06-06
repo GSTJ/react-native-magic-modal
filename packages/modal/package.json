@@ -1,6 +1,6 @@
 {
   "name": "react-native-magic-modal",
-  "version": "2.0.13",
+  "version": "2.1.0",
   "type": "module",
   "description": "A magic modal that can be used imperatively from anywhere! 🦄",
   "main": "./dist/index.cjs",
@@ -51,7 +51,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "docs": "typedoc --excludeInternal --out docs ./src/index.ts",
     "test": "jest",
-    "release": "release-it"
+    "release": "release-it --ci"
   },
   "eslintConfig": {
     "root": true,
