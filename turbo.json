@@ -1,7 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "experimentalUI": false,
-  "pipeline": {
+  "tasks": {
     "topo": {
       "dependsOn": ["^topo"]
     },
