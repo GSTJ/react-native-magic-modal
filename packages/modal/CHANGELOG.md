@@ -1,5 +1,12 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## 2.1.7 (2024-06-07)
+
+
+### :curly_loop: Continuous Integrations :curly_loop:
+
+* validate versions on kitchen-sink are expo-compatible ([021a933](https://github.com/GSTJ/react-native-magic-modal/commit/021a933e07d442c6cc3065b5fed986b61cd8941e))
+
 ## 2.1.6 (2024-06-07)
 
 ## 2.1.5 (2024-06-06)
