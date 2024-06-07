@@ -274,6 +274,7 @@ export const MagicModalPortal: React.FC = memo(() => {
               style={styles.backdropContainer}
             >
               <AnimatedPressable
+                testID="magic-modal-backdrop"
                 style={[
                   styles.backdrop,
                   animatedBackdropStyles,
