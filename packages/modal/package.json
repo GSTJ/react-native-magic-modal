@@ -1,6 +1,6 @@
 {
   "name": "react-native-magic-modal",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "type": "module",
   "description": "A magic modal that can be used imperatively from anywhere! 🦄",
   "main": "./dist/index.cjs",
