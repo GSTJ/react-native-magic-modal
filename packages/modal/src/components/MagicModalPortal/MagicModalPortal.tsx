@@ -46,8 +46,6 @@ import {
 } from "../../constants/types";
 import { defaultConfig, defaultDirection } from "../../constants/defaultConfig";
 
-export const modalRefForTests = React.createRef<any>();
-
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const defaultAnimationInMap = {
@@ -110,7 +108,7 @@ export const MagicModalPortal: React.FC = memo(() => {
     hide,
     show: async (
       newComponent: ModalChildren,
-      newConfig: Partial<ModalProps> = {}
+      newConfig: Partial<ModalProps> = {},
     ) => {
       if (modalContent) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
 
@@ -143,7 +141,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         left: -width,
         right: width,
       }) satisfies Record<Direction, number>,
-    [height, width]
+    [height, width],
   );
 
   const pan = Gesture.Pan()
@@ -213,7 +211,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         rangeMap[config.swipeDirection ?? defaultDirection],
         { velocity: event.velocityX, overshootClamping: true },
         (success) =>
-          success && runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED)
+          success && runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED),
       );
 
       return;
@@ -226,7 +224,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         { translateY: translationY.value },
       ],
     }),
-    [translationX.value, translationY.value]
+    [translationX.value, translationY.value],
   );
 
   const animatedBackdropStyles = useAnimatedStyle(() => {
@@ -239,7 +237,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         translationValue,
         [rangeMap[config.swipeDirection ?? defaultDirection], 0],
         [0, 1],
-        Extrapolation.CLAMP
+        Extrapolation.CLAMP,
       ),
     };
   }, [config.swipeDirection, translationX.value, translationY.value, rangeMap]);
@@ -255,7 +253,7 @@ export const MagicModalPortal: React.FC = memo(() => {
           hide(MagicModalHideTypes.BACK_BUTTON_PRESSED);
         }
         return true;
-      }
+      },
     );
     return () => backHandler.remove();
   }, [config.onBackButtonPress, hide, modalContent]);
@@ -276,6 +274,7 @@ export const MagicModalPortal: React.FC = memo(() => {
               style={styles.backdropContainer}
             >
               <AnimatedPressable
+                testID="magic-modal-backdrop"
                 style={[
                   styles.backdrop,
                   animatedBackdropStyles,

@@ -8,6 +8,9 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", ".svelte-kit/**"]
     },
+    "doctor": {
+      "cache": false
+    },
     "start": {
       "cache": false,
       "persistent": true

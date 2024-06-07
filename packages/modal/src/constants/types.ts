@@ -73,6 +73,7 @@ export type ModalProps = {
   swipeVelocityThreshold: number;
 } & Pick<React.ComponentProps<typeof Animated.View>, "entering" | "exiting">;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GenericFunction = (props: any) => any;
 
 export enum MagicModalHideTypes {
