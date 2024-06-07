@@ -14,7 +14,7 @@
     "format:fix": "prettier --write . --ignore-path ../../.gitignore",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "doctor": "pnpm dlx expo-doctor"
+    "doctor": "pnpm dlx expo install --check"
   },
   "eslintConfig": {
     "root": true,
