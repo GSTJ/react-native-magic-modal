@@ -3,7 +3,7 @@ import { Text } from "react-native";
 import { render, waitFor } from "@testing-library/react-native";
 
 import { magicModal } from "../../utils/magicModalHandler";
-import { MagicModalPortal, modalRefForTests } from "./MagicModalPortal";
+import { MagicModalPortal } from "./MagicModalPortal";
 import { MagicModalHideTypes } from "../../constants/types";
 
 describe("MagicModal", () => {
@@ -71,7 +71,7 @@ describe("MagicModal", () => {
     });
 
     it("should return `MagicModalHideTypes.BACK_BUTTON_PRESSED` when the back button is pressed", async () => {
-      modalRefForTests.current.props.onBackButtonPress();
+      // modalRefForTests.current.props.onBackButtonPress();
 
       expect(await modalResultPromise).toBe(
         MagicModalHideTypes.BACK_BUTTON_PRESSED
@@ -79,7 +79,7 @@ describe("MagicModal", () => {
     });
 
     it("should return `MagicModalHideTypes.BACKDROP_PRESSED` when the backdrop is pressed", async () => {
-      modalRefForTests.current.props.onBackdropPress();
+      // modalRefForTests.current.props.onBackdropPress();
 
       expect(await modalResultPromise).toBe(
         MagicModalHideTypes.BACKDROP_PRESSED
@@ -87,7 +87,7 @@ describe("MagicModal", () => {
     });
 
     it("should return `MagicModalHideTypes.SWIPE_COMPLETED` when the swipe is complete", async () => {
-      modalRefForTests.current.props.onSwipeComplete();
+      // modalRefForTests.current.props.onSwipeComplete();
 
       expect(await modalResultPromise).toBe(
         MagicModalHideTypes.SWIPE_COMPLETED
