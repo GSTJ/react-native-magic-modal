@@ -31,7 +31,8 @@
     "test": "turbo test",
     "build": "turbo build",
     "release": "turbo release",
-    "docs": "turbo docs"
+    "docs": "turbo docs",
+    "doctor": "turbo doctor"
   },
   "config": {
     "commitizen": {

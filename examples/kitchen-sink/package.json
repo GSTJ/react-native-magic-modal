@@ -9,11 +9,12 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "start": "expo start",
-    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "pnpm dlx eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "pnpm lint --fix",
     "format:fix": "prettier --write . --ignore-path ../../.gitignore",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "doctor": "pnpm dlx expo-doctor"
   },
   "eslintConfig": {
     "root": true,
@@ -22,15 +23,15 @@
     ]
   },
   "dependencies": {
-    "react-native-magic-modal": "workspace:*",
-    "expo": "^51.0.8",
+    "expo": "^51.0.11",
     "expo-router": "^3.5.14",
     "expo-splash-screen": "~0.27.4",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "0.74.2",
     "react-native-gesture-handler": "^2.16.2",
-    "react-native-reanimated": "~3.12.0",
+    "react-native-magic-modal": "workspace:*",
+    "react-native-reanimated": "~3.10.1",
     "react-native-web": "~0.19.12"
   },
   "devDependencies": {
