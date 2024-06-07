@@ -9,7 +9,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "start": "expo start",
-    "lint": "pnpm dlx eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "pnpm lint --fix",
     "format:fix": "prettier --write . --ignore-path ../../.gitignore",
     "format": "prettier --check . --ignore-path ../../.gitignore",

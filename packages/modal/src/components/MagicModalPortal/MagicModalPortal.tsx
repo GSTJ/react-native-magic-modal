@@ -46,7 +46,7 @@ import {
 } from "../../constants/types";
 import { defaultConfig, defaultDirection } from "../../constants/defaultConfig";
 
-export const modalRefForTests = React.createRef<any>();
+export const modalRefForTests = React.createRef<unknown>();
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 

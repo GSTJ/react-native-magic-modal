@@ -60,7 +60,7 @@ describe("MagicModal", () => {
   });
 
   describe("should return one of MagicModalHideTypes on automatic hides", () => {
-    let modalResultPromise: any = null;
+    let modalResultPromise: unknown = null;
 
     beforeEach(async () => {
       render(<MagicModalPortal />);
