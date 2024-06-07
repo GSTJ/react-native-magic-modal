@@ -46,7 +46,8 @@ import {
 } from "../../constants/types";
 import { defaultConfig, defaultDirection } from "../../constants/defaultConfig";
 
-export const modalRefForTests = React.createRef<unknown>();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const modalRefForTests = React.createRef<any>();
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
