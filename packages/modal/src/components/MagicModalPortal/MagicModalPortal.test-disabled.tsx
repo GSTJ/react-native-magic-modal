@@ -1,4 +1,3 @@
-// TODO: Re-enable tests when we figure out the jest issues on the project.
 import React from "react";
 import { Text } from "react-native";
 import { render, waitFor } from "@testing-library/react-native";
@@ -6,9 +5,6 @@ import { render, waitFor } from "@testing-library/react-native";
 import { magicModal } from "../../utils/magicModalHandler";
 import { MagicModalPortal, modalRefForTests } from "./MagicModalPortal";
 import { MagicModalHideTypes } from "../../constants/types";
-import { setUpTests } from "react-native-reanimated";
-
-setUpTests();
 
 describe("MagicModal", () => {
   it("renders correctly", async () => {
@@ -78,7 +74,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onBackButtonPress();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACK_BUTTON_PRESSED,
+        MagicModalHideTypes.BACK_BUTTON_PRESSED
       );
     });
 
@@ -86,7 +82,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onBackdropPress();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACKDROP_PRESSED,
+        MagicModalHideTypes.BACKDROP_PRESSED
       );
     });
 
@@ -94,7 +90,7 @@ describe("MagicModal", () => {
       modalRefForTests.current.props.onSwipeComplete();
 
       expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.SWIPE_COMPLETED,
+        MagicModalHideTypes.SWIPE_COMPLETED
       );
     });
   });
