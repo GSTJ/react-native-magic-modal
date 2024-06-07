@@ -1,7 +1,4 @@
-export {
-  MagicModalPortal,
-  modalRefForTests,
-} from "./components/MagicModalPortal/MagicModalPortal";
+export { MagicModalPortal } from "./components/MagicModalPortal/MagicModalPortal";
 export {
   MagicModalHideTypes,
   type ModalChildren,
