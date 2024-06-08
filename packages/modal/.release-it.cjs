@@ -56,7 +56,8 @@ module.exports = {
     },
   },
   git: {
-    commitMessage: "chore(release): magic modal release v${version}",
+    commitMessage: "chore(release): magic modal release v${version} [skip ci]",
+    pushArgs: ["-o ci.skip"],
     commit: true,
     tag: true,
     push: true,
