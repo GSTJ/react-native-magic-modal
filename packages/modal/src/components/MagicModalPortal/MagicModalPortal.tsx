@@ -34,7 +34,6 @@ import {
 } from "../../constants/types";
 import { defaultConfig, defaultDirection } from "../../constants/defaultConfig";
 import { magicModalRef } from "../../utils/magicModalHandler";
-
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const defaultAnimationInMap = {
@@ -50,6 +49,9 @@ const defaultAnimationOutMap = {
   left: FadeOutLeft,
   right: FadeOutRight,
 } satisfies Record<Direction, unknown>;
+
+const generatePsuedoRandomID = () =>
+  Math.random().toString(36).substring(7).toUpperCase() + Date.now();
 
 const MagicModalContext = React.createContext<{
   hide: (props: any) => Promise<unknown>;
@@ -212,7 +214,7 @@ const MagicModal = ({
   const isBackdropVisible = !config.hideBackdrop;
 
   return (
-    <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+    <>
       <Animated.View
         pointerEvents={isBackdropVisible ? "auto" : "none"}
         entering={FadeIn.duration(config.animationInTiming)}
@@ -258,7 +260,7 @@ const MagicModal = ({
           </GestureDetector>
         </Animated.View>
       </Animated.View>
-    </View>
+    </>
   );
 };
 
@@ -345,7 +347,7 @@ export const MagicModalPortal: React.FC = memo(() => {
     newComponent: React.ReactNode,
     newConfig?: ModalProps
   ) => {
-    const id = `${Date.now()}`;
+    const id = generatePsuedoRandomID();
 
     let hideCallback: (props: unknown) => unknown;
 
@@ -400,14 +402,16 @@ export const MagicModalPortal: React.FC = memo(() => {
      the modal will have zIndex issues on react-navigation modals. */
   return (
     <FullWindowOverlay>
-      {modals.map(({ id, component, config }) => (
-        <MagicModalProvider
-          key={id}
-          hide={(props?: unknown) => hide(props, { modalID: id })}
-        >
-          <MagicModal config={config}>{component}</MagicModal>
-        </MagicModalProvider>
-      ))}
+      <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+        {modals.map(({ id, component, config }) => (
+          <MagicModalProvider
+            key={id}
+            hide={(props?: unknown) => hide(props, { modalID: id })}
+          >
+            <MagicModal config={config}>{component}</MagicModal>
+          </MagicModalProvider>
+        ))}
+      </View>
     </FullWindowOverlay>
   );
 });

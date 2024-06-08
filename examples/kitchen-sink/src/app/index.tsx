@@ -92,11 +92,11 @@ export default () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
+        onPress={() => {
           showKeyboardAvoidingModal({
             initialText: "Hello, World!",
-          })
-        }
+          });
+        }}
       >
         <Text style={styles.buttonText}>Show Keyboard Avoiding Modal</Text>
       </TouchableOpacity>
