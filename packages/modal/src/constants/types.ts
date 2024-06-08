@@ -76,6 +76,20 @@ export type ModalProps = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GenericFunction = (props: any) => any;
 
+export type GlobalHideFunction = (
+  props: unknown,
+  options?: { modalID?: string },
+) => void;
+
+export type HookHideFunction = (props?: unknown) => void;
+
+export type NewConfigProps = Partial<ModalProps>;
+
+export type GlobalShowFunction = <T>(
+  newComponent: ModalChildren,
+  newConfig?: NewConfigProps,
+) => { promise: Promise<T | undefined>; modalID: string };
+
 export enum MagicModalHideTypes {
   BACKDROP_PRESSED = "BACKDROP_PRESSED",
   SWIPE_COMPLETED = "SWIPE_COMPLETED",

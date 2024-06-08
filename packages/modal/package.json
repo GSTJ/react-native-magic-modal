@@ -49,10 +49,12 @@
     "format": "prettier --check . --ignore-path ./.prettierignore",
     "format:fix": "prettier --write . --ignore-path ./.prettierignore",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "copy:readme": "shx cp ../../README.md ./README.md",
     "docs": "typedoc --excludeInternal --out docs ./src/index.ts",
     "test": "jest",
     "release": "release-it --ci"
   },
+  "prettier": "@magic/prettier-config",
   "eslintConfig": {
     "root": true,
     "extends": [

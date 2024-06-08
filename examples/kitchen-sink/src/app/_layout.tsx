@@ -1,7 +1,7 @@
-import { MagicModalPortal } from "react-native-magic-modal";
-import { Stack } from "expo-router";
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { MagicModalPortal } from "react-native-magic-modal";
+import { Stack } from "expo-router";
 
 const App = () => {
   return (

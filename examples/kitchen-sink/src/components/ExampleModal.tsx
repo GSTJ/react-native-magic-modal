@@ -1,9 +1,13 @@
 /* eslint-disable react-native/no-color-literals */
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { magicModal } from "react-native-magic-modal";
+import { useMagicModal } from "react-native-magic-modal";
+
+import { showToast } from "./Toast";
 
 export const ExampleModal = () => {
+  const { hide } = useMagicModal();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Example Modal</Text>
@@ -11,10 +15,13 @@ export const ExampleModal = () => {
         This is an example to showcase the imperative Magic Modal!
       </Text>
       <TouchableOpacity
-        onPress={() => magicModal.hide("close button pressed")}
+        onPress={() => hide("close button pressed")}
         style={styles.buttonContainer}
       >
         <Text style={styles.button}>Close Modal</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={showToast} style={styles.buttonContainer}>
+        <Text style={styles.button}>Open Toast</Text>
       </TouchableOpacity>
     </View>
   );

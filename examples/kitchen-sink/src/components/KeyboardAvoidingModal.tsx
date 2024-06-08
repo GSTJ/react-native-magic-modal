@@ -1,12 +1,12 @@
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
-  View,
-  StyleSheet,
-  TextInput,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
+  TextInput,
+  View,
 } from "react-native";
-import { magicModal } from "react-native-magic-modal";
+import { magicModal, useMagicModal } from "react-native-magic-modal";
 
 type KeyboardAvoidingModalProps = {
   initialText?: string;
@@ -18,6 +18,7 @@ const KeyboardAvoidingModal: React.FC<KeyboardAvoidingModalProps> = ({
   initialText = "",
 }) => {
   const [text, setText] = useState(initialText);
+  const { hide } = useMagicModal();
 
   const hasText = useMemo(() => text.trim(), [text]);
 
@@ -26,8 +27,8 @@ const KeyboardAvoidingModal: React.FC<KeyboardAvoidingModalProps> = ({
       return;
     }
 
-    magicModal.hide();
-  }, [hasText]);
+    hide();
+  }, [hasText, hide]);
 
   return (
     <KeyboardAvoidingView

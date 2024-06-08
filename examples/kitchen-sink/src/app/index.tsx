@@ -1,13 +1,15 @@
 /* eslint-disable react-native/no-color-literals */
-import React, { useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { magicModal, Direction } from "react-native-magic-modal";
-import { ExampleModal } from "@/components/ExampleModal";
-import { router } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { Direction, magicModal } from "react-native-magic-modal";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
+import { router } from "expo-router";
+
+import { ExampleModal } from "@/components/ExampleModal";
 import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
+import { showScrollableModal } from "@/components/ScrollableModal";
+import { showToast } from "../components/Toast";
 
 const showModal = async () => {
   const swipeDirection = ["up", "down", "left", "right"][
@@ -16,11 +18,34 @@ const showModal = async () => {
 
   // eslint-disable-next-line no-console
   console.log("Opening modal");
-  const modalResponse = await magicModal.show(() => <ExampleModal />, {
+  const modalResponse = magicModal.show(() => <ExampleModal />, {
     swipeDirection,
   });
+
   // eslint-disable-next-line no-console
-  console.log("Modal closed with response:", modalResponse);
+  console.log("Modal ID: " + modalResponse.modalID);
+
+  // Closing the modal automatically, programmatically
+  setTimeout(() => {
+    magicModal.hide("close timeout", { modalID: modalResponse.modalID });
+  }, 2000);
+
+  // eslint-disable-next-line no-console
+  console.log("Modal closed with response:", await modalResponse.promise);
+};
+
+const showReplacingModals = async () => {
+  const modalResponse = magicModal.show(() => <ExampleModal />);
+
+  await new Promise<void>((resolve) => setTimeout(() => resolve(), 1000));
+
+  magicModal.hide("close timeout", { modalID: modalResponse.modalID });
+
+  await modalResponse.promise;
+
+  return showKeyboardAvoidingModal({
+    initialText: "Hello, World!",
+  });
 };
 
 const showUndismissableModal = async () => {
@@ -41,60 +66,28 @@ const showZoomInModal = async () => {
   });
 };
 
-const Toast = () => {
-  const insets = useSafeAreaInsets();
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      magicModal.hide();
-    }, 2000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
-
-  return (
-    <View style={[styles.toastContainer, { paddingTop: insets.top }]}>
-      <StatusBar style="light" />
-      <Text style={styles.toastText}>This is a toast!</Text>
-    </View>
-  );
-};
-
-const showToast = async () => {
-  // eslint-disable-next-line no-console
-  console.log("Opening toast");
-
-  const toastResponse = await magicModal.show(() => <Toast />, {
-    swipeDirection: "up",
-    hideBackdrop: true,
-    dampingFactor: 0,
-    style: {
-      justifyContent: "flex-start",
-    },
-  });
-
-  // eslint-disable-next-line no-console
-  console.log("Toast closed with response:", toastResponse);
-};
-
 export default () => {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity style={styles.button} onPress={showModal}>
         <Text style={styles.buttonText}>Show Modal</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={showUndismissableModal}>
         <Text style={styles.buttonText}>Show Undismissable Modal</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={showScrollableModal}>
+        <Text style={styles.buttonText}>Show Scrollable Modal</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={showReplacingModals}>
+        <Text style={styles.buttonText}>Show Replacing Modals</Text>
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
+        onPress={() => {
           showKeyboardAvoidingModal({
             initialText: "Hello, World!",
-          })
-        }
+          });
+        }}
       >
         <Text style={styles.buttonText}>Show Keyboard Avoiding Modal</Text>
       </TouchableOpacity>
@@ -110,19 +103,11 @@ export default () => {
       >
         <Text style={styles.buttonText}>Open Modal Screen</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
-  toastContainer: {
-    backgroundColor: "#000000",
-    padding: 10,
-  },
-  toastText: {
-    color: "#ffffff",
-  },
-
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",

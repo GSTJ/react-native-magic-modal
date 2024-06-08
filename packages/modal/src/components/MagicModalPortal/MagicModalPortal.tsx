@@ -4,64 +4,32 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
-  useRef,
-  useState,
 } from "react";
-import Animated, {
-  Extrapolation,
-  FadeIn,
-  FadeInDown,
-  FadeInLeft,
-  FadeInRight,
-  FadeInUp,
-  FadeOut,
-  FadeOutDown,
-  FadeOutLeft,
-  FadeOutRight,
-  FadeOutUp,
-  interpolate,
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import type { IModal } from "../../utils/magicModalHandler";
-import { magicModalRef } from "../../utils/magicModalHandler";
-import { styles } from "./MagicModalPortal.styles";
-import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
+import { BackHandler, StyleSheet, View } from "react-native";
+
+import { defaultConfig } from "../../constants/defaultConfig";
 import {
-  BackHandler,
-  Pressable,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from "react-native";
-import {
-  ModalProps,
-  GenericFunction,
+  GlobalHideFunction,
+  GlobalShowFunction,
   MagicModalHideTypes,
   ModalChildren,
-  Direction,
+  ModalProps,
 } from "../../constants/types";
-import { defaultConfig, defaultDirection } from "../../constants/defaultConfig";
+import { magicModalRef } from "../../utils/magicModalHandler";
+import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
+import { MagicModal } from "../MagicModal";
+import { MagicModalProvider } from "../MagicModalProvider";
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const generatePseudoRandomID = () =>
+  Math.random().toString(36).substring(7).toUpperCase() + Date.now();
 
-const defaultAnimationInMap = {
-  up: FadeInUp,
-  down: FadeInDown,
-  left: FadeInLeft,
-  right: FadeInRight,
-} satisfies Record<Direction, unknown>;
-
-const defaultAnimationOutMap = {
-  up: FadeOutUp,
-  down: FadeOutDown,
-  left: FadeOutLeft,
-  right: FadeOutRight,
-} satisfies Record<Direction, unknown>;
-
+type ModalStackItem = {
+  id: string;
+  component: ModalChildren;
+  config: ModalProps;
+  hideCallback: (value: unknown) => void;
+  hideFunction: (props: unknown) => void;
+};
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
  * @example
@@ -79,239 +47,116 @@ const defaultAnimationOutMap = {
  * ```
  */
 export const MagicModalPortal: React.FC = memo(() => {
-  const [config, setConfig] = useState<ModalProps>(defaultConfig);
-  const [modalContent, setModalContent] = useState<React.ReactNode>(undefined);
+  const [modals, setModals] = React.useState<ModalStackItem[]>([]);
 
-  const translationX = useSharedValue(0);
-  const translationY = useSharedValue(0);
-  const prevTranslationX = useSharedValue(0);
-  const prevTranslationY = useSharedValue(0);
+  const hide = useCallback<GlobalHideFunction>(
+    async (props, { modalID } = {}) => {
+      setModals((prevModals) => {
+        const currentModal = prevModals.find((modal) => modal.id === modalID);
 
-  const onHideRef = useRef<GenericFunction>(() => {});
+        if (!modalID) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
+          );
+        } else if (!currentModal) {
+          // eslint-disable-next-line no-console
+          console.log(
+            `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`,
+          );
+          return prevModals;
+        }
 
-  const { width, height } = useWindowDimensions();
+        if (prevModals.length === 0) {
+          // eslint-disable-next-line no-console
+          console.log(
+            `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`,
+          );
+          return prevModals;
+        }
 
-  const hide = useCallback<IModal["hide"]>(async (props) => {
-    setModalContent(undefined);
+        const safeModal = currentModal || prevModals[prevModals.length - 1]!;
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, config.animationOutTiming);
-    });
+        safeModal.hideCallback(props);
 
-    translationX.value = 0;
-    translationY.value = 0;
-
-    onHideRef.current(props);
-  }, []);
-
-  useImperativeHandle(magicModalRef, () => ({
-    hide,
-    show: async (
-      newComponent: ModalChildren,
-      newConfig: Partial<ModalProps> = {},
-    ) => {
-      if (modalContent) await hide(MagicModalHideTypes.MODAL_OVERRIDE);
-
-      const mergedConfig = { ...defaultConfig, ...newConfig };
-
-      setConfig(mergedConfig);
-      setModalContent(newComponent as unknown as React.ReactNode);
-
-      return new Promise((resolve) => {
-        onHideRef.current = resolve;
+        return prevModals.filter((modal) => modal.id !== safeModal.id);
       });
     },
-  }));
-
-  const onBackdropPress = useMemo(() => {
-    return (
-      config.onBackdropPress ??
-      (() => hide(MagicModalHideTypes.BACKDROP_PRESSED))
-    );
-  }, [config.onBackdropPress, hide]);
-
-  const isHorizontal =
-    config.swipeDirection === "left" || config.swipeDirection === "right";
-
-  const rangeMap = useMemo(
-    () =>
-      ({
-        up: -height,
-        down: height,
-        left: -width,
-        right: width,
-      }) satisfies Record<Direction, number>,
-    [height, width],
+    [],
   );
 
-  const pan = Gesture.Pan()
-    .enabled(!!config.swipeDirection)
-    .minDistance(1)
-    .onStart(() => {
-      prevTranslationX.value = translationX.value;
-      prevTranslationY.value = translationY.value;
-    })
-    .onUpdate((event) => {
-      const translationValue = isHorizontal
-        ? event.translationX
-        : event.translationY;
+  const show = useCallback<GlobalShowFunction>(
+    (newComponent, newConfig) => {
+      const modalID = generatePseudoRandomID();
 
-      const prevTranslationValue = isHorizontal
-        ? prevTranslationX.value
-        : prevTranslationY.value;
+      let hideCallback: (value: unknown) => void = () => {};
+      const hidePromise = new Promise((resolve) => {
+        hideCallback = resolve;
+      });
 
-      const shouldDampMap = {
-        up: translationValue > 0,
-        down: translationValue < 0,
-        left: translationValue > 0,
-        right: translationValue < 0,
-      } satisfies Record<Direction, boolean>;
+      const newModal = {
+        id: modalID,
+        component: newComponent,
+        config: { ...defaultConfig, ...newConfig },
+        hideCallback,
+        hideFunction: (props) => hide(props, { modalID }),
+      } satisfies ModalStackItem;
 
-      const shouldDamp =
-        shouldDampMap[config.swipeDirection ?? defaultDirection];
+      setModals((prevModals) => [...prevModals, newModal]);
 
-      const dampedTranslation = shouldDamp
-        ? prevTranslationValue + translationValue * config.dampingFactor
-        : prevTranslationValue + translationValue;
-
-      if (isHorizontal) {
-        translationX.value = dampedTranslation;
-      } else {
-        translationY.value = dampedTranslation;
-      }
-    })
-    .onEnd((event) => {
-      const velocityThreshold = config.swipeVelocityThreshold;
-
-      const shouldHideMap = {
-        up: event.velocityY < -velocityThreshold,
-        down: event.velocityY > velocityThreshold,
-        right: event.velocityX > velocityThreshold,
-        left: event.velocityX < -velocityThreshold,
-      } satisfies Record<Direction, boolean>;
-
-      const shouldHide =
-        shouldHideMap[config.swipeDirection ?? defaultDirection];
-
-      if (!shouldHide) {
-        translationX.value = withSpring(0, {
-          velocity: event.velocityX,
-          damping: 75,
-        });
-        translationY.value = withSpring(0, {
-          velocity: event.velocityY,
-          damping: 75,
-        });
-        return;
-      }
-
-      const mainTranslation = isHorizontal ? translationX : translationY;
-
-      mainTranslation.value = withSpring(
-        rangeMap[config.swipeDirection ?? defaultDirection],
-        { velocity: event.velocityX, overshootClamping: true },
-        (success) =>
-          success && runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED),
-      );
-
-      return;
-    });
-
-  const animatedStyles = useAnimatedStyle(
-    () => ({
-      transform: [
-        { translateX: translationX.value },
-        { translateY: translationY.value },
-      ],
-    }),
-    [translationX.value, translationY.value],
+      return {
+        // This is already typed by the GlobalShowFunction type Generic
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        promise: hidePromise as any,
+        modalID,
+      } as const;
+    },
+    [hide],
   );
-
-  const animatedBackdropStyles = useAnimatedStyle(() => {
-    const translationValue = isHorizontal
-      ? translationX.value
-      : translationY.value;
-
-    return {
-      opacity: interpolate(
-        translationValue,
-        [rangeMap[config.swipeDirection ?? defaultDirection], 0],
-        [0, 1],
-        Extrapolation.CLAMP,
-      ),
-    };
-  }, [config.swipeDirection, translationX.value, translationY.value, rangeMap]);
 
   useEffect(() => {
-    if (!modalContent) return;
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
-        if (config.onBackButtonPress) {
-          config.onBackButtonPress();
-        } else {
-          hide(MagicModalHideTypes.BACK_BUTTON_PRESSED);
+        const lastModal = modals[modals.length - 1];
+
+        if (!lastModal) {
+          return false;
         }
+
+        if (lastModal.config.onBackButtonPress) {
+          lastModal.config.onBackButtonPress();
+        } else {
+          hide(MagicModalHideTypes.BACK_BUTTON_PRESSED, {
+            modalID: lastModal.id,
+          });
+        }
+
         return true;
       },
     );
     return () => backHandler.remove();
-  }, [config.onBackButtonPress, hide, modalContent]);
+  }, [hide, modals]);
 
-  const isBackdropVisible = modalContent && !config.hideBackdrop;
+  useImperativeHandle(magicModalRef, () => ({
+    show,
+    hide,
+  }));
 
+  const modalList = useMemo(() => {
+    return modals.map(({ id, component, config, hideFunction }) => (
+      <MagicModalProvider key={id} hide={hideFunction}>
+        <MagicModal config={config}>{component}</MagicModal>
+      </MagicModalProvider>
+    ));
+  }, [modals]);
+
+  /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
+     the modal will have zIndex issues on react-navigation modals. */
   return (
     <FullWindowOverlay>
-      {/* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
-          the modal will have zIndex issues on react-navigation modals. */}
       <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-        {modalContent ? (
-          <>
-            <Animated.View
-              pointerEvents={isBackdropVisible ? "auto" : "none"}
-              entering={FadeIn.duration(config.animationInTiming)}
-              exiting={FadeOut.duration(config.animationOutTiming)}
-              style={styles.backdropContainer}
-            >
-              <AnimatedPressable
-                testID="magic-modal-backdrop"
-                style={[
-                  styles.backdrop,
-                  animatedBackdropStyles,
-                  {
-                    backgroundColor: isBackdropVisible
-                      ? config.backdropColor
-                      : "transparent",
-                  },
-                ]}
-                onPress={onBackdropPress}
-              />
-            </Animated.View>
-            <Animated.View
-              pointerEvents="box-none"
-              style={[styles.overlay, animatedStyles]}
-            >
-              <Animated.View
-                pointerEvents="box-none"
-                style={[styles.overlay, config.style]}
-                entering={
-                  config.entering ??
-                  defaultAnimationInMap[
-                    config.swipeDirection ?? defaultDirection
-                  ].duration(config.animationInTiming)
-                }
-                exiting={
-                  config.exiting ??
-                  defaultAnimationOutMap[
-                    config.swipeDirection ?? defaultDirection
-                  ].duration(config.animationOutTiming)
-                }
-              >
-                <GestureDetector gesture={pan}>{modalContent}</GestureDetector>
-              </Animated.View>
-            </Animated.View>
-          </>
-        ) : null}
+        {modalList}
       </View>
     </FullWindowOverlay>
   );

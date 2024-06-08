@@ -2,9 +2,9 @@ import React from "react";
 import { Text } from "react-native";
 import { render, waitFor } from "@testing-library/react-native";
 
+import { MagicModalHideTypes } from "../../constants/types";
 import { magicModal } from "../../utils/magicModalHandler";
 import { MagicModalPortal } from "./MagicModalPortal";
-import { MagicModalHideTypes } from "../../constants/types";
 
 describe("MagicModal", () => {
   it("renders correctly", async () => {
