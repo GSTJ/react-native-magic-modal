@@ -212,57 +212,53 @@ const MagicModal = ({
   const isBackdropVisible = !config.hideBackdrop;
 
   return (
-    <FullWindowOverlay>
-      {/* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
-          the modal will have zIndex issues on react-navigation modals. */}
-      <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-        <Animated.View
-          pointerEvents={isBackdropVisible ? "auto" : "none"}
-          entering={FadeIn.duration(config.animationInTiming)}
-          exiting={FadeOut.duration(config.animationOutTiming)}
-          style={styles.backdropContainer}
-        >
-          <AnimatedPressable
-            testID="magic-modal-backdrop"
-            style={[
-              styles.backdrop,
-              animatedBackdropStyles,
-              {
-                backgroundColor: isBackdropVisible
-                  ? config.backdropColor
-                  : "transparent",
-              },
-            ]}
-            onPress={onBackdropPress}
-          />
-        </Animated.View>
+    <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+      <Animated.View
+        pointerEvents={isBackdropVisible ? "auto" : "none"}
+        entering={FadeIn.duration(config.animationInTiming)}
+        exiting={FadeOut.duration(config.animationOutTiming)}
+        style={styles.backdropContainer}
+      >
+        <AnimatedPressable
+          testID="magic-modal-backdrop"
+          style={[
+            styles.backdrop,
+            animatedBackdropStyles,
+            {
+              backgroundColor: isBackdropVisible
+                ? config.backdropColor
+                : "transparent",
+            },
+          ]}
+          onPress={onBackdropPress}
+        />
+      </Animated.View>
+      <Animated.View
+        pointerEvents="box-none"
+        style={[styles.overlay, animatedStyles]}
+      >
         <Animated.View
           pointerEvents="box-none"
-          style={[styles.overlay, animatedStyles]}
+          style={[styles.overlay, config.style]}
+          entering={
+            config.entering ??
+            defaultAnimationInMap[
+              config.swipeDirection ?? defaultDirection
+            ].duration(config.animationInTiming)
+          }
+          exiting={
+            config.exiting ??
+            defaultAnimationOutMap[
+              config.swipeDirection ?? defaultDirection
+            ].duration(config.animationOutTiming)
+          }
         >
-          <Animated.View
-            pointerEvents="box-none"
-            style={[styles.overlay, config.style]}
-            entering={
-              config.entering ??
-              defaultAnimationInMap[
-                config.swipeDirection ?? defaultDirection
-              ].duration(config.animationInTiming)
-            }
-            exiting={
-              config.exiting ??
-              defaultAnimationOutMap[
-                config.swipeDirection ?? defaultDirection
-              ].duration(config.animationOutTiming)
-            }
-          >
-            <GestureDetector gesture={pan}>
-              <Children />
-            </GestureDetector>
-          </Animated.View>
+          <GestureDetector gesture={pan}>
+            <Children />
+          </GestureDetector>
         </Animated.View>
-      </View>
-    </FullWindowOverlay>
+      </Animated.View>
+    </View>
   );
 };
 
@@ -400,12 +396,18 @@ export const MagicModalPortal: React.FC = memo(() => {
     hide,
   }));
 
-  return modals.map(({ id, component, config }) => (
-    <MagicModalProvider
-      key={id}
-      hide={(props?: unknown) => hide(props, { modalID: id })}
-    >
-      <MagicModal config={config}>{component}</MagicModal>
-    </MagicModalProvider>
-  ));
+  /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
+     the modal will have zIndex issues on react-navigation modals. */
+  return (
+    <FullWindowOverlay>
+      {modals.map(({ id, component, config }) => (
+        <MagicModalProvider
+          key={id}
+          hide={(props?: unknown) => hide(props, { modalID: id })}
+        >
+          <MagicModal config={config}>{component}</MagicModal>
+        </MagicModalProvider>
+      ))}
+    </FullWindowOverlay>
+  );
 });
