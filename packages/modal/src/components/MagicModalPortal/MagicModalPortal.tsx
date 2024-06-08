@@ -214,7 +214,7 @@ const MagicModal = ({
   const isBackdropVisible = !config.hideBackdrop;
 
   return (
-    <>
+    <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
       <Animated.View
         pointerEvents={isBackdropVisible ? "auto" : "none"}
         entering={FadeIn.duration(config.animationInTiming)}
@@ -260,7 +260,7 @@ const MagicModal = ({
           </GestureDetector>
         </Animated.View>
       </Animated.View>
-    </>
+    </View>
   );
 };
 
