@@ -1,12 +1,14 @@
 /* eslint-disable react-native/no-color-literals */
 import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { magicModal, Direction } from "react-native-magic-modal";
 import { ExampleModal } from "@/components/ExampleModal";
 import { router } from "expo-router";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
 import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
 import { showToast } from "../components/Toast";
+import { ScrollView } from "react-native-gesture-handler";
+import { showScrollableModal } from "@/components/ScrollableModal";
 
 const showModal = async () => {
   const swipeDirection = ["up", "down", "left", "right"][
@@ -31,6 +33,20 @@ const showModal = async () => {
   console.log("Modal closed with response:", await modalResponse.promise);
 };
 
+const showReplacingModals = async () => {
+  const modalResponse = magicModal.show(() => <ExampleModal />);
+
+  await new Promise<void>((resolve) => setTimeout(() => resolve(), 1000));
+
+  magicModal.hide("close timeout", { modalID: modalResponse.modalID });
+
+  await modalResponse.promise;
+
+  return showKeyboardAvoidingModal({
+    initialText: "Hello, World!",
+  });
+};
+
 const showUndismissableModal = async () => {
   magicModal.show(() => <ExampleModal />, {
     onBackButtonPress: () => {},
@@ -51,12 +67,18 @@ const showZoomInModal = async () => {
 
 export default () => {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity style={styles.button} onPress={showModal}>
         <Text style={styles.buttonText}>Show Modal</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={showUndismissableModal}>
         <Text style={styles.buttonText}>Show Undismissable Modal</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={showScrollableModal}>
+        <Text style={styles.buttonText}>Show Scrollable Modal</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={showReplacingModals}>
+        <Text style={styles.buttonText}>Show Replacing Modals</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
@@ -80,7 +102,7 @@ export default () => {
       >
         <Text style={styles.buttonText}>Open Modal Screen</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 

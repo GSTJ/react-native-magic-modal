@@ -36,10 +36,15 @@
     "typecheck": {
       "dependsOn": ["^topo", "^build"]
     },
+    "copy:readme": {
+      "cache": false
+    },
     "release": {
+      "dependsOn": ["^copy:readme"],
       "outputs": ["node_modules/.cache/release.json"]
     },
     "docs": {
+      "dependsOn": ["^copy:readme"],
       "outputs": ["node_modules/.cache/docs.json"]
     },
     "clean": {

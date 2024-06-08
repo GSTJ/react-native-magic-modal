@@ -199,6 +199,13 @@ Access the complete documentation [here](https://gstj.github.io/react-native-mag
 
 **A:** Yes. With V3, you can now have multiple modals showing up at the same time.
 
+**Q:** Can I use Scrollables inside the modal?
+
+**A:**
+Yes, but Scrollables can't be used with swipe gestures enabled, as they conflict. Pass in `swipeDirection: undefined` on the `magicModal.show` function to disable gestures on them.
+
+If your use-case is a scrollable bottom-sheet, I recommend going with Gorhom's react-native-bottom-sheet for them temporarily, or waiting for an upcoming scrollable bottom-sheet feature in the library.
+
 ## Contributors
 
 Special thanks to everyone who contributed to making React Native Magic Modal a robust and user-friendly library. [See the full list](https://github.com/GSTJ/react-native-magic-modal/graphs/contributors).
