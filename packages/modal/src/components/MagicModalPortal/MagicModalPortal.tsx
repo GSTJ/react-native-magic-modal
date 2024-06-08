@@ -100,7 +100,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         config: { ...defaultConfig, ...newConfig },
         hideCallback,
         hideFunction: (props) => hide(props, { modalID }),
-      } satisfies ModalQueueItem;
+      } satisfies ModalStackItem;
 
       setModals((prevModals) => [...prevModals, newModal]);
 
