@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
 } from "react";
 
 import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
@@ -13,7 +14,6 @@ import {
   GlobalHideFunction,
   GlobalShowFunction,
   ModalChildren,
-  HookHideFunction,
 } from "../../constants/types";
 import { defaultConfig } from "../../constants/defaultConfig";
 import { magicModalRef } from "../../utils/magicModalHandler";
@@ -27,7 +27,6 @@ type ModalQueueItem = {
   id: string;
   component: ModalChildren;
   config: ModalProps;
-  hideFunction: HookHideFunction;
   hideCallback: (value: unknown) => void;
 };
 
@@ -96,7 +95,6 @@ export const MagicModalPortal: React.FC = memo(() => {
         component: newComponent,
         config: { ...defaultConfig, ...newConfig },
         hideCallback,
-        hideFunction: (props) => hide(props, { modalID: id }),
       } satisfies ModalQueueItem;
 
       setModals((prevModals) => [...prevModals, newModal]);
@@ -135,16 +133,23 @@ export const MagicModalPortal: React.FC = memo(() => {
     hide,
   }));
 
+  const modalList = useMemo(() => {
+    return modals.map(({ id, component, config }) => (
+      <MagicModalProvider
+        key={id}
+        hide={(props) => hide(props, { modalID: id })}
+      >
+        <MagicModal config={config}>{component}</MagicModal>
+      </MagicModalProvider>
+    ));
+  }, [modals, hide]);
+
   /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
      the modal will have zIndex issues on react-navigation modals. */
   return (
     <FullWindowOverlay>
       <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-        {modals.map(({ id, component, config, hideFunction }) => (
-          <MagicModalProvider key={id} hide={hideFunction}>
-            <MagicModal config={config}>{component}</MagicModal>
-          </MagicModalProvider>
-        ))}
+        {modalList}
       </View>
     </FullWindowOverlay>
   );

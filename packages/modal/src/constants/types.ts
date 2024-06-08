@@ -81,7 +81,7 @@ export type GlobalHideFunction = (
   options?: { modalID?: string }
 ) => Promise<void>;
 
-export type HookHideFunction = (props: unknown) => void;
+export type HookHideFunction = (props?: unknown) => void;
 
 export type NewConfigProps = Partial<ModalProps>;
 

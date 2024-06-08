@@ -1,10 +1,9 @@
+/* eslint-disable react-native/no-color-literals */
 import React, { useEffect } from "react";
-import { View, Text } from "react-native";
-import { magicModal } from "react-native-magic-modal";
+import { View, Text, StyleSheet } from "react-native";
+import { magicModal, useMagicModal } from "react-native-magic-modal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { useMagicModal } from "react-native-magic-modal/components/MagicModalPortal/MagicModalPortal";
-import { styles } from "../app";
 
 const Toast = () => {
   const insets = useSafeAreaInsets();
@@ -43,3 +42,13 @@ export const showToast = async () => {
   // eslint-disable-next-line no-console
   console.log("Toast closed with response:", toastResponse);
 };
+
+export const styles = StyleSheet.create({
+  toastContainer: {
+    backgroundColor: "#000000",
+    padding: 10,
+  },
+  toastText: {
+    color: "#ffffff",
+  },
+});

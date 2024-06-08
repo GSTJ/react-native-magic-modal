@@ -76,14 +76,6 @@ export default () => {
 };
 
 export const styles = StyleSheet.create({
-  toastContainer: {
-    backgroundColor: "#000000",
-    padding: 10,
-  },
-  toastText: {
-    color: "#ffffff",
-  },
-
   container: {
     flex: 1,
     alignItems: "center",
