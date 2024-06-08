@@ -1,5 +1,21 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [3.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/2.1.8...3.0.0) (2024-06-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* support multiple modals (#81)
+
+### :stars: New Features :stars:
+
+* support multiple modals ([#81](https://github.com/GSTJ/react-native-magic-modal/issues/81)) ([70da143](https://github.com/GSTJ/react-native-magic-modal/commit/70da143bb546cbb57ede01c9aca6b0595f34e0d1))
+
+
+### :curly_loop: Continuous Integrations :curly_loop:
+
+* fix pr checks ([#79](https://github.com/GSTJ/react-native-magic-modal/issues/79)) ([38df15f](https://github.com/GSTJ/react-native-magic-modal/commit/38df15f4b469a570a8d7a480c127a09fe9254245))
+
 ## 2.1.8 (2024-06-07)
 
 ## 2.1.7 (2024-06-07)
