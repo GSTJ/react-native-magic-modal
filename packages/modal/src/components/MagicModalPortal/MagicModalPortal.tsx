@@ -28,6 +28,7 @@ type ModalQueueItem = {
   component: ModalChildren;
   config: ModalProps;
   hideCallback: (value: unknown) => void;
+  hideFunction: (props: unknown) => void;
 };
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
@@ -50,42 +51,38 @@ export const MagicModalPortal: React.FC = memo(() => {
 
   const hide = useCallback<GlobalHideFunction>(
     async (props, { modalID } = {}) => {
-      const currentModal = modals.find((modal) => modal.id === modalID);
+      setModals((prevModals) => {
+        const currentModal = prevModals.find((modal) => modal.id === modalID);
 
-      if (!modalID) {
-        // eslint-disable-next-line no-console
-        console.warn(
-          "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack."
-        );
-      } else if (!currentModal) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`
-        );
-        return;
-      }
+        if (!modalID) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack."
+          );
+        } else if (!currentModal) {
+          // eslint-disable-next-line no-console
+          console.log(
+            `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`
+          );
+          return prevModals;
+        }
 
-      if (modals.length === 0) {
-        // eslint-disable-next-line no-console
-        console.log(
-          `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`
-        );
-        return;
-      }
+        if (prevModals.length === 0) {
+          // eslint-disable-next-line no-console
+          console.log(
+            `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`
+          );
+          return prevModals;
+        }
 
-      const safeModal = currentModal || modals[modals.length - 1]!;
+        const safeModal = currentModal || prevModals[prevModals.length - 1]!;
 
-      setModals((prevModals) =>
-        prevModals.filter((modal) => modal.id !== safeModal.id)
-      );
+        safeModal.hideCallback(props);
 
-      await new Promise<void>((resolve) => {
-        setTimeout(resolve, safeModal.config.animationOutTiming);
+        return prevModals.filter((modal) => modal.id !== safeModal.id);
       });
-
-      safeModal.hideCallback(props);
     },
-    [modals]
+    []
   );
 
   const show = useCallback<GlobalShowFunction>(
@@ -102,6 +99,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         component: newComponent,
         config: { ...defaultConfig, ...newConfig },
         hideCallback,
+        hideFunction: (props) => hide(props, { modalID }),
       } satisfies ModalQueueItem;
 
       setModals((prevModals) => [...prevModals, newModal]);
@@ -146,15 +144,12 @@ export const MagicModalPortal: React.FC = memo(() => {
   }));
 
   const modalList = useMemo(() => {
-    return modals.map(({ id, component, config }) => (
-      <MagicModalProvider
-        key={id}
-        hide={(props) => hide(props, { modalID: id })}
-      >
+    return modals.map(({ id, component, config, hideFunction }) => (
+      <MagicModalProvider key={id} hide={hideFunction}>
         <MagicModal config={config}>{component}</MagicModal>
       </MagicModalProvider>
     ));
-  }, [modals, hide]);
+  }, [modals]);
 
   /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
      the modal will have zIndex issues on react-navigation modals. */
