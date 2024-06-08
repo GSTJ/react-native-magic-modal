@@ -23,6 +23,8 @@
 > [!NOTE]  
 > Simplify your modal management in React Native with the **React Native Magic Modal** library. Effortlessly control modals, streamline complex flows, and create a seamless user experience.
 
+> [!TIP]  
+> v3 just got released with full support for multiple modals! See the [breaking changes](https://github.com/GSTJ/react-native-magic-modal/releases).
 ## Features
 
 - 📲 [**Easy Integration**](#quickstart): Seamlessly integrate with your React Native app.
@@ -63,7 +65,7 @@ yarn add react-native-magic-modal
 
 ## Quickstart
 
-Insert a `MagicModalPortal` at the top of your application structure, and a GestureHandlerRootView if you haven't already:
+Insert a `MagicModalPortal` at the top of your application structure, and a `GestureHandlerRootView` if you haven't already:
 
 ```javascript
 import { MagicModalPortal } from "react-native-magic-modal";
@@ -87,7 +89,7 @@ Showcasing modal management on iOS and Android platforms:
 
 | iOS                                                                                                                           | Android                                                                                                                       |
 | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/50031755/155215573-df8f20fb-9b3f-4ce6-9d48-2afa8cb41daa.gif" height=600/> | <img src="https://user-images.githubusercontent.com/50031755/155215547-d2b45f33-264e-4c90-8ff1-e33b72e2c3b1.gif" height=600/> |
+| <img src="https://github.com/GSTJ/react-native-magic-modal/assets/50031755/fe95c4d9-3af5-4441-a36c-74dcb56ae78c" height=600/> | <img src="https://github.com/GSTJ/react-native-magic-modal/assets/50031755/f9effb46-7b5e-4371-a797-a84efb537346" height=600/> |
 
 ## Usage
 
@@ -187,7 +189,7 @@ export const MainScreen = () => {
 };
 ```
 
-Refer to the [example](example/src) for detailed usage scenarios.
+Refer to the [kitchen-sink example](examples/kitchen-sink) for detailed usage scenarios.
 
 ## Documentation
 
@@ -197,14 +199,16 @@ Access the complete documentation [here](https://gstj.github.io/react-native-mag
 
 **Q:** Can I have two modals showing up at the same time?
 
-**A:** Yes. With V3, you can now have multiple modals showing up at the same time.
+**A:** Yes. With v3, you can now have multiple modals showing up at the same time.
+
+---
 
 **Q:** Can I use Scrollables inside the modal?
 
 **A:**
 Yes, but Scrollables can't be used with swipe gestures enabled, as they conflict. Pass in `swipeDirection: undefined` on the `magicModal.show` function to disable gestures on them.
 
-If your use-case is a scrollable bottom-sheet, I recommend going with Gorhom's react-native-bottom-sheet for them temporarily, or waiting for an upcoming scrollable bottom-sheet feature in the library.
+If your use-case is a scrollable bottom-sheet, I recommend going with Gorhom's react-native-bottom-sheet for this use-case temporarily.
 
 ## Contributors
 
