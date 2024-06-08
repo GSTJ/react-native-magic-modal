@@ -1,5 +1,12 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## 4.0.5 (2024-06-08)
+
+
+### :curly_loop: Continuous Integrations :curly_loop:
+
+* revert release config ([f6fb9a9](https://github.com/GSTJ/react-native-magic-modal/commit/f6fb9a907d59f35136d3baa51ebb1f3cbc22b084))
+
 ## [4.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/2.1.8...4.0.5) (2024-06-08)
 
 ### ⚠ BREAKING CHANGES
