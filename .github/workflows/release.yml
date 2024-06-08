@@ -57,7 +57,7 @@ jobs:
 
       - name: 🚀 Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git config --global user.email "gabrielstaveira@gmail.com"
