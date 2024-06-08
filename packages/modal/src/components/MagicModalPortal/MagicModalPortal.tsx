@@ -29,7 +29,6 @@ type ModalQueueItem = {
   config: ModalProps;
   hideCallback: (value: unknown) => void;
 };
-
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
  * @example
@@ -60,7 +59,7 @@ export const MagicModalPortal: React.FC = memo(() => {
       if (!modalID) {
         // eslint-disable-next-line no-console
         console.warn(
-          "No modal id provided to hide. Defaulting to the last modal in the stack.\nPlease provide a modal id to hide or use the preferred useMagicModal hook inside the modal to hide itself."
+          "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack."
         );
       } else if (!currentModal) {
         throw new Error(`No modal found with id: ${modalID}`);
