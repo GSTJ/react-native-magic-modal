@@ -79,7 +79,7 @@ export type GenericFunction = (props: any) => any;
 export type GlobalHideFunction = (
   props: unknown,
   options?: { modalID?: string }
-) => Promise<void>;
+) => void;
 
 export type HookHideFunction = (props?: unknown) => void;
 

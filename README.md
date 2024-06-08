@@ -91,38 +91,52 @@ Showcasing modal management on iOS and Android platforms:
 
 ## Usage
 
+Here's the preferred usage pattern for the library:
+
 ```js
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { MagicModalPortal, magicModal } from "react-native-magic-modal";
+import {
+  MagicModalPortal,
+  magicModal,
+  useMagicModal,
+} from "react-native-magic-modal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-const ConfirmationModal = () => (
-  <View>
-    <TouchableOpacity onPress={() => magicModal.hide({ success: true })}>
-      <Text>Click here to confirm</Text>
-    </TouchableOpacity>
-  </View>
-);
+const ConfirmationModal = () => {
+  const { hide } = useMagicModal();
 
-const ResponseModal = ({ text }) => (
-  <View>
-    <Text>{text}</Text>
-    <TouchableOpacity onPress={() => magicModal.hide()}>
-      <Text>Close</Text>
-    </TouchableOpacity>
-  </View>
-);
+  return (
+    <View>
+      <TouchableOpacity onPress={() => hide({ success: true })}>
+        <Text>Click here to confirm</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const ResponseModal = ({ text }) => {
+  const { hide } = useMagicModal();
+
+  return (
+    <View>
+      <Text>{text}</Text>
+      <TouchableOpacity onPress={() => hide()}>
+        <Text>Close</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const handleConfirmationFlow = async () => {
   // You can call `show` with or without props, depending on the requirements of the modal.
-  const result = await magicModal.show(ConfirmationModal);
+  const result = await magicModal.show(() => <ConfirmationModal />).promise;
 
   if (result.success) {
-    return magicModal.show(() => <ResponseModal text="Success!" />);
+    return magicModal.show(() => <ResponseModal text="Success!" />).promise;
   }
 
-  return magicModal.show(() => <ResponseModal text="Failure :(" />);
+  return magicModal.show(() => <ResponseModal text="Failure :(" />).promise;
 };
 
 export const MainScreen = () => {
@@ -130,6 +144,42 @@ export const MainScreen = () => {
     <GestureHandlerRootView>
       <TouchableOpacity onPress={handleConfirmationFlow}>
         <Text>Start the modal flow!</Text>
+      </TouchableOpacity>
+      <MagicModalPortal />
+    </GestureHandlerRootView>
+  );
+};
+```
+
+You can also hide modals imperatively outside of the modal context. For that, we provide the global `hide` method, that requires a modal id:
+
+```js
+import { magicModal } from "react-native-magic-modal";
+
+const QuickModal = ({ text }) => {
+  return (
+    <View>
+      <Text>Hey! I'm going to be closed imperatively</Text>
+    </View>
+  );
+};
+
+const handleQuickModal = async () => {
+  const { modalId } = magicModal.show(QuickModal);
+
+  // Wait for 2 seconds before closing the modal
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  // Note that it's usually preferrable to use the `hide` method from the modal context
+  // You can even put it inside useEffects to handle auto-dismissal for you.
+  magicModal.hide({ modalId });
+};
+
+export const MainScreen = () => {
+  return (
+    <GestureHandlerRootView>
+      <TouchableOpacity onPress={handleQuickModal}>
+        <Text>Show a quick modal</Text>
       </TouchableOpacity>
       <MagicModalPortal />
     </GestureHandlerRootView>
@@ -147,7 +197,7 @@ Access the complete documentation [here](https://gstj.github.io/react-native-mag
 
 **Q:** Can I have two modals showing up at the same time?
 
-**A:** No, we only allow one modal to be shown at a time. If you try to show a modal while another is already visible, the previous modal will be hidden.
+**A:** Yes. With V3, you can now have multiple modals showing up at the same time.
 
 ## Contributors
 

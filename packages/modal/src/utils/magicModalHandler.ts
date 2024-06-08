@@ -4,10 +4,10 @@ import { GlobalHideFunction, GlobalShowFunction } from "../constants/types";
 export const magicModalRef = React.createRef<IModal>();
 
 /**
- * @description Show a modal. If a modal is already present, it will close it first before displaying.
+ * @description Pushes a modal to the Stack, it will be displayed on top of the others.
  * @param newComponent Recieves a function that returns a modal component.
  * @param newConfig Recieves {@link NewConfigProps}  to override the default configs.
- * @returns Returns a Promise that resolves with the {@link hide} props when the Modal is closed. If it were closed automatically, without the manual use of  {@link hide}, the return would be one of {@link MagicModalHideTypes}
+ * @returns Returns a Promise that resolves with the {@link hide} props when the Modal is closed. If it were closed automatically, without the manual use of {@link hide}, the return would be one of {@link MagicModalHideTypes}
  */
 const show: GlobalShowFunction = (newComponent, newConfig) => {
   if (!magicModalRef.current) {
@@ -19,9 +19,9 @@ const show: GlobalShowFunction = (newComponent, newConfig) => {
   return magicModalRef.current.show(newComponent, newConfig);
 };
 /**
- * @description Hide the current modal.
+ * @description Hides the given modal. Prefer using `hide` from `useMagicModal`, as it already infers the modalID.
+ * You should use the `magicModal.hide`function directly  only when calling from outside the modal.
  * @param props Those props will be passed to the {@link show} resolve function.
- * @returns Returns a promise that resolves when the close animation is finished.
  */
 const hide: GlobalHideFunction = async (props, { modalID } = {}) => {
   if (!magicModalRef.current) {
@@ -45,13 +45,14 @@ export interface IModal {
  *
  * // ...
  * const ExampleModal = () => (
- *  <TouchableOpacity onPress={() => magicModal.hide("hey")}>
+ *  const { hide } = useMagicModal();
+ *  <TouchableOpacity onPress={() => hide("hey")}>
  *    <Text>Test!</Text>
  *  </TouchableOpacity>
  * )
  *
- * const result = await magicModal.show(ExampleModal);
- * console.log(result); // Returns 'hey' when the modal is closed by the TouchableOpacity.
+ * const result = magicModal.show(ExampleModal);
+ * console.log(await result.promise); // Returns 'hey' when the modal is closed by the TouchableOpacity.
  * ```
  */
 export const magicModal = {
