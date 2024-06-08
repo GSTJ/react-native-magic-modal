@@ -1,32 +1,24 @@
 import React from "react";
-import { ModalChildren, ModalProps } from "../constants/types";
+import { GlobalHideFunction, GlobalShowFunction } from "../constants/types";
 
 export const magicModalRef = React.createRef<IModal>();
 
-export type NewConfigProps = Partial<ModalProps>;
 /**
  * @description Show a modal. If a modal is already present, it will close it first before displaying.
  * @param newComponent Recieves a function that returns a modal component.
  * @param newConfig Recieves {@link NewConfigProps}  to override the default configs.
- * @returns {Promise<any>} Returns a Promise that resolves with the {@link hide} props when the Modal is closed. If it were closed automatically, without the manual use of  {@link hide}, the return would be one of {@link MagicModalHideTypes}
+ * @returns Returns a Promise that resolves with the {@link hide} props when the Modal is closed. If it were closed automatically, without the manual use of  {@link hide}, the return would be one of {@link MagicModalHideTypes}
  */
-const show = async <T>(
-  newComponent: ModalChildren,
-  newConfig?: NewConfigProps
-): Promise<T | undefined> =>
+const show: GlobalShowFunction = async (newComponent, newConfig) =>
   magicModalRef.current?.show?.(newComponent, newConfig);
 
 /**
  * @description Hide the current modal.
  * @param props Those props will be passed to the {@link show} resolve function.
- * @returns {Promise<void>} Returns a promise that resolves when the close animation is finished.
+ * @returns Returns a promise that resolves when the close animation is finished.
  */
-const hide = async (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  props: any,
-  { modalID }: { modalID?: string } = {}
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<any> => magicModalRef.current?.hide?.(props, { modalID });
+const hide: GlobalHideFunction = async (props, { modalID } = {}) =>
+  magicModalRef.current?.hide?.(props, { modalID });
 
 export interface IModal {
   show: typeof show;

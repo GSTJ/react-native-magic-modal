@@ -1,14 +1,12 @@
 /* eslint-disable react-native/no-color-literals */
-import React, { useEffect } from "react";
+import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { magicModal, Direction } from "react-native-magic-modal";
 import { ExampleModal } from "@/components/ExampleModal";
 import { router } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
 import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
-import { useMagicModal } from "react-native-magic-modal/components/MagicModalPortal/MagicModalPortal";
+import { showToast } from "../components/Toast";
 
 const showModal = async () => {
   const swipeDirection = ["up", "down", "left", "right"][
@@ -40,45 +38,6 @@ const showZoomInModal = async () => {
     animationInTiming: 1000,
     animationOutTiming: 1000,
   });
-};
-
-const Toast = () => {
-  const insets = useSafeAreaInsets();
-  const { hide } = useMagicModal();
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      hide();
-    }, 2000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [hide]);
-
-  return (
-    <View style={[styles.toastContainer, { paddingTop: insets.top }]}>
-      <StatusBar style="light" />
-      <Text style={styles.toastText}>This is a toast!</Text>
-    </View>
-  );
-};
-
-const showToast = async () => {
-  // eslint-disable-next-line no-console
-  console.log("Opening toast");
-
-  const toastResponse = await magicModal.show(() => <Toast />, {
-    swipeDirection: "up",
-    hideBackdrop: true,
-    dampingFactor: 0,
-    style: {
-      justifyContent: "flex-start",
-    },
-  });
-
-  // eslint-disable-next-line no-console
-  console.log("Toast closed with response:", toastResponse);
 };
 
 export default () => {
@@ -116,7 +75,7 @@ export default () => {
   );
 };
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   toastContainer: {
     backgroundColor: "#000000",
     padding: 10,

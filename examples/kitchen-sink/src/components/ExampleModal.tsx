@@ -2,6 +2,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMagicModal } from "react-native-magic-modal/components/MagicModalPortal/MagicModalPortal";
+import { showToast } from "./Toast";
 
 export const ExampleModal = () => {
   const { hide } = useMagicModal();
@@ -17,6 +18,9 @@ export const ExampleModal = () => {
         style={styles.buttonContainer}
       >
         <Text style={styles.button}>Close Modal</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={showToast} style={styles.buttonContainer}>
+        <Text style={styles.button}>Open Toast</Text>
       </TouchableOpacity>
     </View>
   );
