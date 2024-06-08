@@ -1,6 +1,8 @@
 import React from "react";
 import { ModalChildren, ModalProps } from "../constants/types";
 
+export const magicModalRef = React.createRef<IModal>();
+
 export type NewConfigProps = Partial<ModalProps>;
 /**
  * @description Show a modal. If a modal is already present, it will close it first before displaying.
@@ -10,7 +12,7 @@ export type NewConfigProps = Partial<ModalProps>;
  */
 const show = async <T>(
   newComponent: ModalChildren,
-  newConfig?: NewConfigProps,
+  newConfig?: NewConfigProps
 ): Promise<T | undefined> =>
   magicModalRef.current?.show?.(newComponent, newConfig);
 
@@ -19,15 +21,17 @@ const show = async <T>(
  * @param props Those props will be passed to the {@link show} resolve function.
  * @returns {Promise<void>} Returns a promise that resolves when the close animation is finished.
  */
-const hide = async (props?: unknown): Promise<void> =>
-  magicModalRef.current?.hide?.(props);
+const hide = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  props: any,
+  { modalID }: { modalID?: string } = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> => magicModalRef.current?.hide?.(props, { modalID });
 
 export interface IModal {
   show: typeof show;
   hide: typeof hide;
 }
-
-export const magicModalRef = React.createRef<IModal>();
 
 /**
  * @example
