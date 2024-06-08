@@ -32,5 +32,5 @@ export const MagicModalProvider = memo(
         {children}
       </MagicModalContext.Provider>
     );
-  }
+  },
 );

@@ -12,7 +12,7 @@ export const magicModalRef = React.createRef<IModal>();
 const show: GlobalShowFunction = (newComponent, newConfig) => {
   if (!magicModalRef.current) {
     throw new Error(
-      "MagicModalProvider not found. Please wrap your component with MagicModalProvider."
+      "MagicModalProvider not found. Please wrap your component with MagicModalProvider.",
     );
   }
 
@@ -26,7 +26,7 @@ const show: GlobalShowFunction = (newComponent, newConfig) => {
 const hide: GlobalHideFunction = async (props, { modalID } = {}) => {
   if (!magicModalRef.current) {
     throw new Error(
-      "MagicModalProvider not found. Please wrap your component with MagicModalProvider."
+      "MagicModalProvider not found. Please wrap your component with MagicModalProvider.",
     );
   }
 

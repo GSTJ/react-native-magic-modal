@@ -5,18 +5,18 @@ import React, {
   useImperativeHandle,
   useMemo,
 } from "react";
-
-import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
 import { BackHandler, StyleSheet, View } from "react-native";
+
+import { defaultConfig } from "../../constants/defaultConfig";
 import {
-  ModalProps,
-  MagicModalHideTypes,
   GlobalHideFunction,
   GlobalShowFunction,
+  MagicModalHideTypes,
   ModalChildren,
+  ModalProps,
 } from "../../constants/types";
-import { defaultConfig } from "../../constants/defaultConfig";
 import { magicModalRef } from "../../utils/magicModalHandler";
+import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
 import { MagicModal } from "./MagicModal";
 import { MagicModalProvider } from "./MagicModalProvider";
 
@@ -57,12 +57,12 @@ export const MagicModalPortal: React.FC = memo(() => {
         if (!modalID) {
           // eslint-disable-next-line no-console
           console.warn(
-            "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack."
+            "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
           );
         } else if (!currentModal) {
           // eslint-disable-next-line no-console
           console.log(
-            `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`
+            `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`,
           );
           return prevModals;
         }
@@ -70,7 +70,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         if (prevModals.length === 0) {
           // eslint-disable-next-line no-console
           console.log(
-            `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`
+            `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`,
           );
           return prevModals;
         }
@@ -82,7 +82,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         return prevModals.filter((modal) => modal.id !== safeModal.id);
       });
     },
-    []
+    [],
   );
 
   const show = useCallback<GlobalShowFunction>(
@@ -111,7 +111,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         modalID,
       } as const;
     },
-    [hide]
+    [hide],
   );
 
   useEffect(() => {
@@ -133,7 +133,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         }
 
         return true;
-      }
+      },
     );
     return () => backHandler.remove();
   }, [hide, modals]);

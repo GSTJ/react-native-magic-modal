@@ -54,6 +54,7 @@
     "test": "jest",
     "release": "release-it --ci"
   },
+  "prettier": "@magic/prettier-config",
   "eslintConfig": {
     "root": true,
     "extends": [

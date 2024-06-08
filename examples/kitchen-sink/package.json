@@ -42,5 +42,6 @@
     "@magic/tsconfig": "workspace:*",
     "babel-preset-expo": "11.0.8",
     "expo-cli": "^6.3.10"
-  }
+  },
+  "prettier": "@magic/prettier-config"
 }

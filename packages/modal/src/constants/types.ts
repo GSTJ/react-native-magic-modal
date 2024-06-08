@@ -78,7 +78,7 @@ export type GenericFunction = (props: any) => any;
 
 export type GlobalHideFunction = (
   props: unknown,
-  options?: { modalID?: string }
+  options?: { modalID?: string },
 ) => void;
 
 export type HookHideFunction = (props?: unknown) => void;
@@ -87,7 +87,7 @@ export type NewConfigProps = Partial<ModalProps>;
 
 export type GlobalShowFunction = <T>(
   newComponent: ModalChildren,
-  newConfig?: NewConfigProps
+  newConfig?: NewConfigProps,
 ) => { promise: Promise<T | undefined>; modalID: string };
 
 export enum MagicModalHideTypes {
