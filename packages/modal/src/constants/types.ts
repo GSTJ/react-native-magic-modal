@@ -77,7 +77,7 @@ export type ModalProps = {
 export type GenericFunction = (props: any) => any;
 
 export type GlobalHideFunction = (
-  props: unknown,
+  props?: unknown,
   options?: { modalID?: string },
 ) => void;
 
