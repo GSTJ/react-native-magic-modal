@@ -23,7 +23,7 @@ import { MagicModalProvider } from "./MagicModalProvider";
 const generatePseudoRandomID = () =>
   Math.random().toString(36).substring(7).toUpperCase() + Date.now();
 
-type ModalQueueItem = {
+type ModalStackItem = {
   id: string;
   component: ModalChildren;
   config: ModalProps;
@@ -47,7 +47,7 @@ type ModalQueueItem = {
  * ```
  */
 export const MagicModalPortal: React.FC = memo(() => {
-  const [modals, setModals] = React.useState<ModalQueueItem[]>([]);
+  const [modals, setModals] = React.useState<ModalStackItem[]>([]);
 
   const hide = useCallback<GlobalHideFunction>(
     async (props, { modalID } = {}) => {
