@@ -1,6 +1,6 @@
 # 🦄 Magic Modal Changelog 🪄
 
-## [4.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/2.1.8...4.0.2) (2024-06-08)
+## [4.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/2.1.8...4.0.4) (2024-06-08)
 
 ### ⚠ BREAKING CHANGES
 
