@@ -1,29 +1,26 @@
 # 🦄 Magic Modal Changelog 🪄
 
-## [3.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/2.1.8...3.0.0) (2024-06-08)
-
+## [4.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/2.1.8...4.0.0) (2024-06-08)
 
 ### ⚠ BREAKING CHANGES
 
-* support multiple modals (#81)
+- support multiple modals (#81)
 
 ### :stars: New Features :stars:
 
-* support multiple modals ([#81](https://github.com/GSTJ/react-native-magic-modal/issues/81)) ([70da143](https://github.com/GSTJ/react-native-magic-modal/commit/70da143bb546cbb57ede01c9aca6b0595f34e0d1))
-
+- support multiple modals ([#81](https://github.com/GSTJ/react-native-magic-modal/issues/81)) ([70da143](https://github.com/GSTJ/react-native-magic-modal/commit/70da143bb546cbb57ede01c9aca6b0595f34e0d1))
 
 ### :curly_loop: Continuous Integrations :curly_loop:
 
-* fix pr checks ([#79](https://github.com/GSTJ/react-native-magic-modal/issues/79)) ([38df15f](https://github.com/GSTJ/react-native-magic-modal/commit/38df15f4b469a570a8d7a480c127a09fe9254245))
+- fix pr checks ([#79](https://github.com/GSTJ/react-native-magic-modal/issues/79)) ([38df15f](https://github.com/GSTJ/react-native-magic-modal/commit/38df15f4b469a570a8d7a480c127a09fe9254245))
 
 ## 2.1.8 (2024-06-07)
 
 ## 2.1.7 (2024-06-07)
 
-
 ### :curly_loop: Continuous Integrations :curly_loop:
 
-* validate versions on kitchen-sink are expo-compatible ([021a933](https://github.com/GSTJ/react-native-magic-modal/commit/021a933e07d442c6cc3065b5fed986b61cd8941e))
+- validate versions on kitchen-sink are expo-compatible ([021a933](https://github.com/GSTJ/react-native-magic-modal/commit/021a933e07d442c6cc3065b5fed986b61cd8941e))
 
 ## 2.1.6 (2024-06-07)
 
@@ -39,15 +36,13 @@
 
 ## [2.1.0](https://github.com/GSTJ/react-native-magic-modal/compare/2.0.13...2.1.0) (2024-06-06)
 
-
 ### :stars: New Features :stars:
 
-* add web support ([befa910](https://github.com/GSTJ/react-native-magic-modal/commit/befa9105ad2fb5d0e49a128491f12f32c5c755d1))
-
+- add web support ([befa910](https://github.com/GSTJ/react-native-magic-modal/commit/befa9105ad2fb5d0e49a128491f12f32c5c755d1))
 
 ### :curly_loop: Continuous Integrations :curly_loop:
 
-* fix turbo json ([5c50641](https://github.com/GSTJ/react-native-magic-modal/commit/5c506410afc76d1348e414235476db9fa157d950))
+- fix turbo json ([5c50641](https://github.com/GSTJ/react-native-magic-modal/commit/5c506410afc76d1348e414235476db9fa157d950))
 
 ## 2.0.13 (2024-06-04)
 
@@ -73,33 +68,30 @@
 
 ## [2.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/1.0.0...2.0.0) (2024-05-25)
 
-
 ### ⚠ BREAKING CHANGES
 
-* To preserve compatibility, swipeDirection "top" and
-"bottom" properties have been renamed back to "up" and "down". It also
-makes more sense overall.
+- To preserve compatibility, swipeDirection "top" and
+  "bottom" properties have been renamed back to "up" and "down". It also
+  makes more sense overall.
 
 ### :stars: New Features :stars:
 
-* rename swipeDirection "top" and "bottom" to "up" and "down" ([#52](https://github.com/GSTJ/react-native-magic-modal/issues/52)) ([c6107ff](https://github.com/GSTJ/react-native-magic-modal/commit/c6107ff49e197eba852cfa0cc0b23d6f2106b1e6))
-
+- rename swipeDirection "top" and "bottom" to "up" and "down" ([#52](https://github.com/GSTJ/react-native-magic-modal/issues/52)) ([c6107ff](https://github.com/GSTJ/react-native-magic-modal/commit/c6107ff49e197eba852cfa0cc0b23d6f2106b1e6))
 
 ### :curly_loop: Continuous Integrations :curly_loop:
 
-* force docs gen ([633cf09](https://github.com/GSTJ/react-native-magic-modal/commit/633cf09da9c14d52f318315300d6014016312dfc))
-* normalize repository settings ([4a827c5](https://github.com/GSTJ/react-native-magic-modal/commit/4a827c5ffd43c88da278fe81424df96c009ec3f6))
+- force docs gen ([633cf09](https://github.com/GSTJ/react-native-magic-modal/commit/633cf09da9c14d52f318315300d6014016312dfc))
+- normalize repository settings ([4a827c5](https://github.com/GSTJ/react-native-magic-modal/commit/4a827c5ffd43c88da278fe81424df96c009ec3f6))
 
 ## 1.0.0 (2024-05-25)
 
-
 ### ⚠ BREAKING CHANGES
 
-* Renames "direction" to "swipeDirection"
+- Renames "direction" to "swipeDirection"
 
 ### :hammer: Bug Fixes :hammer:
 
-* make modals appear on top of react-native modals & add new animation props ([#51](https://github.com/GSTJ/react-native-magic-modal/issues/51)) ([0cbca82](https://github.com/GSTJ/react-native-magic-modal/commit/0cbca82ca8033772d4bb996d26e7b1af7da7d76d))
+- make modals appear on top of react-native modals & add new animation props ([#51](https://github.com/GSTJ/react-native-magic-modal/issues/51)) ([0cbca82](https://github.com/GSTJ/react-native-magic-modal/commit/0cbca82ca8033772d4bb996d26e7b1af7da7d76d))
 
 ## 0.3.3 (2024-05-24)
 

@@ -24,7 +24,8 @@
 > Simplify your modal management in React Native with the **React Native Magic Modal** library. Effortlessly control modals, streamline complex flows, and create a seamless user experience.
 
 > [!TIP]  
-> v3 just got released with full support for multiple modals! See the [breaking changes](https://github.com/GSTJ/react-native-magic-modal/releases).
+> v4 just got released with full support for multiple modals! See the [breaking changes](https://github.com/GSTJ/react-native-magic-modal/releases).
+
 ## Features
 
 - 📲 [**Easy Integration**](#quickstart): Seamlessly integrate with your React Native app.
@@ -199,7 +200,7 @@ Access the complete documentation [here](https://gstj.github.io/react-native-mag
 
 **Q:** Can I have two modals showing up at the same time?
 
-**A:** Yes. With v3, you can now have multiple modals showing up at the same time.
+**A:** Yes. With v4, you can now have multiple modals showing up at the same time.
 
 ---
 
