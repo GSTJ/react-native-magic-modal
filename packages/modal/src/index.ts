@@ -7,4 +7,4 @@ export {
   type ModalProps,
 } from "./constants/types";
 export { magicModal } from "./utils/magicModalHandler";
-export { useMagicModal } from "./components/MagicModalPortal/MagicModalProvider";
+export { useMagicModal } from "./components/MagicModalProvider";

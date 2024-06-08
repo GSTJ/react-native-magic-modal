@@ -17,8 +17,8 @@ import {
 } from "../../constants/types";
 import { magicModalRef } from "../../utils/magicModalHandler";
 import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
-import { MagicModal } from "./MagicModal";
-import { MagicModalProvider } from "./MagicModalProvider";
+import { MagicModal } from "../MagicModal";
+import { MagicModalProvider } from "../MagicModalProvider";
 
 const generatePseudoRandomID = () =>
   Math.random().toString(36).substring(7).toUpperCase() + Date.now();

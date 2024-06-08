@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from "react";
-import { HookHideFunction } from "../../constants/types";
+
+import { HookHideFunction } from "../constants/types";
 
 const MagicModalContext = React.createContext<{
   hide: HookHideFunction;

@@ -1,4 +1,6 @@
 import React, { memo, useEffect, useMemo } from "react";
+import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -17,16 +19,15 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { styles } from "./MagicModalPortal.styles";
-import { Pressable, StyleSheet, View, useWindowDimensions } from "react-native";
+
+import { defaultDirection } from "../constants/defaultConfig";
 import {
-  ModalProps,
-  MagicModalHideTypes,
   Direction,
+  MagicModalHideTypes,
   ModalChildren,
-} from "../../constants/types";
-import { defaultDirection } from "../../constants/defaultConfig";
+  ModalProps,
+} from "../constants/types";
+import { styles } from "./MagicModalPortal/MagicModalPortal.styles";
 import { useMagicModal } from "./MagicModalProvider";
 
 export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -87,7 +88,7 @@ export const MagicModal = memo(
           left: -width,
           right: width,
         }) satisfies Record<Direction, number>,
-      [height, width]
+      [height, width],
     );
 
     const pan = Gesture.Pan()
@@ -157,7 +158,7 @@ export const MagicModal = memo(
           rangeMap[config.swipeDirection ?? defaultDirection],
           { velocity: event.velocityX, overshootClamping: true },
           (success) =>
-            success && runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED)
+            success && runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED),
         );
 
         return;
@@ -170,7 +171,7 @@ export const MagicModal = memo(
           { translateY: translationY.value },
         ],
       }),
-      [translationX.value, translationY.value]
+      [translationX.value, translationY.value],
     );
 
     const animatedBackdropStyles = useAnimatedStyle(() => {
@@ -183,7 +184,7 @@ export const MagicModal = memo(
           translationValue,
           [rangeMap[config.swipeDirection ?? defaultDirection], 0],
           [0, 1],
-          Extrapolation.CLAMP
+          Extrapolation.CLAMP,
         ),
       };
     }, [
@@ -244,5 +245,5 @@ export const MagicModal = memo(
         </Animated.View>
       </View>
     );
-  }
+  },
 );
