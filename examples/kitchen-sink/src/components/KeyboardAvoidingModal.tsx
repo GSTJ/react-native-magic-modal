@@ -55,7 +55,7 @@ const KeyboardAvoidingModal: React.FC<KeyboardAvoidingModalProps> = ({
 };
 
 export const showKeyboardAvoidingModal = (
-  props: KeyboardAvoidingModalProps
+  props: KeyboardAvoidingModalProps,
 ) => {
   return magicModal.show(() => <KeyboardAvoidingModal {...props} />, {
     style: {
