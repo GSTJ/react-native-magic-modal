@@ -362,7 +362,7 @@ export const MagicModalPortal: React.FC = memo(() => {
       {
         id,
         component: newComponent,
-        config: newConfig ?? defaultConfig,
+        config: { ...defaultConfig, ...newConfig },
         hideCallback,
       },
     ]);
@@ -402,11 +402,10 @@ export const MagicModalPortal: React.FC = memo(() => {
 
   return modals.map(({ id, component, config }) => (
     <MagicModalProvider
+      key={id}
       hide={(props?: unknown) => hide(props, { modalID: id })}
     >
-      <MagicModal key={id} config={config}>
-        {component}
-      </MagicModal>
+      <MagicModal config={config}>{component}</MagicModal>
     </MagicModalProvider>
   ));
 });

@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
 import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
+import { useMagicModal } from "react-native-magic-modal/components/MagicModalPortal/MagicModalPortal";
 
 const showModal = async () => {
   const swipeDirection = ["up", "down", "left", "right"][
@@ -43,16 +44,17 @@ const showZoomInModal = async () => {
 
 const Toast = () => {
   const insets = useSafeAreaInsets();
+  const { hide } = useMagicModal();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      magicModal.hide();
+      hide();
     }, 2000);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, []);
+  }, [hide]);
 
   return (
     <View style={[styles.toastContainer, { paddingTop: insets.top }]}>
