@@ -50,10 +50,6 @@ export const MagicModalPortal: React.FC = memo(() => {
 
   const hide = useCallback<GlobalHideFunction>(
     async (props, { modalID } = {}) => {
-      if (!modals.length) {
-        throw new Error("No modals visible to hide");
-      }
-
       const currentModal = modals.find((modal) => modal.id === modalID);
 
       if (!modalID) {
@@ -62,7 +58,19 @@ export const MagicModalPortal: React.FC = memo(() => {
           "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack."
         );
       } else if (!currentModal) {
-        throw new Error(`No modal found with id: ${modalID}`);
+        // eslint-disable-next-line no-console
+        console.log(
+          `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`
+        );
+        return;
+      }
+
+      if (modals.length === 0) {
+        // eslint-disable-next-line no-console
+        console.log(
+          `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`
+        );
+        return;
       }
 
       const safeModal = currentModal || modals[modals.length - 1]!;
@@ -81,8 +89,8 @@ export const MagicModalPortal: React.FC = memo(() => {
   );
 
   const show = useCallback<GlobalShowFunction>(
-    async (newComponent, newConfig) => {
-      const id = generatePseudoRandomID();
+    (newComponent, newConfig) => {
+      const modalID = generatePseudoRandomID();
 
       let hideCallback: (value: unknown) => void = () => {};
       const hidePromise = new Promise((resolve) => {
@@ -90,7 +98,7 @@ export const MagicModalPortal: React.FC = memo(() => {
       });
 
       const newModal = {
-        id,
+        id: modalID,
         component: newComponent,
         config: { ...defaultConfig, ...newConfig },
         hideCallback,
@@ -98,7 +106,12 @@ export const MagicModalPortal: React.FC = memo(() => {
 
       setModals((prevModals) => [...prevModals, newModal]);
 
-      return hidePromise as Promise<undefined>;
+      return {
+        // This is already typed by the GlobalShowFunction type Generic
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        promise: hidePromise as any,
+        modalID,
+      } as const;
     },
     [hide]
   );

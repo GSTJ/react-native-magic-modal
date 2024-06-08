@@ -15,11 +15,20 @@ const showModal = async () => {
 
   // eslint-disable-next-line no-console
   console.log("Opening modal");
-  const modalResponse = await magicModal.show(() => <ExampleModal />, {
+  const modalResponse = magicModal.show(() => <ExampleModal />, {
     swipeDirection,
   });
+
   // eslint-disable-next-line no-console
-  console.log("Modal closed with response:", modalResponse);
+  console.log("Modal ID: " + modalResponse.modalID);
+
+  // Closing the modal automatically, programmatically
+  setTimeout(() => {
+    magicModal.hide("close timeout", { modalID: modalResponse.modalID });
+  }, 2000);
+
+  // eslint-disable-next-line no-console
+  console.log("Modal closed with response:", await modalResponse.promise);
 };
 
 const showUndismissableModal = async () => {

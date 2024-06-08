@@ -9,17 +9,29 @@ export const magicModalRef = React.createRef<IModal>();
  * @param newConfig Recieves {@link NewConfigProps}  to override the default configs.
  * @returns Returns a Promise that resolves with the {@link hide} props when the Modal is closed. If it were closed automatically, without the manual use of  {@link hide}, the return would be one of {@link MagicModalHideTypes}
  */
-const show: GlobalShowFunction = async (newComponent, newConfig) =>
-  magicModalRef.current?.show?.(newComponent, newConfig);
+const show: GlobalShowFunction = (newComponent, newConfig) => {
+  if (!magicModalRef.current) {
+    throw new Error(
+      "MagicModalProvider not found. Please wrap your component with MagicModalProvider."
+    );
+  }
 
+  return magicModalRef.current.show(newComponent, newConfig);
+};
 /**
  * @description Hide the current modal.
  * @param props Those props will be passed to the {@link show} resolve function.
  * @returns Returns a promise that resolves when the close animation is finished.
  */
-const hide: GlobalHideFunction = async (props, { modalID } = {}) =>
-  magicModalRef.current?.hide?.(props, { modalID });
+const hide: GlobalHideFunction = async (props, { modalID } = {}) => {
+  if (!magicModalRef.current) {
+    throw new Error(
+      "MagicModalProvider not found. Please wrap your component with MagicModalProvider."
+    );
+  }
 
+  return magicModalRef.current.hide(props, { modalID });
+};
 export interface IModal {
   show: typeof show;
   hide: typeof hide;

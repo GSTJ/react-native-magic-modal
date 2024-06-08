@@ -88,7 +88,7 @@ export type NewConfigProps = Partial<ModalProps>;
 export type GlobalShowFunction = <T>(
   newComponent: ModalChildren,
   newConfig?: NewConfigProps
-) => Promise<T | undefined>;
+) => { promise: Promise<T | undefined>; modalID: string };
 
 export enum MagicModalHideTypes {
   BACKDROP_PRESSED = "BACKDROP_PRESSED",
