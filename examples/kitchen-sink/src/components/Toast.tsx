@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-color-literals */
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { magicModal, useMagicModal } from "react-native-magic-modal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";

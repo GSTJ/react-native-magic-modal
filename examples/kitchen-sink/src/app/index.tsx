@@ -1,14 +1,15 @@
 /* eslint-disable react-native/no-color-literals */
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { magicModal, Direction } from "react-native-magic-modal";
-import { ExampleModal } from "@/components/ExampleModal";
-import { router } from "expo-router";
-import { ZoomIn, ZoomOut } from "react-native-reanimated";
-import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
-import { showToast } from "../components/Toast";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { Direction, magicModal } from "react-native-magic-modal";
+import { ZoomIn, ZoomOut } from "react-native-reanimated";
+import { router } from "expo-router";
+
+import { ExampleModal } from "@/components/ExampleModal";
+import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
 import { showScrollableModal } from "@/components/ScrollableModal";
+import { showToast } from "../components/Toast";
 
 const showModal = async () => {
   const swipeDirection = ["up", "down", "left", "right"][

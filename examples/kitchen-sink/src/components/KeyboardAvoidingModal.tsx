@@ -1,10 +1,10 @@
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
-  View,
-  StyleSheet,
-  TextInput,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
+  TextInput,
+  View,
 } from "react-native";
 import { magicModal, useMagicModal } from "react-native-magic-modal";
 

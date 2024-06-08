@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { magicModal } from "react-native-magic-modal";
 
 const ScrollableModal: React.FC = () => {

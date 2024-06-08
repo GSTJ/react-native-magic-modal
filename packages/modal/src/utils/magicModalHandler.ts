@@ -1,4 +1,5 @@
 import React from "react";
+
 import { GlobalHideFunction, GlobalShowFunction } from "../constants/types";
 
 export const magicModalRef = React.createRef<IModal>();
