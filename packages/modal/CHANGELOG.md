@@ -1,5 +1,16 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## 5.0.0 (2024-06-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* improve type safety and docs
+
+### :stars: New Features :stars:
+
+* improve type safety and docs ([d3a7884](https://github.com/GSTJ/react-native-magic-modal/commit/d3a78842b7da87436abd163dc8ac0735a7264e7c))
+
 ## 4.0.8 (2024-06-14)
 
 ## 4.0.7 (2024-06-09)
