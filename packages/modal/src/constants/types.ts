@@ -88,11 +88,10 @@ export type NewConfigProps = Partial<ModalProps>;
 export type GlobalShowFunction = <T>(
   newComponent: ModalChildren,
   newConfig?: NewConfigProps,
-) => { promise: Promise<T | undefined>; modalID: string };
+) => { promise: Promise<T | MagicModalHideTypes>; modalID: string };
 
 export enum MagicModalHideTypes {
   BACKDROP_PRESSED = "BACKDROP_PRESSED",
   SWIPE_COMPLETED = "SWIPE_COMPLETED",
   BACK_BUTTON_PRESSED = "BACK_BUTTON_PRESSED",
-  MODAL_OVERRIDE = "MODAL_OVERRIDE",
 }

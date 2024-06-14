@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "react-native";
-import { render, waitFor } from "@testing-library/react-native";
+import { render } from "@testing-library/react-native";
 
 import { MagicModalHideTypes } from "../../constants/types";
 import { magicModal } from "../../utils/magicModalHandler";
@@ -35,28 +35,6 @@ describe("MagicModal", () => {
 
     const modalResult = await modalResultPromise;
     expect(modalResult).toBe("some-result-2");
-  });
-
-  it("should override old modal on show", async () => {
-    const component = render(<MagicModalPortal />);
-
-    const oldModalRetunPromise = magicModal.show(() => (
-      <Text testID="old-modal">Taveira</Text>
-    ));
-
-    await waitFor(() => {
-      expect(component.queryByTestId("old-modal")).toBeTruthy();
-      expect(component.queryByTestId("new-modal")).toBeFalsy();
-    });
-
-    magicModal.show(() => <Text testID="new-modal">Taveira</Text>);
-
-    expect(await oldModalRetunPromise).toBe(MagicModalHideTypes.MODAL_OVERRIDE);
-
-    await waitFor(() => {
-      expect(component.queryByTestId("new-modal")).toBeTruthy();
-      expect(component.queryByTestId("old-modal")).toBeFalsy();
-    });
   });
 
   describe("should return one of MagicModalHideTypes on automatic hides", () => {
