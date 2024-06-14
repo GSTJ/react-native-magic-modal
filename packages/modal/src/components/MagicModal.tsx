@@ -23,12 +23,12 @@ import Animated, {
 import { defaultDirection } from "../constants/defaultConfig";
 import {
   Direction,
-  MagicModalHideTypes,
+  MagicModalHideReason,
   ModalChildren,
   ModalProps,
 } from "../constants/types";
 import { styles } from "./MagicModalPortal/MagicModalPortal.styles";
-import { useMagicModal } from "./MagicModalProvider";
+import { useInternalMagicModal } from "./MagicModalProvider";
 
 export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -54,7 +54,7 @@ export const MagicModal = memo(
     config: ModalProps;
     children: ModalChildren;
   }) => {
-    const { hide } = useMagicModal();
+    const { hide } = useInternalMagicModal();
 
     const translationX = useSharedValue(0);
     const translationY = useSharedValue(0);
@@ -73,7 +73,7 @@ export const MagicModal = memo(
     const onBackdropPress = useMemo(() => {
       return (
         config.onBackdropPress ??
-        (() => hide(MagicModalHideTypes.BACKDROP_PRESSED))
+        (() => hide({ reason: MagicModalHideReason.BACKDROP_PRESS }))
       );
     }, [config.onBackdropPress, hide]);
 
@@ -158,7 +158,8 @@ export const MagicModal = memo(
           rangeMap[config.swipeDirection ?? defaultDirection],
           { velocity: event.velocityX, overshootClamping: true },
           (success) =>
-            success && runOnJS(hide)(MagicModalHideTypes.SWIPE_COMPLETED),
+            success &&
+            runOnJS(hide)({ reason: MagicModalHideReason.SWIPE_COMPLETE }),
         );
 
         return;

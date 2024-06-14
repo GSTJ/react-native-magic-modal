@@ -2,7 +2,11 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Direction, magicModal } from "react-native-magic-modal";
+import {
+  Direction,
+  magicModal,
+  MagicModalHideReason,
+} from "react-native-magic-modal";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
 import { router } from "expo-router";
 
@@ -34,14 +38,26 @@ const showModal = async () => {
   console.log("Modal closed with response:", await modalResponse.promise);
 };
 
+type ModalResponse = {
+  message: string;
+};
+
 const showReplacingModals = async () => {
-  const modalResponse = magicModal.show(() => <ExampleModal />);
+  const modalResponse = magicModal.show<ModalResponse>(() => <ExampleModal />);
 
   await new Promise<void>((resolve) => setTimeout(() => resolve(), 1000));
 
-  magicModal.hide("close timeout", { modalID: modalResponse.modalID });
+  magicModal.hide<ModalResponse>(
+    { message: "close timeout" },
+    { modalID: modalResponse.modalID },
+  );
 
-  await modalResponse.promise;
+  const res = await modalResponse.promise;
+
+  if (res.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
+    // eslint-disable-next-line no-console
+    console.log("Modal closed with response:", res.data.message);
+  }
 
   return showKeyboardAvoidingModal({
     initialText: "Hello, World!",

@@ -1,6 +1,7 @@
 export { MagicModalPortal } from "./components/MagicModalPortal/MagicModalPortal";
 export {
-  MagicModalHideTypes,
+  MagicModalHideReason,
+  type HideReturn,
   type NewConfigProps,
   type ModalChildren,
   type Direction,

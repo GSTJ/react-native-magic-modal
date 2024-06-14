@@ -4,6 +4,15 @@ export type ModalChildren = React.FC;
 
 export type Direction = "up" | "down" | "left" | "right";
 
+export type HideReturn<T> =
+  | {
+      reason:
+        | MagicModalHideReason.BACKDROP_PRESS
+        | MagicModalHideReason.SWIPE_COMPLETE
+        | MagicModalHideReason.BACK_BUTTON_PRESS;
+    }
+  | { reason: MagicModalHideReason.INTENTIONAL_HIDE; data: T };
+
 export type ModalProps = {
   /**
    * Duration of the animation when the modal is shown.
@@ -76,22 +85,26 @@ export type ModalProps = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GenericFunction = (props: any) => any;
 
-export type GlobalHideFunction = (
-  props?: unknown,
+export type GlobalHideFunction = <T>(
+  props: T,
   options?: { modalID?: string },
 ) => void;
 
-export type HookHideFunction = (props?: unknown) => void;
+export type HookHideFunction = <T>(props: HideReturn<T>) => void;
 
 export type NewConfigProps = Partial<ModalProps>;
+
+export enum MagicModalHideReason {
+  BACKDROP_PRESS = "BACKDROP_PRESS",
+  SWIPE_COMPLETE = "SWIPE_COMPLETE",
+  BACK_BUTTON_PRESS = "BACK_BUTTON_PRESS",
+  INTENTIONAL_HIDE = "INTENTIONAL_HIDE",
+}
 
 export type GlobalShowFunction = <T>(
   newComponent: ModalChildren,
   newConfig?: NewConfigProps,
-) => { promise: Promise<T | MagicModalHideTypes>; modalID: string };
-
-export enum MagicModalHideTypes {
-  BACKDROP_PRESSED = "BACKDROP_PRESSED",
-  SWIPE_COMPLETED = "SWIPE_COMPLETED",
-  BACK_BUTTON_PRESSED = "BACK_BUTTON_PRESSED",
-}
+) => {
+  promise: Promise<HideReturn<T>>;
+  modalID: string;
+};

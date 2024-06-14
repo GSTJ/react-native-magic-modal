@@ -24,7 +24,7 @@
 > Simplify your modal management in React Native with the **React Native Magic Modal** library. Effortlessly control modals, streamline complex flows, and create a seamless user experience.
 
 > [!TIP]  
-> v4 just got released with full support for multiple modals! See the [breaking changes](https://github.com/GSTJ/react-native-magic-modal/releases).
+> Our new version just got released with full support for multiple modals! See the [breaking changes](https://github.com/GSTJ/react-native-magic-modal/releases).
 
 ## Features
 
@@ -103,11 +103,16 @@ import {
   MagicModalPortal,
   magicModal,
   useMagicModal,
+  MagicModalHideReason
 } from "react-native-magic-modal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+type ConfirmationModalReturn = {
+  success: boolean;
+};
+
 const ConfirmationModal = () => {
-  const { hide } = useMagicModal();
+  const { hide } = useMagicModal<ConfirmationModalReturn>();
 
   return (
     <View>
@@ -133,9 +138,15 @@ const ResponseModal = ({ text }) => {
 
 const handleConfirmationFlow = async () => {
   // You can call `show` with or without props, depending on the requirements of the modal.
-  const result = await magicModal.show(() => <ConfirmationModal />).promise;
+  const result = await magicModal.show<ConfirmationModalReturn>(() => <ConfirmationModal />).promise;
 
-  if (result.success) {
+  // Hide could potentially be a backdrop press, a back button press, or a swipe gesture.
+  if (result.reason !== MagicModalHideReason.INTENTIONAL_HIDE) {
+    // User cancelled the flow
+    return;
+  }
+
+  if (result.data.success) {
     return magicModal.show(() => <ResponseModal text="Success!" />).promise;
   }
 
@@ -200,7 +211,7 @@ Access the complete documentation [here](https://gstj.github.io/react-native-mag
 
 **Q:** Can I have two modals showing up at the same time?
 
-**A:** Yes. With v4, you can now have multiple modals showing up at the same time.
+**A:** Yes. With v4+, you can now have multiple modals showing up at the same time.
 
 ---
 

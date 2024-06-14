@@ -6,7 +6,7 @@ import { useMagicModal } from "react-native-magic-modal";
 import { showToast } from "./Toast";
 
 export const ExampleModal = () => {
-  const { hide } = useMagicModal();
+  const { hide } = useMagicModal<string>();
 
   return (
     <View style={styles.container}>

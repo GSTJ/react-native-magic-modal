@@ -11,7 +11,7 @@ import { defaultConfig } from "../../constants/defaultConfig";
 import {
   GlobalHideFunction,
   GlobalShowFunction,
-  MagicModalHideTypes,
+  MagicModalHideReason,
   ModalChildren,
   ModalProps,
 } from "../../constants/types";
@@ -49,7 +49,7 @@ type ModalStackItem = {
 export const MagicModalPortal: React.FC = memo(() => {
   const [modals, setModals] = React.useState<ModalStackItem[]>([]);
 
-  const hide = useCallback<GlobalHideFunction>(
+  const _hide = useCallback<GlobalHideFunction>(
     async (props, { modalID } = {}) => {
       setModals((prevModals) => {
         const currentModal = prevModals.find((modal) => modal.id === modalID);
@@ -99,7 +99,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         component: newComponent,
         config: { ...defaultConfig, ...newConfig },
         hideCallback,
-        hideFunction: (props) => hide(props, { modalID }),
+        hideFunction: (props) => _hide(props, { modalID }),
       } satisfies ModalStackItem;
 
       setModals((prevModals) => [...prevModals, newModal]);
@@ -111,7 +111,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         modalID,
       } as const;
     },
-    [hide],
+    [_hide],
   );
 
   useEffect(() => {
@@ -127,16 +127,26 @@ export const MagicModalPortal: React.FC = memo(() => {
         if (lastModal.config.onBackButtonPress) {
           lastModal.config.onBackButtonPress();
         } else {
-          hide(MagicModalHideTypes.BACK_BUTTON_PRESSED, {
-            modalID: lastModal.id,
-          });
+          _hide(
+            { reason: MagicModalHideReason.BACK_BUTTON_PRESS },
+            { modalID: lastModal.id },
+          );
         }
 
         return true;
       },
     );
     return () => backHandler.remove();
-  }, [hide, modals]);
+  }, [_hide, modals]);
+
+  const hide = useCallback<GlobalHideFunction>(
+    (props, { modalID } = {}) =>
+      _hide(
+        { reason: MagicModalHideReason.INTENTIONAL_HIDE, data: props },
+        { modalID },
+      ),
+    [_hide],
+  );
 
   useImperativeHandle(magicModalRef, () => ({
     show,

@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react";
 
-import { HookHideFunction } from "../constants/types";
+import { HookHideFunction, MagicModalHideReason } from "../constants/types";
 
 const MagicModalContext = React.createContext<{
   hide: HookHideFunction;
@@ -8,14 +8,44 @@ const MagicModalContext = React.createContext<{
   hide: async () => {},
 });
 
-export const useMagicModal = () => {
+export const useInternalMagicModal = () => {
   const context = React.useContext(MagicModalContext);
 
   if (!context) {
-    throw new Error("useMagicModal must be used within a MagicModalProvider");
+    throw new Error(
+      "useInternalMagicModal must be used within a MagicModalProvider",
+    );
   }
 
   return context;
+};
+
+/**
+ * A hook to hide the modal from inside the modal component.
+ * @example
+ * ```tsx
+ * const { hide } = useMagicModal<{ message: string }>();
+ *
+ * return (
+ *   <TouchableOpacity onPress={() => hide({ message: "hey" })}>
+ *     <Text>Test!</Text>
+ *   </TouchableOpacity>
+ * );
+ * ```
+ */
+export const useMagicModal = <T = void,>() => {
+  const context = useInternalMagicModal();
+
+  return useMemo(
+    () => ({
+      hide: (data: T) =>
+        context.hide({
+          reason: MagicModalHideReason.INTENTIONAL_HIDE,
+          data,
+        }),
+    }),
+    [context],
+  );
 };
 
 export const MagicModalProvider = memo(

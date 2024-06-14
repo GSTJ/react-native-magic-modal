@@ -2,7 +2,7 @@ import React from "react";
 import { Text } from "react-native";
 import { render } from "@testing-library/react-native";
 
-import { MagicModalHideTypes } from "../../constants/types";
+import { MagicModalHideReason } from "../../constants/types";
 import { magicModal } from "../../utils/magicModalHandler";
 import { MagicModalPortal } from "./MagicModalPortal";
 
@@ -48,28 +48,28 @@ describe("MagicModal", () => {
       ));
     });
 
-    it("should return `MagicModalHideTypes.BACK_BUTTON_PRESSED` when the back button is pressed", async () => {
+    it("should return `MagicModalHideTypes.BACK_BUTTON_PRESS` when the back button is press", async () => {
       // modalRefForTests.current.props.onBackButtonPress();
 
-      expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACK_BUTTON_PRESSED,
-      );
+      expect(await modalResultPromise).toBe({
+        reason: MagicModalHideReason.BACK_BUTTON_PRESS,
+      });
     });
 
-    it("should return `MagicModalHideTypes.BACKDROP_PRESSED` when the backdrop is pressed", async () => {
+    it("should return `MagicModalHideTypes.BACKDROP_PRESS` when the backdrop is press", async () => {
       // modalRefForTests.current.props.onBackdropPress();
 
-      expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.BACKDROP_PRESSED,
-      );
+      expect(await modalResultPromise).toBe({
+        reason: MagicModalHideReason.BACKDROP_PRESS,
+      });
     });
 
-    it("should return `MagicModalHideTypes.SWIPE_COMPLETED` when the swipe is complete", async () => {
+    it("should return `MagicModalHideTypes.SWIPE_COMPLETE` when the swipe is complete", async () => {
       // modalRefForTests.current.props.onSwipeComplete();
 
-      expect(await modalResultPromise).toBe(
-        MagicModalHideTypes.SWIPE_COMPLETED,
-      );
+      expect(await modalResultPromise).toBe({
+        reason: MagicModalHideReason.SWIPE_COMPLETE,
+      });
     });
   });
 });
