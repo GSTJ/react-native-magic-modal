@@ -29,7 +29,9 @@ const hide: GlobalHideFunction = (props, { modalID } = {}) => {
 };
 
 const hideAll: GlobalHideAllFunction = () => {
-  return getMagicModal().hideAll();
+  // We recommend using this method in jest, and having throw because the ref was not found isn't useful there.
+  // Not all tests are necessarily using the provider.
+  return magicModalRef.current?.hideAll();
 };
 export interface IModal {
   show: typeof show;
