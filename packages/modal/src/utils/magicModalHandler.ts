@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+  GlobalHideAllFunction,
   GlobalHideFunction,
   GlobalShowFunction,
   // HideReturn is used in JS Doc
@@ -10,28 +11,30 @@ import {
 
 export const magicModalRef = React.createRef<IModal>();
 
-const show: GlobalShowFunction = (newComponent, newConfig) => {
+const getMagicModal = (): NonNullable<typeof magicModalRef.current> => {
   if (!magicModalRef.current) {
     throw new Error(
       "MagicModalPortal not found. Please wrap your component with MagicModalPortal.",
     );
   }
-
-  return magicModalRef.current.show(newComponent, newConfig);
+  return magicModalRef.current;
 };
 
-const hide: GlobalHideFunction = async (props, { modalID } = {}) => {
-  if (!magicModalRef.current) {
-    throw new Error(
-      "MagicModalPortal not found. Please wrap your component with <MagicModalPortal />.",
-    );
-  }
+const show: GlobalShowFunction = (newComponent, newConfig) => {
+  return getMagicModal().show(newComponent, newConfig);
+};
 
-  return magicModalRef.current.hide(props, { modalID });
+const hide: GlobalHideFunction = (props, { modalID } = {}) => {
+  return getMagicModal().hide(props, { modalID });
+};
+
+const hideAll: GlobalHideAllFunction = () => {
+  return getMagicModal().hideAll();
 };
 export interface IModal {
   show: typeof show;
   hide: typeof hide;
+  hideAll: typeof hideAll;
 }
 
 /**
@@ -66,4 +69,9 @@ export const magicModal = {
    * @param props Those props will be passed to the {@link show} resolve function.
    */
   hide,
+  /**
+   * @description Hides all modals in the stack. This function should be used sparingly, as it's generally preferable to hide modals individually from within the modal itself.
+   * However, this function can be useful in edge cases. It's also useful for test suites, such as calling hideAll in Jest's beforeEach function as a cleanup step.
+   */
+  hideAll,
 };

@@ -71,10 +71,9 @@ export const MagicModal = memo(
     }, []);
 
     const onBackdropPress = useMemo(() => {
-      return (
-        config.onBackdropPress ??
-        (() => hide({ reason: MagicModalHideReason.BACKDROP_PRESS }))
-      );
+      return config.onBackdropPress
+        ? () => config.onBackdropPress?.({ hide })
+        : () => hide({ reason: MagicModalHideReason.BACKDROP_PRESS });
     }, [config.onBackdropPress, hide]);
 
     const isHorizontal =

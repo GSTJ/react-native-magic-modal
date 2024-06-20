@@ -9,7 +9,8 @@ export type HideReturn<T> =
       reason:
         | MagicModalHideReason.BACKDROP_PRESS
         | MagicModalHideReason.SWIPE_COMPLETE
-        | MagicModalHideReason.BACK_BUTTON_PRESS;
+        | MagicModalHideReason.BACK_BUTTON_PRESS
+        | MagicModalHideReason.GLOBAL_HIDE_ALL;
     }
   | { reason: MagicModalHideReason.INTENTIONAL_HIDE; data: T };
 
@@ -42,17 +43,19 @@ export type ModalProps = {
    * Function to be called when the back button is pressed.
    * You can override it to prevent the modal from closing on back button press.
    * @default undefined
-   * @example () => { console.log('Back button pressed'); magicModal.hide(); }
+   * @example ({ hide }) => { console.log('Back button pressed'); hide({ reason: MagicModalHideReason.BACK_BUTTON_PRESS }); }
    */
-  onBackButtonPress: (() => void) | undefined;
+  onBackButtonPress:
+    | (({ hide }: { hide: HookHideFunction }) => void)
+    | undefined;
 
   /**
    * Function to be called when the backdrop is pressed.
    * You can override it to prevent the modal from closing on backdrop press.
    * @default undefined
-   * @example () => { console.log('Backdrop pressed'); magicModal.hide(); }
+   * @example ({ hide }) => { console.log('Backdrop pressed'); hide({ reason: MagicModalHideReason.BACKDROP_PRESS }); }
    */
-  onBackdropPress: (() => void) | undefined;
+  onBackdropPress: (({ hide }: { hide: HookHideFunction }) => void) | undefined;
 
   /**
    * Custom style for the modal.
@@ -90,6 +93,8 @@ export type GlobalHideFunction = <T>(
   options?: { modalID?: string },
 ) => void;
 
+export type GlobalHideAllFunction = () => void;
+
 export type HookHideFunction = <T>(props: HideReturn<T>) => void;
 
 export type NewConfigProps = Partial<ModalProps>;
@@ -99,6 +104,7 @@ export enum MagicModalHideReason {
   SWIPE_COMPLETE = "SWIPE_COMPLETE",
   BACK_BUTTON_PRESS = "BACK_BUTTON_PRESS",
   INTENTIONAL_HIDE = "INTENTIONAL_HIDE",
+  GLOBAL_HIDE_ALL = "GLOBAL_HIDE_ALL",
 }
 
 export type GlobalShowFunction = <T>(

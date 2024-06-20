@@ -125,7 +125,9 @@ export const MagicModalPortal: React.FC = memo(() => {
         }
 
         if (lastModal.config.onBackButtonPress) {
-          lastModal.config.onBackButtonPress();
+          lastModal.config.onBackButtonPress({
+            hide: (props) => _hide(props, { modalID: lastModal.id }),
+          });
         } else {
           _hide(
             { reason: MagicModalHideReason.BACK_BUTTON_PRESS },
@@ -148,9 +150,19 @@ export const MagicModalPortal: React.FC = memo(() => {
     [_hide],
   );
 
+  const hideAll = useCallback(() => {
+    setModals((prevModals) => {
+      prevModals.forEach((modal) => {
+        modal.hideCallback({ reason: MagicModalHideReason.GLOBAL_HIDE_ALL });
+      });
+      return [];
+    });
+  }, []);
+
   useImperativeHandle(magicModalRef, () => ({
     show,
     hide,
+    hideAll,
   }));
 
   const modalList = useMemo(() => {
