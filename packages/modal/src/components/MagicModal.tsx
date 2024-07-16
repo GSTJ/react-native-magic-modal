@@ -63,13 +63,6 @@ export const MagicModal = memo(
 
     const { width, height } = useWindowDimensions();
 
-    useEffect(() => {
-      return () => {
-        translationX.value = 0;
-        translationY.value = 0;
-      };
-    }, []);
-
     const onBackdropPress = useMemo(() => {
       return config.onBackdropPress
         ? () => config.onBackdropPress?.({ hide })
