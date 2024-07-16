@@ -65,6 +65,8 @@ export const MagicModal = memo(
      * Necessary to skip exit animation when swipe is complete.
      * This is a problem on web, where the exit animation does not
      * work properly with the swipe animation styles.
+     *
+     * This seems to be a bug in reanimated.
      */
     const [isSwipeComplete, setIsSwipeComplete] = React.useState(false);
 
