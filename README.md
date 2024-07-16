@@ -75,8 +75,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 export default function App() {
   return (
     <GestureHandlerRootView>
-      <MagicModalPortal /> {/** At the top of your app component hierarchy */}
       <YourAppContent />
+      <MagicModalPortal /> {/** After your app component hierarchy */}
     </GestureHandlerRootView>
   );
 }
