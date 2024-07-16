@@ -1,5 +1,11 @@
-import React, { memo, useEffect, useMemo } from "react";
-import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+import React, { memo, useMemo } from "react";
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
@@ -160,6 +166,11 @@ export const MagicModal = memo(
           { velocity: event.velocityX, overshootClamping: true },
           (success) => {
             if (!success) return;
+
+            if (Platform.OS !== "web") {
+              runOnJS(hide)({ reason: MagicModalHideReason.SWIPE_COMPLETE });
+              return;
+            }
 
             runOnJS(setIsSwipeComplete)(true);
 
