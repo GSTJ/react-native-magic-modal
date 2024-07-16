@@ -102,10 +102,14 @@ export const MagicModal = memo(
       .enabled(!!config.swipeDirection)
       .minDistance(1)
       .onStart(() => {
+        "worklet";
+
         prevTranslationX.value = translationX.value;
         prevTranslationY.value = translationY.value;
       })
       .onUpdate((event) => {
+        "worklet";
+
         const translationValue = isHorizontal
           ? event.translationX
           : event.translationY;
@@ -135,6 +139,8 @@ export const MagicModal = memo(
         }
       })
       .onEnd((event) => {
+        "worklet";
+
         const velocityThreshold = config.swipeVelocityThreshold;
 
         const shouldHideMap = {
@@ -181,8 +187,6 @@ export const MagicModal = memo(
             );
           },
         );
-
-        return;
       });
 
     const animatedStyles = useAnimatedStyle(
