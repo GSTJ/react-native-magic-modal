@@ -27,9 +27,9 @@ export const useInternalMagicModal = () => {
  * const { hide } = useMagicModal<{ message: string }>();
  *
  * return (
- *   <TouchableOpacity onPress={() => hide({ message: "hey" })}>
+ *   <Pressable onPress={() => hide({ message: "hey" })}>
  *     <Text>Test!</Text>
- *   </TouchableOpacity>
+ *   </Pressable>
  * );
  * ```
  */

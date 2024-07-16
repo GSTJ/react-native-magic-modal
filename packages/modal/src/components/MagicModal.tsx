@@ -1,5 +1,11 @@
-import React, { memo, useEffect, useMemo } from "react";
-import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+import React, { memo, useMemo } from "react";
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
@@ -61,14 +67,16 @@ export const MagicModal = memo(
     const prevTranslationX = useSharedValue(0);
     const prevTranslationY = useSharedValue(0);
 
-    const { width, height } = useWindowDimensions();
+    /**
+     * Necessary to skip exit animation when swipe is complete.
+     * This is a problem on web, where the exit animation does not
+     * work properly with the swipe animation styles.
+     *
+     * This seems to be a bug in reanimated.
+     */
+    const [isSwipeComplete, setIsSwipeComplete] = React.useState(false);
 
-    useEffect(() => {
-      return () => {
-        translationX.value = 0;
-        translationY.value = 0;
-      };
-    }, []);
+    const { width, height } = useWindowDimensions();
 
     const onBackdropPress = useMemo(() => {
       return config.onBackdropPress
@@ -94,10 +102,14 @@ export const MagicModal = memo(
       .enabled(!!config.swipeDirection)
       .minDistance(1)
       .onStart(() => {
+        "worklet";
+
         prevTranslationX.value = translationX.value;
         prevTranslationY.value = translationY.value;
       })
       .onUpdate((event) => {
+        "worklet";
+
         const translationValue = isHorizontal
           ? event.translationX
           : event.translationY;
@@ -127,6 +139,8 @@ export const MagicModal = memo(
         }
       })
       .onEnd((event) => {
+        "worklet";
+
         const velocityThreshold = config.swipeVelocityThreshold;
 
         const shouldHideMap = {
@@ -156,12 +170,23 @@ export const MagicModal = memo(
         mainTranslation.value = withSpring(
           rangeMap[config.swipeDirection ?? defaultDirection],
           { velocity: event.velocityX, overshootClamping: true },
-          (success) =>
-            success &&
-            runOnJS(hide)({ reason: MagicModalHideReason.SWIPE_COMPLETE }),
-        );
+          (success) => {
+            if (!success) return;
 
-        return;
+            if (Platform.OS !== "web") {
+              runOnJS(hide)({ reason: MagicModalHideReason.SWIPE_COMPLETE });
+              return;
+            }
+
+            runOnJS(setIsSwipeComplete)(true);
+
+            // Set immediate is needed so the hide function is called
+            // after "isSwipeComplete" is set to true.
+            runOnJS(setImmediate)(() =>
+              hide({ reason: MagicModalHideReason.SWIPE_COMPLETE }),
+            );
+          },
+        );
       });
 
     const animatedStyles = useAnimatedStyle(
@@ -226,16 +251,20 @@ export const MagicModal = memo(
             pointerEvents="box-none"
             style={[styles.overlay, config.style]}
             entering={
-              config.entering ??
-              defaultAnimationInMap[
-                config.swipeDirection ?? defaultDirection
-              ].duration(config.animationInTiming)
+              !isSwipeComplete
+                ? config.entering ??
+                  defaultAnimationInMap[
+                    config.swipeDirection ?? defaultDirection
+                  ].duration(config.animationInTiming)
+                : undefined
             }
             exiting={
-              config.exiting ??
-              defaultAnimationOutMap[
-                config.swipeDirection ?? defaultDirection
-              ].duration(config.animationOutTiming)
+              !isSwipeComplete
+                ? config.exiting ??
+                  defaultAnimationOutMap[
+                    config.swipeDirection ?? defaultDirection
+                  ].duration(config.animationOutTiming)
+                : undefined
             }
           >
             <GestureDetector gesture={pan}>

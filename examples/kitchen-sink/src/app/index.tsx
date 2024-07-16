@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-color-literals */
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import {
   Direction,
@@ -85,19 +85,19 @@ const showZoomInModal = async () => {
 export default () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={showModal}>
+      <Pressable style={styles.button} onPress={showModal}>
         <Text style={styles.buttonText}>Show Modal</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={showUndismissableModal}>
+      </Pressable>
+      <Pressable style={styles.button} onPress={showUndismissableModal}>
         <Text style={styles.buttonText}>Show Undismissable Modal</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={showScrollableModal}>
+      </Pressable>
+      <Pressable style={styles.button} onPress={showScrollableModal}>
         <Text style={styles.buttonText}>Show Scrollable Modal</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={showReplacingModals}>
+      </Pressable>
+      <Pressable style={styles.button} onPress={showReplacingModals}>
         <Text style={styles.buttonText}>Show Replacing Modals</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
+      </Pressable>
+      <Pressable
         style={styles.button}
         onPress={() => {
           showKeyboardAvoidingModal({
@@ -106,19 +106,16 @@ export default () => {
         }}
       >
         <Text style={styles.buttonText}>Show Keyboard Avoiding Modal</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={showZoomInModal}>
+      </Pressable>
+      <Pressable style={styles.button} onPress={showZoomInModal}>
         <Text style={styles.buttonText}>Show Zoom In Modal</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={showToast}>
+      </Pressable>
+      <Pressable style={styles.button} onPress={showToast}>
         <Text style={styles.buttonText}>Show Toast</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push("/modal")}
-      >
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => router.push("/modal")}>
         <Text style={styles.buttonText}>Open Modal Screen</Text>
-      </TouchableOpacity>
+      </Pressable>
     </ScrollView>
   );
 };

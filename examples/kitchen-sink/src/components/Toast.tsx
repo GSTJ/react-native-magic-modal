@@ -20,7 +20,12 @@ const Toast = () => {
   }, [hide]);
 
   return (
-    <View style={[styles.toastContainer, { paddingTop: insets.top }]}>
+    <View
+      style={[
+        styles.toastContainer,
+        { paddingTop: Math.max(insets.top, styles.toastContainer.padding) },
+      ]}
+    >
       <StatusBar style="light" />
       <Text style={styles.toastText}>This is a toast!</Text>
     </View>

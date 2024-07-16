@@ -48,13 +48,13 @@ export interface IModal {
  * // ...
  * const ExampleModal = () => (
  *  const { hide } = useMagicModal<{ message: string }>();
- *  <TouchableOpacity onPress={() => hide({ message: "hey" })}>
+ *  <Pressable onPress={() => hide({ message: "hey" })}>
  *    <Text>Test!</Text>
- *  </TouchableOpacity>
+ *  </Pressable>
  * )
  *
  * const result = magicModal.show(ExampleModal);
- * console.log(await result.promise); // Returns { reason: MagicModalHideReason.INTENTIONAL_HIDE, message: "hey" } when the modal is closed by the TouchableOpacity.
+ * console.log(await result.promise); // Returns { reason: MagicModalHideReason.INTENTIONAL_HIDE, message: "hey" } when the modal is closed by the Pressable.
  * ```
  */
 export const magicModal = {
