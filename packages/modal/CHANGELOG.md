@@ -1,5 +1,12 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## 5.1.0 (2024-07-16)
+
+
+### :stars: New Features :stars:
+
+* make example web-compatible & mark functions as worklets ([#92](https://github.com/GSTJ/react-native-magic-modal/issues/92)) ([713ee86](https://github.com/GSTJ/react-native-magic-modal/commit/713ee86c5f0c50b326fe06f9585f6bb4fbea8723))
+
 ## 5.0.3 (2024-07-16)
 
 ## 5.0.2 (2024-06-20)
