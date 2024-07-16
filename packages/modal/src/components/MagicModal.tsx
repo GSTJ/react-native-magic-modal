@@ -61,6 +61,13 @@ export const MagicModal = memo(
     const prevTranslationX = useSharedValue(0);
     const prevTranslationY = useSharedValue(0);
 
+    /**
+     * Necessary to skip exit animation when swipe is complete.
+     * This is a problem on web, where the exit animation does not
+     * work properly with the swipe animation styles.
+     */
+    const [isSwipeComplete, setIsSwipeComplete] = React.useState(false);
+
     const { width, height } = useWindowDimensions();
 
     const onBackdropPress = useMemo(() => {
@@ -149,9 +156,17 @@ export const MagicModal = memo(
         mainTranslation.value = withSpring(
           rangeMap[config.swipeDirection ?? defaultDirection],
           { velocity: event.velocityX, overshootClamping: true },
-          (success) =>
-            success &&
-            runOnJS(hide)({ reason: MagicModalHideReason.SWIPE_COMPLETE }),
+          (success) => {
+            if (!success) return;
+
+            runOnJS(setIsSwipeComplete)(true);
+
+            // Set immediate is needed so the hide function is called
+            // after "isSwipeComplete" is set to true.
+            runOnJS(setImmediate)(() =>
+              hide({ reason: MagicModalHideReason.SWIPE_COMPLETE }),
+            );
+          },
         );
 
         return;
@@ -219,16 +234,20 @@ export const MagicModal = memo(
             pointerEvents="box-none"
             style={[styles.overlay, config.style]}
             entering={
-              config.entering ??
-              defaultAnimationInMap[
-                config.swipeDirection ?? defaultDirection
-              ].duration(config.animationInTiming)
+              !isSwipeComplete
+                ? config.entering ??
+                  defaultAnimationInMap[
+                    config.swipeDirection ?? defaultDirection
+                  ].duration(config.animationInTiming)
+                : undefined
             }
             exiting={
-              config.exiting ??
-              defaultAnimationOutMap[
-                config.swipeDirection ?? defaultDirection
-              ].duration(config.animationOutTiming)
+              !isSwipeComplete
+                ? config.exiting ??
+                  defaultAnimationOutMap[
+                    config.swipeDirection ?? defaultDirection
+                  ].duration(config.animationOutTiming)
+                : undefined
             }
           >
             <GestureDetector gesture={pan}>
