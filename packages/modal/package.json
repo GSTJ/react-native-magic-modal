@@ -95,7 +95,7 @@
     "shx": "^0.3.4",
     "ts-jest": "^29.1.4",
     "ts-node-dev": "^2.0.0",
-    "typedoc": "^0.25.13",
+    "typedoc": "^0.26.0",
     "typescript": "^5.0.0"
   }
 }
