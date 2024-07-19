@@ -1,11 +1,5 @@
 import React, { memo, useMemo } from "react";
-import {
-  Platform,
-  Pressable,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
@@ -171,35 +165,39 @@ export const MagicModal = memo(
           rangeMap[config.swipeDirection ?? defaultDirection],
           { velocity: event.velocityX, overshootClamping: true },
           (success) => {
+            "worklet";
             if (!success) return;
 
-            if (Platform.OS !== "web") {
-              runOnJS(hide)({ reason: MagicModalHideReason.SWIPE_COMPLETE });
-              return;
-            }
+            // TODO: Re-enable after figuring out the Platform.OS
+            // usage inside a worklet.
+            // if (Platform.OS !== "web") {
+            runOnJS(hide)({ reason: MagicModalHideReason.SWIPE_COMPLETE });
+            //   return;
+            // }
 
-            runOnJS(setIsSwipeComplete)(true);
+            // runOnJS(setIsSwipeComplete)(true);
 
-            // Set immediate is needed so the hide function is called
-            // after "isSwipeComplete" is set to true.
-            runOnJS(setImmediate)(() =>
-              hide({ reason: MagicModalHideReason.SWIPE_COMPLETE }),
-            );
+            // // Set immediate is needed so the hide function is called
+            // // after "isSwipeComplete" is set to true.
+            // runOnJS(setImmediate)(() =>
+            //   hide({ reason: MagicModalHideReason.SWIPE_COMPLETE }),
+            // );
           },
         );
       });
 
-    const animatedStyles = useAnimatedStyle(
-      () => ({
+    const animatedStyles = useAnimatedStyle(() => {
+      "worklet";
+      return {
         transform: [
           { translateX: translationX.value },
           { translateY: translationY.value },
         ],
-      }),
-      [translationX.value, translationY.value],
-    );
+      };
+    }, [translationX.value, translationY.value]);
 
     const animatedBackdropStyles = useAnimatedStyle(() => {
+      "worklet";
       const translationValue = isHorizontal
         ? translationX.value
         : translationY.value;
