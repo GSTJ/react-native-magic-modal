@@ -1,5 +1,12 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## 5.1.16 (2024-07-19)
+
+
+### :hammer: Bug Fixes :hammer:
+
+* fix magic modal for react compiler users ([fee1735](https://github.com/GSTJ/react-native-magic-modal/commit/fee1735cc56371b809e8a8746cb8a04c31bdfc1a))
+
 ## 5.1.15 (2024-07-19)
 
 ## 5.1.14 (2024-07-18)
