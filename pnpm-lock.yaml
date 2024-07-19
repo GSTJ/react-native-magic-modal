@@ -141,7 +141,7 @@ importers:
         version: 0.3.4
       ts-jest:
         specifier: ^29.1.4
-        version: 29.2.2(@babel/core@7.24.9)(jest@29.7.0)(typescript@5.5.3)
+        version: 29.2.3(@babel/core@7.24.9)(jest@29.7.0)(typescript@5.5.3)
       ts-node-dev:
         specifier: ^2.0.0
         version: 2.0.0(@swc/core@1.6.13)(@types/node@20.14.11)(typescript@5.5.3)
@@ -7258,7 +7258,7 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
     dependencies:
-      jake: 10.9.1
+      jake: 10.9.2
     dev: true
 
   /electron-to-chromium@1.4.829:
@@ -10130,8 +10130,8 @@ packages:
     optionalDependencies:
       '@pkgjs/parseargs': 0.11.0
 
-  /jake@10.9.1:
-    resolution: {integrity: sha512-61btcOHNnLnsOdtLgA5efqQWjnSi/vow5HbI7HMdKKWqvrKR1bLK3BPlJn9gcSaP2ewuamUSMB5XEy76KUIS2w==}
+  /jake@10.9.2:
+    resolution: {integrity: sha512-2P4SQ0HrLQ+fw6llpLnOaGAvN2Zu6778SJMrCUwns4fOoG9ayrTiZk3VV8sCPkVZF8ab0zksVpS8FDY5pRCNBA==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -15084,8 +15084,8 @@ packages:
   /ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
-  /ts-jest@29.2.2(@babel/core@7.24.9)(jest@29.7.0)(typescript@5.5.3):
-    resolution: {integrity: sha512-sSW7OooaKT34AAngP6k1VS669a0HdLxkQZnlC7T76sckGCokXFnvJ3yRlQZGRTAoV5K19HfSgCiSwWOSIfcYlg==}
+  /ts-jest@29.2.3(@babel/core@7.24.9)(jest@29.7.0)(typescript@5.5.3):
+    resolution: {integrity: sha512-yCcfVdiBFngVz9/keHin9EnsrQtQtEu3nRykNy9RVp+FiPFFbPJ3Sg6Qg4+TkmH0vMP5qsTKgXSsk80HRwvdgQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
