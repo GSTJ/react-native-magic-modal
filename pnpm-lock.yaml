@@ -34,7 +34,7 @@ importers:
         version: 0.74.3(@babel/core@7.24.9)(@babel/preset-env@7.24.8)(react@18.2.0)
       react-native-gesture-handler:
         specifier: ^2.16.2
-        version: 2.16.2(react-native@0.74.3)(react@18.2.0)
+        version: 2.17.1(react-native@0.74.3)(react@18.2.0)
       react-native-magic-modal:
         specifier: workspace:*
         version: link:../../packages/modal
@@ -77,7 +77,7 @@ importers:
         version: 0.74.3(@babel/core@7.24.9)(@babel/preset-env@7.24.8)(@types/react@18.3.3)(react@18.2.0)
       react-native-gesture-handler:
         specifier: '*'
-        version: 2.16.2(react-native@0.74.3)(react@18.2.0)
+        version: 2.17.1(react-native@0.74.3)(react@18.2.0)
       react-native-reanimated:
         specifier: '*'
         version: 3.10.1(@babel/core@7.24.9)(react-native@0.74.3)(react@18.2.0)
@@ -13224,8 +13224,8 @@ packages:
   /react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  /react-native-gesture-handler@2.16.2(react-native@0.74.3)(react@18.2.0):
-    resolution: {integrity: sha512-vGFlrDKlmyI+BT+FemqVxmvO7nqxU33cgXVsn6IKAFishvlG3oV2Ds67D5nPkHMea8T+s1IcuMm0bF8ntZtAyg==}
+  /react-native-gesture-handler@2.17.1(react-native@0.74.3)(react@18.2.0):
+    resolution: {integrity: sha512-pWfniN6NuVKUq40KACuD3NCMe+bWNQCpD3cmxL6aLSCTwPKYmf7l4Lp0/E/almpjvxhybJZtFLU0w4tmxnIKaA==}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -13233,7 +13233,6 @@ packages:
       '@egjs/hammerjs': 2.0.17
       hoist-non-react-statics: 3.3.2
       invariant: 2.2.4
-      lodash: 4.17.21
       prop-types: 15.8.1
       react: 18.2.0
       react-native: 0.74.3(@babel/core@7.24.9)(@babel/preset-env@7.24.8)(react@18.2.0)
