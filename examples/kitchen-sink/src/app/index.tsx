@@ -82,6 +82,12 @@ const showZoomInModal = async () => {
   });
 };
 
+const showNoFullWindowOverlayModal = async () => {
+  magicModal.show(() => <ExampleModal />, {
+    fullWindowOverlay: false,
+  });
+};
+
 export default () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -115,6 +121,9 @@ export default () => {
       </Pressable>
       <Pressable style={styles.button} onPress={() => router.push("/modal")}>
         <Text style={styles.buttonText}>Open Modal Screen</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={showNoFullWindowOverlayModal}>
+        <Text style={styles.buttonText}>Show No Full Window Overlay Modal</Text>
       </Pressable>
     </ScrollView>
   );
