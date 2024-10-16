@@ -16,7 +16,6 @@ import {
   ModalProps,
 } from "../../constants/types";
 import { magicModalRef } from "../../utils/magicModalHandler";
-import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
 import { MagicModal } from "../MagicModal";
 import { MagicModalProvider } from "../MagicModalProvider";
 
@@ -166,20 +165,20 @@ export const MagicModalPortal: React.FC = memo(() => {
   }));
 
   const modalList = useMemo(() => {
-    return modals.map(({ id, component, config, hideFunction }) => (
-      <MagicModalProvider key={id} hide={hideFunction}>
-        <MagicModal config={config}>{component}</MagicModal>
-      </MagicModalProvider>
-    ));
+    return modals.map(({ id, component, config, hideFunction }) => {
+      return (
+        <MagicModalProvider key={id} hide={hideFunction}>
+          <MagicModal config={config}>{component}</MagicModal>
+        </MagicModalProvider>
+      );
+    });
   }, [modals]);
 
   /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
      the modal will have zIndex issues on react-navigation modals. */
   return (
-    <FullWindowOverlay>
-      <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-        {modalList}
-      </View>
-    </FullWindowOverlay>
+    <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+      {modalList}
+    </View>
   );
 });

@@ -222,6 +222,15 @@ Yes, but Scrollables can't be used with swipe gestures enabled, as they conflict
 
 If your use-case is a scrollable bottom-sheet, I recommend going with Gorhom's react-native-bottom-sheet for this use-case temporarily.
 
+---
+
+**Q:** Modals are appearing on top of native modal screens, such as the image picker. How can I fix this?
+
+**A:**
+This behavior can be disabled by passing `fullWindowOverlay: false` to the `magicModal.show` function.
+
+This will prevent the modal from appearing on top of native modal screens.
+
 ## Contributors
 
 Special thanks to everyone who contributed to making React Native Magic Modal a robust and user-friendly library. [See the full list](https://github.com/GSTJ/react-native-magic-modal/graphs/contributors).

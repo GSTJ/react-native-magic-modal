@@ -14,7 +14,7 @@
     "format:fix": "prettier --write . --ignore-path ../../.gitignore",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "doctor": "pnpm dlx expo-doctor"
+    "doctor": "pnpm expo-doctor"
   },
   "eslintConfig": {
     "root": true,
@@ -23,13 +23,14 @@
     ]
   },
   "dependencies": {
-    "expo": "^51.0.20",
-    "expo-router": "^3.5.18",
-    "expo-splash-screen": "0.27.5",
+    "expo-doctor": "1.11.1",
+    "expo": "^51.0.38",
+    "expo-router": "^3.5.23",
+    "expo-splash-screen": "0.27.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.74.3",
-    "react-native-gesture-handler": "^2.16.2",
+    "react-native": "0.74.5",
+    "react-native-gesture-handler": "2.16.2",
     "react-native-magic-modal": "workspace:*",
     "react-native-reanimated": "~3.10.1",
     "react-native-web": "~0.19.12"
@@ -40,8 +41,7 @@
     "@magic/eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
-    "babel-preset-expo": "11.0.12",
-    "expo-cli": "^6.3.10"
+    "babel-preset-expo": "11.0.12"
   },
   "prettier": "@magic/prettier-config"
 }
