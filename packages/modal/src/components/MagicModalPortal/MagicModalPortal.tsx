@@ -5,8 +5,7 @@ import React, {
   useImperativeHandle,
   useMemo,
 } from "react";
-import { BackHandler, Platform, StyleSheet, View } from "react-native";
-import { FullWindowOverlay } from "react-native-screens";
+import { BackHandler, StyleSheet, View } from "react-native";
 
 import { defaultConfig } from "../../constants/defaultConfig";
 import {
@@ -167,17 +166,10 @@ export const MagicModalPortal: React.FC = memo(() => {
 
   const modalList = useMemo(() => {
     return modals.map(({ id, component, config, hideFunction }) => {
-      const Overlay =
-        config.fullWindowOverlay && Platform.OS === "ios"
-          ? FullWindowOverlay
-          : React.Fragment;
-
       return (
-        <Overlay key={id}>
-          <MagicModalProvider hide={hideFunction}>
-            <MagicModal config={config}>{component}</MagicModal>
-          </MagicModalProvider>
-        </Overlay>
+        <MagicModalProvider key={id} hide={hideFunction}>
+          <MagicModal config={config}>{component}</MagicModal>
+        </MagicModalProvider>
       );
     });
   }, [modals]);
