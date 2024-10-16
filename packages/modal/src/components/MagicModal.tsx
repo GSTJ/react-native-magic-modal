@@ -80,7 +80,7 @@ export const MagicModal = memo(
      *
      * This seems to be a bug in reanimated.
      */
-    const [isSwipeComplete, setIsSwipeComplete] = React.useState(false);
+    const [isSwipeComplete, _setIsSwipeComplete] = React.useState(false);
 
     const { width, height } = useWindowDimensions();
 
