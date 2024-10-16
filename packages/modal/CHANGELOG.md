@@ -1,5 +1,12 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## 5.1.17 (2024-10-16)
+
+
+### :hammer: Bug Fixes :hammer:
+
+* cjs errors while importing & add fullWindowOverlay option ([#113](https://github.com/GSTJ/react-native-magic-modal/issues/113)) ([274a2a3](https://github.com/GSTJ/react-native-magic-modal/commit/274a2a3be8896eeb7568615a42a0323e6f2c78cb)), closes [#112](https://github.com/GSTJ/react-native-magic-modal/issues/112) [#110](https://github.com/GSTJ/react-native-magic-modal/issues/110) [#91](https://github.com/GSTJ/react-native-magic-modal/issues/91) [#89](https://github.com/GSTJ/react-native-magic-modal/issues/89)
+
 ## 5.1.16 (2024-07-19)
 
 
