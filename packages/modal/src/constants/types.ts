@@ -40,9 +40,9 @@ export type ModalProps = {
   backdropColor: string;
 
   /**
-   * iOS only.
    * If true, the modal will be displayed as a full window overlay on top of native modal screens.
    * @default true
+   * @platform ios
    */
   fullWindowOverlay: boolean;
 
