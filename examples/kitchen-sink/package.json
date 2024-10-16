@@ -40,8 +40,7 @@
     "@magic/eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
-    "babel-preset-expo": "11.0.12",
-    "expo-cli": "^6.3.10"
+    "babel-preset-expo": "11.0.12"
   },
   "prettier": "@magic/prettier-config"
 }
