@@ -41,7 +41,7 @@
     "@magic/eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
-    "babel-preset-expo": "11.0.12"
+    "babel-preset-expo": "11.0.15"
   },
   "prettier": "@magic/prettier-config"
 }
