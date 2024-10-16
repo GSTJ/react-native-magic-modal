@@ -40,6 +40,13 @@ export type ModalProps = {
   backdropColor: string;
 
   /**
+   * iOS only. If true, the modal will be displayed as a full window overlay, on
+   * top of native modal screens too.
+   * @default true
+   */
+  fullWindowOverlay: boolean;
+
+  /**
    * Function to be called when the back button is pressed.
    * You can override it to prevent the modal from closing on back button press.
    * @default undefined

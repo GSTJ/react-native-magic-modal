@@ -13,5 +13,6 @@ export const defaultConfig: ModalProps = {
   swipeVelocityThreshold: 500,
   onBackButtonPress: undefined,
   onBackdropPress: undefined,
+  fullWindowOverlay: true,
   style: {},
 } satisfies ModalProps;

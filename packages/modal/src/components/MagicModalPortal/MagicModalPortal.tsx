@@ -5,7 +5,8 @@ import React, {
   useImperativeHandle,
   useMemo,
 } from "react";
-import { BackHandler, StyleSheet, View } from "react-native";
+import { BackHandler, Platform, StyleSheet, View } from "react-native";
+import { FullWindowOverlay } from "react-native-screens";
 
 import { defaultConfig } from "../../constants/defaultConfig";
 import {
@@ -16,7 +17,6 @@ import {
   ModalProps,
 } from "../../constants/types";
 import { magicModalRef } from "../../utils/magicModalHandler";
-import { FullWindowOverlay } from "../FullWindowOverlay/FullWindowOverlay";
 import { MagicModal } from "../MagicModal";
 import { MagicModalProvider } from "../MagicModalProvider";
 
@@ -173,10 +173,12 @@ export const MagicModalPortal: React.FC = memo(() => {
     ));
   }, [modals]);
 
+  const Overlay = (modals[0]?.config.fullWindowOverlay && Platform.OS === "ios") ? FullWindowOverlay : View;
+
   /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
      the modal will have zIndex issues on react-navigation modals. */
   return (
-    <FullWindowOverlay>
+   { <FullWindowOverlay>}
       <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
         {modalList}
       </View>
