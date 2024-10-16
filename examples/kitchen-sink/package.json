@@ -36,7 +36,7 @@
     "react-native-web": "~0.19.12"
   },
   "devDependencies": {
-    "@babel/core": "~7.24.5",
+    "@babel/core": "~7.25.0",
     "@babel/runtime": "^7.24.5",
     "@magic/eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
