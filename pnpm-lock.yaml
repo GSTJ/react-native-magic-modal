@@ -17,6 +17,9 @@ importers:
       expo:
         specifier: ^51.0.38
         version: 51.0.38(@babel/core@7.24.9)(@babel/preset-env@7.24.8(@babel/core@7.24.9))
+      expo-doctor:
+        specifier: ^1.11.1
+        version: 1.11.1
       expo-router:
         specifier: ^3.5.23
         version: 3.5.23(yfsmir6aw2t3uytsrf6dnrlacq)
@@ -33,7 +36,7 @@ importers:
         specifier: 0.74.5
         version: 0.74.5(@babel/core@7.24.9)(@babel/preset-env@7.24.8(@babel/core@7.24.9))(@types/react@18.3.3)(react@18.2.0)
       react-native-gesture-handler:
-        specifier: ^2.16.2
+        specifier: 2.16.2
         version: 2.16.2(react-native@0.74.5(@babel/core@7.24.9)(@babel/preset-env@7.24.8(@babel/core@7.24.9))(@types/react@18.3.3)(react@18.2.0))(react@18.2.0)
       react-native-magic-modal:
         specifier: workspace:*
@@ -3520,6 +3523,10 @@ packages:
     resolution: {integrity: sha512-9tNY3OVO0jfiMzl7ngb6IOyR5VFzNoN5OOazUWoeGfmMqVB5kltTemRvKraK9JRbBKIw+SOYLEmF0sEqgFZ6OQ==}
     peerDependencies:
       expo: '*'
+
+  expo-doctor@1.11.1:
+    resolution: {integrity: sha512-ZUdrlNbP6A+lq9Z2LgCDyUAcO8HgryJaouglhMZEsqrs/7EQXcfaoRGBbkKw81e3sz/65Sdgz/aXPNvYPnJlQw==}
+    hasBin: true
 
   expo-file-system@17.0.1:
     resolution: {integrity: sha512-dYpnZJqTGj6HCYJyXAgpFkQWsiCH3HY1ek2cFZVHFoEc5tLz9gmdEgTF6nFHurvmvfmXqxi7a5CXyVm0aFYJBw==}
@@ -11634,6 +11641,8 @@ snapshots:
       expo: 51.0.38(@babel/core@7.24.9)(@babel/preset-env@7.24.8(@babel/core@7.24.9))
     transitivePeerDependencies:
       - supports-color
+
+  expo-doctor@1.11.1: {}
 
   expo-file-system@17.0.1(expo@51.0.38(@babel/core@7.24.9)(@babel/preset-env@7.24.8(@babel/core@7.24.9))):
     dependencies:
