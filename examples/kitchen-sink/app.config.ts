@@ -20,8 +20,12 @@ export default {
       },
     ],
   ],
+  android: {
+    package: "com.gstj.reactnativemagicmodalexample",
+  },
   platforms: ["ios", "android", "web"],
   ios: {
+    bundleIdentifier: "com.gstj.reactnativemagicmodalexample",
     supportsTablet: true,
   },
   assetBundlePatterns: ["**/*"],

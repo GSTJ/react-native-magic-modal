@@ -35,7 +35,7 @@ export const showToast = async () => {
   // eslint-disable-next-line no-console
   console.log("Opening toast");
 
-  const toastResponse = await magicModal.show(() => <Toast />, {
+  const toastResponse = magicModal.show(() => <Toast />, {
     swipeDirection: "up",
     hideBackdrop: true,
     dampingFactor: 0,
@@ -45,7 +45,7 @@ export const showToast = async () => {
   });
 
   // eslint-disable-next-line no-console
-  console.log("Toast closed with response:", toastResponse);
+  console.log("Toast closed with response:", await toastResponse.promise);
 };
 
 export const styles = StyleSheet.create({
