@@ -128,8 +128,8 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2
       prettier:
-        specifier: 3.3.1
-        version: 3.3.1
+        specifier: 3.4.2
+        version: 3.4.2
       react-test-renderer:
         specifier: ^18.3.1
         version: 18.3.1(react@18.2.0)
@@ -177,7 +177,7 @@ importers:
         version: 3.4.1(eslint@8.57.1)
       eslint-plugin-prettier:
         specifier: ^5.1.3
-        version: 5.2.1(eslint@8.57.1)(prettier@3.3.1)
+        version: 5.2.1(eslint@8.57.1)(prettier@3.4.2)
       eslint-plugin-react:
         specifier: ^7.34.1
         version: 7.37.1(eslint@8.57.1)
@@ -208,10 +208,10 @@ importers:
     dependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.2.1
-        version: 4.3.1(prettier@3.3.1)
+        version: 4.3.1(prettier@3.4.2)
       prettier:
         specifier: ^3.2.5
-        version: 3.3.1
+        version: 3.4.2
     devDependencies:
       '@magic/tsconfig':
         specifier: workspace:*
@@ -2252,7 +2252,7 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.3.1):
+  /@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.4.2):
     resolution: {integrity: sha512-ZHwbyjkANZOjaBm3ZosADD2OUYGFzQGxfy67HmGZU94mHqe7g1LCMA7YYKB1Cq+UTPCBqlAYapY0KXAjKEw8Sg==}
     peerDependencies:
       '@vue/compiler-sfc': 2.7.x || 3.x
@@ -2266,7 +2266,7 @@ packages:
       '@babel/parser': 7.25.8
       '@babel/traverse': 7.25.7
       '@babel/types': 7.25.8
-      prettier: 3.3.1
+      prettier: 3.4.2
       semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
@@ -4411,6 +4411,7 @@ packages:
   /@xmldom/xmldom@0.7.13:
     resolution: {integrity: sha512-lm2GW5PkosIzccsaZIz7tp8cPADSIlIHWDFTR1N0SzfinhhYgeIQjFMz4rYzanCScr3DqQLeomUDArp6MWKm+g==}
     engines: {node: '>=10.0.0'}
+    deprecated: this version is no longer supported, please update to at least 0.8.*
 
   /@xmldom/xmldom@0.8.10:
     resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}
@@ -6569,7 +6570,7 @@ packages:
       eslint: 8.57.1
     dev: false
 
-  /eslint-plugin-prettier@5.2.1(eslint@8.57.1)(prettier@3.3.1):
+  /eslint-plugin-prettier@5.2.1(eslint@8.57.1)(prettier@3.4.2):
     resolution: {integrity: sha512-gH3iR3g4JfF+yYPaJYkN7jEl9QbweL/YfkoRlNnuIEHEz1vHVlCmWOS+eGGiRuzHQXdJFCOTxRgvju9b8VUmrw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -6584,7 +6585,7 @@ packages:
         optional: true
     dependencies:
       eslint: 8.57.1
-      prettier: 3.3.1
+      prettier: 3.4.2
       prettier-linter-helpers: 1.0.0
       synckit: 0.9.2
     dev: false
@@ -7133,6 +7134,7 @@ packages:
 
   /fast-uri@3.0.3:
     resolution: {integrity: sha512-aLrHthzCjH5He4Z2H9YZ+v6Ujb9ocRuW6ZzkJQOrTxleEijANq4v1TsaPaVG1PZcuurEzrLcWRyYBYXD5cEiaw==}
+    requiresBuild: true
 
   /fast-xml-parser@4.5.0:
     resolution: {integrity: sha512-/PlTQCI96+fZMAOLMZK4CWG1ItCbfZ/0jx7UIJFChPNrx7tcEgerUgWbeieCM9MfHInUDyK8DWYZ+YrywDJuTg==}
@@ -9267,6 +9269,7 @@ packages:
 
   /json-schema-traverse@1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
+    requiresBuild: true
 
   /json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
@@ -10797,8 +10800,8 @@ packages:
       fast-diff: 1.3.0
     dev: false
 
-  /prettier@3.3.1:
-    resolution: {integrity: sha512-7CAwy5dRsxs8PHXT3twixW9/OEll8MLE0VRPCJyl7CkS6VHGPSlsVaWTiASPTyGyYRyApxlaWTzwUxVNrhcwDg==}
+  /prettier@3.4.2:
+    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
