@@ -15,12 +15,12 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "prettier": "^3.2.5",
-    "@ianvs/prettier-plugin-sort-imports": "^4.2.1"
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
+    "prettier": "^3.4.2"
   },
   "devDependencies": {
     "@magic/tsconfig": "workspace:*",
-    "typescript": "^5.4.5"
+    "typescript": "^5.7.2"
   },
   "prettier": "@magic/prettier-config"
 }

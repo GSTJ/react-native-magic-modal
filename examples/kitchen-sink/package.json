@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "expo": "^52.0.18",
-    "expo-doctor": "1.11.1",
+    "expo-doctor": "1.12.4",
     "expo-router": "^4.0.11",
     "expo-splash-screen": "0.29.18",
     "expo-status-bar": "~2.0.0",
@@ -37,8 +37,10 @@
     "react-native-web": "~0.19.13"
   },
   "devDependencies": {
-    "@babel/core": "~7.25.0",
-    "@babel/runtime": "^7.24.5",
+    "@types/react": "~18.3.12",
+    "@types/react-native": "^0.73.0",
+    "@babel/core": "~7.26.0",
+    "@babel/runtime": "^7.26.0",
     "@magic/eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",

@@ -264,18 +264,18 @@ export const MagicModal = memo(
               ]}
               entering={
                 !isSwipeComplete
-                  ? config.entering ??
+                  ? (config.entering ??
                     defaultAnimationInMap[
                       config.swipeDirection ?? defaultDirection
-                    ].duration(config.animationInTiming)
+                    ].duration(config.animationInTiming))
                   : undefined
               }
               exiting={
                 !isSwipeComplete
-                  ? config.exiting ??
+                  ? (config.exiting ??
                     defaultAnimationOutMap[
                       config.swipeDirection ?? defaultDirection
-                    ].duration(config.animationOutTiming)
+                    ].duration(config.animationOutTiming))
                   : undefined
               }
             >
