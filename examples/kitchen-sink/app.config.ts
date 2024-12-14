@@ -19,9 +19,12 @@ export default {
     ],
   ],
   platforms: ["ios", "android", "web"],
-  newArchEnabled: true,
   ios: {
     supportsTablet: true,
+    bundleIdentifier: "com.gstj.reactnativemagicmodalexample",
+  },
+  android: {
+    package: "com.gstj.reactnativemagicmodalexample",
   },
   assetBundlePatterns: ["**/*"],
 } satisfies ExpoConfig;
