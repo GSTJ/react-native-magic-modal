@@ -1,6 +1,13 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  pointerEventsBoxNone: {
+    pointerEvents: "box-none",
+  },
+  childrenWrapper: {
+    flex: 1,
+    justifyContent: "center",
+  },
   overlay: {
     flex: 1,
     justifyContent: "center",

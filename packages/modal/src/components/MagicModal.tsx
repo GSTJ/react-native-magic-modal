@@ -206,7 +206,7 @@ export const MagicModal = memo(
           { translateY: translationY.value },
         ],
       };
-    }, [translationX.value, translationY.value]);
+    });
 
     const animatedBackdropStyles = useAnimatedStyle(() => {
       "worklet";
@@ -222,18 +222,13 @@ export const MagicModal = memo(
           Extrapolation.CLAMP,
         ),
       };
-    }, [
-      config.swipeDirection,
-      translationX.value,
-      translationY.value,
-      rangeMap,
-    ]);
+    });
 
     const isBackdropVisible = !config.hideBackdrop;
 
     return (
       <Overlay>
-        <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+        <View style={[StyleSheet.absoluteFill, styles.pointerEventsBoxNone]}>
           <Animated.View
             pointerEvents={isBackdropVisible ? "auto" : "none"}
             entering={FadeIn.duration(config.animationInTiming)}
@@ -255,12 +250,18 @@ export const MagicModal = memo(
             />
           </Animated.View>
           <Animated.View
-            pointerEvents="box-none"
-            style={[styles.overlay, animatedStyles]}
+            style={[
+              styles.overlay,
+              styles.pointerEventsBoxNone,
+              animatedStyles,
+            ]}
           >
             <Animated.View
-              pointerEvents="box-none"
-              style={[styles.overlay, config.style]}
+              style={[
+                styles.overlay,
+                styles.pointerEventsBoxNone,
+                config.style,
+              ]}
               entering={
                 !isSwipeComplete
                   ? config.entering ??
@@ -279,7 +280,16 @@ export const MagicModal = memo(
               }
             >
               <GestureDetector gesture={pan}>
-                <Children />
+                <View
+                  collapsable={false}
+                  style={[
+                    styles.childrenWrapper,
+                    styles.pointerEventsBoxNone,
+                    config.style,
+                  ]}
+                >
+                  <Children />
+                </View>
               </GestureDetector>
             </Animated.View>
           </Animated.View>
