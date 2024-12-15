@@ -17,11 +17,11 @@
     },
     "lint": {
       "dependsOn": ["^topo", "^build"],
-      "outputs": []
+      "outputs": ["node_modules/.cache/.lintcache"]
     },
     "lint:fix": {
       "dependsOn": ["^topo", "^build"],
-      "outputs": []
+      "outputs": ["node_modules/.cache/.lintcache"]
     },
     "format": {
       "outputs": ["node_modules/.cache/.formatcache"]
