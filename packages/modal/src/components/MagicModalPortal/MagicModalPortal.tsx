@@ -5,7 +5,9 @@ import React, {
   useImperativeHandle,
   useMemo,
 } from "react";
-import { BackHandler, StyleSheet, View } from "react-native";
+import { BackHandler, Platform, StyleSheet, View } from "react-native";
+/** Do not import FullWindowOverlay from react-native-screens directly, as it screws up code splitting */
+import FullWindowOverlay from "react-native-screens/src/components/FullWindowOverlay";
 
 import { defaultConfig } from "../../constants/defaultConfig";
 import {
@@ -47,6 +49,16 @@ type ModalStackItem = {
  */
 export const MagicModalPortal: React.FC = memo(() => {
   const [modals, setModals] = React.useState<ModalStackItem[]>([]);
+  const [fullWindowOverlayEnabled, setFullWindowOverlayEnabled] =
+    React.useState(true);
+
+  const disableFullWindowOverlay = useCallback(() => {
+    setFullWindowOverlayEnabled(false);
+  }, []);
+
+  const enableFullWindowOverlay = useCallback(() => {
+    setFullWindowOverlayEnabled(true);
+  }, []);
 
   const _hide = useCallback<GlobalHideFunction>(
     async (props, { modalID } = {}) => {
@@ -162,6 +174,8 @@ export const MagicModalPortal: React.FC = memo(() => {
     show,
     hide,
     hideAll,
+    disableFullWindowOverlay,
+    enableFullWindowOverlay,
   }));
 
   const modalList = useMemo(() => {
@@ -174,11 +188,22 @@ export const MagicModalPortal: React.FC = memo(() => {
     });
   }, [modals]);
 
+  const Overlay =
+    fullWindowOverlayEnabled && Platform.OS === "ios"
+      ? FullWindowOverlay
+      : React.Fragment;
+
   /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
      the modal will have zIndex issues on react-navigation modals. */
   return (
-    <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-      {modalList}
-    </View>
+    <Overlay>
+      <View style={[StyleSheet.absoluteFill, styles.wrapper]}>{modalList}</View>
+    </Overlay>
   );
+});
+
+const styles = StyleSheet.create({
+  wrapper: {
+    pointerEvents: "box-none",
+  },
 });

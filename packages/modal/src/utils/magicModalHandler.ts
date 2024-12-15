@@ -1,6 +1,8 @@
 import React from "react";
 
 import {
+  DisableFullWindowOverlayFunction,
+  EnableFullWindowOverlayFunction,
   GlobalHideAllFunction,
   GlobalHideFunction,
   GlobalShowFunction,
@@ -28,6 +30,14 @@ const hide: GlobalHideFunction = (props, { modalID } = {}) => {
   return getMagicModal().hide(props, { modalID });
 };
 
+const enableFullWindowOverlay: EnableFullWindowOverlayFunction = () => {
+  return getMagicModal().enableFullWindowOverlay();
+};
+
+const disableFullWindowOverlay: DisableFullWindowOverlayFunction = () => {
+  return getMagicModal().disableFullWindowOverlay();
+};
+
 const hideAll: GlobalHideAllFunction = () => {
   // We recommend using this method in jest, and having throw because the ref was not found isn't useful there.
   // Not all tests are necessarily using the provider.
@@ -37,6 +47,8 @@ export interface IModal {
   show: typeof show;
   hide: typeof hide;
   hideAll: typeof hideAll;
+  enableFullWindowOverlay: typeof enableFullWindowOverlay;
+  disableFullWindowOverlay: typeof disableFullWindowOverlay;
 }
 
 /**
@@ -76,4 +88,26 @@ export const magicModal = {
    * However, this function can be useful in edge cases. It's also useful for test suites, such as calling hideAll in Jest's beforeEach function as a cleanup step.
    */
   hideAll,
+  /**
+   * @description Enables the full window overlay globally. This is useful for modals that need to be displayed on top of native iOS modal screens. The function is no-op on non-iOS platforms.
+   * @example
+   * ```js
+   * magicModal.disableFullWindowOverlay();
+   * await magicModal.show(() => <ExampleModal />).promise;
+   * magicModal.enableFullWindowOverlay();
+   * ```
+   * @platform ios
+   */
+  enableFullWindowOverlay,
+  /**
+   * @description Disables the full window overlay globally. This is useful for modals that do not need to be displayed on top of native iOS modal screens. The function is no-op on non-iOS platforms.
+   * @example
+   * ```js
+   * magicModal.disableFullWindowOverlay();
+   * await magicModal.show(() => <ExampleModal />).promise;
+   * magicModal.enableFullWindowOverlay();
+   * ```
+   * @platform ios
+   */
+  disableFullWindowOverlay,
 };

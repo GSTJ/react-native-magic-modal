@@ -1,11 +1,5 @@
 import React, { memo, useMemo } from "react";
-import {
-  Platform,
-  Pressable,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
@@ -25,8 +19,6 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-/** Do not import FullWindowOverlay from react-native-screens directly, as it screws up code splitting */
-import FullWindowOverlay from "react-native-screens/src/components/FullWindowOverlay";
 
 import { defaultDirection } from "../constants/defaultConfig";
 import {
@@ -68,11 +60,6 @@ export const MagicModal = memo(
     const translationY = useSharedValue(0);
     const prevTranslationX = useSharedValue(0);
     const prevTranslationY = useSharedValue(0);
-
-    const Overlay =
-      config.fullWindowOverlay && Platform.OS === "ios"
-        ? FullWindowOverlay
-        : React.Fragment;
 
     /**
      * Necessary to skip exit animation when swipe is complete.
@@ -228,74 +215,64 @@ export const MagicModal = memo(
     const isBackdropVisible = !config.hideBackdrop;
 
     return (
-      <Overlay>
-        <View style={[StyleSheet.absoluteFill, styles.pointerEventsBoxNone]}>
-          <Animated.View
-            pointerEvents={isBackdropVisible ? "auto" : "none"}
-            entering={FadeIn.duration(config.animationInTiming)}
-            exiting={FadeOut.duration(config.animationOutTiming)}
-            style={styles.backdropContainer}
-          >
-            <AnimatedPressable
-              testID="magic-modal-backdrop"
-              style={[
-                styles.backdrop,
-                animatedBackdropStyles,
-                {
-                  backgroundColor: isBackdropVisible
-                    ? config.backdropColor
-                    : "transparent",
-                },
-              ]}
-              onPress={onBackdropPress}
-            />
-          </Animated.View>
-          <Animated.View
+      <View style={[StyleSheet.absoluteFill, styles.pointerEventsBoxNone]}>
+        <Animated.View
+          pointerEvents={isBackdropVisible ? "auto" : "none"}
+          entering={FadeIn.duration(config.animationInTiming)}
+          exiting={FadeOut.duration(config.animationOutTiming)}
+          style={styles.backdropContainer}
+        >
+          <AnimatedPressable
+            testID="magic-modal-backdrop"
             style={[
-              styles.overlay,
-              styles.pointerEventsBoxNone,
-              animatedStyles,
+              styles.backdrop,
+              animatedBackdropStyles,
+              {
+                backgroundColor: isBackdropVisible
+                  ? config.backdropColor
+                  : "transparent",
+              },
             ]}
+            onPress={onBackdropPress}
+          />
+        </Animated.View>
+        <Animated.View
+          style={[styles.overlay, styles.pointerEventsBoxNone, animatedStyles]}
+        >
+          <Animated.View
+            style={[styles.overlay, styles.pointerEventsBoxNone, config.style]}
+            entering={
+              !isSwipeComplete
+                ? (config.entering ??
+                  defaultAnimationInMap[
+                    config.swipeDirection ?? defaultDirection
+                  ].duration(config.animationInTiming))
+                : undefined
+            }
+            exiting={
+              !isSwipeComplete
+                ? (config.exiting ??
+                  defaultAnimationOutMap[
+                    config.swipeDirection ?? defaultDirection
+                  ].duration(config.animationOutTiming))
+                : undefined
+            }
           >
-            <Animated.View
-              style={[
-                styles.overlay,
-                styles.pointerEventsBoxNone,
-                config.style,
-              ]}
-              entering={
-                !isSwipeComplete
-                  ? (config.entering ??
-                    defaultAnimationInMap[
-                      config.swipeDirection ?? defaultDirection
-                    ].duration(config.animationInTiming))
-                  : undefined
-              }
-              exiting={
-                !isSwipeComplete
-                  ? (config.exiting ??
-                    defaultAnimationOutMap[
-                      config.swipeDirection ?? defaultDirection
-                    ].duration(config.animationOutTiming))
-                  : undefined
-              }
-            >
-              <GestureDetector gesture={pan}>
-                <View
-                  collapsable={false}
-                  style={[
-                    styles.childrenWrapper,
-                    styles.pointerEventsBoxNone,
-                    config.style,
-                  ]}
-                >
-                  <Children />
-                </View>
-              </GestureDetector>
-            </Animated.View>
+            <GestureDetector gesture={pan}>
+              <View
+                collapsable={false}
+                style={[
+                  styles.childrenWrapper,
+                  styles.pointerEventsBoxNone,
+                  config.style,
+                ]}
+              >
+                <Children />
+              </View>
+            </GestureDetector>
           </Animated.View>
-        </View>
-      </Overlay>
+        </Animated.View>
+      </View>
     );
   },
 );
