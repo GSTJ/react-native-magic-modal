@@ -227,9 +227,9 @@ If your use-case is a scrollable bottom-sheet, I recommend going with Gorhom's r
 **Q:** Modals are appearing on top of native modal screens, such as the image picker. How can I fix this?
 
 **A:**
-This behavior can be disabled by passing `fullWindowOverlay: false` to the `magicModal.show` function.
+This behavior can be disabled by calling `magicModal.disableFullWindowOverlay()` before showing the modal. This will prevent the modal from appearing on top of native modal screens.
 
-This will prevent the modal from appearing on top of native modal screens.
+You can also call `magicModal.enableFullWindowOverlay()` to re-enable it.
 
 ## Contributors
 

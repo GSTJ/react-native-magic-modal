@@ -84,9 +84,9 @@ const showZoomInModal = async () => {
 };
 
 const showNoFullWindowOverlayModal = async () => {
-  magicModal.show(() => <ExampleModal />, {
-    fullWindowOverlay: false,
-  });
+  magicModal.disableFullWindowOverlay();
+  await magicModal.show(() => <ExampleModal />).promise;
+  magicModal.enableFullWindowOverlay();
 };
 
 export default () => {
