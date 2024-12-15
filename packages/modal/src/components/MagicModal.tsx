@@ -25,7 +25,8 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { FullWindowOverlay } from "react-native-screens";
+/** Do not import FullWindowOverlay from react-native-screens directly, as it screws up code splitting */
+import FullWindowOverlay from "react-native-screens/src/components/FullWindowOverlay";
 
 import { defaultDirection } from "../constants/defaultConfig";
 import {
