@@ -19,6 +19,12 @@ export default {
     ],
   ],
   platforms: ["ios", "android", "web"],
+  splash: {
+    image: "./assets/blank.png",
+    resizeMode: "contain",
+    backgroundColor: "#ffffff",
+  },
+  icon: "./assets/blank.png",
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.gstj.reactnativemagicmodalexample",
