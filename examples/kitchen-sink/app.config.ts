@@ -2,11 +2,9 @@ import { ExpoConfig } from "expo/config";
 
 export default {
   name: "react-native-magic-modal-example",
-  displayName: "MagicModal Example",
   slug: "react-native-magic-modal-example",
   scheme: "magic-modal",
   description: "Example app for react-native-magic-modal",
-  privacy: "public",
   version: "1.0.0",
   web: {
     output: "static",
@@ -21,8 +19,19 @@ export default {
     ],
   ],
   platforms: ["ios", "android", "web"],
+  splash: {
+    image: "./assets/blank.png",
+    resizeMode: "contain",
+    backgroundColor: "#ffffff",
+  },
+  icon: "./assets/blank.png",
   ios: {
     supportsTablet: true,
+    bundleIdentifier: "com.gstj.reactnativemagicmodalexample",
   },
+  android: {
+    package: "com.gstj.reactnativemagicmodalexample",
+  },
+  newArchEnabled: true,
   assetBundlePatterns: ["**/*"],
-} as ExpoConfig;
+} satisfies ExpoConfig;

@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-color-literals */
 import React from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Platform, Pressable, StyleSheet, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import {
   Direction,
@@ -9,6 +9,7 @@ import {
 } from "react-native-magic-modal";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 import { ExampleModal } from "@/components/ExampleModal";
 import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
@@ -91,6 +92,7 @@ const showNoFullWindowOverlayModal = async () => {
 export default () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <StatusBar style="dark" />
       <Pressable style={styles.button} onPress={showModal}>
         <Text style={styles.buttonText}>Show Modal</Text>
       </Pressable>
@@ -119,12 +121,24 @@ export default () => {
       <Pressable style={styles.button} onPress={showToast}>
         <Text style={styles.buttonText}>Show Toast</Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={() => router.push("/modal")}>
-        <Text style={styles.buttonText}>Open Modal Screen</Text>
-      </Pressable>
-      <Pressable style={styles.button} onPress={showNoFullWindowOverlayModal}>
-        <Text style={styles.buttonText}>Show No Full Window Overlay Modal</Text>
-      </Pressable>
+      {Platform.OS === "ios" && (
+        <>
+          <Pressable
+            style={styles.button}
+            onPress={() => router.push("/modal")}
+          >
+            <Text style={styles.buttonText}>Open Modal Screen</Text>
+          </Pressable>
+          <Pressable
+            style={styles.button}
+            onPress={showNoFullWindowOverlayModal}
+          >
+            <Text style={styles.buttonText}>
+              Show No Full Window Overlay Modal
+            </Text>
+          </Pressable>
+        </>
+      )}
     </ScrollView>
   );
 };

@@ -42,7 +42,7 @@ export const showToast = async () => {
     style: {
       justifyContent: "flex-start",
     },
-  });
+  }).promise;
 
   // eslint-disable-next-line no-console
   console.log("Toast closed with response:", toastResponse);
