@@ -1,5 +1,18 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## 6.0.0 (2024-12-15)
+
+### ⚠ BREAKING CHANGES
+
+* Removes individual `fullWindowOverlay` config from
+`magicModal.show`. Introduces `magicModal.enableFullWindowOverlay()` and
+`magicModal.disableFullWindowOverlay()` in order to control overlay
+behavior globally. This fixes exit animations on iOS.
+
+### :dash: Code Improvements :dash:
+
+* configure full window overlay globally to address exit animation issues ([#125](https://github.com/GSTJ/react-native-magic-modal/issues/125)) ([e797c20](https://github.com/GSTJ/react-native-magic-modal/commit/e797c20d9ca82aeeff68fcd1b5a7947bc98f57c7))
+
 ## 5.1.21 (2024-12-15)
 
 ## 5.1.20 (2024-10-19)
