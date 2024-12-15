@@ -19,7 +19,7 @@ importers:
         version: 52.0.18(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(react-native@0.76.5)(react@18.3.1)
       expo-router:
         specifier: ^4.0.11
-        version: 4.0.11(expo-constants@17.0.3)(expo-linking@7.0.3)(expo@52.0.18)(react-dom@18.2.0)(react-native-reanimated@3.16.5)(react-native-safe-area-context@5.0.0)(react-native-screens@4.3.0)(react-native@0.76.5)(react@18.3.1)
+        version: 4.0.11(expo-constants@17.0.3)(expo-linking@7.0.3)(expo@52.0.18)(react-dom@18.3.1)(react-native-reanimated@3.16.5)(react-native-safe-area-context@5.0.0)(react-native-screens@4.3.0)(react-native@0.76.5)(react@18.3.1)
       expo-splash-screen:
         specifier: 0.29.18
         version: 0.29.18(expo@52.0.18)
@@ -30,8 +30,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.3.1)
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
       react-native:
         specifier: 0.76.5
         version: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.16)(react@18.3.1)
@@ -46,7 +46,7 @@ importers:
         version: 3.16.5(@babel/core@7.26.0)(react-native@0.76.5)(react@18.3.1)
       react-native-web:
         specifier: ~0.19.13
-        version: 0.19.13(react-dom@18.2.0)(react@18.3.1)
+        version: 0.19.13(react-dom@18.3.1)(react@18.3.1)
     devDependencies:
       '@babel/core':
         specifier: ~7.26.0
@@ -78,9 +78,6 @@ importers:
       react:
         specifier: '*'
         version: 18.2.0
-      react-native:
-        specifier: '*'
-        version: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.16)(react@18.2.0)
       react-native-gesture-handler:
         specifier: '*'
         version: 2.16.2(react-native@0.76.5)(react@18.2.0)
@@ -109,9 +106,6 @@ importers:
       '@types/react':
         specifier: ~18.3.12
         version: 18.3.16
-      '@types/react-native':
-        specifier: ^0.73.0
-        version: 0.73.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.16)(react@18.2.0)
       bunchee:
         specifier: ^6.0.3
         version: 6.0.3(typescript@5.7.2)
@@ -136,6 +130,9 @@ importers:
       prettier:
         specifier: 3.4.2
         version: 3.4.2
+      react-native:
+        specifier: 0.76.5
+        version: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.16)(react@18.2.0)
       react-test-renderer:
         specifier: ^18.2.0
         version: 18.3.1(react@18.2.0)
@@ -3912,23 +3909,6 @@ packages:
   /@types/prop-types@15.7.14:
     resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
 
-  /@types/react-native@0.73.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.16)(react@18.2.0):
-    resolution: {integrity: sha512-6ZRPQrYM72qYKGWidEttRe6M5DZBEV5F+MHMHqd4TTYx0tfkcdrUFGdef6CCxY0jXU7wldvd/zA/b0A/kTeJmA==}
-    deprecated: This is a stub types definition. react-native provides its own type definitions, so you do not need this installed.
-    dependencies:
-      react-native: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.16)(react@18.2.0)
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@babel/preset-env'
-      - '@react-native-community/cli-server-api'
-      - '@types/react'
-      - bufferutil
-      - encoding
-      - react
-      - supports-color
-      - utf-8-validate
-    dev: true
-
   /@types/react@18.3.16:
     resolution: {integrity: sha512-oh8AMIC4Y2ciKufU8hnKgs+ufgbA/dhPTACaZPM86AbwX9QwnFtSoPWEeRUj8fge+v6kFt78BXcDhAU1SrrAsw==}
     dependencies:
@@ -6843,7 +6823,7 @@ packages:
     dependencies:
       invariant: 2.2.4
 
-  /expo-router@4.0.11(expo-constants@17.0.3)(expo-linking@7.0.3)(expo@52.0.18)(react-dom@18.2.0)(react-native-reanimated@3.16.5)(react-native-safe-area-context@5.0.0)(react-native-screens@4.3.0)(react-native@0.76.5)(react@18.3.1):
+  /expo-router@4.0.11(expo-constants@17.0.3)(expo-linking@7.0.3)(expo@52.0.18)(react-dom@18.3.1)(react-native-reanimated@3.16.5)(react-native-safe-area-context@5.0.0)(react-native-screens@4.3.0)(react-native@0.76.5)(react@18.3.1):
     resolution: {integrity: sha512-2Qrd/fk98kC+CTg1umbuUaBaGkpdGStPpkSR99SoAjX6KWC1WhNMCv0hGFn7cRmSNOWQzgIfLGLERhRY1o4myw==}
     peerDependencies:
       '@react-navigation/drawer': ^7.0.0
@@ -6872,7 +6852,7 @@ packages:
       expo: 52.0.18(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(react-native@0.76.5)(react@18.3.1)
       expo-constants: 17.0.3(expo@52.0.18)(react-native@0.76.5)
       expo-linking: 7.0.3(expo@52.0.18)(react-native@0.76.5)(react@18.3.1)
-      react-helmet-async: 1.3.0(react-dom@18.2.0)(react@18.3.1)
+      react-helmet-async: 1.3.0(react-dom@18.3.1)(react@18.3.1)
       react-native-helmet-async: 2.0.4(react@18.3.1)
       react-native-is-edge-to-edge: 1.1.6(react-native@0.76.5)(react@18.3.1)
       react-native-reanimated: 3.16.5(@babel/core@7.26.0)(react-native@0.76.5)(react@18.3.1)
@@ -10634,10 +10614,10 @@ packages:
       - bufferutil
       - utf-8-validate
 
-  /react-dom@18.2.0(react@18.3.1):
-    resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
+  /react-dom@18.3.1(react@18.3.1):
+    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
-      react: ^18.2.0
+      react: ^18.3.1
     dependencies:
       loose-envify: 1.4.0
       react: 18.3.1
@@ -10666,7 +10646,7 @@ packages:
       react: 18.3.1
     dev: false
 
-  /react-helmet-async@1.3.0(react-dom@18.2.0)(react@18.3.1):
+  /react-helmet-async@1.3.0(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-9jZ57/dAn9t3q6hneQS0wukqC2ENOBgMNVEhb/ZG9ZSxUetzVIw4iAmEU38IaVg3QGYauQPhSeUTuIUtFglWpg==}
     peerDependencies:
       react: ^16.6.0 || ^17.0.0 || ^18.0.0
@@ -10676,7 +10656,7 @@ packages:
       invariant: 2.2.4
       prop-types: 15.8.1
       react: 18.3.1
-      react-dom: 18.2.0(react@18.3.1)
+      react-dom: 18.3.1(react@18.3.1)
       react-fast-compare: 3.2.2
       shallowequal: 1.1.0
     dev: false
@@ -10806,7 +10786,7 @@ packages:
       warn-once: 0.1.1
     dev: false
 
-  /react-native-web@0.19.13(react-dom@18.2.0)(react@18.3.1):
+  /react-native-web@0.19.13(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-etv3bN8rJglrRCp/uL4p7l8QvUNUC++QwDbdZ8CB7BvZiMvsxfFIRM1j04vxNldG3uo2puRd6OSWR3ibtmc29A==}
     peerDependencies:
       react: ^18.0.0
@@ -10820,7 +10800,7 @@ packages:
       nullthrows: 1.1.1
       postcss-value-parser: 4.2.0
       react: 18.3.1
-      react-dom: 18.2.0(react@18.3.1)
+      react-dom: 18.3.1(react@18.3.1)
       styleq: 0.1.3
     transitivePeerDependencies:
       - encoding
