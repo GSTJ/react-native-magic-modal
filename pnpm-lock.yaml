@@ -17,9 +17,6 @@ importers:
       expo:
         specifier: ^52.0.18
         version: 52.0.18(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(react-native@0.76.5)(react@18.3.1)
-      expo-doctor:
-        specifier: 1.12.4
-        version: 1.12.4
       expo-router:
         specifier: ^4.0.11
         version: 4.0.11(expo-constants@17.0.3)(expo-linking@7.0.3)(expo@52.0.18)(react-dom@18.3.1)(react-native-reanimated@3.16.5)(react-native-safe-area-context@5.0.0)(react-native-screens@4.3.0)(react-native@0.76.5)(react@18.3.1)
@@ -69,12 +66,12 @@ importers:
       '@types/react':
         specifier: ~18.3.12
         version: 18.3.16
-      '@types/react-native':
-        specifier: ^0.73.0
-        version: 0.73.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.16)(react@18.3.1)
       babel-preset-expo:
         specifier: 12.0.4
         version: 12.0.4(@babel/core@7.26.0)(@babel/preset-env@7.26.0)
+      expo-doctor:
+        specifier: 1.12.4
+        version: 1.12.4
 
   packages/modal:
     dependencies:
@@ -3932,23 +3929,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@types/react-native@0.73.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.16)(react@18.3.1):
-    resolution: {integrity: sha512-6ZRPQrYM72qYKGWidEttRe6M5DZBEV5F+MHMHqd4TTYx0tfkcdrUFGdef6CCxY0jXU7wldvd/zA/b0A/kTeJmA==}
-    deprecated: This is a stub types definition. react-native provides its own type definitions, so you do not need this installed.
-    dependencies:
-      react-native: 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.16)(react@18.3.1)
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@babel/preset-env'
-      - '@react-native-community/cli-server-api'
-      - '@types/react'
-      - bufferutil
-      - encoding
-      - react
-      - supports-color
-      - utf-8-validate
-    dev: true
-
   /@types/react@18.3.16:
     resolution: {integrity: sha512-oh8AMIC4Y2ciKufU8hnKgs+ufgbA/dhPTACaZPM86AbwX9QwnFtSoPWEeRUj8fge+v6kFt78BXcDhAU1SrrAsw==}
     dependencies:
@@ -6778,7 +6758,7 @@ packages:
   /expo-doctor@1.12.4:
     resolution: {integrity: sha512-WgA4ERef4183DZAkwr+w/mnQE+fIlpzybZEABjV7xauwKfp2Dp7hMAxe7ca30VgyYsLgxTPi8HKWpU5cgOI/Dg==}
     hasBin: true
-    dev: false
+    dev: true
 
   /expo-file-system@18.0.5(expo@52.0.18)(react-native@0.76.5):
     resolution: {integrity: sha512-vm7gA+PB7j99hfvBBFMRiti8OeazFK3AZWtDmCi6WQCXDxngXkAJViXhkHyF3xwDKljzlP8+4BIGrKCzbfoObg==}

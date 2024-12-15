@@ -5,8 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "start": "expo start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -16,6 +16,15 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "doctor": "pnpm expo-doctor"
   },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "react-native-magic-modal"
+        ]
+      }
+    }
+  },
   "eslintConfig": {
     "root": true,
     "extends": [
@@ -24,7 +33,6 @@
   },
   "dependencies": {
     "expo": "^52.0.18",
-    "expo-doctor": "1.12.4",
     "expo-router": "^4.0.11",
     "expo-splash-screen": "0.29.18",
     "expo-status-bar": "~2.0.0",
@@ -37,8 +45,8 @@
     "react-native-web": "~0.19.13"
   },
   "devDependencies": {
+    "expo-doctor": "1.12.4",
     "@types/react": "~18.3.12",
-    "@types/react-native": "^0.73.0",
     "@babel/core": "~7.26.0",
     "@babel/runtime": "^7.26.0",
     "@magic/eslint-config": "workspace:*",
