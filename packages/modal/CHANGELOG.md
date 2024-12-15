@@ -1,5 +1,7 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## 6.0.1 (2024-12-15)
+
 ## 6.0.0 (2024-12-15)
 
 ### ⚠ BREAKING CHANGES
