@@ -36,7 +36,7 @@
     "eslint-plugin-react-native-a11y": "^3.5.1",
     "eslint-plugin-reanimated": "^2.0.1",
     "eslint-plugin-testing-library": "^7.1.1",
-    "eslint-plugin-unused-imports": "^4.1.4"
+    "eslint-plugin-unused-imports": "^3.0.0"
   },
   "devDependencies": {
     "@magic/prettier-config": "workspace:*"
