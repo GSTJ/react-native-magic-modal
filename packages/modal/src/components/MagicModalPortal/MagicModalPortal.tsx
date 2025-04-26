@@ -22,15 +22,15 @@ import { MagicModal } from "../MagicModal";
 import { MagicModalProvider } from "../MagicModalProvider";
 
 const generatePseudoRandomID = () =>
-  Math.random().toString(36).substring(7).toUpperCase() + Date.now();
+  Math.random().toString(36).substring(7).toUpperCase() + String(Date.now());
 
-type ModalStackItem = {
+interface ModalStackItem {
   id: string;
   component: ModalChildren;
   config: ModalProps;
   hideCallback: (value: unknown) => void;
   hideFunction: (props: unknown) => void;
-};
+}
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
  * @example
@@ -60,47 +60,53 @@ export const MagicModalPortal: React.FC = memo(() => {
     setFullWindowOverlayEnabled(true);
   }, []);
 
-  const _hide = useCallback<GlobalHideFunction>(
-    async (props, { modalID } = {}) => {
-      setModals((prevModals) => {
-        const currentModal = prevModals.find((modal) => modal.id === modalID);
+  const _hide = useCallback<GlobalHideFunction>((props, { modalID } = {}) => {
+    setModals((prevModals) => {
+      const currentModal = prevModals.find((modal) => modal.id === modalID);
 
-        if (!modalID) {
-          // eslint-disable-next-line no-console
-          console.warn(
-            "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
-          );
-        } else if (!currentModal) {
-          // eslint-disable-next-line no-console
-          console.log(
-            `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`,
-          );
-          return prevModals;
-        }
+      if (!modalID) {
+        // We need to keep this console.warn for deprecation notice
+        // eslint-disable-next-line no-console
+        console.warn(
+          "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
+        );
+      } else if (!currentModal) {
+        // eslint-disable-next-line no-console
+        console.log(
+          `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`,
+        );
+        return prevModals;
+      }
 
-        if (prevModals.length === 0) {
-          // eslint-disable-next-line no-console
-          console.log(
-            `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`,
-          );
-          return prevModals;
-        }
+      if (prevModals.length === 0) {
+        // eslint-disable-next-line no-console
+        console.log(
+          `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`,
+        );
+        return prevModals;
+      }
 
-        const safeModal = currentModal || prevModals[prevModals.length - 1]!;
+      const safeModal = currentModal ?? prevModals[prevModals.length - 1];
 
-        safeModal.hideCallback(props);
+      if (!safeModal) {
+        // eslint-disable-next-line no-console
+        console.warn("[HIDE EVENT IGNORED] No modal found to hide.");
+        return prevModals;
+      }
 
-        return prevModals.filter((modal) => modal.id !== safeModal.id);
-      });
-    },
-    [],
-  );
+      safeModal.hideCallback(props);
+
+      return prevModals.filter((modal) => modal.id !== safeModal.id);
+    });
+  }, []);
 
   const show = useCallback<GlobalShowFunction>(
     (newComponent, newConfig) => {
       const modalID = generatePseudoRandomID();
 
-      let hideCallback: (value: unknown) => void = () => {};
+      let hideCallback: (value: unknown) => void = (_value) => {
+        // This is intentionally empty as it will be replaced by the Promise resolver
+      };
       const hidePromise = new Promise((resolve) => {
         hideCallback = resolve;
       });
@@ -119,7 +125,7 @@ export const MagicModalPortal: React.FC = memo(() => {
 
       return {
         // This is already typed by the GlobalShowFunction type Generic
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
         promise: hidePromise as any,
         modalID,
       } as const;

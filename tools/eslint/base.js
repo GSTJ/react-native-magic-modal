@@ -59,7 +59,7 @@ const baseConfig = tseslint.config(
       "@shopify/no-namespace-imports": [
         "error",
         {
-          allow: ["@radix-ui", "react"],
+          allow: ["react"],
         },
       ],
       "@shopify/no-ancestor-directory-import": ["error"],
@@ -100,39 +100,6 @@ const baseConfig = tseslint.config(
       ],
       "no-console": "error",
       "no-void": 0,
-      "no-restricted-imports": [
-        "error",
-        {
-          paths: [
-            {
-              name: "sonner",
-              message:
-                "Import toast from @/lib/toast instead of using sonner directly.",
-            },
-            {
-              name: "zod",
-              message:
-                "Import Zod only in @/schemas/{file-name}.ts directory. Create a schema file and import the types from there instead.",
-            },
-            {
-              name: "react-i18next",
-              importNames: ["Trans", "useTranslation"],
-              message:
-                "Import Trans and useTranslation from @/i18n/client instead of react-i18next directly.",
-            },
-            {
-              name: "@ui/dialog",
-              message:
-                "Import Credenza from @ui/credenza instead. Credenza is mobile-friendly and automatically switches between Dialog and Drawer based on screen size.",
-            },
-            {
-              name: "@ui/drawer",
-              message:
-                "Import Credenza from @ui/credenza instead. Credenza is mobile-friendly and automatically switches between Dialog and Drawer based on screen size.",
-            },
-          ],
-        },
-      ],
       "import/no-duplicates": "error",
       "import/no-anonymous-default-export": "off",
       "import/no-cycle": "error",
@@ -141,8 +108,7 @@ const baseConfig = tseslint.config(
       "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
       "line-comment-position": "off",
       "unused-imports/no-unused-imports": "error",
-      "@typescript-eslint/array-type": "off",
-      "@typescript-eslint/consistent-type-definitions": "off",
+      "@typescript-eslint/no-unnecessary-type-parameters": "off", // Broken rule, breaks our generics.
       "prefer-arrow-functions/prefer-arrow-functions": [
         "error",
         {
