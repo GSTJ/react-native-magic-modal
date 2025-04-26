@@ -7,10 +7,6 @@ import { magicModal } from "../../utils/magicModalHandler";
 import { MagicModalPortal } from "./MagicModalPortal";
 
 describe("MagicModalPortal", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it("renders correctly", async () => {
     const component = render(<MagicModalPortal />);
     expect(component).toMatchSnapshot();
