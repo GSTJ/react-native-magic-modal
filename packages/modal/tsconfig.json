@@ -1,7 +1,7 @@
 {
   "extends": ["expo/tsconfig.base", "@magic/tsconfig/base.json"],
   "exclude": ["node_modules"],
-  "include": ["src"],
+  "include": ["src", ".release-it.cjs", "eslint.config.js", "jest.config.cjs"],
   "compilerOptions": {
     "jsx": "react-native",
     "outDir": "dist",

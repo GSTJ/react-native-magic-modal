@@ -34,7 +34,7 @@ const baseConfig = tseslint.config(
     },
   },
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
+    files: ["**/*.{cjs,js,jsx,ts,tsx}"],
     plugins: {
       "@typescript-eslint": typescript,
       "unused-imports": unusedImports,
@@ -196,9 +196,9 @@ const baseConfig = tseslint.config(
   },
   {
     ignores: [
+      "**/node_modules/**",
       "node_modules/**",
       "dist/**",
-      "playwright-report/**",
       "test-results/**",
     ],
   },

@@ -6,19 +6,15 @@ import { MagicModalHideReason } from "../constants/types";
 const MagicModalContext = React.createContext<{
   hide: HookHideFunction;
 }>({
-  hide: async () => {},
+  hide: () => {
+    throw new Error(
+      "MagicModal.hide() was called outside of MagicModalProvider",
+    );
+  },
 });
 
 export const useInternalMagicModal = () => {
-  const context = React.useContext(MagicModalContext);
-
-  if (!context) {
-    throw new Error(
-      "useInternalMagicModal must be used within a MagicModalProvider",
-    );
-  }
-
-  return context;
+  return React.useContext(MagicModalContext);
 };
 
 /**
