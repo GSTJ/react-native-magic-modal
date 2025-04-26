@@ -1,3 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="0" failures="0" errors="0" time="0.621">
+<testsuites name="jest tests" tests="4" failures="0" errors="0" time="7.202">
+  <testsuite name="src/components/MagicModalPortal/MagicModalPortal.test.tsx" errors="0" failures="0" skipped="0" timestamp="2025-04-26T14:48:31" time="6.971" tests="4">
+    <testcase classname="MagicModalPortal" name="renders correctly" time="0.339">
+    </testcase>
+    <testcase classname="MagicModalPortal" name="renders children conditionally" time="0.021">
+    </testcase>
+    <testcase classname="MagicModalPortal" name="redirects hide params to promise result data" time="0.013">
+    </testcase>
+    <testcase classname="MagicModalPortal › returns appropriate hide reasons" name="returns INTENTIONAL_HIDE when explicitly hidden" time="0.004">
+    </testcase>
+  </testsuite>
 </testsuites>
