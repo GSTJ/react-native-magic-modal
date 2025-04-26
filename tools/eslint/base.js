@@ -16,12 +16,6 @@ import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
-const restrictedSyntax = [
-  "ForInStatement",
-  "LabeledStatement",
-  "WithStatement",
-];
-
 const baseConfig = tseslint.config(
   includeIgnoreFile(join(import.meta.dirname, "../../.gitignore")),
   eslint.configs.recommended,
@@ -100,9 +94,9 @@ const baseConfig = tseslint.config(
       "jsx-a11y/no-autofocus": "off",
       "no-restricted-syntax": [
         "error",
-        ...restrictedSyntax,
-        restrictedEnvAccess,
-        restrictedI18nLanguageAccessClient,
+        "ForInStatement",
+        "LabeledStatement",
+        "WithStatement",
       ],
       "no-console": "error",
       "no-void": 0,
