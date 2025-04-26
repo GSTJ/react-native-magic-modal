@@ -25,12 +25,6 @@
       }
     }
   },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@magic/eslint-config/expo"
-    ]
-  },
   "dependencies": {
     "expo": "^52.0.16",
     "expo-constants": "~17.0.2",
