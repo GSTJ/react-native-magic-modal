@@ -1,8 +1,11 @@
+
 /** @typedef {import("prettier").Config} PrettierConfig */
 /** @typedef {import("@ianvs/prettier-plugin-sort-imports").PluginConfig} SortImportsConfig */
 /** @type { PrettierConfig | SortImportsConfig } */
-const config = {
-  plugins: ["@ianvs/prettier-plugin-sort-imports"],
+export default {
+  plugins: [
+    "@ianvs/prettier-plugin-sort-imports",
+  ],
   importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
   importOrderTypeScriptVersion: "4.4.0",
   importOrder: [
@@ -12,8 +15,8 @@ const config = {
     "^(expo(.*)$)|^(expo$)",
     "<THIRD_PARTY_MODULES>",
     "",
-    "<TYPES>^@magic",
-    "^@magic/(.*)$",
+    "<TYPES>^@chatmode",
+    "^@chatmode/(.*)$",
     "",
     "<TYPES>^[.|..|~]",
     "^@/",
@@ -21,5 +24,3 @@ const config = {
     "^[./]",
   ],
 };
-
-export default config;

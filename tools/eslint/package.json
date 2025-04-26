@@ -2,44 +2,40 @@
   "name": "@magic/eslint-config",
   "version": "0.1.0",
   "private": true,
-  "license": "MIT",
-  "files": [
-    "./base.js",
-    "./expo.js",
-    "./nextjs.js"
-  ],
+  "type": "module",
+  "exports": {
+    "./base": "./base.js",
+    "./react": "./react.js"
+  },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "pnpm lint --fix",
-    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "format:fix": "prettier --write . --ignore-path ../../.gitignore"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "./base.js"
-    ]
+    "format:check": "prettier --check \"**/*.{mjs,ts,md,json}\" --ignore-path ../../.gitignore",
+    "format:write": "prettier --write . --ignore-path ../../.gitignore"
   },
   "dependencies": {
-    "@next/eslint-plugin-next": "^15.1.0",
-    "@typescript-eslint/eslint-plugin": "^8.18.0",
-    "@typescript-eslint/parser": "^8.18.0",
-    "eslint": "^8.57.0",
+    "@eslint/compat": "^1.2.8",
+    "@shopify/eslint-plugin": "^48.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "@typescript-eslint/parser": "^8.29.1",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-prefer-arrow-functions": "^3.4.1",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.1.0",
-    "eslint-plugin-react-native": "^4.1.0",
-    "eslint-plugin-react-native-a11y": "^3.5.1",
-    "eslint-plugin-reanimated": "^2.0.1",
+    "eslint-plugin-jest-formatting": "^3.1.0",
+    "eslint-plugin-prefer-arrow-functions": "^3.6.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-compiler": "19.0.0-beta-e993439-20250405",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-testing-library": "^7.1.1",
-    "eslint-plugin-unused-imports": "^4.1.4"
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "globals": "^16.0.0",
+    "typescript-eslint": "^8.29.1"
   },
   "devDependencies": {
-    "@magic/prettier-config": "workspace:*"
+    "@magic/prettier-config": "workspace:*",
+    "@magic/tsconfig": "workspace:*",
+    "@types/eslint": "^9.6.1",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   },
   "prettier": "@magic/prettier-config"
 }

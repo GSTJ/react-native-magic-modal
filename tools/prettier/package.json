@@ -7,20 +7,19 @@
     ".": "./index.js"
   },
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "format:fix": "prettier --write . --ignore-path ../../.gitignore",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "clean": "git clean -xdf .cache .turbo node_modules",
+    "format:check": "prettier --check . --ignore-path ../../.gitignore",
+    "format:write": "prettier --write . --ignore-path ../../.gitignore",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
-    "prettier": "^3.4.2"
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
+    "prettier": "catalog:"
   },
   "devDependencies": {
     "@magic/tsconfig": "workspace:*",
-    "typescript": "^5.7.2"
+    "@types/node": "^22.14.0",
+    "typescript": "catalog:"
   },
   "prettier": "@magic/prettier-config"
 }

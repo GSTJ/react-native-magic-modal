@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="4" failures="0" errors="0" time="7.202">
-  <testsuite name="src/components/MagicModalPortal/MagicModalPortal.test.tsx" errors="0" failures="0" skipped="0" timestamp="2025-04-26T14:48:31" time="6.971" tests="4">
-    <testcase classname="MagicModalPortal" name="renders correctly" time="0.339">
-    </testcase>
-    <testcase classname="MagicModalPortal" name="renders children conditionally" time="0.021">
+<testsuites name="jest tests" tests="10" failures="0" errors="0" time="5.284">
+  <testsuite name="src/components/MagicModalPortal/MagicModalPortal.test.tsx" errors="0" failures="0" skipped="0" timestamp="2025-04-26T15:06:34" time="5.179" tests="10">
+    <testcase classname="MagicModalPortal" name="renders children conditionally" time="0.073">
     </testcase>
     <testcase classname="MagicModalPortal" name="redirects hide params to promise result data" time="0.013">
     </testcase>
-    <testcase classname="MagicModalPortal › returns appropriate hide reasons" name="returns INTENTIONAL_HIDE when explicitly hidden" time="0.004">
+    <testcase classname="MagicModalPortal › returns appropriate hide reasons" name="returns INTENTIONAL_HIDE when explicitly hidden" time="0.003">
+    </testcase>
+    <testcase classname="MagicModalPortal › returns appropriate hide reasons" name="handles back button press" time="0.004">
+    </testcase>
+    <testcase classname="MagicModalPortal › multiple modals" name="stacks modals in correct order" time="0.008">
+    </testcase>
+    <testcase classname="MagicModalPortal › multiple modals" name="hides specific modal by ID" time="0.008">
+    </testcase>
+    <testcase classname="MagicModalPortal › multiple modals" name="hides all modals with hideAll" time="0.014">
+    </testcase>
+    <testcase classname="MagicModalPortal › overlay configuration" name="enables and disables FullWindowOverlay" time="0.006">
+    </testcase>
+    <testcase classname="MagicModalPortal › error handling" name="handles hiding non-existent modal gracefully" time="0.012">
+    </testcase>
+    <testcase classname="MagicModalPortal › error handling" name="handles hideAll on empty modal stack gracefully" time="0.011">
     </testcase>
   </testsuite>
 </testsuites>

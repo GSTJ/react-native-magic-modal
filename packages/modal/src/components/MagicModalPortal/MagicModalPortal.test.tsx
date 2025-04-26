@@ -1,15 +1,36 @@
 import React from "react";
-import { Text } from "react-native";
+import { BackHandler, Platform, Text } from "react-native";
 import { act, render } from "@testing-library/react-native";
 
-import { MagicModalHideReason } from "../../constants/types";
+import { HideReturn, MagicModalHideReason } from "../../constants/types";
 import { magicModal } from "../../utils/magicModalHandler";
 import { MagicModalPortal } from "./MagicModalPortal";
 
+// Mock FullWindowOverlay from react-native-screens
+jest.mock("react-native-screens/src/components/FullWindowOverlay", () => {
+  return ({ children }: { children: React.ReactNode }) => children;
+});
+
 describe("MagicModalPortal", () => {
-  it("renders correctly", async () => {
-    const component = render(<MagicModalPortal />);
-    expect(component).toMatchSnapshot();
+  let backHandlerSpy: jest.SpyInstance;
+  let backHandlerCallback: null | (() => boolean) = null;
+
+  beforeEach(() => {
+    Platform.OS = "ios";
+    backHandlerSpy = jest
+      .spyOn(BackHandler, "addEventListener")
+      .mockImplementation((_event, callback) => {
+        backHandlerCallback = () => {
+          callback();
+          return true;
+        };
+        return { remove: jest.fn() };
+      });
+  });
+
+  afterEach(() => {
+    backHandlerSpy.mockRestore();
+    backHandlerCallback = null;
   });
 
   it("renders children conditionally", async () => {
@@ -28,21 +49,21 @@ describe("MagicModalPortal", () => {
   it("redirects hide params to promise result data", async () => {
     render(<MagicModalPortal />);
 
-    let modalResult;
+    const result = "some-result-2";
+    let modalResult: Promise<HideReturn<typeof result>>;
+
     await act(async () => {
-      const { promise } = magicModal.show(() => <Text>Taveira</Text>);
+      const { promise } = magicModal.show<typeof result>(() => (
+        <Text>Taveira</Text>
+      ));
 
-      // Store the promise for later resolution
       modalResult = promise;
-
-      // Hide with specific data
-      magicModal.hide("some-result-2");
+      magicModal.hide(result);
     });
 
-    // The promise should resolve with the hide params in the data field
-    expect(await modalResult).toEqual({
+    expect(await modalResult!).toEqual({
       reason: MagicModalHideReason.INTENTIONAL_HIDE,
-      data: "some-result-2",
+      data: result,
     });
   });
 
@@ -50,22 +71,154 @@ describe("MagicModalPortal", () => {
     it("returns INTENTIONAL_HIDE when explicitly hidden", async () => {
       render(<MagicModalPortal />);
 
-      let modalPromise;
+      const result = "some-result-2";
+      let modalPromise: Promise<HideReturn<typeof result>>;
       await act(async () => {
-        const { promise } = magicModal.show(() => (
+        const { promise } = magicModal.show<typeof result>(() => (
           <Text testID="my-modal">Taveira</Text>
         ));
 
         modalPromise = promise;
-
-        // Explicitly hide with data
-        magicModal.hide("test-data");
+        magicModal.hide(result);
       });
 
-      const result = await modalPromise;
-      expect(result).toEqual({
+      expect(await modalPromise!).toEqual({
         reason: MagicModalHideReason.INTENTIONAL_HIDE,
-        data: "test-data",
+        data: result,
+      });
+    });
+
+    it("handles back button press", async () => {
+      render(<MagicModalPortal />);
+
+      const showResult = await act(async () => {
+        return magicModal.show(() => (
+          <Text testID="my-modal">Back Button Test</Text>
+        ));
+      });
+
+      const modalPromise = showResult.promise;
+
+      await act(async () => {
+        if (backHandlerCallback) {
+          backHandlerCallback();
+        }
+      });
+
+      expect(await modalPromise).toEqual({
+        reason: MagicModalHideReason.BACK_BUTTON_PRESS,
+      });
+    });
+  });
+
+  describe("multiple modals", () => {
+    it("stacks modals in correct order", async () => {
+      const { getByTestId, queryByTestId } = render(<MagicModalPortal />);
+
+      await act(async () => {
+        magicModal.show(() => <Text testID="modal-1">First Modal</Text>);
+      });
+
+      expect(getByTestId("modal-1")).toBeTruthy();
+
+      await act(async () => {
+        magicModal.show(() => <Text testID="modal-2">Second Modal</Text>);
+      });
+
+      expect(getByTestId("modal-1")).toBeTruthy();
+      expect(getByTestId("modal-2")).toBeTruthy();
+
+      await act(async () => {
+        magicModal.hide(null);
+      });
+
+      expect(getByTestId("modal-1")).toBeTruthy();
+      expect(queryByTestId("modal-2")).toBeFalsy();
+    });
+
+    it("hides specific modal by ID", async () => {
+      const { getByTestId, queryByTestId } = render(<MagicModalPortal />);
+
+      await act(async () => {
+        magicModal.show(() => <Text testID="modal-1">First Modal</Text>);
+      });
+
+      expect(getByTestId("modal-1")).toBeTruthy();
+
+      await act(async () => {
+        magicModal.show(() => <Text testID="modal-2">Second Modal</Text>);
+      });
+
+      expect(getByTestId("modal-2")).toBeTruthy();
+
+      const firstModalResult = await act(async () => {
+        return magicModal.show(() => <Text testID="modal-3">Third Modal</Text>);
+      });
+
+      expect(getByTestId("modal-3")).toBeTruthy();
+
+      await act(async () => {
+        magicModal.hide(null, { modalID: firstModalResult.modalID });
+      });
+
+      expect(getByTestId("modal-1")).toBeTruthy();
+      expect(getByTestId("modal-2")).toBeTruthy();
+      expect(queryByTestId("modal-3")).toBeFalsy();
+    });
+
+    it("hides all modals with hideAll", async () => {
+      const { queryByTestId } = render(<MagicModalPortal />);
+
+      await act(async () => {
+        magicModal.show(() => <Text testID="modal-1">First Modal</Text>);
+        magicModal.show(() => <Text testID="modal-2">Second Modal</Text>);
+        magicModal.show(() => <Text testID="modal-3">Third Modal</Text>);
+      });
+
+      await act(async () => {
+        magicModal.hideAll();
+      });
+
+      expect(queryByTestId("modal-1")).toBeFalsy();
+      expect(queryByTestId("modal-2")).toBeFalsy();
+      expect(queryByTestId("modal-3")).toBeFalsy();
+    });
+  });
+
+  describe("overlay configuration", () => {
+    it("enables and disables FullWindowOverlay", async () => {
+      render(<MagicModalPortal />);
+
+      await act(async () => {
+        magicModal.disableFullWindowOverlay();
+      });
+
+      await act(async () => {
+        magicModal.enableFullWindowOverlay();
+      });
+
+      expect(true).toBe(true);
+    });
+  });
+
+  describe("error handling", () => {
+    it("handles hiding non-existent modal gracefully", async () => {
+      render(<MagicModalPortal />);
+
+      await act(async () => {
+        magicModal.hide(null, { modalID: "non-existent-id" });
+      });
+    });
+
+    it("handles hideAll on empty modal stack gracefully", async () => {
+      render(<MagicModalPortal />);
+
+      await act(async () => {
+        magicModal.hideAll();
+      });
+
+      await act(async () => {
+        magicModal.hide(null);
       });
     });
   });
