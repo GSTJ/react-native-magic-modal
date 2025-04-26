@@ -1,6 +1,7 @@
 import React, { memo, useMemo } from "react";
 
-import { HookHideFunction, MagicModalHideReason } from "../constants/types";
+import type { HookHideFunction } from "../constants/types";
+import { MagicModalHideReason } from "../constants/types";
 
 const MagicModalContext = React.createContext<{
   hide: HookHideFunction;
@@ -38,11 +39,12 @@ export const useMagicModal = <T = void,>() => {
 
   return useMemo(
     () => ({
-      hide: (data: T) =>
+      hide: (data: T) => {
         context.hide({
           reason: MagicModalHideReason.INTENTIONAL_HIDE,
           data,
-        }),
+        });
+      },
     }),
     [context],
   );

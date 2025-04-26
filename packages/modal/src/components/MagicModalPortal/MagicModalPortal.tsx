@@ -9,14 +9,14 @@ import { BackHandler, Platform, StyleSheet, View } from "react-native";
 /** Do not import FullWindowOverlay from react-native-screens directly, as it screws up code splitting */
 import FullWindowOverlay from "react-native-screens/src/components/FullWindowOverlay";
 
-import { defaultConfig } from "../../constants/defaultConfig";
-import {
+import type {
   GlobalHideFunction,
   GlobalShowFunction,
-  MagicModalHideReason,
   ModalChildren,
   ModalProps,
 } from "../../constants/types";
+import { defaultConfig } from "../../constants/defaultConfig";
+import { MagicModalHideReason } from "../../constants/types";
 import { magicModalRef } from "../../utils/magicModalHandler";
 import { MagicModal } from "../MagicModal";
 import { MagicModalProvider } from "../MagicModalProvider";
@@ -110,7 +110,9 @@ export const MagicModalPortal: React.FC = memo(() => {
         component: newComponent,
         config: { ...defaultConfig, ...newConfig },
         hideCallback,
-        hideFunction: (props) => _hide(props, { modalID }),
+        hideFunction: (props) => {
+          _hide(props, { modalID });
+        },
       } satisfies ModalStackItem;
 
       setModals((prevModals) => [...prevModals, newModal]);
@@ -137,7 +139,9 @@ export const MagicModalPortal: React.FC = memo(() => {
 
         if (lastModal.config.onBackButtonPress) {
           lastModal.config.onBackButtonPress({
-            hide: (props) => _hide(props, { modalID: lastModal.id }),
+            hide: (props) => {
+              _hide(props, { modalID: lastModal.id });
+            },
           });
         } else {
           _hide(
@@ -149,15 +153,18 @@ export const MagicModalPortal: React.FC = memo(() => {
         return true;
       },
     );
-    return () => backHandler.remove();
+    return () => {
+      backHandler.remove();
+    };
   }, [_hide, modals]);
 
   const hide = useCallback<GlobalHideFunction>(
-    (props, { modalID } = {}) =>
+    (props, { modalID } = {}) => {
       _hide(
         { reason: MagicModalHideReason.INTENTIONAL_HIDE, data: props },
         { modalID },
-      ),
+      );
+    },
     [_hide],
   );
 

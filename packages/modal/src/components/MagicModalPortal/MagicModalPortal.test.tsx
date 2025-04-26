@@ -2,7 +2,8 @@ import React from "react";
 import { BackHandler, Platform, Text } from "react-native";
 import { act, render } from "@testing-library/react-native";
 
-import { HideReturn, MagicModalHideReason } from "../../constants/types";
+import type { HideReturn } from "../../constants/types";
+import { MagicModalHideReason } from "../../constants/types";
 import { magicModal } from "../../utils/magicModalHandler";
 import { MagicModalPortal } from "./MagicModalPortal";
 

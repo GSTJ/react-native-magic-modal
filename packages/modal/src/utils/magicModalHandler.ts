@@ -1,11 +1,13 @@
 import React from "react";
 
-import {
+import type {
   DisableFullWindowOverlayFunction,
   EnableFullWindowOverlayFunction,
   GlobalHideAllFunction,
   GlobalHideFunction,
   GlobalShowFunction,
+} from "../constants/types";
+import {
   // HideReturn is used in JS Doc
   // eslint-disable-next-line unused-imports/no-unused-imports, @typescript-eslint/no-unused-vars
   HideReturn,
@@ -27,15 +29,15 @@ const show: GlobalShowFunction = (newComponent, newConfig) => {
 };
 
 const hide: GlobalHideFunction = (props, { modalID } = {}) => {
-  return getMagicModal().hide(props, { modalID });
+  getMagicModal().hide(props, { modalID });
 };
 
 const enableFullWindowOverlay: EnableFullWindowOverlayFunction = () => {
-  return getMagicModal().enableFullWindowOverlay();
+  getMagicModal().enableFullWindowOverlay();
 };
 
 const disableFullWindowOverlay: DisableFullWindowOverlayFunction = () => {
-  return getMagicModal().disableFullWindowOverlay();
+  getMagicModal().disableFullWindowOverlay();
 };
 
 const hideAll: GlobalHideAllFunction = () => {
