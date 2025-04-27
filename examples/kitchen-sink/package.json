@@ -32,28 +32,28 @@
     ]
   },
   "dependencies": {
-    "expo": "^52.0.16",
-    "expo-constants": "~17.0.2",
-    "expo-linking": "~7.0.2",
-    "expo-router": "^4.0.2",
-    "expo-splash-screen": "~0.29.7",
+    "expo": "^52.0.46",
+    "expo-constants": "~17.0.8",
+    "expo-linking": "~7.0.5",
+    "expo-router": "^4.0.20",
+    "expo-splash-screen": "~0.29.24",
+    "expo-status-bar": "~2.0.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.79.1",
+    "react-native-gesture-handler": "2.25.0",
     "react-native-magic-modal": "workspace:*",
-    "expo-status-bar": "~2.0.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "react-native": "0.76.5",
-    "react-native-gesture-handler": "2.20.2",
-    "react-native-reanimated": "~3.16.5",
-    "react-native-safe-area-context": "4.12.0",
-    "react-native-screens": "~4.1.0",
-    "react-native-web": "~0.19.13"
+    "react-native-reanimated": "~3.17.5",
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "~4.10.0",
+    "react-native-web": "~0.20.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.26.10",
     "@magic/eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
-    "expo-doctor": "1.12.4"
+    "expo-doctor": "1.13.0"
   },
   "prettier": "@magic/prettier-config"
 }
