@@ -188,10 +188,12 @@ export const MagicModalPortal: React.FC = memo(() => {
     });
   }, [modals]);
 
-  const Overlay =
-    fullWindowOverlayEnabled && Platform.OS === "ios"
-      ? FullWindowOverlay
-      : React.Fragment;
+  const shouldRenderFullWindowOverlay =
+    fullWindowOverlayEnabled && Platform.OS === "ios" && modals.length > 0;
+
+  const Overlay = shouldRenderFullWindowOverlay
+    ? FullWindowOverlay
+    : React.Fragment;
 
   /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
      the modal will have zIndex issues on react-navigation modals. */

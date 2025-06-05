@@ -27,7 +27,7 @@
     "format": "turbo format",
     "format:fix": "turbo format:fix",
     "typecheck": "turbo typecheck",
-    "start": "turbo start",
+    "start": "pnpm --filter @magic/kitchen-sink start",
     "test": "turbo test",
     "build": "turbo build",
     "release": "turbo release",
@@ -40,6 +40,6 @@
     }
   },
   "devDependencies": {
-    "turbo": "^2.3.3"
+    "turbo": "^2.5.2"
   }
 }
