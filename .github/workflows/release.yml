@@ -3,6 +3,8 @@ name: 🚀 Publish
 on:
   push:
     branches: [main]
+    paths:
+      - "packages/modal/**"
 
 jobs:
   release:
