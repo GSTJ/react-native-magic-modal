@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
 
+const BACKDROP_COLOR = "rgba(0, 0, 0, 0.5)";
+
 export const styles = StyleSheet.create({
   pointerEventsBoxNone: {
     pointerEvents: "box-none",
@@ -14,7 +16,7 @@ export const styles = StyleSheet.create({
   },
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: BACKDROP_COLOR,
   },
   backdropContainer: {
     position: "absolute",

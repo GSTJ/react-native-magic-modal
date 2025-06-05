@@ -83,6 +83,8 @@ const baseConfig = tseslint.config(
       // Turn on
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unnecessary-type-parameters": "off", // Consistently misfires
+      "@typescript-eslint/no-empty-function": "off", // Empty functions are fine sometimes
       "no-arbitrary-value": "off",
       "no-nested-ternary": "error",
       "max-depth": ["error", 3],

@@ -7,4 +7,9 @@ import reactNativeConfig from "@magic/eslint-config/react-native";
 export default [
   includeIgnoreFile(join(import.meta.dirname, "../../.gitignore")),
   ...reactNativeConfig,
+  {
+    rules: {
+      "@shopify/jsx-no-hardcoded-content": "off",
+    },
+  },
 ];

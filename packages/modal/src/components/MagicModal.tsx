@@ -20,13 +20,9 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
+import type { Direction, ModalChildren, ModalProps } from "../constants/types";
 import { defaultDirection } from "../constants/defaultConfig";
-import {
-  Direction,
-  MagicModalHideReason,
-  ModalChildren,
-  ModalProps,
-} from "../constants/types";
+import { MagicModalHideReason } from "../constants/types";
 import { styles } from "./MagicModalPortal/MagicModalPortal.styles";
 import { useInternalMagicModal } from "./MagicModalProvider";
 
@@ -75,8 +71,10 @@ export const MagicModal = memo(
     const onBackdropPress = useMemo(() => {
       return config.onBackdropPress
         ? () => config.onBackdropPress?.({ hide })
-        : () => hide({ reason: MagicModalHideReason.BACKDROP_PRESS });
-    }, [config.onBackdropPress, hide]);
+        : () => {
+            hide({ reason: MagicModalHideReason.BACKDROP_PRESS });
+          };
+    }, [config, hide]);
 
     const isHorizontal =
       config.swipeDirection === "left" || config.swipeDirection === "right";
@@ -227,6 +225,7 @@ export const MagicModal = memo(
             style={[
               styles.backdrop,
               animatedBackdropStyles,
+              // eslint-disable-next-line react-native/no-inline-styles, react-native/no-color-literals
               {
                 backgroundColor: isBackdropVisible
                   ? config.backdropColor

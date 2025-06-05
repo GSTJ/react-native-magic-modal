@@ -11,12 +11,6 @@
     },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "android",
-    "ios",
-    "metro.config.js",
-    "babel.config.js"
-  ]
+  "include": ["."],
+  "exclude": ["node_modules", "android", "ios"]
 }
