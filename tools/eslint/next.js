@@ -1,7 +1,7 @@
 /// <reference types="./types.d.ts" />
 import next from "@next/eslint-plugin-next";
 
-import reactRules from "./react";
+import reactRules from "@magic/eslint-config/react";
 
 /** @type {Awaited<import('typescript-eslint').Config>} */
 export default [

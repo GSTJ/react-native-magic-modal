@@ -3,16 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
-  "files": [
-    "./base.js",
-    "./react-native.js",
-    "./next.js",
-    "./react.js"
-  ],
+  "type": "module",
+  "exports": {
+    "./base": "./base.js",
+    "./react": "./react.js",
+    "./react-native": "./react-native.js",
+    "./next": "./next.js"
+  },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "pnpm lint --fix",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "format:fix": "prettier --write . --ignore-path ../../.gitignore"
   },
@@ -37,7 +36,14 @@
     "eslint-plugin-react-native-a11y": "^3.5.1",
     "eslint-plugin-reanimated": "^2.0.1",
     "eslint-plugin-testing-library": "^7.4.0",
-    "eslint-plugin-unused-imports": "^4.1.4"
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "@eslint/compat": "^1.2.8",
+    "@shopify/eslint-plugin": "^48.0.2",
+    "eslint-plugin-jest-formatting": "^3.1.0",
+    "eslint-plugin-react-compiler": "19.0.0-beta-e993439-20250405",
+    "eslint-plugin-tailwindcss": "^3.18.0",
+    "globals": "^16.0.0",
+    "typescript-eslint": "^8.29.1"
   },
   "devDependencies": {
     "@magic/prettier-config": "workspace:*"
