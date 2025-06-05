@@ -53,6 +53,11 @@ export default {
           },
         ],
       },
+      /**
+       * Only include commits with (modal) in the message
+       * @param {{ header: string }} commit
+       */
+      commitFilter: (commit) => commit.header.includes("(modal)"),
     },
   },
   git: {

@@ -13,7 +13,8 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "format:fix": "prettier --write . --ignore-path ../../.gitignore"
+    "format:fix": "prettier --write . --ignore-path ../../.gitignore",
+    "release": "release-it"
   },
   "eslintConfig": {
     "root": true,
@@ -46,7 +47,8 @@
     "typescript-eslint": "^8.29.1"
   },
   "devDependencies": {
-    "@magic/prettier-config": "workspace:*"
+    "@magic/prettier-config": "workspace:*",
+    "release-it": "^17.10.0"
   },
   "prettier": "@magic/prettier-config"
 }
