@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   plugins: {
     "@release-it/conventional-changelog": {
       infile: "CHANGELOG.md",
