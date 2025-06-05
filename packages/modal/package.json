@@ -55,18 +55,6 @@
     "release": "release-it --ci"
   },
   "prettier": "@magic/prettier-config",
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@magic/eslint-config/base"
-    ],
-    "ignorePatterns": [
-      "dist",
-      "node_modules",
-      "docs",
-      "coverage"
-    ]
-  },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",

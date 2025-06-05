@@ -5,7 +5,7 @@
   "license": "MIT",
   "files": [
     "./base.js",
-    "./expo.js",
+    "./react-native.js",
     "./next.js",
     "./react.js"
   ],
