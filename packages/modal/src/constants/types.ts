@@ -1,4 +1,4 @@
-import Animated from "react-native-reanimated";
+import type Animated from "react-native-reanimated";
 
 export type ModalChildren = React.FC;
 

@@ -1,22 +1,16 @@
 import React, { memo, useMemo } from "react";
 
-import { HookHideFunction, MagicModalHideReason } from "../constants/types";
+import type { HookHideFunction } from "../constants/types";
+import { MagicModalHideReason } from "../constants/types";
 
 const MagicModalContext = React.createContext<{
   hide: HookHideFunction;
 }>({
-  hide: async () => {},
+  hide: () => {},
 });
 
 export const useInternalMagicModal = () => {
   const context = React.useContext(MagicModalContext);
-
-  if (!context) {
-    throw new Error(
-      "useInternalMagicModal must be used within a MagicModalProvider",
-    );
-  }
-
   return context;
 };
 
@@ -38,11 +32,12 @@ export const useMagicModal = <T = void,>() => {
 
   return useMemo(
     () => ({
-      hide: (data: T) =>
+      hide: (data: T) => {
         context.hide({
           reason: MagicModalHideReason.INTENTIONAL_HIDE,
           data,
-        }),
+        });
+      },
     }),
     [context],
   );

@@ -25,12 +25,6 @@
       }
     }
   },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@magic/eslint-config/expo"
-    ]
-  },
   "dependencies": {
     "expo": "^52.0.16",
     "expo-constants": "~17.0.2",
@@ -41,16 +35,16 @@
     "expo-status-bar": "~2.0.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-native": "0.76.5",
+    "react-native": "0.76.9",
     "react-native-gesture-handler": "2.20.2",
     "react-native-reanimated": "~3.16.5",
     "react-native-safe-area-context": "4.12.0",
-    "react-native-screens": "~4.1.0",
+    "react-native-screens": "~4.4.0",
     "react-native-web": "~0.19.13"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@magic/eslint-config": "workspace:*",
+    "magic-eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
     "expo-doctor": "1.12.4"

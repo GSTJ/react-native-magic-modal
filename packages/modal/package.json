@@ -1,6 +1,6 @@
 {
   "name": "react-native-magic-modal",
-  "version": "6.0.2",
+  "version": "6.0.6",
   "type": "module",
   "description": "A magic modal that can be used imperatively from anywhere! 🦄",
   "main": "./dist/index.cjs",
@@ -55,18 +55,6 @@
     "release": "release-it --ci"
   },
   "prettier": "@magic/prettier-config",
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@magic/eslint-config/base"
-    ],
-    "ignorePatterns": [
-      "dist",
-      "node_modules",
-      "docs",
-      "coverage"
-    ]
-  },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
@@ -75,14 +63,14 @@
   },
   "devDependencies": {
     "@types/react": "~18.3.12",
-    "@magic/eslint-config": "workspace:*",
+    "magic-eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
     "@release-it/conventional-changelog": "^9.0.3",
     "@testing-library/react-native": "^12.9.0",
     "@types/jest": "^29.5.14",
     "bunchee": "^6.0.3",
-    "react-native": "0.76.5",
+    "react-native": "0.76.9",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",

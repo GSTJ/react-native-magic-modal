@@ -9,28 +9,28 @@ import { BackHandler, Platform, StyleSheet, View } from "react-native";
 /** Do not import FullWindowOverlay from react-native-screens directly, as it screws up code splitting */
 import FullWindowOverlay from "react-native-screens/src/components/FullWindowOverlay";
 
-import { defaultConfig } from "../../constants/defaultConfig";
-import {
+import type {
   GlobalHideFunction,
   GlobalShowFunction,
-  MagicModalHideReason,
   ModalChildren,
   ModalProps,
 } from "../../constants/types";
+import { defaultConfig } from "../../constants/defaultConfig";
+import { MagicModalHideReason } from "../../constants/types";
 import { magicModalRef } from "../../utils/magicModalHandler";
 import { MagicModal } from "../MagicModal";
 import { MagicModalProvider } from "../MagicModalProvider";
 
 const generatePseudoRandomID = () =>
-  Math.random().toString(36).substring(7).toUpperCase() + Date.now();
+  Math.random().toString(36).substring(7).toUpperCase() + Date.now().toString();
 
-type ModalStackItem = {
+interface ModalStackItem {
   id: string;
   component: ModalChildren;
   config: ModalProps;
   hideCallback: (value: unknown) => void;
   hideFunction: (props: unknown) => void;
-};
+}
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
  * @example
@@ -60,47 +60,46 @@ export const MagicModalPortal: React.FC = memo(() => {
     setFullWindowOverlayEnabled(true);
   }, []);
 
-  const _hide = useCallback<GlobalHideFunction>(
-    async (props, { modalID } = {}) => {
-      setModals((prevModals) => {
-        const currentModal = prevModals.find((modal) => modal.id === modalID);
+  const _hide = useCallback<GlobalHideFunction>((props, { modalID } = {}) => {
+    setModals((prevModals) => {
+      const currentModal = prevModals.find((modal) => modal.id === modalID);
 
-        if (!modalID) {
-          // eslint-disable-next-line no-console
-          console.warn(
-            "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
-          );
-        } else if (!currentModal) {
-          // eslint-disable-next-line no-console
-          console.log(
-            `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`,
-          );
-          return prevModals;
-        }
+      if (!modalID) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
+        );
+      } else if (!currentModal) {
+        // eslint-disable-next-line no-console
+        console.log(
+          `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`,
+        );
+        return prevModals;
+      }
 
-        if (prevModals.length === 0) {
-          // eslint-disable-next-line no-console
-          console.log(
-            `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`,
-          );
-          return prevModals;
-        }
+      if (prevModals.length === 0) {
+        // eslint-disable-next-line no-console
+        console.log(
+          `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`,
+        );
+        return prevModals;
+      }
 
-        const safeModal = currentModal || prevModals[prevModals.length - 1]!;
+      const safeModal = currentModal ?? prevModals[prevModals.length - 1];
 
-        safeModal.hideCallback(props);
+      safeModal?.hideCallback(props);
 
-        return prevModals.filter((modal) => modal.id !== safeModal.id);
-      });
-    },
-    [],
-  );
+      return prevModals.filter((modal) => modal.id !== safeModal?.id);
+    });
+  }, []);
 
   const show = useCallback<GlobalShowFunction>(
     (newComponent, newConfig) => {
       const modalID = generatePseudoRandomID();
 
-      let hideCallback: (value: unknown) => void = () => {};
+      let hideCallback: (value: unknown) => void = () => {
+        // Empty function
+      };
       const hidePromise = new Promise((resolve) => {
         hideCallback = resolve;
       });
@@ -110,7 +109,9 @@ export const MagicModalPortal: React.FC = memo(() => {
         component: newComponent,
         config: { ...defaultConfig, ...newConfig },
         hideCallback,
-        hideFunction: (props) => _hide(props, { modalID }),
+        hideFunction: (props) => {
+          _hide(props, { modalID });
+        },
       } satisfies ModalStackItem;
 
       setModals((prevModals) => [...prevModals, newModal]);
@@ -137,7 +138,9 @@ export const MagicModalPortal: React.FC = memo(() => {
 
         if (lastModal.config.onBackButtonPress) {
           lastModal.config.onBackButtonPress({
-            hide: (props) => _hide(props, { modalID: lastModal.id }),
+            hide: (props) => {
+              _hide(props, { modalID: lastModal.id });
+            },
           });
         } else {
           _hide(
@@ -149,15 +152,18 @@ export const MagicModalPortal: React.FC = memo(() => {
         return true;
       },
     );
-    return () => backHandler.remove();
+    return () => {
+      backHandler.remove();
+    };
   }, [_hide, modals]);
 
   const hide = useCallback<GlobalHideFunction>(
-    (props, { modalID } = {}) =>
+    (props, { modalID } = {}) => {
       _hide(
         { reason: MagicModalHideReason.INTENTIONAL_HIDE, data: props },
         { modalID },
-      ),
+      );
+    },
     [_hide],
   );
 

@@ -58,9 +58,6 @@ jobs:
       - name: 🏗 Setup Turborepo Cache
         uses: dtinth/setup-github-actions-caching-for-turbo@v1
 
-      - name: 🧹 Dedupe
-        run: pnpm dedupe --check
-
       - name: 🧪 Typecheck
         run: pnpm run typecheck
 

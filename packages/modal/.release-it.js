@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   plugins: {
     "@release-it/conventional-changelog": {
       infile: "CHANGELOG.md",
@@ -53,6 +53,11 @@ module.exports = {
           },
         ],
       },
+      /**
+       * Only include commits with (modal) in the message
+       * @param {{ header: string }} commit
+       */
+      commitFilter: (commit) => commit.header.includes("(modal)"),
     },
   },
   git: {
@@ -62,13 +67,13 @@ module.exports = {
     tag: true,
     push: true,
     requireCleanWorkingDir: false,
-    tagName: "${version}",
+    tagName: "magic-modal-${version}",
   },
   npm: {
     publish: true,
   },
   github: {
     release: true,
-    releaseName: "Release ${version}",
+    releaseName: "Magic Modal Release ${version}",
   },
 };

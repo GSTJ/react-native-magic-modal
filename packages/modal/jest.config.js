@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   preset: "jest-expo",
   testResultsProcessor: "jest-junit",
   transformIgnorePatterns: [
