@@ -67,7 +67,6 @@ export default {
     tag: true,
     push: true,
     requireCleanWorkingDir: false,
-    tagName: "Magic Modal v${version}",
   },
   npm: {
     publish: true,
