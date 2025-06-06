@@ -74,91 +74,9 @@ importers:
         version: 1.12.4
       magic-eslint-config:
         specifier: workspace:*
-        version: link:../../tools/eslint
+        version: link:../../packages/eslint-config
 
-  packages/modal:
-    dependencies:
-      react:
-        specifier: '*'
-        version: 18.3.1
-      react-native-gesture-handler:
-        specifier: '*'
-        version: 2.20.2(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react@18.3.1)
-      react-native-reanimated:
-        specifier: '*'
-        version: 3.16.5(@babel/core@7.26.0)(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react@18.3.1)
-    devDependencies:
-      '@magic/prettier-config':
-        specifier: workspace:*
-        version: link:../../tools/prettier
-      '@magic/tsconfig':
-        specifier: workspace:*
-        version: link:../../tools/tsconfig
-      '@release-it/conventional-changelog':
-        specifier: ^9.0.3
-        version: 9.0.3(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.0.0)(release-it@17.10.0(typescript@5.8.3))
-      '@testing-library/react-native':
-        specifier: ^12.9.0
-        version: 12.9.0(jest@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3)))(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react-test-renderer@18.3.1(react@18.3.1))(react@18.3.1)
-      '@types/jest':
-        specifier: ^29.5.14
-        version: 29.5.14
-      '@types/react':
-        specifier: ~18.3.12
-        version: 18.3.17
-      bunchee:
-        specifier: ^6.0.3
-        version: 6.0.3(typescript@5.8.3)
-      cz-conventional-changelog:
-        specifier: ^3.3.0
-        version: 3.3.0(@types/node@22.10.2)(typescript@5.8.3)
-      husky:
-        specifier: ^9.1.7
-        version: 9.1.7
-      jest:
-        specifier: ^29.7.0
-        version: 29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3))
-      jest-expo:
-        specifier: ^52.0.2
-        version: 52.0.2(@babel/core@7.26.0)(expo@52.0.18(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@expo/metro-runtime@4.0.0(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1)))(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react@18.3.1))(jest@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3)))(react-dom@19.0.0-rc-6230622a1a-20240610(react@18.3.1))(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react@18.3.1)(webpack@5.97.1(@swc/core@1.10.1(@swc/helpers@0.5.15)))
-      jest-junit:
-        specifier: ^16.0.0
-        version: 16.0.0
-      magic-eslint-config:
-        specifier: workspace:*
-        version: link:../../tools/eslint
-      pod-install:
-        specifier: ^0.3.2
-        version: 0.3.2
-      prettier:
-        specifier: 3.4.2
-        version: 3.4.2
-      react-native:
-        specifier: 0.76.9
-        version: 0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1)
-      react-test-renderer:
-        specifier: ^18.2.0
-        version: 18.3.1(react@18.3.1)
-      release-it:
-        specifier: ^17.10.0
-        version: 17.10.0(typescript@5.8.3)
-      shx:
-        specifier: ^0.3.4
-        version: 0.3.4
-      ts-jest:
-        specifier: ^29.2.5
-        version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3)))(typescript@5.8.3)
-      ts-node-dev:
-        specifier: ^2.0.0
-        version: 2.0.0(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3)
-      typedoc:
-        specifier: ^0.27.5
-        version: 0.27.5(typescript@5.8.3)
-      typescript:
-        specifier: ^5.7.2
-        version: 5.8.3
-
-  tools/eslint:
+  packages/eslint-config:
     dependencies:
       '@eslint/compat':
         specifier: ^1.2.8
@@ -229,10 +147,92 @@ importers:
     devDependencies:
       '@magic/prettier-config':
         specifier: workspace:*
-        version: link:../prettier
+        version: link:../../tools/prettier
       release-it:
         specifier: ^17.10.0
         version: 17.10.0(typescript@5.8.3)
+
+  packages/modal:
+    dependencies:
+      react:
+        specifier: '*'
+        version: 18.3.1
+      react-native-gesture-handler:
+        specifier: '*'
+        version: 2.20.2(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react@18.3.1)
+      react-native-reanimated:
+        specifier: '*'
+        version: 3.16.5(@babel/core@7.26.0)(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react@18.3.1)
+    devDependencies:
+      '@magic/prettier-config':
+        specifier: workspace:*
+        version: link:../../tools/prettier
+      '@magic/tsconfig':
+        specifier: workspace:*
+        version: link:../../tools/tsconfig
+      '@release-it/conventional-changelog':
+        specifier: ^9.0.3
+        version: 9.0.3(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.0.0)(release-it@17.10.0(typescript@5.8.3))
+      '@testing-library/react-native':
+        specifier: ^12.9.0
+        version: 12.9.0(jest@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3)))(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react-test-renderer@18.3.1(react@18.3.1))(react@18.3.1)
+      '@types/jest':
+        specifier: ^29.5.14
+        version: 29.5.14
+      '@types/react':
+        specifier: ~18.3.12
+        version: 18.3.17
+      bunchee:
+        specifier: ^6.0.3
+        version: 6.0.3(typescript@5.8.3)
+      cz-conventional-changelog:
+        specifier: ^3.3.0
+        version: 3.3.0(@types/node@22.10.2)(typescript@5.8.3)
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3))
+      jest-expo:
+        specifier: ^52.0.2
+        version: 52.0.2(@babel/core@7.26.0)(expo@52.0.18(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@expo/metro-runtime@4.0.0(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1)))(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react@18.3.1))(jest@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3)))(react-dom@19.0.0-rc-6230622a1a-20240610(react@18.3.1))(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react@18.3.1)(webpack@5.97.1(@swc/core@1.10.1(@swc/helpers@0.5.15)))
+      jest-junit:
+        specifier: ^16.0.0
+        version: 16.0.0
+      magic-eslint-config:
+        specifier: workspace:*
+        version: link:../eslint-config
+      pod-install:
+        specifier: ^0.3.2
+        version: 0.3.2
+      prettier:
+        specifier: 3.4.2
+        version: 3.4.2
+      react-native:
+        specifier: 0.76.9
+        version: 0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1)
+      react-test-renderer:
+        specifier: ^18.2.0
+        version: 18.3.1(react@18.3.1)
+      release-it:
+        specifier: ^17.10.0
+        version: 17.10.0(typescript@5.8.3)
+      shx:
+        specifier: ^0.3.4
+        version: 0.3.4
+      ts-jest:
+        specifier: ^29.2.5
+        version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@22.10.2)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3)))(typescript@5.8.3)
+      ts-node-dev:
+        specifier: ^2.0.0
+        version: 2.0.0(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.8.3)
+      typedoc:
+        specifier: ^0.27.5
+        version: 0.27.5(typescript@5.8.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.8.3
 
   tools/prettier:
     dependencies:
