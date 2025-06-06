@@ -67,13 +67,13 @@ export default {
     tag: true,
     push: true,
     requireCleanWorkingDir: false,
-    tagName: "${version}",
+    tagName: "Magic Modal v${version}",
   },
   npm: {
     publish: true,
   },
   github: {
     release: true,
-    releaseName: "Release ${version}",
+    releaseName: "Magic Modal Release ${version}",
   },
 };
