@@ -75,8 +75,7 @@ dist
 junit.xml
 docs
 
-**/README.md
-
+**/modal/README.md
 
 .pnp.*
 .yarn/*
