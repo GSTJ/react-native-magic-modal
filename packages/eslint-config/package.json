@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@magic/prettier-config": "workspace:*",
-    "release-it": "^17.10.0"
+    "release-it": "^19.0.3"
   },
   "prettier": "@magic/prettier-config"
 }
