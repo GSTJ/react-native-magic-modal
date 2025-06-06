@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@types/react": "~18.3.12",
-    "@magic/eslint-config": "workspace:*",
+    "magic-eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
     "@release-it/conventional-changelog": "^9.0.3",

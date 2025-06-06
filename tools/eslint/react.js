@@ -3,8 +3,7 @@ import shopify from "@shopify/eslint-plugin";
 import react from "eslint-plugin-react";
 import reactCompiler from "eslint-plugin-react-compiler";
 import hooksPlugin from "eslint-plugin-react-hooks";
-
-import baseRules from "@magic/eslint-config/base";
+import baseRules from "magic-eslint-config/base";
 
 /** @type {Awaited<import('typescript-eslint').Config>} */
 export default [

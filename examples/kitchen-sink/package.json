@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@magic/eslint-config": "workspace:*",
+    "magic-eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
     "expo-doctor": "1.12.4"

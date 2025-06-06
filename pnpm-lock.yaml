@@ -63,9 +63,6 @@ importers:
       '@babel/core':
         specifier: ^7.20.0
         version: 7.26.0
-      '@magic/eslint-config':
-        specifier: workspace:*
-        version: link:../../tools/eslint
       '@magic/prettier-config':
         specifier: workspace:*
         version: link:../../tools/prettier
@@ -75,6 +72,9 @@ importers:
       expo-doctor:
         specifier: 1.12.4
         version: 1.12.4
+      magic-eslint-config:
+        specifier: workspace:*
+        version: link:../../tools/eslint
 
   packages/modal:
     dependencies:
@@ -88,9 +88,6 @@ importers:
         specifier: '*'
         version: 3.16.5(@babel/core@7.26.0)(react-native@0.76.9(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.17)(react@18.3.1))(react@18.3.1)
     devDependencies:
-      '@magic/eslint-config':
-        specifier: workspace:*
-        version: link:../../tools/eslint
       '@magic/prettier-config':
         specifier: workspace:*
         version: link:../../tools/prettier
@@ -127,6 +124,9 @@ importers:
       jest-junit:
         specifier: ^16.0.0
         version: 16.0.0
+      magic-eslint-config:
+        specifier: workspace:*
+        version: link:../../tools/eslint
       pod-install:
         specifier: ^0.3.2
         version: 0.3.2

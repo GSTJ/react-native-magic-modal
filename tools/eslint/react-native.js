@@ -1,8 +1,7 @@
 /// <reference types="./types.d.ts" />
 import reactNative from "eslint-plugin-react-native";
 import reanimated from "eslint-plugin-reanimated";
-
-import reactRules from "@magic/eslint-config/react";
+import reactRules from "magic-eslint-config/react";
 
 /** @type {Awaited<import('typescript-eslint').Config>} */
 export default [
