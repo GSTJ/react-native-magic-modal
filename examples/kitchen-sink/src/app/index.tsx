@@ -1,13 +1,9 @@
 /* eslint-disable react-native/no-color-literals */
+import type { Direction } from "react-native-magic-modal";
 import React from "react";
 import { Platform, Pressable, StyleSheet, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import {
-  
-  magicModal,
-  MagicModalHideReason
-} from "react-native-magic-modal";
-import type {Direction} from "react-native-magic-modal";
+import { magicModal, MagicModalHideReason } from "react-native-magic-modal";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -47,7 +43,11 @@ interface ModalResponse {
 const showReplacingModals = async () => {
   const modalResponse = magicModal.show<ModalResponse>(() => <ExampleModal />);
 
-  await new Promise<void>((resolve) => setTimeout(() => { resolve(); }, 1000));
+  await new Promise<void>((resolve) =>
+    setTimeout(() => {
+      resolve();
+    }, 1000),
+  );
 
   magicModal.hide<ModalResponse>(
     { message: "close timeout" },
@@ -126,7 +126,9 @@ export default () => {
         <>
           <Pressable
             style={styles.button}
-            onPress={() => { router.push("/modal"); }}
+            onPress={() => {
+              router.push("/modal");
+            }}
           >
             <Text style={styles.buttonText}>Open Modal Screen</Text>
           </Pressable>

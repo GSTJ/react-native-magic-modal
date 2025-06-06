@@ -1,16 +1,17 @@
 import React from "react";
 
+import type {
+  DisableFullWindowOverlayFunction,
+  EnableFullWindowOverlayFunction,
+  GlobalHideAllFunction,
+  GlobalHideFunction,
+  GlobalShowFunction,
+} from "../constants/types";
 import {
-  
-  
-  
-  
-  
   // HideReturn is used in JS Doc
   // eslint-disable-next-line unused-imports/no-unused-imports, @typescript-eslint/no-unused-vars
-  HideReturn
+  HideReturn,
 } from "../constants/types";
-import type {DisableFullWindowOverlayFunction, EnableFullWindowOverlayFunction, GlobalHideAllFunction, GlobalHideFunction, GlobalShowFunction} from "../constants/types";
 
 export const magicModalRef = React.createRef<IModal>();
 

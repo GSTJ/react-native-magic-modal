@@ -1,4 +1,4 @@
-import type {ExpoConfig} from "expo/config";
+import type { ExpoConfig } from "expo/config";
 
 export default {
   name: "react-native-magic-modal-example",
