@@ -1,7 +1,7 @@
 {
-  "name": "@magic/eslint-config",
+  "name": "magic-eslint-config",
   "version": "0.1.6",
-  "private": true,
+  "private": false,
   "license": "MIT",
   "type": "module",
   "exports": {
