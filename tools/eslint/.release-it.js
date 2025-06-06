@@ -7,6 +7,7 @@ export default {
     tag: true,
     push: true,
     requireCleanWorkingDir: false,
+    tagName: "magic-eslint-${version}",
   },
   npm: {
     publish: true,
