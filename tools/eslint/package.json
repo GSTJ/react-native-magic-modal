@@ -14,7 +14,7 @@
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "format:fix": "prettier --write . --ignore-path ../../.gitignore",
-    "release": "release-it"
+    "release": "release-it --ci"
   },
   "eslintConfig": {
     "root": true,
