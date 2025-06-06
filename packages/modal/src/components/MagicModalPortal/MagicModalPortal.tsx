@@ -24,13 +24,13 @@ import { MagicModalProvider } from "../MagicModalProvider";
 const generatePseudoRandomID = () =>
   Math.random().toString(36).substring(7).toUpperCase() + Date.now().toString();
 
-type ModalStackItem = {
+interface ModalStackItem {
   id: string;
   component: ModalChildren;
   config: ModalProps;
   hideCallback: (value: unknown) => void;
   hideFunction: (props: unknown) => void;
-};
+}
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
  * @example

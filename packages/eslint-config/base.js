@@ -115,7 +115,7 @@ const baseConfig = tseslint.config(
       "line-comment-position": "off",
       "unused-imports/no-unused-imports": "error",
       "@typescript-eslint/array-type": "off",
-      "@typescript-eslint/consistent-type-definitions": "off",
+      "@typescript-eslint/consistent-type-definitions": "error",
       "prefer-arrow-functions/prefer-arrow-functions": [
         "error",
         {

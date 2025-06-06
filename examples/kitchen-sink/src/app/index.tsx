@@ -40,9 +40,9 @@ const showModal = async () => {
   console.log("Modal closed with response:", await modalResponse.promise);
 };
 
-type ModalResponse = {
+interface ModalResponse {
   message: string;
-};
+}
 
 const showReplacingModals = async () => {
   const modalResponse = magicModal.show<ModalResponse>(() => <ExampleModal />);
