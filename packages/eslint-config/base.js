@@ -23,7 +23,7 @@ const restrictedSyntax = [
 const restrictedEnvAccess = {
   selector: "MemberExpression[object.name='process'][property.name='env']",
   message:
-    "Direct process.env usage is not allowed. Import from @/env.{server,client} instead.",
+    "Direct process.env usage is not allowed. Import from a dedicated env file instead.",
 };
 
 const restrictedI18nLanguageAccessClient = {
