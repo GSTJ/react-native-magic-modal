@@ -26,13 +26,6 @@ const restrictedEnvAccess = {
     "Direct process.env usage is not allowed. Import from a dedicated env file instead.",
 };
 
-const restrictedI18nLanguageAccessClient = {
-  selector:
-    "ImportDeclaration[source.value='@/i18n/client'] ~ * MemberExpression[object.name='i18n'][property.name='language']",
-  message:
-    "Direct i18n.language access is not allowed in client components as it causes SSR issues. Use the `import { useLanguage } from '@/i18n/client'` hook instead.",
-};
-
 const baseConfig = tseslint.config(
   eslint.configs.recommended,
   tseslint.configs.strictTypeChecked,
@@ -110,7 +103,6 @@ const baseConfig = tseslint.config(
         "error",
         ...restrictedSyntax,
         restrictedEnvAccess,
-        restrictedI18nLanguageAccessClient,
       ],
       "no-console": "error",
       "no-void": 0,
@@ -200,13 +192,9 @@ const baseConfig = tseslint.config(
     },
   },
   {
-    files: ["**/env.client.ts"],
+    files: ["**/env.*"],
     rules: {
-      "no-restricted-syntax": [
-        "error",
-        ...restrictedSyntax,
-        restrictedI18nLanguageAccessClient,
-      ],
+      "no-restricted-syntax": ["error", ...restrictedSyntax],
     },
   },
   {
