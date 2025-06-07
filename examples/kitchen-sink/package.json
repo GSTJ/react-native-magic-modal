@@ -47,7 +47,7 @@
     "magic-eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
-    "expo-doctor": "1.12.4"
+    "expo-doctor": "1.13.3"
   },
   "prettier": "@magic/prettier-config"
 }
