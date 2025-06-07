@@ -62,7 +62,7 @@
     "react-native-reanimated": "*"
   },
   "devDependencies": {
-    "@types/react": "~18.3.12",
+    "@types/react": "~19.1.0",
     "magic-eslint-config": "workspace:*",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
