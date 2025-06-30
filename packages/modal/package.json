@@ -70,7 +70,7 @@
     "@testing-library/react-native": "^12.9.0",
     "@types/jest": "^29.5.14",
     "bunchee": "^6.0.3",
-    "react-native": "0.76.9",
+    "react-native": "0.80.1",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
