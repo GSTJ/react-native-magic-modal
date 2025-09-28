@@ -87,7 +87,11 @@ export const MagicModalPortal: React.FC = memo(() => {
 
       const safeModal = currentModal ?? prevModals[prevModals.length - 1];
 
-      safeModal?.hideCallback(props);
+      // Delay the hideCallback resolution to ensure React reconciliation and Android view cleanup complete
+      // This prevents race conditions when navigation occurs immediately after modal hiding
+      setTimeout(() => {
+        safeModal?.hideCallback(props);
+      }, 0);
 
       return prevModals.filter((modal) => modal.id !== safeModal?.id);
     });
@@ -169,9 +173,12 @@ export const MagicModalPortal: React.FC = memo(() => {
 
   const hideAll = useCallback(() => {
     setModals((prevModals) => {
-      prevModals.forEach((modal) => {
-        modal.hideCallback({ reason: MagicModalHideReason.GLOBAL_HIDE_ALL });
-      });
+      // Delay the hideCallback resolution to ensure React reconciliation and Android view cleanup complete
+      setTimeout(() => {
+        prevModals.forEach((modal) => {
+          modal.hideCallback({ reason: MagicModalHideReason.GLOBAL_HIDE_ALL });
+        });
+      }, 0);
       return [];
     });
   }, []);
