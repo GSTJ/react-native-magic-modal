@@ -12,6 +12,7 @@ import { ExampleModal } from "@/components/ExampleModal";
 import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
 import { showScrollableModal } from "@/components/ScrollableModal";
 import { showToast } from "../components/Toast";
+import { Issue155Modal } from "../components/Issue155Modal";
 
 const showModal = async () => {
   const swipeDirection = ["up", "down", "left", "right"][
@@ -90,6 +91,13 @@ const showNoFullWindowOverlayModal = async () => {
   magicModal.enableFullWindowOverlay();
 };
 
+const showIssue155Modal = async () => {
+  // This reproduces the issue from GitHub issue #155
+  const result = await magicModal.show(() => <Issue155Modal />).promise;
+  // eslint-disable-next-line no-console
+  console.log("Issue #155 modal closed with:", result);
+};
+
 export default () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -121,6 +129,9 @@ export default () => {
       </Pressable>
       <Pressable style={styles.button} onPress={showToast}>
         <Text style={styles.buttonText}>Show Toast</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={showIssue155Modal}>
+        <Text style={styles.buttonText}>Test Issue #155 (Navigation Crash)</Text>
       </Pressable>
       {Platform.OS === "ios" && (
         <>

@@ -87,7 +87,16 @@ export const MagicModalPortal: React.FC = memo(() => {
 
       const safeModal = currentModal ?? prevModals[prevModals.length - 1];
 
-      safeModal?.hideCallback(props);
+      // Android-specific: Add a small delay before calling hideCallback to ensure
+      // animation completion. This addresses Issue #155 where navigation
+      // immediately after hide causes crashes on Android.
+      if (Platform.OS === "android") {
+        setTimeout(() => {
+          safeModal?.hideCallback(props);
+        }, 50);
+      } else {
+        safeModal?.hideCallback(props);
+      }
 
       return prevModals.filter((modal) => modal.id !== safeModal?.id);
     });

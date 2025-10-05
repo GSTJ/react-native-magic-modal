@@ -9,3 +9,4 @@ export {
 } from "./constants/types";
 export { magicModal } from "./utils/magicModalHandler";
 export { useMagicModal } from "./components/MagicModalProvider";
+export { useSafeModalNavigation } from "./hooks/useSafeModalNavigation";

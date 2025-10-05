@@ -1,0 +1,47 @@
+appId: com.gstj.reactnativemagicmodalexample
+---
+- launchApp:
+    clearState: true
+
+- assertVisible: "Test Issue #155 (Navigation Crash)"
+
+# Test 1: Navigate immediately after hiding modal
+- tapOn: "Test Issue #155 (Navigation Crash)"
+- waitForAnimationToEnd
+
+- assertVisible: "Issue #155 Reproduction Modal"
+- tapOn: "Navigate Immediately"
+
+# Check if we successfully navigated
+- waitForAnimationToEnd
+- assertVisible: "Issue #155 Test Page"
+
+# Go back to main screen
+- tapOn: "Go Back"
+- waitForAnimationToEnd
+
+# Test 2: Navigate with delay after hiding modal
+- tapOn: "Test Issue #155 (Navigation Crash)"
+- waitForAnimationToEnd
+
+- assertVisible: "Issue #155 Reproduction Modal"
+- tapOn: "Navigate with 100ms Delay"
+
+# Check if we successfully navigated
+- waitForAnimationToEnd
+- assertVisible: "Issue #155 Test Page"
+
+# Go back to main screen
+- tapOn: "Go Back"
+- waitForAnimationToEnd
+
+# Test 3: Just close modal without navigation
+- tapOn: "Test Issue #155 (Navigation Crash)"
+- waitForAnimationToEnd
+
+- assertVisible: "Issue #155 Reproduction Modal"
+- tapOn: "Just Close"
+
+# Verify modal closed and we're still on main screen
+- waitForAnimationToEnd
+- assertVisible: "Test Issue #155 (Navigation Crash)"
