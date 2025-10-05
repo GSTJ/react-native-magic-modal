@@ -9,7 +9,8 @@
       "react-native-magic-modal": ["../../packages/modal/src"],
       "react-native-magic-modal/*": ["../../packages/modal/src/*"]
     },
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "skipLibCheck": true
   },
   "include": ["."],
   "exclude": ["node_modules", "android", "ios"]
