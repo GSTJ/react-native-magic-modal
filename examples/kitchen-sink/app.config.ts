@@ -32,6 +32,5 @@ export default {
   android: {
     package: "com.gstj.reactnativemagicmodalexample",
   },
-  newArchEnabled: true,
   assetBundlePatterns: ["**/*"],
 } satisfies ExpoConfig;
