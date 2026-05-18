@@ -1,0 +1,109 @@
+name: 📱 E2E iOS (Maestro)
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  maestro-ios:
+    name: 🧪 Maestro smoke tests (iOS sim)
+    runs-on: macos-14
+    timeout-minutes: 60
+    env:
+      EXAMPLE_DIR: examples/kitchen-sink
+      APP_ID: com.gstj.reactnativemagicmodalexample
+
+    steps:
+      - name: 🏗 Setup Repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: pnpm
+
+      - name: 🏗 Setup Ruby (for CocoaPods)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: false
+
+      - name: 🏗 Install CocoaPods
+        run: gem install cocoapods --no-document
+
+      - name: 🏗 Get PNPM store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: 🏗 Setup PNPM cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 📦 Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🏗 Install Maestro CLI
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: 🔎 Verify Maestro
+        run: maestro --version
+
+      - name: 📱 Boot iOS Simulator
+        id: boot-sim
+        run: |
+          # Use the latest iPhone simulator already available on the runner image.
+          DEVICE_UDID=$(xcrun simctl list devices available -j \
+            | python3 -c "import json,sys; d=json.load(sys.stdin)['devices']; \
+            rt=sorted([k for k in d if 'iOS' in k]); \
+            uuids=[x['udid'] for x in d[rt[-1]] if 'iPhone' in x['name']]; \
+            print(uuids[-1])")
+          echo "Using simulator UDID: $DEVICE_UDID"
+          xcrun simctl boot "$DEVICE_UDID" || true
+          xcrun simctl bootstatus "$DEVICE_UDID" -b
+          echo "device_udid=$DEVICE_UDID" >> "$GITHUB_OUTPUT"
+
+      - name: 🛠 Expo prebuild (iOS)
+        working-directory: ${{ env.EXAMPLE_DIR }}
+        run: pnpm expo prebuild --platform ios --clean
+
+      - name: 🏗 Build & install iOS app on simulator
+        working-directory: ${{ env.EXAMPLE_DIR }}
+        run: pnpm expo run:ios --configuration Release --no-bundler --device "${{ steps.boot-sim.outputs.device_udid }}"
+
+      - name: 🧪 Run Maestro smoke flows
+        working-directory: ${{ env.EXAMPLE_DIR }}
+        run: |
+          maestro test \
+            .maestro/smoke-launch.yaml \
+            .maestro/smoke-modal-open-close.yaml
+
+      - name: 📤 Upload Maestro debug output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-debug-output
+          path: |
+            ~/.maestro/tests/**
+            ${{ env.EXAMPLE_DIR }}/.maestro/**/*.png
+          if-no-files-found: ignore
+          retention-days: 7
