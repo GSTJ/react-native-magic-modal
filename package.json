@@ -41,5 +41,12 @@
   },
   "devDependencies": {
     "turbo": "^2.5.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "metro": "^0.83.3",
+      "metro-resolver": "^0.83.3",
+      "metro-config": "^0.83.3"
+    }
   }
 }
