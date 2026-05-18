@@ -14,7 +14,7 @@ concurrency:
 jobs:
   maestro-ios:
     name: 🧪 Maestro smoke tests (iOS sim)
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 60
     env:
       EXAMPLE_DIR: examples/kitchen-sink
