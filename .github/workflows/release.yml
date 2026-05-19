@@ -106,9 +106,33 @@ jobs:
           BOUNDARY=$(echo "$CANDIDATES" | xargs -I{} git log -1 --pretty="%ct %H" {} 2>/dev/null | sort -rn | head -1 | awk '{print $2}')
           echo "boundary=$BOUNDARY ($(git log -1 --pretty=%s "$BOUNDARY"))"
 
-          # `\(modal\)` matches scoped commits; `BREAKING[- ]CHANGE` matches
-          # the footer added by conventional-commits for breaking changes.
-          QUALIFY=$(git log "$BOUNDARY..HEAD" -E --grep='\(modal\)|BREAKING[- ]CHANGE' --pretty=%s || true)
+          # A commit qualifies if EITHER:
+          #   - its subject (first line) has `(modal)` scope, OR
+          #   - its body contains a line starting with `BREAKING CHANGE:`
+          #     or `BREAKING-CHANGE:` (the conventional-commits footer).
+          # We can't use `git log --grep` here because that searches the
+          # entire commit message; a PR description that mentions
+          # "BREAKING CHANGE" in prose would falsely match. Iterate
+          # commits with a unit separator and check each part explicitly.
+          UNIT=$'\x1f'
+          REC=$'\x1e'
+          COMMITS=$(git log "$BOUNDARY..HEAD" --pretty=format:"%H${UNIT}%s${UNIT}%b${REC}")
+          QUALIFY=""
+          while IFS= read -r -d "$REC" entry; do
+            [ -z "$entry" ] && continue
+            sha=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $1}')
+            subject=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $2}')
+            body=$(printf '%s' "$entry" | awk -F"$UNIT" '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i<NF?FS:"")}')
+            if printf '%s' "$subject" | grep -q '(modal)'; then
+              QUALIFY="${QUALIFY}${subject}"$'\n'
+              continue
+            fi
+            if printf '%s' "$body" | grep -qE '^BREAKING[- ]CHANGE:'; then
+              QUALIFY="${QUALIFY}${subject}"$'\n'
+            fi
+          done <<< "$COMMITS"
+          QUALIFY=$(printf '%s' "$QUALIFY" | sed '/^$/d')
+
           if [ -z "$QUALIFY" ]; then
             echo "No qualifying commits since boundary. Skipping release."
             echo "skip=true" >> "$GITHUB_OUTPUT"
