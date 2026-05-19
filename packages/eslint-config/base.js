@@ -56,7 +56,7 @@ const baseConfig = tseslint.config(
     languageOptions: {
       parser,
       parserOptions: {
-        project: true,
+        projectService: true,
       },
       globals: {
         ...globals.node,

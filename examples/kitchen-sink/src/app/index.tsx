@@ -1,8 +1,13 @@
 /* eslint-disable react-native/no-color-literals */
 import type { Direction } from "react-native-magic-modal";
 import React from "react";
-import { Platform, Pressable, StyleSheet, Text } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import {
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { magicModal, MagicModalHideReason } from "react-native-magic-modal";
 import { ZoomIn, ZoomOut } from "react-native-reanimated";
 import { router } from "expo-router";
