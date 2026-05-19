@@ -101,7 +101,7 @@ jobs:
       - name: 🏗 Setup Ruby (for CocoaPods)
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2"
+          ruby-version: "3.4.9"
           bundler-cache: false
 
       - name: 🏗 Install CocoaPods
