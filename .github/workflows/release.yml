@@ -14,8 +14,15 @@ jobs:
       - name: 🏗 Setup Repo
         uses: actions/checkout@v4
         with:
+          # Need full history so the no-op probe below can locate the last
+          # release boundary commit and grep for qualifying commits since.
+          fetch-depth: 0
           # PAT lets release-it push the version-bump commit + tag back to
           # main past branch protection (GITHUB_TOKEN can't bypass rules).
+          # NOTE: GH_PAT was failing with "Permission denied" on push (likely
+          # expired/missing contents:write). We keep this here in case it gets
+          # rotated, but `.release-it.js` now sets `git.push: false` so the
+          # workflow no longer depends on it actually working.
           token: ${{ secrets.GH_PAT }}
           persist-credentials: true
 
@@ -64,20 +71,50 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # release-it prints the next version it WOULD publish. If it matches
-          # the version already on disk (== last published), there is nothing
-          # to ship. We disable npm/github side-effects on this probe so it
-          # only computes the version from conventional commits.
+          # We can't trust `release-it --release-version` here: when no commits
+          # match the `(modal)` scope filter, the conventional-changelog plugin
+          # returns no recommendation and release-it's Version plugin falls
+          # back to a CI-default `patch` of `latestVersion` (which is `0.0.0`
+          # because there's no `magic-modal-*` git tag yet). That made the
+          # probe print `0.0.1` even with zero qualifying commits, so the
+          # script proceeded to publish.
+          #
+          # Instead, decide skip deterministically from git history. The
+          # boundary is the most recent of:
+          #   - last `magic-modal-*` tag (preferred, once we ever push one)
+          #   - last `chore(release):` commit (release-it's own bump commit)
+          #   - last `chore(modal): sync version` commit (manual sync fallback)
+          # We then look for any commit since the boundary whose subject is
+          # `(modal)`-scoped OR whose body has a `BREAKING CHANGE:` footer.
+          # This mirrors the commitFilter in packages/modal/.release-it.js.
           CURRENT=$(node -p "require('./package.json').version")
-          NEXT=$(pnpm exec release-it --release-version --ci --no-npm --no-github 2>&1 | grep -E '^[0-9]+\.[0-9]+\.[0-9]+' | tail -n 1 | tr -d '[:space:]')
           echo "current=$CURRENT"
-          echo "next=$NEXT"
           echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
-          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
-          if [ -z "$NEXT" ] || [ "$NEXT" = "$CURRENT" ]; then
+
+          TAG_BOUND=$(git describe --tags --abbrev=0 --match='magic-modal-*' 2>/dev/null || true)
+          REL_BOUND=$(git log -1 --pretty=%H --grep='^chore(release)' 2>/dev/null || true)
+          SYNC_BOUND=$(git log -1 --pretty=%H --grep='^chore(modal): sync version' 2>/dev/null || true)
+          CANDIDATES=$(printf '%s\n%s\n%s\n' "$TAG_BOUND" "$REL_BOUND" "$SYNC_BOUND" | grep -v '^$' || true)
+
+          if [ -z "$CANDIDATES" ]; then
+            # No boundary at all (fresh repo) — let the release flow run.
+            echo "No release boundary found; proceeding."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          BOUNDARY=$(echo "$CANDIDATES" | xargs -I{} git log -1 --pretty="%ct %H" {} 2>/dev/null | sort -rn | head -1 | awk '{print $2}')
+          echo "boundary=$BOUNDARY ($(git log -1 --pretty=%s "$BOUNDARY"))"
+
+          # `\(modal\)` matches scoped commits; `BREAKING[- ]CHANGE` matches
+          # the footer added by conventional-commits for breaking changes.
+          QUALIFY=$(git log "$BOUNDARY..HEAD" -E --grep='\(modal\)|BREAKING[- ]CHANGE' --pretty=%s || true)
+          if [ -z "$QUALIFY" ]; then
+            echo "No qualifying commits since boundary. Skipping release."
             echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "No new version to release. Skipping."
           else
+            echo "Qualifying commits found:"
+            echo "$QUALIFY"
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 

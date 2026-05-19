@@ -76,7 +76,22 @@ export default {
     pushArgs: ["-o ci.skip"],
     commit: true,
     tag: true,
-    push: true,
+    // We intentionally do NOT push the release commit/tag back to main from
+    // CI. The repository's GH_PAT secret (dated 2024) is currently rejected
+    // by branch protection ("Permission to GSTJ/react-native-magic-modal.git
+    // denied to GSTJ"), which causes the entire publish workflow to fail
+    // AFTER npm publish has already happened — leaving npm and main out of
+    // sync and bricking the workflow forever after.
+    //
+    // Keeping `commit: true` and `tag: true` so the @release-it/github plugin
+    // still has a tag to attach the GitHub Release to within the runner.
+    // The bump commit + tag exist only on the runner and are discarded when
+    // the job ends; main stays at the pre-release version, and we sync via
+    // a follow-up PR (same pattern used for #192).
+    //
+    // TODO: once GH_PAT is rotated with `contents: write` and granted
+    // bypass on branch protection, flip `push` back to `true`.
+    push: false,
     requireCleanWorkingDir: false,
     tagName: "magic-modal-${version}",
   },
