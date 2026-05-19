@@ -13,6 +13,11 @@ jobs:
     steps:
       - name: 🏗 Setup Repo
         uses: actions/checkout@v4
+        with:
+          # PAT lets release-it push the version-bump commit + tag back to
+          # main past branch protection (GITHUB_TOKEN can't bypass rules).
+          token: ${{ secrets.GH_PAT }}
+          persist-credentials: true
 
       - name: 🏗 Setup PNPM
         uses: pnpm/action-setup@v4
