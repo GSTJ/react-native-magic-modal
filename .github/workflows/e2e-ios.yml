@@ -123,15 +123,11 @@ jobs:
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 🏗 Install ccache
+      - name: 🏗 Install ccache (Pods enable it via expo-build-properties)
         run: |
           brew install ccache
           ccache --version
           ccache --max-size=2G
-          # Wire ccache as the compiler front-end for the build.
-          echo "CC=ccache clang" >> "$GITHUB_ENV"
-          echo "CXX=ccache clang++" >> "$GITHUB_ENV"
-          echo "LD=ccache clang++" >> "$GITHUB_ENV"
           echo "CCACHE_DIR=$HOME/.ccache" >> "$GITHUB_ENV"
           echo "CCACHE_SLOPPINESS=clang_index_store,file_macro,include_file_mtime,include_file_ctime,time_macros" >> "$GITHUB_ENV"
           echo "CCACHE_FILECLONE=true" >> "$GITHUB_ENV"
@@ -196,6 +192,23 @@ jobs:
         working-directory: ${{ env.EXAMPLE_DIR }}
         # No --clean so cached ios/Pods + DerivedData stay usable across runs.
         run: pnpm expo prebuild --platform ios
+
+      - name: 🧰 Enable ccache in Podfile.properties.json
+        working-directory: ${{ env.EXAMPLE_DIR }}
+        # RN 0.83 Podfile reads `apple.ccacheEnabled` and wires ccache via
+        # react_native_post_install when true.
+        run: |
+          python3 -c "
+          import json, pathlib
+          p = pathlib.Path('ios/Podfile.properties.json')
+          d = json.loads(p.read_text())
+          d['apple.ccacheEnabled'] = 'true'
+          p.write_text(json.dumps(d, indent=2))
+          print(p.read_text())
+          "
+          # The Podfile invokes pod install during prebuild — re-run it so
+          # the ccache flag actually takes effect.
+          cd ios && pod install
 
       - name: 🏗 Build & install iOS app on simulator
         working-directory: ${{ env.EXAMPLE_DIR }}
