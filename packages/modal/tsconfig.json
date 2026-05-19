@@ -1,6 +1,6 @@
 {
   "extends": ["expo/tsconfig.base", "@magic/tsconfig/base.json"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "dist"],
   "include": [".", ".release-it.js"],
   "compilerOptions": {
     "jsx": "react-native",

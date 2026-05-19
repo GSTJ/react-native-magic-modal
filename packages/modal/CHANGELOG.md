@@ -1,5 +1,26 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## Unreleased
+
+### ⚠ BREAKING CHANGES
+
+* Minimum peer versions bumped to align with the React Native ecosystem
+  required by Reanimated 4 and `scheduleOnRN` (replacing the deprecated
+  `runOnJS`):
+  * `react` `>=18.0.0`
+  * `react-native` `>=0.81.0`
+  * `react-native-gesture-handler` `>=2.20.0`
+  * `react-native-reanimated` `>=4.0.0`
+  * `react-native-worklets` `>=0.5.0` (optional peer; ships with Reanimated 4)
+* Consumers on older RN/Reanimated versions must upgrade their app before
+  taking this release.
+
+### :sparkles: Internal :sparkles:
+
+* Replace deprecated `runOnJS` with `scheduleOnRN` from `react-native-worklets`.
+* Kitchen-sink example bumped to Expo SDK 55 (RN 0.83.6, React 19.2,
+  Reanimated 4.3.1) end-to-end.
+
 ## 6.0.2 (2024-12-16)
 
 ## 6.0.1 (2024-12-15)

@@ -17,6 +17,7 @@ export default {
         origin: "https://kitchen-sink.expo.dev",
       },
     ],
+    "./plugins/withExpoModulesCoreSwiftStrictConcurrency",
   ],
   platforms: ["ios", "android", "web"],
   splash: {
@@ -32,6 +33,5 @@ export default {
   android: {
     package: "com.gstj.reactnativemagicmodalexample",
   },
-  newArchEnabled: true,
   assetBundlePatterns: ["**/*"],
 } satisfies ExpoConfig;
