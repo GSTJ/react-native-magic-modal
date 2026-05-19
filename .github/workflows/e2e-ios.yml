@@ -1,16 +1,58 @@
 name: 📱 E2E iOS (Maestro)
 on:
+  pull_request_review:
+    types: [submitted]
   pull_request:
     branches:
       - main
+    types: [synchronize, ready_for_review]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # Only run the (expensive) macOS build once a reviewer has approved the PR,
+  # or on subsequent commits to a PR that already has an approval.
+  approval-gate:
+    name: 🔐 Approval gate
+    runs-on: ubuntu-latest
+    outputs:
+      approved: ${{ steps.check.outputs.approved }}
+    steps:
+      - name: Check for approval
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUM="${{ github.event.pull_request.number || github.event.review.pull_request.number }}"
+          if [ -z "$PR_NUM" ]; then
+            echo "No PR number; skipping."
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # If this run was triggered by a review submission, check it's an approval.
+          if [ "${{ github.event_name }}" = "pull_request_review" ] && [ "${{ github.event.review.state }}" != "approved" ]; then
+            echo "Review state is ${{ github.event.review.state }}, not approved."
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Otherwise look up the latest review per reviewer on this PR.
+          STATE=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUM/reviews" \
+            --jq '[.[] | select(.state=="APPROVED" or .state=="CHANGES_REQUESTED")] | sort_by(.submitted_at) | last | .state' \
+            || echo "")
+          if [ "$STATE" = "APPROVED" ]; then
+            echo "PR is approved."
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "PR has no APPROVED review yet (latest review: ${STATE:-none}). Skipping E2E."
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+          fi
+
   maestro-ios:
     name: 🧪 Maestro smoke tests (iOS sim)
+    needs: approval-gate
+    if: needs.approval-gate.outputs.approved == 'true'
     runs-on: macos-15
     timeout-minutes: 60
     env:
