@@ -24,6 +24,19 @@ jobs:
       - name: 🏗 Setup Repo
         uses: actions/checkout@v4
 
+      - name: 🏗 Select Xcode 26 (Swift 6.1+ for expo-modules-core)
+        run: |
+          # expo-modules-core 55.x uses @MainActor extension syntax (Swift 6.1+).
+          # macos-15 default is Xcode 16.4 (Swift 6.0) which can't parse it.
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | head -1)
+          if [ -z "$XCODE_PATH" ]; then
+            echo "No Xcode 26 found; falling back to default. Pods may not compile."
+            xcodebuild -version
+          else
+            sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+            xcodebuild -version
+          fi
+
       - name: 🏗 Setup PNPM
         uses: pnpm/action-setup@v4
 
