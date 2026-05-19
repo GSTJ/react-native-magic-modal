@@ -134,16 +134,21 @@ jobs:
           echo "CCACHE_DEPEND=true" >> "$GITHUB_ENV"
           echo "CCACHE_INODECACHE=true" >> "$GITHUB_ENV"
 
-      - name: 🗄 Cache ccache compiler cache
-        uses: actions/cache@v4
+      # Split restore + save so the warmed caches get uploaded even when the
+      # later maestro step fails. actions/cache@v4 only saves on whole-job
+      # success; restore/save lets us save unconditionally.
+      - name: 🗄 Restore ccache compiler cache
+        id: ccache-restore
+        uses: actions/cache/restore@v4
         with:
           path: ~/.ccache
           key: ${{ runner.os }}-ccache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-ccache-
 
-      - name: 🗄 Cache CocoaPods (specs + downloaded sources)
-        uses: actions/cache@v4
+      - name: 🗄 Restore CocoaPods (specs + downloaded sources)
+        id: pods-cache-restore
+        uses: actions/cache/restore@v4
         with:
           path: |
             ~/.cocoapods
@@ -152,8 +157,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-cache-
 
-      - name: 🗄 Cache iOS Pods/build/DerivedData
-        uses: actions/cache@v4
+      - name: 🗄 Restore iOS Pods/build/DerivedData
+        id: ios-cache-restore
+        uses: actions/cache/restore@v4
         with:
           path: |
             ${{ env.EXAMPLE_DIR }}/ios/Pods
@@ -235,3 +241,32 @@ jobs:
             ${{ env.EXAMPLE_DIR }}/.maestro/**/*.png
           if-no-files-found: ignore
           retention-days: 7
+
+      # Save caches even when a later step (maestro) fails. Each save is
+      # gated on the cache not already being a key hit so we don't waste
+      # GHA cache quota re-uploading identical contents.
+      - name: 💾 Save ccache compiler cache
+        if: always() && steps.ccache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.ccache
+          key: ${{ steps.ccache-restore.outputs.cache-primary-key }}
+
+      - name: 💾 Save CocoaPods cache
+        if: always() && steps.pods-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cocoapods
+            ~/Library/Caches/CocoaPods
+          key: ${{ steps.pods-cache-restore.outputs.cache-primary-key }}
+
+      - name: 💾 Save iOS Pods/build/DerivedData cache
+        if: always() && steps.ios-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ env.EXAMPLE_DIR }}/ios/Pods
+            ${{ env.EXAMPLE_DIR }}/ios/build
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ steps.ios-cache-restore.outputs.cache-primary-key }}

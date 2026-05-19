@@ -16,6 +16,9 @@ export const ExampleModal = () => {
       </Text>
       <Pressable
         testID="close-modal-button"
+        accessibilityRole="button"
+        accessibilityLabel="Close Modal"
+        accessible
         onPress={() => {
           hide("close button pressed");
         }}

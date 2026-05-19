@@ -101,6 +101,9 @@ export default () => {
       <StatusBar style="dark" />
       <Pressable
         testID="show-modal-button"
+        accessibilityRole="button"
+        accessibilityLabel="Show Modal"
+        accessible
         style={styles.button}
         onPress={showModal}
       >
