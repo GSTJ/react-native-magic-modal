@@ -5,7 +5,7 @@ on:
   pull_request:
     branches:
       - main
-    types: [synchronize, ready_for_review]
+    types: [opened, reopened, synchronize, ready_for_review]
 
 concurrency:
   # Key off the PR number (works across pull_request and pull_request_review
