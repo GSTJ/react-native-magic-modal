@@ -54,10 +54,21 @@ export default {
         ],
       },
       /**
-       * Only include commits with (modal) in the message
-       * @param {{ header: string }} commit
+       * Include commits scoped to (modal) and any commit carrying a
+       * BREAKING CHANGE note (regardless of scope). This ensures that
+       * unscoped `feat!:` / `fix!:` commits or commits with a
+       * `BREAKING CHANGE:` footer still trigger a release, while
+       * unrelated chore/deps noise without (modal) scope is ignored.
+       * @param {{ header?: string, notes?: Array<{ title?: string, text?: string }> }} commit
        */
-      commitFilter: (commit) => commit.header.includes("(modal)"),
+      commitFilter: (commit) => {
+        if (commit.header?.includes("(modal)")) return true;
+        if (
+          commit.notes?.some((n) => /BREAKING[- ]CHANGE/i.test(n.title ?? ""))
+        )
+          return true;
+        return false;
+      },
     },
   },
   git: {
