@@ -123,6 +123,53 @@ jobs:
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: 🏗 Install ccache
+        run: |
+          brew install ccache
+          ccache --version
+          ccache --max-size=2G
+          # Wire ccache as the compiler front-end for the build.
+          echo "CC=ccache clang" >> "$GITHUB_ENV"
+          echo "CXX=ccache clang++" >> "$GITHUB_ENV"
+          echo "LD=ccache clang++" >> "$GITHUB_ENV"
+          echo "CCACHE_DIR=$HOME/.ccache" >> "$GITHUB_ENV"
+          echo "CCACHE_SLOPPINESS=clang_index_store,file_macro,include_file_mtime,include_file_ctime,time_macros" >> "$GITHUB_ENV"
+          echo "CCACHE_FILECLONE=true" >> "$GITHUB_ENV"
+          echo "CCACHE_DEPEND=true" >> "$GITHUB_ENV"
+          echo "CCACHE_INODECACHE=true" >> "$GITHUB_ENV"
+
+      - name: 🗄 Cache ccache compiler cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-ccache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
+
+      - name: 🗄 Cache CocoaPods (specs + downloaded sources)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cocoapods
+            ~/Library/Caches/CocoaPods
+          key: ${{ runner.os }}-pods-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-cache-
+
+      - name: 🗄 Cache iOS Pods/build/DerivedData
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.EXAMPLE_DIR }}/ios/Pods
+            ${{ env.EXAMPLE_DIR }}/ios/build
+            ~/Library/Developer/Xcode/DerivedData
+          # Pods.lock changes when any native dep version moves; keying on
+          # the workspace lockfile is a safe proxy until ios/Podfile.lock
+          # is tracked in git.
+          key: ${{ runner.os }}-ios-pods-derived-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-ios-pods-derived-
+
       - name: 🏗 Install Maestro CLI
         run: |
           curl -fsSL "https://get.maestro.mobile.dev" | bash
@@ -147,11 +194,16 @@ jobs:
 
       - name: 🛠 Expo prebuild (iOS)
         working-directory: ${{ env.EXAMPLE_DIR }}
-        run: pnpm expo prebuild --platform ios --clean
+        # No --clean so cached ios/Pods + DerivedData stay usable across runs.
+        run: pnpm expo prebuild --platform ios
 
       - name: 🏗 Build & install iOS app on simulator
         working-directory: ${{ env.EXAMPLE_DIR }}
         run: pnpm expo run:ios --configuration Release --no-bundler --device "${{ steps.boot-sim.outputs.device_udid }}"
+
+      - name: 📊 ccache stats
+        if: always()
+        run: ccache --show-stats || true
 
       - name: 🧪 Run Maestro smoke flows
         working-directory: ${{ env.EXAMPLE_DIR }}
