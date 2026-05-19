@@ -14,18 +14,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Only run the (expensive) macOS build once a reviewer has approved the PR,
-  # or on subsequent commits to a PR that already has an approval.
+  # Run the (expensive) macOS build when:
+  #   - the PR is opened/updated by the repo owner (GSTJ), OR
+  #   - a reviewer has approved the PR (including subsequent pushes to an
+  #     already-approved PR).
   approval-gate:
     name: 🔐 Approval gate
     runs-on: ubuntu-latest
     outputs:
       approved: ${{ steps.check.outputs.approved }}
     steps:
-      - name: Check for approval
+      - name: Check for approval (or trusted author)
         id: check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login || github.event.review.pull_request.user.login }}
         run: |
           PR_NUM="${{ github.event.pull_request.number || github.event.review.pull_request.number }}"
           if [ -z "$PR_NUM" ]; then
@@ -33,6 +36,14 @@ jobs:
             echo "approved=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          # Trusted authors run E2E without needing an approval.
+          case "$PR_AUTHOR" in
+            GSTJ)
+              echo "PR author $PR_AUTHOR is trusted; running E2E."
+              echo "approved=true" >> "$GITHUB_OUTPUT"
+              exit 0
+              ;;
+          esac
           # If this run was triggered by a review submission, check it's an approval.
           if [ "${{ github.event_name }}" = "pull_request_review" ] && [ "${{ github.event.review.state }}" != "approved" ]; then
             echo "Review state is ${{ github.event.review.state }}, not approved."
