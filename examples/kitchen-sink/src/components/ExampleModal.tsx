@@ -15,6 +15,7 @@ export const ExampleModal = () => {
         This is an example to showcase the imperative Magic Modal!
       </Text>
       <Pressable
+        testID="close-modal-button"
         onPress={() => {
           hide("close button pressed");
         }}

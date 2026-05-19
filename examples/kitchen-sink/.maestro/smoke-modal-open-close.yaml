@@ -4,19 +4,25 @@ appId: com.gstj.reactnativemagicmodalexample
 # Close button. NOTE: src/app/index.tsx's showModal() also auto-closes via
 # setTimeout(2000), so this flow taps "Close Modal" promptly to avoid racing
 # the timer.
+#
+# Uses testID selectors (id:) because XCUITest on iOS 26+ does not reliably
+# expose RN <Text> nodes inside <Pressable> for text-based assertions.
 - launchApp
 - waitForAnimationToEnd:
     timeout: 10000
 - extendedWaitUntil:
-    visible: "Show Modal"
+    visible:
+      id: "show-modal-button"
     timeout: 15000
-- tapOn: "Show Modal"
+- tapOn:
+    id: "show-modal-button"
 - extendedWaitUntil:
-    visible: "Example Modal"
+    visible:
+      id: "close-modal-button"
     timeout: 5000
-- assertVisible: "This is an example to showcase the imperative Magic Modal!"
-- tapOn: "Close Modal"
+- tapOn:
+    id: "close-modal-button"
 - extendedWaitUntil:
-    visible: "Show Modal"
+    visible:
+      id: "show-modal-button"
     timeout: 5000
-- assertNotVisible: "Example Modal"

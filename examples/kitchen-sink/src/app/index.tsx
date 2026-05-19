@@ -99,7 +99,11 @@ export default () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <StatusBar style="dark" />
-      <Pressable style={styles.button} onPress={showModal}>
+      <Pressable
+        testID="show-modal-button"
+        style={styles.button}
+        onPress={showModal}
+      >
         <Text style={styles.buttonText}>Show Modal</Text>
       </Pressable>
       <Pressable style={styles.button} onPress={showUndismissableModal}>
