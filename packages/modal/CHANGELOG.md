@@ -1,6 +1,6 @@
 # 🦄 Magic Modal Changelog 🪄
 
-## Unreleased
+## 7.0.0 (2026-05-19)
 
 ### ⚠ BREAKING CHANGES
 
