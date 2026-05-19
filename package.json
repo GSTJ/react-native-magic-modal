@@ -30,7 +30,7 @@
     "start": "turbo start",
     "test": "turbo test",
     "build": "turbo build",
-    "release": "turbo release",
+    "release": "turbo run release --filter=react-native-magic-modal",
     "docs": "turbo docs",
     "doctor": "turbo doctor"
   },

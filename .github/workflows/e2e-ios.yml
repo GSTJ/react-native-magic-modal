@@ -1,19 +1,71 @@
 name: 📱 E2E iOS (Maestro)
 on:
-  push:
-    branches-ignore:
-      - main
+  pull_request_review:
+    types: [submitted]
   pull_request:
     branches:
       - main
+    types: [synchronize, ready_for_review]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # Key off the PR number (works across pull_request and pull_request_review
+  # events). Falls back to ref for direct pushes / re-runs.
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.review.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # Run the (expensive) macOS build when:
+  #   - the PR is opened/updated by the repo owner (GSTJ), OR
+  #   - a reviewer has approved the PR (including subsequent pushes to an
+  #     already-approved PR).
+  approval-gate:
+    name: 🔐 Approval gate
+    runs-on: ubuntu-latest
+    outputs:
+      approved: ${{ steps.check.outputs.approved }}
+    steps:
+      - name: Check for approval (or trusted author)
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login || github.event.review.pull_request.user.login }}
+        run: |
+          PR_NUM="${{ github.event.pull_request.number || github.event.review.pull_request.number }}"
+          if [ -z "$PR_NUM" ]; then
+            echo "No PR number; skipping."
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Trusted authors run E2E without needing an approval.
+          case "$PR_AUTHOR" in
+            GSTJ)
+              echo "PR author $PR_AUTHOR is trusted; running E2E."
+              echo "approved=true" >> "$GITHUB_OUTPUT"
+              exit 0
+              ;;
+          esac
+          # If this run was triggered by a review submission, check it's an approval.
+          if [ "${{ github.event_name }}" = "pull_request_review" ] && [ "${{ github.event.review.state }}" != "approved" ]; then
+            echo "Review state is ${{ github.event.review.state }}, not approved."
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Otherwise look up the latest review per reviewer on this PR.
+          STATE=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUM/reviews" \
+            --jq '[.[] | select(.state=="APPROVED" or .state=="CHANGES_REQUESTED")] | sort_by(.submitted_at) | last | .state' \
+            || echo "")
+          if [ "$STATE" = "APPROVED" ]; then
+            echo "PR is approved."
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "PR has no APPROVED review yet (latest review: ${STATE:-none}). Skipping E2E."
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+          fi
+
   maestro-ios:
     name: 🧪 Maestro smoke tests (iOS sim)
+    needs: approval-gate
+    if: needs.approval-gate.outputs.approved == 'true'
     runs-on: macos-15
     timeout-minutes: 60
     env:
@@ -23,6 +75,19 @@ jobs:
     steps:
       - name: 🏗 Setup Repo
         uses: actions/checkout@v4
+
+      - name: 🏗 Select Xcode 26 (Swift 6.1+ for expo-modules-core)
+        run: |
+          # expo-modules-core 55.x uses @MainActor extension syntax (Swift 6.1+).
+          # macos-15 default is Xcode 16.4 (Swift 6.0) which can't parse it.
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | head -1)
+          if [ -z "$XCODE_PATH" ]; then
+            echo "No Xcode 26 found; falling back to default. Pods may not compile."
+            xcodebuild -version
+          else
+            sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+            xcodebuild -version
+          fi
 
       - name: 🏗 Setup PNPM
         uses: pnpm/action-setup@v4
@@ -58,6 +123,55 @@ jobs:
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: 🏗 Install ccache (Pods enable it via expo-build-properties)
+        run: |
+          brew install ccache
+          ccache --version
+          ccache --max-size=2G
+          echo "CCACHE_DIR=$HOME/.ccache" >> "$GITHUB_ENV"
+          echo "CCACHE_SLOPPINESS=clang_index_store,file_macro,include_file_mtime,include_file_ctime,time_macros" >> "$GITHUB_ENV"
+          echo "CCACHE_FILECLONE=true" >> "$GITHUB_ENV"
+          echo "CCACHE_DEPEND=true" >> "$GITHUB_ENV"
+          echo "CCACHE_INODECACHE=true" >> "$GITHUB_ENV"
+
+      # Split restore + save so the warmed caches get uploaded even when the
+      # later maestro step fails. actions/cache@v4 only saves on whole-job
+      # success; restore/save lets us save unconditionally.
+      - name: 🗄 Restore ccache compiler cache
+        id: ccache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-ccache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
+
+      - name: 🗄 Restore CocoaPods (specs + downloaded sources)
+        id: pods-cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.cocoapods
+            ~/Library/Caches/CocoaPods
+          key: ${{ runner.os }}-pods-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-cache-
+
+      - name: 🗄 Restore iOS Pods/build/DerivedData
+        id: ios-cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ${{ env.EXAMPLE_DIR }}/ios/Pods
+            ${{ env.EXAMPLE_DIR }}/ios/build
+            ~/Library/Developer/Xcode/DerivedData
+          # Pods.lock changes when any native dep version moves; keying on
+          # the workspace lockfile is a safe proxy until ios/Podfile.lock
+          # is tracked in git.
+          key: ${{ runner.os }}-ios-pods-derived-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-ios-pods-derived-
+
       - name: 🏗 Install Maestro CLI
         run: |
           curl -fsSL "https://get.maestro.mobile.dev" | bash
@@ -82,11 +196,33 @@ jobs:
 
       - name: 🛠 Expo prebuild (iOS)
         working-directory: ${{ env.EXAMPLE_DIR }}
-        run: pnpm expo prebuild --platform ios --clean
+        # No --clean so cached ios/Pods + DerivedData stay usable across runs.
+        run: pnpm expo prebuild --platform ios
+
+      - name: 🧰 Enable ccache in Podfile.properties.json
+        working-directory: ${{ env.EXAMPLE_DIR }}
+        # RN 0.83 Podfile reads `apple.ccacheEnabled` and wires ccache via
+        # react_native_post_install when true.
+        run: |
+          python3 -c "
+          import json, pathlib
+          p = pathlib.Path('ios/Podfile.properties.json')
+          d = json.loads(p.read_text())
+          d['apple.ccacheEnabled'] = 'true'
+          p.write_text(json.dumps(d, indent=2))
+          print(p.read_text())
+          "
+          # The Podfile invokes pod install during prebuild — re-run it so
+          # the ccache flag actually takes effect.
+          cd ios && pod install
 
       - name: 🏗 Build & install iOS app on simulator
         working-directory: ${{ env.EXAMPLE_DIR }}
         run: pnpm expo run:ios --configuration Release --no-bundler --device "${{ steps.boot-sim.outputs.device_udid }}"
+
+      - name: 📊 ccache stats
+        if: always()
+        run: ccache --show-stats || true
 
       - name: 🧪 Run Maestro smoke flows
         working-directory: ${{ env.EXAMPLE_DIR }}
@@ -105,3 +241,32 @@ jobs:
             ${{ env.EXAMPLE_DIR }}/.maestro/**/*.png
           if-no-files-found: ignore
           retention-days: 7
+
+      # Save caches even when a later step (maestro) fails. Each save is
+      # gated on the cache not already being a key hit so we don't waste
+      # GHA cache quota re-uploading identical contents.
+      - name: 💾 Save ccache compiler cache
+        if: always() && steps.ccache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.ccache
+          key: ${{ steps.ccache-restore.outputs.cache-primary-key }}
+
+      - name: 💾 Save CocoaPods cache
+        if: always() && steps.pods-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cocoapods
+            ~/Library/Caches/CocoaPods
+          key: ${{ steps.pods-cache-restore.outputs.cache-primary-key }}
+
+      - name: 💾 Save iOS Pods/build/DerivedData cache
+        if: always() && steps.ios-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ env.EXAMPLE_DIR }}/ios/Pods
+            ${{ env.EXAMPLE_DIR }}/ios/build
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ steps.ios-cache-restore.outputs.cache-primary-key }}
