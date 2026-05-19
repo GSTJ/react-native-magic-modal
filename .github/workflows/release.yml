@@ -58,7 +58,31 @@ jobs:
       - name: 🛠️ Build
         run: pnpm run build
 
+      - name: 🔎 Determine next version
+        id: next-version
+        working-directory: packages/modal
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # release-it prints the next version it WOULD publish. If it matches
+          # the version already on disk (== last published), there is nothing
+          # to ship. We disable npm/github side-effects on this probe so it
+          # only computes the version from conventional commits.
+          CURRENT=$(node -p "require('./package.json').version")
+          NEXT=$(pnpm exec release-it --release-version --ci --no-npm --no-github 2>&1 | grep -E '^[0-9]+\.[0-9]+\.[0-9]+' | tail -n 1 | tr -d '[:space:]')
+          echo "current=$CURRENT"
+          echo "next=$NEXT"
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
+          if [ -z "$NEXT" ] || [ "$NEXT" = "$CURRENT" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "No new version to release. Skipping."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: 🚀 Release
+        if: steps.next-version.outputs.skip != 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
