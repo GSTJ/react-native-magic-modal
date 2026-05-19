@@ -1,7 +1,7 @@
 name: 🛠️ Branch Checkup
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - main
 
 concurrency:

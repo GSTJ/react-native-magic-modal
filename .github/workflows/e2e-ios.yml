@@ -1,8 +1,5 @@
 name: 📱 E2E iOS (Maestro)
 on:
-  push:
-    branches-ignore:
-      - main
   pull_request:
     branches:
       - main
