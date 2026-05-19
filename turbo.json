@@ -45,7 +45,7 @@
     },
     "docs": {
       "dependsOn": ["^copy:readme"],
-      "outputs": ["node_modules/.cache/docs.json"]
+      "outputs": ["docs/**", "node_modules/.cache/docs.json"]
     },
     "clean": {
       "cache": false
