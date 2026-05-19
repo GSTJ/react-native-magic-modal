@@ -56,11 +56,11 @@
   },
   "prettier": "@magic/prettier-config",
   "peerDependencies": {
-    "react": "*",
-    "react-native": "*",
-    "react-native-gesture-handler": "*",
-    "react-native-reanimated": "*",
-    "react-native-worklets": "*"
+    "react": ">=18.0.0",
+    "react-native": ">=0.81.0",
+    "react-native-gesture-handler": ">=2.20.0",
+    "react-native-reanimated": ">=4.0.0",
+    "react-native-worklets": ">=0.5.0"
   },
   "peerDependenciesMeta": {
     "react-native-worklets": {
