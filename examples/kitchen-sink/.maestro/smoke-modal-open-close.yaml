@@ -5,16 +5,17 @@ appId: com.gstj.reactnativemagicmodalexample
 # setTimeout(2000), so this flow taps "Close Modal" promptly to avoid racing
 # the timer.
 - launchApp
-- assertVisible: "Show Modal"
+- waitForAnimationToEnd:
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "Show Modal"
+    timeout: 15000
 - tapOn: "Show Modal"
-# ExampleModal (src/components/ExampleModal.tsx) renders "Example Modal" title
-# and a "Close Modal" button.
 - extendedWaitUntil:
     visible: "Example Modal"
     timeout: 5000
 - assertVisible: "This is an example to showcase the imperative Magic Modal!"
 - tapOn: "Close Modal"
-# After dismissal we should be back on the home screen.
 - extendedWaitUntil:
     visible: "Show Modal"
     timeout: 5000

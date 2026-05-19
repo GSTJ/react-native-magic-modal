@@ -2,8 +2,11 @@ appId: com.gstj.reactnativemagicmodalexample
 ---
 # Smoke test: verify the kitchen-sink app launches and the home screen renders.
 # The home screen (src/app/index.tsx) renders a ScrollView of Pressable buttons.
-# "Show Modal" is the first / primary entry point and is rendered unconditionally.
 - launchApp
-- assertVisible: "Show Modal"
+- waitForAnimationToEnd:
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "Show Modal"
+    timeout: 15000
 - assertVisible: "Show Undismissable Modal"
 - assertVisible: "Show Toast"
