@@ -8,7 +8,9 @@ on:
     types: [synchronize, ready_for_review]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # Key off the PR number (works across pull_request and pull_request_review
+  # events). Falls back to ref for direct pushes / re-runs.
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.review.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
