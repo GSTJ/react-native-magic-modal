@@ -14,11 +14,11 @@ import Animated, {
   FadeOutRight,
   FadeOutUp,
   interpolate,
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 
 import type { Direction, ModalChildren, ModalProps } from "../constants/types";
 import { defaultDirection } from "../constants/defaultConfig";
@@ -169,7 +169,9 @@ export const MagicModal = memo(
             // TODO: Re-enable after figuring out the Platform.OS
             // usage inside a worklet.
             // if (Platform.OS !== "web") {
-            runOnJS(hide)({ reason: MagicModalHideReason.SWIPE_COMPLETE });
+            scheduleOnRN(hide, {
+              reason: MagicModalHideReason.SWIPE_COMPLETE,
+            });
             //   return;
             // }
 
