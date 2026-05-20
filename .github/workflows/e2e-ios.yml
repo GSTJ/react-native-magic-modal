@@ -74,7 +74,7 @@ jobs:
 
     steps:
       - name: 🏗 Setup Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🏗 Select Xcode 26 (Swift 6.1+ for expo-modules-core)
         run: |
