@@ -113,7 +113,7 @@ jobs:
           echo "pnpm_cache_dir=$(pnpm store path)" >> "$GITHUB_OUTPUT"
 
       - name: 🏗 Setup PNPM cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -139,7 +139,7 @@ jobs:
       # success; restore/save lets us save unconditionally.
       - name: 🗄 Restore ccache compiler cache
         id: ccache-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ~/.ccache
           key: ${{ runner.os }}-ccache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -148,7 +148,7 @@ jobs:
 
       - name: 🗄 Restore CocoaPods (specs + downloaded sources)
         id: pods-cache-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             ~/.cocoapods
@@ -159,7 +159,7 @@ jobs:
 
       - name: 🗄 Restore iOS Pods/build/DerivedData
         id: ios-cache-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             ${{ env.EXAMPLE_DIR }}/ios/Pods
@@ -247,14 +247,14 @@ jobs:
       # GHA cache quota re-uploading identical contents.
       - name: 💾 Save ccache compiler cache
         if: always() && steps.ccache-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ~/.ccache
           key: ${{ steps.ccache-restore.outputs.cache-primary-key }}
 
       - name: 💾 Save CocoaPods cache
         if: always() && steps.pods-cache-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: |
             ~/.cocoapods
@@ -263,7 +263,7 @@ jobs:
 
       - name: 💾 Save iOS Pods/build/DerivedData cache
         if: always() && steps.ios-cache-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: |
             ${{ env.EXAMPLE_DIR }}/ios/Pods
