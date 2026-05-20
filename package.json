@@ -45,7 +45,7 @@
   "pnpm": {
     "overrides": {
       "metro": "^0.83.3",
-      "metro-resolver": "^0.83.3",
+      "metro-resolver": "^0.84.0",
       "metro-config": "^0.83.3",
       "@expo/metro-runtime": "55.0.11"
     }
