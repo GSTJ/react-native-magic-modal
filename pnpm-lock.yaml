@@ -6,7 +6,7 @@ settings:
 
 overrides:
   metro: ^0.83.3
-  metro-resolver: ^0.83.3
+  metro-resolver: ^0.84.0
   metro-config: ^0.83.3
   '@expo/metro-runtime': 55.0.11
 
@@ -5101,9 +5101,9 @@ packages:
     resolution: {integrity: sha512-MfJar2IS4tBRuLb9svwb0Gu5l9BsH+pcRm8eGcEi/wy8MzZinfinh5dFLt2nWkocnulIgtGB5NkFDdbXqMXKhQ==}
     engines: {node: '>=20.19.4'}
 
-  metro-resolver@0.83.7:
-    resolution: {integrity: sha512-WSJIENlMcoSsuz66IfBHOkgfp3KJt2UW2TnEHPf1b8pIG2eEXNOVmo2+03A0H17WY2XGXWgxL0CG7FAopqgB1A==}
-    engines: {node: '>=20.19.4'}
+  metro-resolver@0.84.4:
+    resolution: {integrity: sha512-1qLgbxQ5ZGhhutuPot1Yp348ofDsATL2WkrHF65TobqTT9K3P9qJXw38bomk7ncp5B7OYMfWwtyBZo1lCV792A==}
+    engines: {node: ^20.19.4 || ^22.13.0 || ^24.3.0 || >= 25.0.0}
 
   metro-runtime@0.83.7:
     resolution: {integrity: sha512-9GKkJURaB2iyYoEExKnedzAHzxmKtSi+k0tsZUvMoU27tBZJElchYt7JH/Ai/XzYAI9lCAaV7u5HZSI8J5Z+wQ==}
@@ -7964,7 +7964,7 @@ snapshots:
       metro-core: 0.83.7
       metro-file-map: 0.83.7
       metro-minify-terser: 0.83.7
-      metro-resolver: 0.83.7
+      metro-resolver: 0.84.4
       metro-runtime: 0.83.7
       metro-source-map: 0.83.7
       metro-symbolicate: 0.83.7
@@ -12848,7 +12848,7 @@ snapshots:
     dependencies:
       flow-enums-runtime: 0.0.6
       lodash.throttle: 4.1.1
-      metro-resolver: 0.83.7
+      metro-resolver: 0.84.4
 
   metro-file-map@0.83.7:
     dependencies:
@@ -12869,7 +12869,7 @@ snapshots:
       flow-enums-runtime: 0.0.6
       terser: 5.47.1
 
-  metro-resolver@0.83.7:
+  metro-resolver@0.84.4:
     dependencies:
       flow-enums-runtime: 0.0.6
 
@@ -12967,7 +12967,7 @@ snapshots:
       metro-config: 0.83.7
       metro-core: 0.83.7
       metro-file-map: 0.83.7
-      metro-resolver: 0.83.7
+      metro-resolver: 0.84.4
       metro-runtime: 0.83.7
       metro-source-map: 0.83.7
       metro-symbolicate: 0.83.7
