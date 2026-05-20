@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: 🏗 Setup Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # Need full history so the no-op probe below can locate the last
           # release boundary commit and grep for qualifying commits since.
