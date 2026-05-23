@@ -79,8 +79,8 @@ importers:
         specifier: workspace:*
         version: link:../../tools/tsconfig
       expo-doctor:
-        specifier: 1.13.3
-        version: 1.13.3
+        specifier: 1.19.8
+        version: 1.19.8
       magic-eslint-config:
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -3705,8 +3705,9 @@ packages:
       expo: '*'
       react-native: '*'
 
-  expo-doctor@1.13.3:
-    resolution: {integrity: sha512-jkVAYdByZf15LCIdumHa/VP9KijFDfeq9gdXD+A2koG8J9ITCKsXXevu2rS1Ibo+YwIkFXu9ovLcB1A/y3kkow==}
+  expo-doctor@1.19.8:
+    resolution: {integrity: sha512-ZHpQM+BfJe1DNaA+/ObtLYazC2x78tIV3kkfoSGR46Tj1EvzOFh1p9gFHsILI9TOyXPEcgxCkFw9AVvf8C4c1g==}
+    engines: {node: ^20.19.4 || ^22.13.0 || ^24.3.0 || >= 25.0.0}
     hasBin: true
 
   expo-file-system@55.0.21:
@@ -11156,7 +11157,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  expo-doctor@1.13.3: {}
+  expo-doctor@1.19.8: {}
 
   expo-file-system@55.0.21(expo@55.0.25)(react-native@0.83.6(@babel/core@7.29.0)(@react-native/metro-config@0.85.3(@babel/core@7.29.0))(@types/react@19.2.15)(react@19.2.0)):
     dependencies:

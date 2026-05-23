@@ -52,7 +52,7 @@
     "@babel/core": "^7.20.0",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
-    "expo-doctor": "1.13.3",
+    "expo-doctor": "1.19.8",
     "magic-eslint-config": "workspace:*"
   },
   "prettier": "@magic/prettier-config"
