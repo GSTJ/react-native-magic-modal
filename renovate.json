@@ -11,8 +11,9 @@
       "automerge": true
     },
     {
-      "description": "The example app's versions are dictated by the installed Expo SDK, and expo-doctor fails the build when they drift. Refresh the lockfile inside the declared ranges, never widen them. SDK jumps are done by hand.",
+      "description": "The example app's runtime versions are dictated by the installed Expo SDK, and expo-doctor fails the build when they drift. Refresh the lockfile inside the declared ranges, never widen them. SDK jumps are done by hand.",
       "matchFileNames": ["examples/kitchen-sink/package.json"],
+      "matchDepTypes": ["dependencies"],
       "rangeStrategy": "in-range-only"
     },
     {
