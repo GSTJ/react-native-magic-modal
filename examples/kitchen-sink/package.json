@@ -31,12 +31,12 @@
     }
   },
   "dependencies": {
-    "@expo/metro-runtime": "~55.0.11",
-    "expo": "^55.0.25",
-    "expo-constants": "~55.0.16",
-    "expo-linking": "~55.0.15",
-    "expo-router": "~55.0.15",
-    "expo-splash-screen": "~55.0.21",
+    "@expo/metro-runtime": "~55.0.12",
+    "expo": "^55.0.28",
+    "expo-constants": "~55.0.17",
+    "expo-linking": "~55.0.16",
+    "expo-router": "~55.0.17",
+    "expo-splash-screen": "~55.0.23",
     "expo-status-bar": "~55.0.6",
     "react": "19.2.0",
     "react-dom": "19.2.0",
