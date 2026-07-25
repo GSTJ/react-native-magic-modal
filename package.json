@@ -22,17 +22,17 @@
     "access": "public"
   },
   "scripts": {
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
-    "format": "turbo format",
-    "format:fix": "turbo format:fix",
-    "typecheck": "turbo typecheck",
-    "start": "turbo start",
-    "test": "turbo test",
-    "build": "turbo build",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "turbo run format",
+    "format:fix": "turbo run format:fix",
+    "typecheck": "turbo run typecheck",
+    "start": "turbo run start",
+    "test": "turbo run test",
+    "build": "turbo run build",
     "release": "turbo run release --filter=react-native-magic-modal",
-    "docs": "turbo docs",
-    "doctor": "turbo doctor"
+    "docs": "turbo run docs",
+    "doctor": "turbo run doctor"
   },
   "config": {
     "commitizen": {
