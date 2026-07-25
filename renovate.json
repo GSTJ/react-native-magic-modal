@@ -9,6 +9,16 @@
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
+    },
+    {
+      "description": "The example app's versions are dictated by the installed Expo SDK, and expo-doctor fails the build when they drift. Refresh the lockfile inside the declared ranges, never widen them. SDK jumps are done by hand.",
+      "matchFileNames": ["examples/kitchen-sink/package.json"],
+      "rangeStrategy": "in-range-only"
+    },
+    {
+      "description": "Metro is pinned to whatever line React Native ships with, same reason.",
+      "matchPackageNames": ["metro", "metro-config", "metro-resolver"],
+      "rangeStrategy": "in-range-only"
     }
   ]
 }
