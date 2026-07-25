@@ -95,6 +95,79 @@ describe("MagicModalPortal", () => {
     expect(screen.queryByTestId("b")).toBeNull();
   });
 
+  it("swaps the content without closing the modal", async () => {
+    render(<MagicModalPortal />);
+
+    let update: (component: React.FC) => void = () => {};
+    let result: Promise<unknown> | undefined;
+    let resolved = false;
+
+    act(() => {
+      const modal = magicModal.show(() => <ModalContent testID="before" />);
+      update = modal.update;
+      result = modal.promise;
+      void result.then(() => {
+        resolved = true;
+      });
+    });
+
+    expect(await screen.findByTestId("before")).toBeTruthy();
+
+    act(() => {
+      update(() => <ModalContent testID="after" />);
+    });
+
+    expect(await screen.findByTestId("after")).toBeTruthy();
+    expect(screen.queryByTestId("before")).toBeNull();
+    expect(screen.getByTestId("magic-modal-backdrop")).toBeTruthy();
+    expect(resolved).toBe(false);
+  });
+
+  it("updates only the targeted modal", async () => {
+    render(<MagicModalPortal />);
+
+    let updateBottom: (component: React.FC) => void = () => {};
+
+    act(() => {
+      updateBottom = magicModal.show(() => (
+        <ModalContent testID="bottom" />
+      )).update;
+      magicModal.show(() => <ModalContent testID="top" />);
+    });
+
+    act(() => {
+      updateBottom(() => <ModalContent testID="bottom-updated" />);
+    });
+
+    expect(await screen.findByTestId("bottom-updated")).toBeTruthy();
+    expect(screen.getByTestId("top")).toBeTruthy();
+    expect(screen.queryByTestId("bottom")).toBeNull();
+  });
+
+  it("ignores updates for a modal that is already hidden", async () => {
+    render(<MagicModalPortal />);
+
+    let update: (component: React.FC) => void = () => {};
+    let modalID = "";
+
+    act(() => {
+      const modal = magicModal.show(() => <ModalContent testID="gone" />);
+      update = modal.update;
+      modalID = modal.modalID;
+    });
+
+    act(() => {
+      magicModal.hide(undefined, { modalID });
+    });
+
+    act(() => {
+      update(() => <ModalContent testID="zombie" />);
+    });
+
+    expect(screen.queryByTestId("zombie")).toBeNull();
+    expect(screen.queryByTestId("gone")).toBeNull();
+  });
+
   it("hides on backdrop press", async () => {
     render(<MagicModalPortal />);
 

@@ -179,14 +179,14 @@ const QuickModal = ({ text }) => {
 };
 
 const handleQuickModal = async () => {
-  const { modalId } = magicModal.show(QuickModal);
+  const { modalID } = magicModal.show(QuickModal);
 
   // Wait for 2 seconds before closing the modal
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
   // Note that it's usually preferrable to use the `hide` method from the modal context
   // You can even put it inside useEffects to handle auto-dismissal for you.
-  magicModal.hide({ modalId });
+  magicModal.hide(undefined, { modalID });
 };
 
 export const MainScreen = () => {
@@ -200,6 +200,30 @@ export const MainScreen = () => {
   );
 };
 ```
+
+`show` also hands you an `update` function, for when the data driving the modal lives outside of it:
+
+```js
+import { magicModal } from "react-native-magic-modal";
+
+const UploadModal = ({ progress }) => (
+  <View>
+    <Text>Uploading, {progress}%</Text>
+  </View>
+);
+
+const handleUpload = async (file) => {
+  const { modalID, update } = magicModal.show(() => <UploadModal progress={0} />);
+
+  await uploadFile(file, {
+    onProgress: (progress) => update(() => <UploadModal progress={progress} />),
+  });
+
+  magicModal.hide(undefined, { modalID });
+};
+```
+
+The modal itself stays put: same position in the stack, same backdrop, and the promise from `show` keeps waiting. Only the content is swapped, and it's a new component, so it mounts from scratch and anything it kept in `useState` is gone. If the state belongs to the modal, drive it from inside with a store or context instead.
 
 Refer to the [kitchen-sink example](examples/kitchen-sink) for detailed usage scenarios.
 

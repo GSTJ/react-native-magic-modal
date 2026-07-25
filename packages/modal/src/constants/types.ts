@@ -95,6 +95,16 @@ export type GlobalHideFunction = <T>(
 
 export type GlobalHideAllFunction = () => void;
 
+/**
+ * Swaps the content of the modal it came from. Returned by {@link GlobalShowFunction}.
+ */
+export type ModalUpdateFunction = (newComponent: ModalChildren) => void;
+
+export type GlobalUpdateFunction = (
+  newComponent: ModalChildren,
+  options: { modalID: string },
+) => void;
+
 export type EnableFullWindowOverlayFunction = () => void;
 
 export type DisableFullWindowOverlayFunction = () => void;
@@ -117,4 +127,5 @@ export type GlobalShowFunction = <T>(
 ) => {
   promise: Promise<HideReturn<T>>;
   modalID: string;
+  update: ModalUpdateFunction;
 };

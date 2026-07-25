@@ -76,7 +76,15 @@ export const magicModal = {
    * @description Pushes a modal to the Stack, it will be displayed on top of the others.
    * @param newComponent Recieves a function that returns a modal component.
    * @param newConfig Recieves {@link NewConfigProps}  to override the default configs.
-   * @returns Returns a Promise that resolves with the {@link hide} props when the Modal is closed. If it were closed automatically, without the manual use of {@link hide}, the return would be one of {@link HideReturn}
+   * @returns `promise`, which resolves with the {@link hide} props when the Modal is closed (if it were closed automatically, without the manual use of {@link hide}, the return would be one of {@link HideReturn}), the `modalID`, and an `update` function that swaps the modal's content while it stays open.
+   * @example
+   * ```js
+   * const { update } = magicModal.show(() => <ExampleModal step={1} />);
+   * update(() => <ExampleModal step={2} />);
+   * ```
+   * Prefer keeping state inside the modal component when you can. `update` is for data that
+   * lives outside of it and can't reach in. The content is a new component, so it mounts from
+   * scratch: anything the old one held in `useState` is gone.
    */
   show,
   /**

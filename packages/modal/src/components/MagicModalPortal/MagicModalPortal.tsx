@@ -12,6 +12,7 @@ import FullWindowOverlay from "react-native-screens/src/components/FullWindowOve
 import type {
   GlobalHideFunction,
   GlobalShowFunction,
+  GlobalUpdateFunction,
   ModalChildren,
   ModalProps,
 } from "../../constants/types";
@@ -93,6 +94,31 @@ export const MagicModalPortal: React.FC = memo(() => {
     });
   }, []);
 
+  const update = useCallback<GlobalUpdateFunction>(
+    (newComponent, { modalID }) => {
+      setModals((prevModals) => {
+        const currentModal = prevModals.find((modal) => modal.id === modalID);
+
+        if (!currentModal) {
+          // eslint-disable-next-line no-console
+          console.log(
+            `[UPDATE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`,
+          );
+          return prevModals;
+        }
+
+        if (currentModal.component === newComponent) {
+          return prevModals;
+        }
+
+        return prevModals.map((modal) =>
+          modal.id === modalID ? { ...modal, component: newComponent } : modal,
+        );
+      });
+    },
+    [],
+  );
+
   const show = useCallback<GlobalShowFunction>(
     (newComponent, newConfig) => {
       const modalID = generatePseudoRandomID();
@@ -121,9 +147,12 @@ export const MagicModalPortal: React.FC = memo(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         promise: hidePromise as any,
         modalID,
+        update: (updatedComponent: ModalChildren) => {
+          update(updatedComponent, { modalID });
+        },
       } as const;
     },
-    [_hide],
+    [_hide, update],
   );
 
   useEffect(() => {
