@@ -28,6 +28,8 @@ import { useInternalMagicModal } from "./MagicModalProvider";
 
 export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
+const TOUCH_SLOP = 10;
+
 export const defaultAnimationInMap = {
   up: FadeInUp,
   down: FadeInDown,
@@ -92,7 +94,10 @@ export const MagicModal = memo(
 
     const pan = Gesture.Pan()
       .enabled(!!config.swipeDirection)
-      .minDistance(1)
+      // Matches the platform touch slop. Anything smaller (we used to use 1)
+      // lets finger jitter during a tap activate the pan, which cancels the
+      // touch on whatever the user was actually pressing inside the modal.
+      .minDistance(TOUCH_SLOP)
       .onStart(() => {
         "worklet";
 
