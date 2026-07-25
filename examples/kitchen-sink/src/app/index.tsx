@@ -89,6 +89,26 @@ const showZoomInModal = async () => {
   });
 };
 
+const wait = (ms: number) =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
+const showUpdatingModal = async () => {
+  const { modalID, update } = magicModal.show(() => (
+    <ExampleModal body="Closing in 3..." />
+  ));
+
+  await wait(1000);
+  update(() => <ExampleModal body="Closing in 2..." />);
+
+  await wait(1000);
+  update(() => <ExampleModal body="Closing in 1..." />);
+
+  await wait(1000);
+  magicModal.hide(undefined, { modalID });
+};
+
 const showNoFullWindowOverlayModal = async () => {
   magicModal.disableFullWindowOverlay();
   await magicModal.show(() => <ExampleModal />).promise;
@@ -130,6 +150,9 @@ export default () => {
       </Pressable>
       <Pressable style={styles.button} onPress={showZoomInModal}>
         <Text style={styles.buttonText}>Show Zoom In Modal</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={showUpdatingModal}>
+        <Text style={styles.buttonText}>Show Updating Modal</Text>
       </Pressable>
       <Pressable style={styles.button} onPress={showToast}>
         <Text style={styles.buttonText}>Show Toast</Text>

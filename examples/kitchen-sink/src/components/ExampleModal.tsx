@@ -5,14 +5,14 @@ import { useMagicModal } from "react-native-magic-modal";
 
 import { showToast } from "./Toast";
 
-export const ExampleModal = () => {
+export const ExampleModal = ({ body }: { body?: string }) => {
   const { hide } = useMagicModal<string>();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Example Modal</Text>
       <Text style={styles.body}>
-        This is an example to showcase the imperative Magic Modal!
+        {body ?? "This is an example to showcase the imperative Magic Modal!"}
       </Text>
       <Pressable
         testID="close-modal-button"
