@@ -1,11 +1,12 @@
 {
   "extends": ["expo/tsconfig.base", "@magic/tsconfig/base.json"],
-  "exclude": ["node_modules", "dist"],
+  "exclude": ["node_modules", "dist", "docs"],
   "include": [".", ".release-it.js"],
   "compilerOptions": {
     "jsx": "react-native",
     "outDir": "dist",
     "baseUrl": ".",
+    "rootDir": ".",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   }
 }
