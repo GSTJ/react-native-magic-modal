@@ -1,5 +1,12 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## 7.0.2 (2026-05-19)
+
+### :curly_loop: Continuous Integrations :curly_loop:
+
+* Published by the #192 release run, which pushed to npm and then failed before the version bump landed on main
+* Align package.json version with npm publish 7.0.2
+
 ## 7.0.1 (2026-05-19)
 
 ### :curly_loop: Continuous Integrations :curly_loop:
