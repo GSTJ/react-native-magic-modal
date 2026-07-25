@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🏗 Setup Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🏗 Setup PNPM
         uses: pnpm/action-setup@v4
@@ -25,7 +25,7 @@ jobs:
           echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: 🏗 Setup PNPM cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
