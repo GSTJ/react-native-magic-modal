@@ -111,8 +111,11 @@ jobs:
           BOUNDARY=$(echo "$CANDIDATES" | xargs -I{} git log -1 --pretty="%ct %H" {} 2>/dev/null | sort -rn | head -1 | awk '{print $2}')
           echo "boundary=$BOUNDARY ($(git log -1 --pretty=%s "$BOUNDARY"))"
 
-          # A commit qualifies if EITHER:
-          #   - its subject (first line) has `(modal)` scope, OR
+          # A commit qualifies if ANY of:
+          #   - its subject (first line) has `(modal)` scope,
+          #   - its subject marks a breaking change with `!` before the colon
+          #     (`feat!:`, `fix(deps)!:`), which conventional-commits treats as
+          #     a major on its own, with or without a footer,
           #   - its body contains a line starting with `BREAKING CHANGE:`
           #     or `BREAKING-CHANGE:` (the conventional-commits footer).
           # We can't use `git log --grep` here because that searches the
@@ -128,7 +131,7 @@ jobs:
             sha=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $1}')
             subject=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $2}')
             body=$(printf '%s' "$entry" | awk -F"$UNIT" '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i<NF?FS:"")}')
-            if printf '%s' "$subject" | grep -q '(modal)'; then
+            if printf '%s' "$subject" | grep -qE '\(modal\)|^[a-zA-Z]+(\([^)]*\))?!:'; then
               QUALIFY="${QUALIFY}${subject}"$'\n'
               continue
             fi
