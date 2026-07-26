@@ -1,5 +1,25 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [7.1.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-7.0.3...magic-modal-7.1.0) (2026-07-25)
+
+### :stars: New Features :stars:
+
+* **modal:** add update() to swap a modal's content in place ([#217](https://github.com/GSTJ/react-native-magic-modal/issues/217)) ([24a939f](https://github.com/GSTJ/react-native-magic-modal/commit/24a939f2bf00d825c44e43b06bc4919759fce628))
+
+### :hammer: Bug Fixes :hammer:
+
+* **ci:** stop turbo from swallowing the docs task ([#215](https://github.com/GSTJ/react-native-magic-modal/issues/215)) ([18966e0](https://github.com/GSTJ/react-native-magic-modal/commit/18966e09880e26e6255af25ebc1eb119dade9e88))
+
+## 7.0.3 (2026-07-25)
+
+### :hammer: Bug Fixes :hammer:
+
+* **modal:** stop the swipe gesture from eating taps ([#205](https://github.com/GSTJ/react-native-magic-modal/issues/205)) ([dc0a98c](https://github.com/GSTJ/react-native-magic-modal/commit/dc0a98c3413f85b0497ee07dd252ac34f464d83a))
+
+### :link: Testing Updated :link:
+
+* bring jest back to life and run it in CI ([#201](https://github.com/GSTJ/react-native-magic-modal/issues/201)) ([1864ea9](https://github.com/GSTJ/react-native-magic-modal/commit/1864ea9a74a803e2ead35e02a243b70e8d6721b6))
+
 ## 7.0.2 (2026-05-19)
 
 ### :curly_loop: Continuous Integrations :curly_loop:
