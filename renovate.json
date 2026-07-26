@@ -27,6 +27,11 @@
       "enabled": false
     },
     {
+      "description": "packages/modal builds and tests against the same react-native the example app runs, which the Expo SDK dictates. Bumping it on its own installs a second copy and expo-doctor fails on the duplicate. Moves by hand with the SDK.",
+      "matchPackageNames": ["react-native", "@react-native/{/,}**"],
+      "enabled": false
+    },
+    {
       "description": "typescript-eslint ships @typescript-eslint/eslint-plugin and /parser, and ESLint throws `Cannot redefine plugin` if a separate copy of the plugin ends up in the tree. Bump them together.",
       "matchPackageNames": ["typescript-eslint", "@typescript-eslint/{/,}**"],
       "groupName": "typescript-eslint"
