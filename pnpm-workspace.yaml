@@ -2,3 +2,18 @@ packages:
   - tools/*
   - packages/*
   - examples/*
+
+nodeLinker: hoisted
+dedupeDirectDeps: true
+
+overrides:
+  "metro": "^0.83.3"
+  "metro-resolver": "^0.83.3"
+  "metro-config": "^0.83.3"
+  "@expo/metro-runtime": "55.0.12"
+  "undici": "^6.27.0"
+  "lodash": "^4.18.0"
+  "tmp": "^0.2.6"
+
+onlyBuiltDependencies:
+  - "@swc/core"
