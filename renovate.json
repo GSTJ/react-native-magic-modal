@@ -20,6 +20,16 @@
       "description": "Metro is pinned to whatever line React Native ships with, same reason.",
       "matchPackageNames": ["metro", "metro-config", "metro-resolver"],
       "rangeStrategy": "in-range-only"
+    },
+    {
+      "description": "react-test-renderer has to match the installed react exactly or @testing-library/react-native refuses to run the suite. React's version comes from the Expo SDK, so this one moves by hand alongside it.",
+      "matchPackageNames": ["react-test-renderer"],
+      "enabled": false
+    },
+    {
+      "description": "typescript-eslint ships @typescript-eslint/eslint-plugin and /parser, and ESLint throws `Cannot redefine plugin` if a separate copy of the plugin ends up in the tree. Bump them together.",
+      "matchPackageNames": ["typescript-eslint", "@typescript-eslint/{/,}**"],
+      "groupName": "typescript-eslint"
     }
   ]
 }
