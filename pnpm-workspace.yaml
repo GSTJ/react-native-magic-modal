@@ -14,6 +14,11 @@ overrides:
   "undici": "^6.27.0"
   "lodash": "^4.18.0"
   "tmp": "^0.2.6"
+  "brace-expansion": "^5.0.8"
+  "uuid": "^11.1.1"
+
+patchedDependencies:
+  "minimatch@3.1.5": "patches/minimatch@3.1.5.patch"
 
 onlyBuiltDependencies:
   - "@swc/core"
