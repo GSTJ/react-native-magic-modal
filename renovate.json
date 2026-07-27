@@ -13,12 +13,17 @@
     {
       "description": "The example app's runtime versions are dictated by the installed Expo SDK, and expo-doctor fails the build when they drift. Refresh the lockfile inside the declared ranges, never widen them. SDK jumps are done by hand.",
       "matchFileNames": ["examples/kitchen-sink/package.json"],
-      "matchDepTypes": ["dependencies"],
+      "matchDepTypes": ["dependencies", "devDependencies"],
       "rangeStrategy": "in-range-only"
     },
     {
-      "description": "Metro is pinned to whatever line React Native ships with, same reason.",
-      "matchPackageNames": ["metro", "metro-config", "metro-resolver"],
+      "description": "Metro is pinned to whatever line React Native ships with, same reason. @expo/metro-runtime rides the Expo SDK and is held at the SDK version by a pnpm-workspace.yaml override, which the file rule above doesn't reach.",
+      "matchPackageNames": [
+        "metro",
+        "metro-config",
+        "metro-resolver",
+        "@expo/metro-runtime"
+      ],
       "rangeStrategy": "in-range-only"
     },
     {
