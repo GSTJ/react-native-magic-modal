@@ -6,7 +6,6 @@
     "jsx": "react-native",
     "outDir": "dist",
     "baseUrl": ".",
-    "rootDir": ".",
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "rootDir": "."
   }
 }
