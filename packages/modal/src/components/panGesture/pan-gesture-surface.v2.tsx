@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
-import type { PanGestureSurfaceProps } from "./PanGestureSurface.types";
+import type { PanGestureSurfaceProps } from "./pan-gesture-surface.types";
 
 /**
  * The gesture object `Gesture.Pan()` builds. Derived from the builder rather

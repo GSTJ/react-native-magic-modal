@@ -4,12 +4,12 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { act, render as rntlRender } from "@testing-library/react-native";
 
 import type { Direction } from "../constants/types";
-import { magicModal } from "../utils/magicModalHandler";
-import { MagicModalPortal } from "./MagicModalPortal/MagicModalPortal";
+import { magicModal } from "../utils/magic-modal-handler";
+import { MagicModalPortal } from "./MagicModalPortal/magic-modal-portal";
 
 /**
- * Scaffolding shared by `MagicModal.swipe.v2.test.tsx` and
- * `MagicModal.swipe.v3.test.tsx`.
+ * Scaffolding shared by `magic-modal.swipe.v2.test.tsx` and
+ * `magic-modal.swipe.v3.test.tsx`.
  *
  * MagicModal wires the swipe up through gesture-handler 2.x's `Gesture.Pan()`
  * builder or 3.x's `usePanGesture` hook, whichever the installed major has, so

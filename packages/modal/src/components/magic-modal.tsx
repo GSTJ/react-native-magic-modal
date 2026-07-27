@@ -21,10 +21,10 @@ import { scheduleOnRN } from "react-native-worklets";
 
 import type { Direction, ModalChildren, ModalProps } from "../constants/types";
 import type { SwipeGestureSpec } from "./panGesture";
-import { defaultDirection } from "../constants/defaultConfig";
+import { defaultDirection } from "../constants/default-config";
 import { MagicModalHideReason } from "../constants/types";
-import { styles } from "./MagicModalPortal/MagicModalPortal.styles";
-import { useInternalMagicModal } from "./MagicModalProvider";
+import { styles } from "./MagicModalPortal/magic-modal-portal.styles";
+import { useInternalMagicModal } from "./magic-modal-provider";
 import { PanGestureSurface } from "./panGesture";
 
 export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -100,7 +100,7 @@ export const MagicModal = memo(
      *
      * The callback names are gesture-handler 2.x's, and `PanGestureSurface`
      * maps them to whichever API the installed major exposes. See
-     * `panGesture/PanGestureSurface.types.ts` for the mapping and for why
+     * `panGesture/pan-gesture-surface.types.ts` for the mapping and for why
      * nothing hangs off `onFinalize`.
      */
     const swipe = useMemo<SwipeGestureSpec>(

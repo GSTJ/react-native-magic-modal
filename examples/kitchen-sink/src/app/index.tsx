@@ -13,10 +13,10 @@ import { ZoomIn, ZoomOut } from "react-native-reanimated";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-import { ExampleModal } from "@/components/ExampleModal";
-import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
-import { showScrollableModal } from "@/components/ScrollableModal";
-import { showToast } from "../components/Toast";
+import { ExampleModal } from "@/components/example-modal";
+import { showKeyboardAvoidingModal } from "@/components/keyboard-avoiding-modal";
+import { showScrollableModal } from "@/components/scrollable-modal";
+import { showToast } from "../components/toast";
 
 const showModal = async () => {
   const swipeDirection = ["up", "down", "left", "right"][

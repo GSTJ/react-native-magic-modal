@@ -1,4 +1,4 @@
-export { MagicModalPortal } from "./components/MagicModalPortal/MagicModalPortal";
+export { MagicModalPortal } from "./components/MagicModalPortal/magic-modal-portal";
 export {
   MagicModalHideReason,
   type HideReturn,
@@ -7,5 +7,5 @@ export {
   type Direction,
   type ModalProps,
 } from "./constants/types";
-export { magicModal } from "./utils/magicModalHandler";
-export { useMagicModal } from "./components/MagicModalProvider";
+export { magicModal } from "./utils/magic-modal-handler";
+export { useMagicModal } from "./components/magic-modal-provider";

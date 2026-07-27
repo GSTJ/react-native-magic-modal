@@ -9,8 +9,8 @@ import {
 } from "@testing-library/react-native";
 
 import { MagicModalHideReason } from "../../constants/types";
-import { magicModal } from "../../utils/magicModalHandler";
-import { MagicModalPortal } from "./MagicModalPortal";
+import { magicModal } from "../../utils/magic-modal-handler";
+import { MagicModalPortal } from "./magic-modal-portal";
 
 const content = "Taveira";
 

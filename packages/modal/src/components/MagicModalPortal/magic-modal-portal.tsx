@@ -16,11 +16,11 @@ import type {
   ModalChildren,
   ModalProps,
 } from "../../constants/types";
-import { defaultConfig } from "../../constants/defaultConfig";
+import { defaultConfig } from "../../constants/default-config";
 import { MagicModalHideReason } from "../../constants/types";
-import { magicModalRef } from "../../utils/magicModalHandler";
-import { MagicModal } from "../MagicModal";
-import { MagicModalProvider } from "../MagicModalProvider";
+import { magicModalRef } from "../../utils/magic-modal-handler";
+import { MagicModal } from "../magic-modal";
+import { MagicModalProvider } from "../magic-modal-provider";
 
 const generatePseudoRandomID = () =>
   Math.random().toString(36).substring(7).toUpperCase() + Date.now().toString();

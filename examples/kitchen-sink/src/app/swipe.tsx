@@ -4,7 +4,7 @@ import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { magicModal, MagicModalHideReason } from "react-native-magic-modal";
 
-import { ExampleModal } from "@/components/ExampleModal";
+import { ExampleModal } from "@/components/example-modal";
 
 const directions = ["up", "down", "left", "right"] as const;
 

@@ -39,13 +39,13 @@ const loadWith = (gestureHandlerOverrides: Record<string, unknown>) => {
       "./index",
     );
     const { PanGestureSurfaceV2 } = load<{ PanGestureSurfaceV2: unknown }>(
-      "./PanGestureSurface.v2",
+      "./pan-gesture-surface.v2",
     );
     const { PanGestureSurfaceV3 } = load<{ PanGestureSurfaceV3: unknown }>(
-      "./PanGestureSurface.v3",
+      "./pan-gesture-surface.v3",
     );
     const { hasPanGestureHook } = load<{ hasPanGestureHook: boolean }>(
-      "./gestureHandlerCompat",
+      "./gesture-handler-compat",
     );
 
     loaded = {
