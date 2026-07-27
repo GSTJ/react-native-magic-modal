@@ -1,7 +1,5 @@
-import type { PanGestureConfig } from "react-native-gesture-handler";
 import React, { memo, useMemo } from "react";
 import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
-import { GestureDetector, usePanGesture } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -22,10 +20,12 @@ import Animated, {
 import { scheduleOnRN } from "react-native-worklets";
 
 import type { Direction, ModalChildren, ModalProps } from "../constants/types";
+import type { SwipeGestureSpec } from "./panGesture";
 import { defaultDirection } from "../constants/defaultConfig";
 import { MagicModalHideReason } from "../constants/types";
 import { styles } from "./MagicModalPortal/MagicModalPortal.styles";
 import { useInternalMagicModal } from "./MagicModalProvider";
+import { PanGestureSurface } from "./panGesture";
 
 export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -94,29 +94,23 @@ export const MagicModal = memo(
     );
 
     /**
-     * `usePanGesture` memoizes on the identity of the config object it is
-     * handed, and re-pushes the whole config to the native side whenever that
-     * identity changes. Building the object inline would do that on every
-     * render, so it lives in a `useMemo` keyed on everything the worklets
-     * close over.
+     * Both swipe surfaces re-push the whole gesture to the native side when
+     * this object's identity changes, so it lives in a `useMemo` keyed on
+     * everything the worklets close over.
      *
-     * The callback names are gesture-handler v3's. The v2 builder equivalents
-     * were `.onStart` (`onActivate`), `.onUpdate` (`onUpdate`) and `.onEnd`
-     * (`onDeactivate`). `onDeactivate` is deliberate: it is the callback wired
-     * to `CALLBACK_TYPE.END`, which is what `.onEnd` registered, so
-     * `SWIPE_COMPLETE` still resolves at the same point in the gesture
-     * lifecycle. `onFinalize` (`CALLBACK_TYPE.FINALIZE`) also runs after
-     * gestures that never activated, and using it here would fire the
-     * dismissal spring on taps that failed the slop check.
+     * The callback names are gesture-handler 2.x's, and `PanGestureSurface`
+     * maps them to whichever API the installed major exposes. See
+     * `panGesture/PanGestureSurface.types.ts` for the mapping and for why
+     * nothing hangs off `onFinalize`.
      */
-    const panConfig = useMemo<PanGestureConfig>(
+    const swipe = useMemo<SwipeGestureSpec>(
       () => ({
         enabled: !!config.swipeDirection,
         // Matches the platform touch slop. Anything smaller (we used to use 1)
         // lets finger jitter during a tap activate the pan, which cancels the
         // touch on whatever the user was actually pressing inside the modal.
         minDistance: TOUCH_SLOP,
-        onActivate: () => {
+        onStart: () => {
           "worklet";
 
           prevTranslationX.value = translationX.value;
@@ -153,7 +147,7 @@ export const MagicModal = memo(
             translationY.value = dampedTranslation;
           }
         },
-        onDeactivate: (event) => {
+        onEnd: (event) => {
           "worklet";
 
           const velocityThreshold = config.swipeVelocityThreshold;
@@ -222,8 +216,6 @@ export const MagicModal = memo(
         translationY,
       ],
     );
-
-    const pan = usePanGesture(panConfig);
 
     const animatedStyles = useAnimatedStyle(() => {
       "worklet";
@@ -298,7 +290,7 @@ export const MagicModal = memo(
                 : undefined
             }
           >
-            <GestureDetector gesture={pan}>
+            <PanGestureSurface swipe={swipe}>
               <View
                 collapsable={false}
                 style={[
@@ -309,7 +301,7 @@ export const MagicModal = memo(
               >
                 <Children />
               </View>
-            </GestureDetector>
+            </PanGestureSurface>
           </Animated.View>
         </Animated.View>
       </View>
