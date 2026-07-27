@@ -9,6 +9,11 @@ on:
     branches:
       - main
 
+# Reads the tree and nothing else. The pnpm and turbo caches go through the
+# Actions cache service on the runtime token.
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
