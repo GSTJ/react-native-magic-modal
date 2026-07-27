@@ -227,6 +227,11 @@ jobs:
       - name: 🧪 Run Maestro smoke flows
         working-directory: ${{ env.EXAMPLE_DIR }}
         run: |
+          # The four swipe-dismiss flows are deliberately not here yet. They
+          # assert on text, and on iOS 26 + RN 0.83 XCUITest sees the whole RN
+          # root as one opaque element, so no text or testID in the app is
+          # reachable. Same reason the two flows above are down to launch plus
+          # a screenshot. See .maestro/README.md.
           maestro test \
             .maestro/smoke-launch.yaml \
             .maestro/smoke-modal-open-close.yaml

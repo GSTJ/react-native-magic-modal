@@ -157,6 +157,18 @@ export default () => {
       <Pressable style={styles.button} onPress={showToast}>
         <Text style={styles.buttonText}>Show Toast</Text>
       </Pressable>
+      <Pressable
+        testID="swipe-tests-button"
+        accessibilityRole="button"
+        accessibilityLabel="Swipe To Dismiss"
+        accessible
+        style={styles.button}
+        onPress={() => {
+          router.push("/swipe");
+        }}
+      >
+        <Text style={styles.buttonText}>Swipe To Dismiss</Text>
+      </Pressable>
       {Platform.OS === "ios" && (
         <>
           <Pressable
