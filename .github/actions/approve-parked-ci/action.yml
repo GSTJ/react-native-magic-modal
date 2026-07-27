@@ -1,0 +1,52 @@
+name: Approve parked CI
+description: >
+  Releases the pull_request runs that GitHub parks at conclusion
+  action_required when a PR is opened with GITHUB_TOKEN. The ruleset on main
+  only reads checks attached to the PR, so a parked run leaves the PR unable to
+  merge. GITHUB_TOKEN is allowed to approve a run it triggered.
+
+inputs:
+  pull-request:
+    description: Number of the pull request whose runs should be released.
+    required: true
+  token:
+    description: Token with actions:write on this repository.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        PR: ${{ inputs.pull-request }}
+      run: |
+        set -euo pipefail
+
+        sha=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq .headRefOid)
+        echo "pull request #$PR is at $sha"
+
+        # The runs show up after the PR does, so poll for them and approve
+        # every parked one. Both Branch Checkup and the iOS E2E trigger on
+        # pull_request, so there's more than one.
+        # 3 minutes. The runs list is indexed a little behind the events, and
+        # a head_sha query has come back empty for a run whose check suite was
+        # already in_progress.
+        approved=0
+        for _ in $(seq 1 30); do
+          ids=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?event=pull_request&head_sha=$sha" \
+            --jq '.workflow_runs[] | select(.conclusion == "action_required") | .id')
+          if [ -n "$ids" ]; then
+            for id in $ids; do
+              gh api -X POST "repos/$GITHUB_REPOSITORY/actions/runs/$id/approve"
+              echo "approved run $id"
+              approved=$((approved + 1))
+            done
+            break
+          fi
+          sleep 6
+        done
+
+        if [ "$approved" = "0" ]; then
+          echo "::warning::no parked pull_request run for $sha. Check whether it got a Branch Checkup run at all."
+        fi
