@@ -1,0 +1,39 @@
+### MUTATION: v2: .onEnd -> .onFinalize
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       6 failed, 30 passed, 36 total
+
+### MUTATION: v2: .onStart -> .onBegin
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       2 failed, 34 passed, 36 total
+
+### MUTATION: v2: minDistance -> 1
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       1 failed, 35 passed, 36 total
+
+### MUTATION: v2: enabled always true
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       1 failed, 35 passed, 36 total
+
+### MUTATION: v3: onDeactivate -> onFinalize
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       6 failed, 30 passed, 36 total
+
+### MUTATION: v3: onActivate -> onBegin
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       2 failed, 34 passed, 36 total
+
+### MUTATION: v3: minDistance -> 1
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       1 failed, 35 passed, 36 total
+
+### MUTATION: v3: enabled always true
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       1 failed, 35 passed, 36 total
+
+### MUTATION: index: invert the detection
+Test Suites: 3 failed, 1 passed, 4 total
+Tests:       28 failed, 8 passed, 36 total
+
+### baseline (restored)
+Test Suites: 4 passed, 4 total
+Tests:       36 passed, 36 total
