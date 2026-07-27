@@ -102,7 +102,7 @@ export default {
     // and opens a PR, so the version and CHANGELOG.md still reach main. Main
     // stays at the pre-release version until that PR merges.
     //
-    // TODO: once GH_PAT is rotated with `contents: write` and granted
+    // The way out: once GH_PAT is rotated with `contents: write` and granted
     // bypass on the main ruleset, flip `push` back to `true` and drop the
     // sync-PR step.
     push: false,

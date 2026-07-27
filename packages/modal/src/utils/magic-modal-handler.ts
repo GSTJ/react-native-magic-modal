@@ -1,5 +1,3 @@
-import React from "react";
-
 import type {
   DisableFullWindowOverlayFunction,
   EnableFullWindowOverlayFunction,
@@ -7,6 +5,9 @@ import type {
   GlobalHideFunction,
   GlobalShowFunction,
 } from "../constants/types";
+
+import React from "react";
+
 import {
   // HideReturn is used in JS Doc
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

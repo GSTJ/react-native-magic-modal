@@ -46,7 +46,8 @@ export type ModalProps = {
    * @example ({ hide }) => { console.log('Back button pressed'); hide({ reason: MagicModalHideReason.BACK_BUTTON_PRESS }); }
    */
   onBackButtonPress:
-    (({ hide }: { hide: HookHideFunction }) => void) | undefined;
+    | (({ hide }: { hide: HookHideFunction }) => void)
+    | undefined;
 
   /**
    * Function to be called when the backdrop is pressed.

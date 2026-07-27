@@ -1,8 +1,10 @@
-import React, { useMemo } from "react";
-import { GestureDetector } from "react-native-gesture-handler";
-
 import type { PanGestureConfigCompat } from "./gesture-handler-compat";
 import type { PanGestureSurfaceProps } from "./pan-gesture-surface.types";
+
+import React, { useMemo } from "react";
+
+import { GestureDetector } from "react-native-gesture-handler";
+
 import { usePanGestureCompat } from "./gesture-handler-compat";
 
 /**

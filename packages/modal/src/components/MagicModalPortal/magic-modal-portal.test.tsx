@@ -1,12 +1,13 @@
 import React from "react";
 import { Text } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 import {
   act,
   fireEvent,
   render as rntlRender,
   screen,
 } from "@testing-library/react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { MagicModalHideReason } from "../../constants/types";
 import { magicModal } from "../../utils/magic-modal-handler";
@@ -37,7 +38,7 @@ describe("MagicModalPortal", () => {
       magicModal.show(() => <ModalContent testID="first" />);
     });
 
-    expect(await screen.findByTestId("first")).toBeTruthy();
+    await expect(screen.findByTestId("first")).resolves.toBeTruthy();
   });
 
   it("resolves the show promise with the hide payload", async () => {
@@ -56,7 +57,7 @@ describe("MagicModalPortal", () => {
       magicModal.hide({ answer: 42 }, { modalID });
     });
 
-    expect(await result).toEqual({
+    await expect(result).resolves.toStrictEqual({
       reason: MagicModalHideReason.INTENTIONAL_HIDE,
       data: { answer: 42 },
     });
@@ -75,8 +76,8 @@ describe("MagicModalPortal", () => {
       magicModal.show(() => <ModalContent testID="top" />);
     });
 
-    expect(await screen.findByTestId("bottom")).toBeTruthy();
-    expect(await screen.findByTestId("top")).toBeTruthy();
+    await expect(screen.findByTestId("bottom")).resolves.toBeTruthy();
+    await expect(screen.findByTestId("top")).resolves.toBeTruthy();
 
     act(() => {
       magicModal.hide(undefined, { modalID: bottomID });
@@ -102,7 +103,7 @@ describe("MagicModalPortal", () => {
       magicModal.hideAll();
     });
 
-    expect(await Promise.all(promises)).toEqual([
+    await expect(Promise.all(promises)).resolves.toStrictEqual([
       { reason: MagicModalHideReason.GLOBAL_HIDE_ALL },
       { reason: MagicModalHideReason.GLOBAL_HIDE_ALL },
     ]);
@@ -126,13 +127,13 @@ describe("MagicModalPortal", () => {
       });
     });
 
-    expect(await screen.findByTestId("before")).toBeTruthy();
+    await expect(screen.findByTestId("before")).resolves.toBeTruthy();
 
     act(() => {
       update(() => <ModalContent testID="after" />);
     });
 
-    expect(await screen.findByTestId("after")).toBeTruthy();
+    await expect(screen.findByTestId("after")).resolves.toBeTruthy();
     expect(screen.queryByTestId("before")).toBeNull();
     expect(screen.getByTestId("magic-modal-backdrop")).toBeTruthy();
     expect(resolved).toBe(false);
@@ -154,7 +155,7 @@ describe("MagicModalPortal", () => {
       updateBottom(() => <ModalContent testID="bottom-updated" />);
     });
 
-    expect(await screen.findByTestId("bottom-updated")).toBeTruthy();
+    await expect(screen.findByTestId("bottom-updated")).resolves.toBeTruthy();
     expect(screen.getByTestId("top")).toBeTruthy();
     expect(screen.queryByTestId("bottom")).toBeNull();
   });
@@ -196,9 +197,10 @@ describe("MagicModalPortal", () => {
 
     fireEvent.press(screen.getByTestId("magic-modal-backdrop"));
 
-    expect(await result).toEqual({
+    // No `data` key at all, not `data: undefined` — `toStrictEqual` tells the
+    // two apart and a backdrop press carries no payload.
+    await expect(result).resolves.toStrictEqual({
       reason: MagicModalHideReason.BACKDROP_PRESS,
-      data: undefined,
     });
   });
 });

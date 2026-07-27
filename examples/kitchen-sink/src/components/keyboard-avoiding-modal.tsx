@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+
 import { magicModal, useMagicModal } from "react-native-magic-modal";
 
 interface KeyboardAvoidingModalProps {
@@ -65,11 +66,6 @@ export const showKeyboardAvoidingModal = (
 };
 
 const styles = StyleSheet.create({
-  close: {
-    position: "absolute",
-    right: 24,
-    top: 20,
-  },
   // eslint-disable-next-line react-native/no-color-literals
   container: {
     backgroundColor: "white",
@@ -80,8 +76,4 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   input: {},
-
-  title: {
-    alignSelf: "center",
-  },
 });

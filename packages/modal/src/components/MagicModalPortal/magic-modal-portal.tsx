@@ -1,3 +1,11 @@
+import type {
+  GlobalHideFunction,
+  GlobalShowFunction,
+  GlobalUpdateFunction,
+  ModalChildren,
+  ModalProps,
+} from "../../constants/types";
+
 import React, {
   memo,
   useCallback,
@@ -6,16 +14,10 @@ import React, {
   useMemo,
 } from "react";
 import { BackHandler, Platform, StyleSheet, View } from "react-native";
+
 /** Do not import FullWindowOverlay from react-native-screens directly, as it screws up code splitting */
 import FullWindowOverlay from "react-native-screens/src/components/FullWindowOverlay";
 
-import type {
-  GlobalHideFunction,
-  GlobalShowFunction,
-  GlobalUpdateFunction,
-  ModalChildren,
-  ModalProps,
-} from "../../constants/types";
 import { defaultConfig } from "../../constants/default-config";
 import { MagicModalHideReason } from "../../constants/types";
 import { magicModalRef } from "../../utils/magic-modal-handler";
@@ -23,7 +25,7 @@ import { MagicModal } from "../magic-modal";
 import { MagicModalProvider } from "../magic-modal-provider";
 
 const generatePseudoRandomID = () =>
-  Math.random().toString(36).substring(7).toUpperCase() + Date.now().toString();
+  Math.random().toString(36).slice(7).toUpperCase() + Date.now().toString();
 
 interface ModalStackItem {
   id: string;
@@ -86,7 +88,7 @@ export const MagicModalPortal: React.FC = memo(() => {
         return prevModals;
       }
 
-      const safeModal = currentModal ?? prevModals[prevModals.length - 1];
+      const safeModal = currentModal ?? prevModals.at(-1);
 
       safeModal?.hideCallback(props);
 
@@ -159,7 +161,7 @@ export const MagicModalPortal: React.FC = memo(() => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
-        const lastModal = modals[modals.length - 1];
+        const lastModal = modals.at(-1);
 
         if (!lastModal) {
           return false;
@@ -198,9 +200,9 @@ export const MagicModalPortal: React.FC = memo(() => {
 
   const hideAll = useCallback(() => {
     setModals((prevModals) => {
-      prevModals.forEach((modal) => {
+      for (const modal of prevModals) {
         modal.hideCallback({ reason: MagicModalHideReason.GLOBAL_HIDE_ALL });
-      });
+      }
       return [];
     });
   }, []);

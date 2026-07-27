@@ -1,14 +1,18 @@
-import React, { useMemo } from "react";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-
 import type { PanGestureSurfaceProps } from "./pan-gesture-surface.types";
+
+import React, { useMemo } from "react";
+
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 /**
  * The gesture object `Gesture.Pan()` builds. Derived from the builder rather
  * than imported by name because the name moved: 2.x exports it as `PanGesture`,
  * and in 3.x that name belongs to the hook API's gesture instead.
+ *
+ * `Gesture.Pan` is deprecated on 3.x. That is deliberate here — see the note on
+ * the builder call below. Nothing suppresses it: `typescript/no-deprecated` is
+ * type-aware and off in the shared preset.
  */
-// eslint-disable-next-line @typescript-eslint/no-deprecated -- v2 compat
 export type LegacyPanGesture = ReturnType<typeof Gesture.Pan>;
 
 /**
@@ -25,11 +29,9 @@ export const PanGestureSurfaceV2 = ({
   const pan = useMemo(
     () =>
       // `Gesture.Pan()` is the only swipe API gesture-handler 2.x has, and 3.x
-      // marks the builder deprecated. The rule fires because this repo builds
-      // against 3.x; the call is what keeps 2.x, and so every current Expo SDK,
-      // working. Suppressed here rather than in the config: any *other*
-      // deprecated call in this package should still be an error.
-      // eslint-disable-next-line @typescript-eslint/no-deprecated -- v2 compat
+      // marks the builder deprecated. The call is what keeps 2.x, and so every
+      // current Expo SDK, working.
+      // eslint-disable-next-line react/react-compiler -- `Gesture.Pan` is gesture-handler's builder factory, not a component; the rule has no way to tell
       Gesture.Pan()
         .enabled(swipe.enabled)
         .minDistance(swipe.minDistance)

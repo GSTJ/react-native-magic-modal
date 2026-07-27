@@ -1,9 +1,11 @@
+import type { Direction } from "../constants/types";
+
 import React from "react";
 import { Text } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { act, render as rntlRender } from "@testing-library/react-native";
 
-import type { Direction } from "../constants/types";
+import { act, render as rntlRender } from "@testing-library/react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 import { magicModal } from "../utils/magic-modal-handler";
 import { MagicModalPortal } from "./MagicModalPortal/magic-modal-portal";
 
@@ -79,9 +81,9 @@ export const showModal = (swipeDirection: Direction | undefined) => {
   let promise: Promise<unknown> | undefined;
 
   act(() => {
-    promise = magicModal.show(() => <ModalContent />, {
+    ({ promise } = magicModal.show(() => <ModalContent />, {
       swipeDirection,
-    }).promise;
+    }));
   });
 
   return promise;
@@ -94,8 +96,16 @@ export const showModal = (swipeDirection: Direction | undefined) => {
  * awaiting the show promise instead deadlocks, because the frame loop doesn't
  * advance inside `act`.
  */
+const tick = (ms: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
 export const waitForHide = async (isResolved: () => boolean) => {
   for (let i = 0; i < 100 && !isResolved(); i++) {
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    // Sequential on purpose: each tick has to let the spring advance before the
+    // next poll reads `isResolved`, so there is nothing to run in parallel.
+    // eslint-disable-next-line no-await-in-loop -- polling loop, see above
+    await tick(20);
   }
 };

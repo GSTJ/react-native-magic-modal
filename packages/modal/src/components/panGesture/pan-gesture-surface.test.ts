@@ -28,12 +28,15 @@ const loadWith = (gestureHandlerOverrides: Record<string, unknown>) => {
   let loaded: IsolatedModules | undefined;
 
   jest.isolateModules(() => {
-    jest.doMock("react-native-gesture-handler", () => ({
-      ...jest.requireActual<Record<string, unknown>>(
-        "react-native-gesture-handler",
-      ),
-      ...gestureHandlerOverrides,
-    }));
+    jest.doMock<Record<string, unknown>>(
+      "react-native-gesture-handler",
+      () => ({
+        ...jest.requireActual<Record<string, unknown>>(
+          "react-native-gesture-handler",
+        ),
+        ...gestureHandlerOverrides,
+      }),
+    );
 
     const { PanGestureSurface } = load<{ PanGestureSurface: unknown }>(
       "./index",

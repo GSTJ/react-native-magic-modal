@@ -1,8 +1,8 @@
 {
   "name": "@magic/kitchen-sink",
-  "description": "Example app for react-native-magic-modal",
   "version": "0.0.1",
   "private": true,
+  "description": "Example app for react-native-magic-modal",
   "main": "index.js",
   "scripts": {
     "android": "expo run:android",
@@ -15,21 +15,6 @@
     "format:fix": "oxfmt .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "doctor": "pnpm expo-doctor"
-  },
-  "expo": {
-    "doctor": {
-      "reactNativeDirectoryCheck": {
-        "exclude": [
-          "react-native-magic-modal"
-        ]
-      }
-    },
-    "install": {
-      "exclude": [
-        "react-native-reanimated",
-        "react-native-gesture-handler"
-      ]
-    }
   },
   "dependencies": {
     "@expo/metro-runtime": "~55.0.12",
@@ -57,5 +42,20 @@
     "magic-tsconfig": "^1.0.0",
     "oxfmt": "0.60.0",
     "oxlint": "1.75.0"
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "react-native-magic-modal"
+        ]
+      }
+    },
+    "install": {
+      "exclude": [
+        "react-native-reanimated",
+        "react-native-gesture-handler"
+      ]
+    }
   }
 }
