@@ -33,3 +33,6 @@ minimumReleaseAgeExclude:
   - "magic-oxfmt-config@1.2.0"
   - "magic-tsconfig@1.2.0"
   - "magic-codemods@1.1.0"
+  # Our own plugin, published from this account 2026-07-27 — same first-party
+  # exemption the sibling repos carry. Version-pinned like the rest.
+  - "eslint-plugin-safe-jsx@1.3.0"
