@@ -1,0 +1,44 @@
+approve-parked-ci, five paths driven against stub gh/git.
+The stub returns whatever runs the case sets up for the current head sha,
+and 'git commit --amend' advances the sha the way a real amend would.
+
+### parked runs present immediately
+    attempt 1: #99 is at sha0 on chore/release-sync-9.9.9
+    111 action_required
+    222 action_required
+    approved run 111
+    approved run 222
+    exit=0 | actions: APPROVED: POST APPROVED: POST 
+
+### runs present and already running
+    attempt 1: #99 is at sha0 on chore/release-sync-9.9.9
+    111 none
+    exit=0 | actions: 
+
+### nothing on sha0, appears after one re-push
+    attempt 1: #99 is at sha0 on chore/release-sync-9.9.9
+    no pull_request run for sha0, amending to move the head and fire synchronize
+    attempt 2: #99 is at sha1 on chore/release-sync-9.9.9
+    333 action_required
+    approved run 333
+    exit=0 | actions: AMENDED PUSHED sha1 APPROVED: POST 
+
+### nothing on sha0 or sha1, appears after two
+    attempt 1: #99 is at sha0 on chore/release-sync-9.9.9
+    no pull_request run for sha0, amending to move the head and fire synchronize
+    attempt 2: #99 is at sha1 on chore/release-sync-9.9.9
+    no pull_request run for sha1, amending to move the head and fire synchronize
+    attempt 3: #99 is at sha2 on chore/release-sync-9.9.9
+    444 action_required
+    approved run 444
+    exit=0 | actions: AMENDED PUSHED sha1 AMENDED PUSHED sha2 APPROVED: POST 
+
+### never appears
+    attempt 1: #99 is at sha0 on chore/release-sync-9.9.9
+    no pull_request run for sha0, amending to move the head and fire synchronize
+    attempt 2: #99 is at sha1 on chore/release-sync-9.9.9
+    no pull_request run for sha1, amending to move the head and fire synchronize
+    attempt 3: #99 is at sha2 on chore/release-sync-9.9.9
+    ::error::No pull_request run ever attached to #99 after 3 tries. The required check cannot report, so this needs an admin merge.
+    exit=1 | actions: AMENDED PUSHED sha1 AMENDED PUSHED sha2 COMMENTED 
+
