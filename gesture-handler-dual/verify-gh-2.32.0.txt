@@ -1,0 +1,227 @@
+react-native-magic-modal peer range:
+>=2.20.0
+installed react-native-gesture-handler: 2.32.0
+
+===== tsc --noEmit =====
+tsc: no errors
+tsc exit=0
+
+===== eslint --max-warnings 0 =====
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Renderer/shims/ReactNativeViewConfigRegistry.js
+Line 34, column 44: Variable declaration expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Components/View/View.js
+Line 25, column 0: Unexpected keyword or identifier.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Renderer/shims/ReactNativeViewConfigRegistry.js
+Line 34, column 44: Variable declaration expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Components/View/View.js
+Line 25, column 0: Unexpected keyword or identifier.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Renderer/shims/ReactNativeViewConfigRegistry.js
+Line 34, column 44: Variable declaration expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Components/View/View.js
+Line 25, column 0: Unexpected keyword or identifier.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Renderer/shims/ReactNativeViewConfigRegistry.js
+Line 34, column 44: Variable declaration expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Components/View/View.js
+Line 25, column 0: Unexpected keyword or identifier.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/index.js
+Line 27, column 14: Expression expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Renderer/shims/ReactNativeViewConfigRegistry.js
+Line 34, column 44: Variable declaration expected.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+Error while parsing <repo>/node_modules/react-native/Libraries/Components/View/View.js
+Line 25, column 0: Unexpected keyword or identifier.
+`parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+
+<repo>/packages/modal/src/components/panGesture/PanGestureSurface.v2.tsx
+  11:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-deprecated')
+  32:7  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-deprecated')
+
+✖ 2 problems (0 errors, 2 warnings)
+  0 errors and 2 warnings potentially fixable with the `--fix` option.
+
+ESLint found too many warnings (maximum: 0).
+eslint exit=1
+
+===== jest =====
+PASS src/components/panGesture/PanGestureSurface.test.ts
+PASS src/components/MagicModalPortal/MagicModalPortal.test.tsx
+  ● Console
+
+    console.log
+      [UPDATE EVENT IGNORED] No modal found with id: II0M3L1785124014350. It might have already been hidden.
+
+      at log (src/components/MagicModalPortal/MagicModalPortal.tsx:104:19)
+
+PASS src/components/MagicModal.swipe.v2.test.tsx (9.231 s)
+PASS src/components/MagicModal.swipe.v3.test.tsx (9.237 s)
+
+Test Suites: 4 passed, 4 total
+Tests:       36 passed, 36 total
+Snapshots:   0 total
+Time:        9.453 s
+Ran all test suites.
+jest exit=0
+
+===== bunchee build =====
+Exports  File              Size
+.        dist/index.js     27.4 kB
+         dist/index.cjs    29 kB
+         dist/index.d.ts   7.71 kB
+         dist/index.d.cts  7.71 kB
+build exit=0
