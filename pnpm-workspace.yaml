@@ -1,5 +1,4 @@
 packages:
-  - tools/*
   - packages/*
   - examples/*
 
@@ -20,5 +19,7 @@ overrides:
 patchedDependencies:
   "minimatch@3.1.5": "patches/minimatch@3.1.5.patch"
 
-onlyBuiltDependencies:
-  - "@swc/core"
+# pnpm 11 renamed `onlyBuiltDependencies` to `allowBuilds`, which is a map so a
+# package can also be explicitly denied.
+allowBuilds:
+  "@swc/core": true
