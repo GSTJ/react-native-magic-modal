@@ -8,6 +8,7 @@ const App = () => {
     <GestureHandlerRootView>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="swipe" />
         <Stack.Screen
           name="modal"
           options={{
