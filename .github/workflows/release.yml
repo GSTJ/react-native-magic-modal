@@ -7,8 +7,13 @@ on:
 jobs:
   release:
     name: 🎉 Release
-    if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+    # release-it writes "[skip ci]", with a space. The old guard looked for
+    # "[skip-ci]" and never matched anything.
+    if: "!contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       - name: 🏗 Setup Repo
@@ -106,8 +111,11 @@ jobs:
           BOUNDARY=$(echo "$CANDIDATES" | xargs -I{} git log -1 --pretty="%ct %H" {} 2>/dev/null | sort -rn | head -1 | awk '{print $2}')
           echo "boundary=$BOUNDARY ($(git log -1 --pretty=%s "$BOUNDARY"))"
 
-          # A commit qualifies if EITHER:
-          #   - its subject (first line) has `(modal)` scope, OR
+          # A commit qualifies if ANY of:
+          #   - its subject (first line) has `(modal)` scope,
+          #   - its subject marks a breaking change with `!` before the colon
+          #     (`feat!:`, `fix(deps)!:`), which conventional-commits treats as
+          #     a major on its own, with or without a footer,
           #   - its body contains a line starting with `BREAKING CHANGE:`
           #     or `BREAKING-CHANGE:` (the conventional-commits footer).
           # We can't use `git log --grep` here because that searches the
@@ -123,7 +131,7 @@ jobs:
             sha=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $1}')
             subject=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $2}')
             body=$(printf '%s' "$entry" | awk -F"$UNIT" '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i<NF?FS:"")}')
-            if printf '%s' "$subject" | grep -q '(modal)'; then
+            if printf '%s' "$subject" | grep -qE '\(modal\)|^[a-zA-Z]+(\([^)]*\))?!:'; then
               QUALIFY="${QUALIFY}${subject}"$'\n'
               continue
             fi
@@ -152,3 +160,42 @@ jobs:
           git config --global user.name "Gabriel Taveira"
           npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
           pnpm run release
+
+      - name: 🔁 Open version sync PR
+        if: steps.next-version.outputs.skip != 'true'
+        # release-it commits the version bump and the generated CHANGELOG.md on
+        # the runner but doesn't push (see packages/modal/.release-it.js), so
+        # main never saw either. That's how main ended up on 7.0.3 while npm was
+        # on 7.1.0, with no 7.0.3 or 7.1.0 section in the changelog.
+        #
+        # continue-on-error because npm has already published by this point.
+        # A failure here is a stale main, not a broken release.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(node -p "require('./packages/modal/package.json').version")
+          if [ "$VERSION" = "${{ steps.next-version.outputs.current }}" ]; then
+            echo "Version is still $VERSION, nothing to sync."
+            exit 0
+          fi
+
+          BRANCH="chore/release-sync-$VERSION"
+          git push --force origin "HEAD:refs/heads/$BRANCH"
+
+          if gh pr view "$BRANCH" --json number >/dev/null 2>&1; then
+            echo "PR for $BRANCH already open."
+            exit 0
+          fi
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "chore(release): sync magic modal version with npm $VERSION" \
+            --body "$(printf '%s\n' \
+              "release-it published $VERSION to npm and tagged magic-modal-$VERSION, then stopped." \
+              "" \
+              "It can't push to main (GH_PAT is rejected by the ruleset), so the version bump and" \
+              "the generated changelog live only on the release runner. This is that commit." \
+              "" \
+              "Opened by the 🚀 Publish workflow, run ${{ github.run_id }}.")"
