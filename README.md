@@ -73,11 +73,11 @@ Minimum peer versions:
 | `react-native-gesture-handler` | 2.20.0  |
 | `react-native-reanimated`      | 4.0.0   |
 
-Both gesture-handler majors work. Swipe-to-dismiss uses 3.x's `usePanGesture` hook when it's available and falls back to 2.x's `Gesture.Pan()` builder when it isn't.
+Both gesture-handler majors work. Swipe-to-dismiss uses 3.x's `usePanGesture` hook when it's available and falls back to 2.x's `Gesture.Pan()` builder otherwise.
 
-On Expo there's nothing to do: `npx expo install react-native-gesture-handler` gives you whatever your SDK bundles, which is 2.x on every SDK through 57, and `npx expo-doctor` stays clean. If you added `react-native-gesture-handler` to `expo.install.exclude` to quiet the version check on 8.0.0, drop it.
+On Expo there's nothing to do: `npx expo install react-native-gesture-handler` gives you whatever your SDK bundles, which is 2.x on every SDK through 57, and `npx expo-doctor` stays clean.
 
-8.0.0 required gesture-handler 3.x. If you're on 8.0.0 and pinned to 2.x, upgrade to 8.1.0 or later.
+8.0.0 was the one version that required gesture-handler 3.x. If you're on it and pinned to 2.x, upgrade to 8.1.0 or later, and drop `react-native-gesture-handler` from `expo.install.exclude` if you added it to quiet the version check.
 
 ## Quickstart
 
