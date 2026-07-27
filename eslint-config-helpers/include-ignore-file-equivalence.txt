@@ -1,0 +1,68 @@
+includeIgnoreFile, @eslint/compat@1.4.1 vs @eslint/config-helpers@0.7.0
+input: the repo .gitignore on main
+
+compat@1.4.1          keys: name, ignores
+config-helpers@0.7.0  keys: name, ignores
+name equal:            true  (Imported .gitignore patterns)
+ignore pattern count:  57 vs 57
+ignores deep equal:    true
+whole object equal:    true
+
+patterns:
+    1  **/.DS_Store
+    2  **/build/
+    3  **/*.pbxuser
+    4  !**/default.pbxuser
+    5  **/*.mode1v3
+    6  !**/default.mode1v3
+    7  **/*.mode2v3
+    8  !**/default.mode2v3
+    9  **/*.perspectivev3
+   10  !**/default.perspectivev3
+   11  **/xcuserdata
+   12  **/*.xccheckout
+   13  **/*.moved-aside
+   14  **/DerivedData
+   15  **/*.hmap
+   16  **/*.ipa
+   17  **/*.xcuserstate
+   18  **/project.xcworkspace
+   19  **/build/
+   20  **/.idea
+   21  **/.gradle
+   22  **/local.properties
+   23  **/*.iml
+   24  **/node_modules/
+   25  **/npm-debug.log
+   26  **/yarn-error.log
+   27  **/.pnpm-debug.log*
+   28  **/buck-out/
+   29  **/\.buckd/
+   30  **/*.keystore
+   31  */fastlane/report.xml
+   32  */fastlane/Preview.html
+   33  */fastlane/screenshots
+   34  **/*.jsbundle
+   35  ios/Pods/
+   36  .expo/*
+   37  **/web-build/
+   38  **/*/.expo
+   39  **/*/.next
+   40  **/*/ios
+   41  **/*/android
+   42  **/.turbo
+   43  **/dist
+   44  **/junit.xml
+   45  **/docs
+   46  **/modal/README.md
+   47  **/.pnp.*
+   48  .yarn/*
+   49  !.yarn/patches
+   50  !.yarn/plugins
+   51  !.yarn/releases
+   52  !.yarn/sdks
+   53  !.yarn/versions
+   54  **/.env
+   55  **/.envrc
+   56  **/.yarn
+   57  **/coverage
