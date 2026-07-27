@@ -9,6 +9,12 @@ on:
     branches:
       - main
 
+# Reads the tree and nothing else. The pnpm and turbo caches go through the
+# Actions cache service on the runtime token. Declared here because a called
+# workflow can never exceed the caller's grant.
+permissions:
+  contents: read
+
 jobs:
   # Install, lint, format and typecheck now live in GSTJ/magic, so every repo
   # runs the same steps. `concurrency` is declared inside the reusable workflow,

@@ -3,9 +3,14 @@
   "extends": ["github>GSTJ/magic"],
   "packageRules": [
     {
-      "description": "The example app's runtime versions are dictated by the installed Expo SDK, and expo-doctor fails the build when they drift. The shared preset names the usual suspects; this widens it to every runtime dependency the example app declares. Refresh the lockfile inside the declared ranges, never widen them. SDK jumps are done by hand.",
+      "description": "The example app's runtime versions are dictated by the installed Expo SDK, and expo-doctor fails the build when they drift. The shared preset names the usual suspects; this widens it to everything the example app declares. Refresh the lockfile inside the declared ranges, never widen them. SDK jumps are done by hand.",
       "matchFileNames": ["examples/kitchen-sink/package.json"],
-      "matchDepTypes": ["dependencies"],
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "rangeStrategy": "in-range-only"
+    },
+    {
+      "description": "@expo/metro-runtime rides the Expo SDK and is held at the SDK version by a pnpm-workspace.yaml override, which the file rule above doesn't reach. The shared preset covers metro and friends but its expo-* pattern doesn't match the scoped name.",
+      "matchPackageNames": ["@expo/metro-runtime"],
       "rangeStrategy": "in-range-only"
     },
     {
