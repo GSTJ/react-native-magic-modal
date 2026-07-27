@@ -114,8 +114,7 @@ const runOnUpdate = (
   translation: { translationX: number; translationY: number },
 ) => {
   const onUpdate = config.onUpdate as
-    | ((event: UpdateEvent) => void)
-    | undefined;
+    ((event: UpdateEvent) => void) | undefined;
 
   onUpdate?.({ ...baseEvent, ...translation } as unknown as UpdateEvent);
 };
