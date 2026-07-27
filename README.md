@@ -77,7 +77,7 @@ Both gesture-handler majors work. Swipe-to-dismiss uses 3.x's `usePanGesture` ho
 
 On Expo there's nothing to do: `npx expo install react-native-gesture-handler` gives you whatever your SDK bundles, which is 2.x on every SDK through 57, and `npx expo-doctor` stays clean.
 
-8.0.0 was the one version that required gesture-handler 3.x. If you're on it and pinned to 2.x, upgrade to 8.1.0 or later, and drop `react-native-gesture-handler` from `expo.install.exclude` if you added it to quiet the version check.
+8.0.0 was the one version that required gesture-handler 3.x. If you're on it and pinned to 2.x, upgrade to 9.0.0 or later, and drop `react-native-gesture-handler` from `expo.install.exclude` if you added it to quiet the version check.
 
 ## Quickstart
 

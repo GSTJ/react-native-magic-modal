@@ -3,6 +3,22 @@ export default {
     "@release-it/conventional-changelog": {
       infile: "CHANGELOG.md",
       header: "# 🦄 Magic Modal Changelog 🪄",
+      // Where the recommended bump starts counting from. Without it,
+      // conventional-recommended-bump falls back to `git-semver-tags` with an
+      // empty prefix, which can't parse `magic-modal-8.0.0` and skips every
+      // release tag this repo has. It then lands on the old `v*` tags from the
+      // 6.x days, and the range stretches back 53 commits.
+      //
+      // That's how 8.1.0 came out as 9.0.0: the range swept up
+      // `feat(modal)!: move swipe-to-dismiss onto gesture-handler's
+      // usePanGesture` (#241), which was already released as 8.0.0, and its
+      // breaking marker forced a second major. 8.0.0 itself came out of the
+      // same fault. Every release was going to be a major until this was set.
+      //
+      // The plugin does derive a `tagPrefix` from `git.tagName` below, but it
+      // only uses it for the changelog, never for the bump. `tagOpts` is what
+      // reaches the bumper.
+      tagOpts: { prefix: "magic-modal-" },
       preset: {
         name: "conventionalcommits",
         types: [
