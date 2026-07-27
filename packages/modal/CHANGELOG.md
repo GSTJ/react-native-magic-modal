@@ -1,5 +1,16 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [9.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-8.0.0...magic-modal-9.0.0) (2026-07-27)
+
+### :hammer: Bug Fixes :hammer:
+
+* **ci:** auto-merge the release sync PR past the required check ([#255](https://github.com/GSTJ/react-native-magic-modal/issues/255)) ([86dd808](https://github.com/GSTJ/react-native-magic-modal/commit/86dd808b8307db29a5b03c1caeeeacf6049f3a2c)), closes [#248](https://github.com/GSTJ/react-native-magic-modal/issues/248) [#196](https://github.com/GSTJ/react-native-magic-modal/issues/196)
+* **ci:** move onto the node 24 action majors and unbreak the docs build ([#251](https://github.com/GSTJ/react-native-magic-modal/issues/251)) ([65b5e2c](https://github.com/GSTJ/react-native-magic-modal/commit/65b5e2c699a02b8d8faaa5faab3762fc987e9e45)), closes [#241](https://github.com/GSTJ/react-native-magic-modal/issues/241) [#239](https://github.com/GSTJ/react-native-magic-modal/issues/239) [#224](https://github.com/GSTJ/react-native-magic-modal/issues/224) [#248](https://github.com/GSTJ/react-native-magic-modal/issues/248) [#244](https://github.com/GSTJ/react-native-magic-modal/issues/244) [#245](https://github.com/GSTJ/react-native-magic-modal/issues/245) [#249](https://github.com/GSTJ/react-native-magic-modal/issues/249)
+
+### :stars: New Features :stars:
+
+* **modal:** support gesture-handler 2.x alongside 3.x ([#257](https://github.com/GSTJ/react-native-magic-modal/issues/257)) ([939c982](https://github.com/GSTJ/react-native-magic-modal/commit/939c98215b52a567f40b235310270fb55ffe30b4))
+
 ## [8.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-7.1.0...magic-modal-8.0.0) (2026-07-27)
 
 ### ⚠ BREAKING CHANGES
