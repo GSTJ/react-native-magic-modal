@@ -53,22 +53,18 @@ export default {
           },
         ],
       },
-      /**
-       * Include commits scoped to (modal) and any commit carrying a
-       * BREAKING CHANGE note (regardless of scope). This ensures that
-       * unscoped `feat!:` / `fix!:` commits or commits with a
-       * `BREAKING CHANGE:` footer still trigger a release, while
-       * unrelated chore/deps noise without (modal) scope is ignored.
-       * @param {{ header?: string, notes?: Array<{ title?: string, text?: string }> }} commit
-       */
-      commitFilter: (commit) => {
-        if (commit.header?.includes("(modal)")) return true;
-        if (
-          commit.notes?.some((n) => /BREAKING[- ]CHANGE/i.test(n.title ?? ""))
-        )
-          return true;
-        return false;
-      },
+      // There used to be a `commitFilter` here meant to keep the changelog to
+      // (modal)-scoped and breaking commits. @release-it/conventional-changelog
+      // accepts `preset`, `context`, `gitRawCommitsOpts`, `parserOpts`,
+      // `writerOpts` and `whatBump`, so it was silently dropped: the 7.1.0
+      // release notes list `fix(ci): stop turbo from swallowing the docs task`,
+      // which the filter claimed to exclude.
+      //
+      // Whether a release happens at all is decided by the "Determine next
+      // version" probe in .github/workflows/release.yml, which does check for
+      // (modal) scope and BREAKING CHANGE footers. Once a release is running,
+      // every non-hidden commit in range belongs in the notes, so there's
+      // nothing left for a filter to do.
     },
   },
   git: {
@@ -85,12 +81,14 @@ export default {
     //
     // Keeping `commit: true` and `tag: true` so the @release-it/github plugin
     // still has a tag to attach the GitHub Release to within the runner.
-    // The bump commit + tag exist only on the runner and are discarded when
-    // the job ends; main stays at the pre-release version, and we sync via
-    // a follow-up PR (same pattern used for #192).
+    // The bump commit + tag exist only on the runner. The "Open version sync
+    // PR" step in .github/workflows/release.yml pushes that commit to a branch
+    // and opens a PR, so the version and CHANGELOG.md still reach main. Main
+    // stays at the pre-release version until that PR merges.
     //
     // TODO: once GH_PAT is rotated with `contents: write` and granted
-    // bypass on branch protection, flip `push` back to `true`.
+    // bypass on the main ruleset, flip `push` back to `true` and drop the
+    // sync-PR step.
     push: false,
     requireCleanWorkingDir: false,
     tagName: "magic-modal-${version}",
