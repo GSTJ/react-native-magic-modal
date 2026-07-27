@@ -74,7 +74,7 @@ jobs:
     name: 🧪 Maestro smoke tests (iOS sim)
     needs: approval-gate
     if: needs.approval-gate.outputs.approved == 'true'
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 60
     env:
       EXAMPLE_DIR: examples/kitchen-sink
