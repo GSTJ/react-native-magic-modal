@@ -3,9 +3,13 @@ import reactNative from "magic-oxlint-config/react-native";
 
 // `extendConfig` flattens the preset and this object into a single config
 // instead of going through oxlint's `extends`, which drops `ignorePatterns`.
-// That is still true on oxlint 1.75.0 with magic-oxlint-config 1.1.0 — checked
-// with `--print-config`, an `extends`-only config reports `ignorePatterns: []`.
-// Flattening leaves nothing to re-declare by hand.
+// oxlint has no per-override ignore, so nothing in the preset can carry them
+// across — which is why magic-oxlint-config 1.2.0 stopped documenting `extends`
+// as a way to consume it. Flattening leaves nothing to re-declare by hand.
+//
+// Don't reach for `oxlint --print-config` to check this: it renders an
+// `extends`-shaped config post-expansion and pre-merge, so what it prints is
+// not what runs.
 export default extendConfig(reactNative, {
   overrides: [
     {
