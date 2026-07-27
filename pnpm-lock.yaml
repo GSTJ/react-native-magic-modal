@@ -87,14 +87,14 @@ importers:
         specifier: 1.20.1
         version: 1.20.1
       magic-oxfmt-config:
-        specifier: ^1.1.0
-        version: 1.1.0(oxfmt@0.60.0)
+        specifier: ^1.2.0
+        version: 1.2.0(oxfmt@0.60.0)
       magic-oxlint-config:
-        specifier: ^1.1.0
-        version: 1.1.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
+        specifier: ^1.2.0
+        version: 1.2.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
       magic-tsconfig:
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.2.0
+        version: 1.2.0
       oxfmt:
         specifier: 0.60.0
         version: 0.60.0
@@ -148,14 +148,14 @@ importers:
         specifier: ^16.0.0
         version: 16.0.0
       magic-oxfmt-config:
-        specifier: ^1.1.0
-        version: 1.1.0(oxfmt@0.60.0)
+        specifier: ^1.2.0
+        version: 1.2.0(oxfmt@0.60.0)
       magic-oxlint-config:
-        specifier: ^1.1.0
-        version: 1.1.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
+        specifier: ^1.2.0
+        version: 1.2.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
       magic-tsconfig:
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.2.0
+        version: 1.2.0
       oxfmt:
         specifier: 0.60.0
         version: 0.60.0
@@ -4616,8 +4616,8 @@ packages:
     engines: {node: '>=22'}
     hasBin: true
 
-  magic-oxfmt-config@1.1.0:
-    resolution: {integrity: sha512-GxnwMVWyBMCP37e+rRct1bhkER10wOWO3B/N/aT58b+MVelpXBCA+L4U8vtMLMRIQNBiQs3mNsbM90WLb6W5Kg==}
+  magic-oxfmt-config@1.2.0:
+    resolution: {integrity: sha512-Wq46MqLnrZTJx1V2nJumdyW8OgA4URnhrfkYx6NYeewQRJAN+wiS1lxu1+5gU6BvlDetmbz7Ol/Xb8sxVXgW3A==}
     engines: {node: '>=22.18.0'}
     hasBin: true
     peerDependencies:
@@ -4626,8 +4626,8 @@ packages:
       oxfmt:
         optional: true
 
-  magic-oxlint-config@1.1.0:
-    resolution: {integrity: sha512-6QlcAx5zZuBFylQAPAQTX9kzOkTGcfUMp4YUwpiBMcCH05yHaVONBEYNKni6xF+qNrTyt9oHtD7gUsYAQKH++w==}
+  magic-oxlint-config@1.2.0:
+    resolution: {integrity: sha512-QBqa4xdsLwi3a9yo8hGW5ZZwXdHzGBmz6GCK86nHza2r+8s9tztwP6mxIzP/8HGd6xbzP2zOfcwHsUIso3ROvQ==}
     engines: {node: '>=22.18.0'}
     peerDependencies:
       oxlint: '>=1.75.0'
@@ -4638,8 +4638,8 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
-  magic-tsconfig@1.1.0:
-    resolution: {integrity: sha512-4sDvMYhYXXTDyNX2HMgFY7LXRoAaLO958EONYt9pj4kLaT2ty59p5FR7ZgcTDnAkAsw7lPLfaVYLD4Kow1uQCQ==}
+  magic-tsconfig@1.2.0:
+    resolution: {integrity: sha512-odQYUHWzEvgB85RsdRvKwYQPm4/zMMgXABhPPHyNpkEd4T4OqPp8SI4LfYQAn5LXLIktLHzqSJktH5g0Y5EeIQ==}
 
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
@@ -11361,11 +11361,11 @@ snapshots:
     dependencies:
       ts-morph: 28.0.0
 
-  magic-oxfmt-config@1.1.0(oxfmt@0.60.0):
+  magic-oxfmt-config@1.2.0(oxfmt@0.60.0):
     optionalDependencies:
       oxfmt: 0.60.0
 
-  magic-oxlint-config@1.1.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0):
+  magic-oxlint-config@1.2.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0):
     dependencies:
       eslint-plugin-react-native: 5.0.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))
       eslint-plugin-safe-jsx: 1.3.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))
@@ -11378,7 +11378,7 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  magic-tsconfig@1.1.0: {}
+  magic-tsconfig@1.2.0: {}
 
   make-dir@4.0.0:
     dependencies:
