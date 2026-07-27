@@ -38,17 +38,20 @@ To run the example app on Web:
 pnpm run example web
 ```
 
-Make sure your code passes TypeScript and ESLint. Run the following to verify:
+Make sure your code passes TypeScript, oxlint and oxfmt. Run the following to
+verify:
 
 ```sh
-pnpm run typescript
+pnpm run typecheck
 pnpm run lint
+pnpm run format
 ```
 
-To fix formatting errors, run the following:
+To fix what can be fixed automatically, run the following:
 
 ```sh
-pnpm run lint --fix
+pnpm run lint:fix
+pnpm run format:fix
 ```
 
 Remember to add tests for your change if possible. Run the unit tests by:
@@ -72,9 +75,9 @@ Our pre-commit hooks verify that your commit message matches this format when co
 
 ### Linting and tests
 
-[ESLint](https://eslint.org/), [Prettier](https://prettier.io/), [TypeScript](https://www.typescriptlang.org/)
+[oxlint](https://oxc.rs/docs/guide/usage/linter), [oxfmt](https://oxc.rs/docs/guide/usage/formatter), [TypeScript](https://www.typescriptlang.org/)
 
-We use [TypeScript](https://www.typescriptlang.org/) for type checking, [ESLint](https://eslint.org/) with [Prettier](https://prettier.io/) for linting and formatting the code, and [Jest](https://jestjs.io/) for testing.
+We use [TypeScript](https://www.typescriptlang.org/) for type checking, [oxlint](https://oxc.rs/docs/guide/usage/linter) for linting and [oxfmt](https://oxc.rs/docs/guide/usage/formatter) for formatting, and [Jest](https://jestjs.io/) for testing. All three read their config from [GSTJ/magic](https://github.com/GSTJ/magic), which every GSTJ repo shares.
 
 Our pre-commit hooks verify that the linter and tests pass when committing.
 
@@ -93,8 +96,9 @@ pnpm run release
 The `package.json` file contains various scripts for common tasks:
 
 - `pnpm run bootstrap`: setup project by installing all dependencies and pods.
-- `pnpm run typescript`: type-check files with TypeScript.
-- `pnpm run lint`: lint files with ESLint.
+- `pnpm run typecheck`: type-check files with TypeScript.
+- `pnpm run lint`: lint files with oxlint.
+- `pnpm run format`: check formatting with oxfmt.
 - `pnpm run test`: run unit tests with Jest.
 - `pnpm run example start`: start the Metro server for the example app.
 - `pnpm run example android`: run the example app on Android.

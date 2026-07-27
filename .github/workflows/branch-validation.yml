@@ -9,56 +9,15 @@ on:
     branches:
       - main
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
+  # Install, lint, format and typecheck now live in GSTJ/magic, so every repo
+  # runs the same steps. `concurrency` is declared inside the reusable workflow,
+  # at job level — a `workflow_call` file never gets a run of its own, so a
+  # workflow-level group there would never apply.
   checkup:
-    name: 👮‍♂️ Typecheck, Healthcheck, Lint and Format
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🏗 Setup Repo
-        uses: actions/checkout@v7
-
-      - name: 🏗 Setup PNPM
-        uses: pnpm/action-setup@v4
-
-      - name: 🏗 Get PNPM store directory
-        id: pnpm-cache
-        run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: 🏗 Setup PNPM cache
-        uses: actions/cache@v6
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: 🏗 Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-
-      - name: 📦 Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: 👨‍⚕️ Expo Doctor
-        run: pnpm run doctor
-
-      - name: 🏗 Setup Turborepo Cache
-        uses: dtinth/setup-github-actions-caching-for-turbo@v1
-
-      - name: 🧪 Typecheck
-        run: pnpm run typecheck
-
-      - name: 🧹 Lint
-        run: pnpm run lint
-
-      - name: 🧪 Test
-        run: pnpm run test
-
-      - name: 💅 Format
-        run: pnpm run format
+    uses: GSTJ/magic/.github/workflows/ci.yml@main
+    with:
+      test-command: pnpm run test
+      # This repo's own gate: expo-doctor catches the duplicate react-native and
+      # the SDK drift the example app is prone to.
+      extra-command: pnpm run doctor
