@@ -38,7 +38,7 @@
     "eslint-plugin-react-native": "^5.0.0",
     "eslint-plugin-react-native-a11y": "^3.5.1",
     "eslint-plugin-reanimated": "^2.0.1",
-    "eslint-plugin-tailwindcss": "^3.18.0",
+    "eslint-plugin-tailwindcss": "^4.0.0",
     "eslint-plugin-testing-library": "^7.4.0",
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^16.0.0",
