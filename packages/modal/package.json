@@ -85,7 +85,7 @@
     "pod-install": "^1.0.0",
     "prettier": "3.9.6",
     "react-test-renderer": "19.2.0",
-    "release-it": "^19.0.3",
+    "release-it": "^21.0.0",
     "shx": "^0.4.0",
     "ts-jest": "^29.2.5",
     "ts-node-dev": "^2.0.0",
