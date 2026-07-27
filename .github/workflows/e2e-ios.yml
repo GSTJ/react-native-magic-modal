@@ -101,7 +101,7 @@ jobs:
         uses: pnpm/action-setup@v4
 
       - name: 🏗 Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -246,7 +246,7 @@ jobs:
 
       - name: 📤 Upload Maestro debug output
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: maestro-debug-output
           path: |
