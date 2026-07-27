@@ -203,7 +203,7 @@ importers:
         version: 19.2.17
       bunchee:
         specifier: ^6.0.3
-        version: 6.12.1(typescript@5.9.3)
+        version: 6.12.2(typescript@5.9.3)
       cz-conventional-changelog:
         specifier: ^3.3.0
         version: 3.3.0(@types/node@26.1.1)(typescript@5.9.3)
@@ -2868,8 +2868,8 @@ packages:
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
 
-  bunchee@6.12.1:
-    resolution: {integrity: sha512-s/PSLmDGUaMQ35gHTZt0OTJtDWqinM/jAjt0i94gNn648poAzQAf+1bUcaUEpUHs+jP2egCNFrj+ppdD9pdR4g==}
+  bunchee@6.12.2:
+    resolution: {integrity: sha512-jhsFQoDoebSBWAoTNR3b2R6hcXBX1w87TYq8i38nGQmbkZtCjxliQjo9RWRhEvIH65YQgfODkC4DcPOSkvrDBg==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
@@ -10193,7 +10193,7 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
-  bunchee@6.12.1(typescript@5.9.3):
+  bunchee@6.12.2(typescript@5.9.3):
     dependencies:
       '@rollup/plugin-commonjs': 29.0.3(rollup@4.62.3)
       '@rollup/plugin-json': 6.1.0(rollup@4.62.3)
