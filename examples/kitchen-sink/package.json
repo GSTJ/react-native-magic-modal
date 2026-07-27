@@ -50,7 +50,7 @@
     "react-native-web": "^0.21.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^8.0.0",
     "@magic/prettier-config": "workspace:*",
     "@magic/tsconfig": "workspace:*",
     "expo-doctor": "1.20.1",
