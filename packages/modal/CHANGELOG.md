@@ -2,89 +2,94 @@
 
 ## [9.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-8.0.0...magic-modal-9.0.0) (2026-07-27)
 
+Nothing in this release is breaking. It should have been 8.1.0. The recommended
+bump was computed over a 53-commit range going back to the 6.x `v*` tags, so it
+re-counted the breaking marker on #241 that 8.0.0 already shipped. Fixed in
+`.release-it.js`, see #261.
+
 ### :hammer: Bug Fixes :hammer:
 
-* **ci:** auto-merge the release sync PR past the required check ([#255](https://github.com/GSTJ/react-native-magic-modal/issues/255)) ([86dd808](https://github.com/GSTJ/react-native-magic-modal/commit/86dd808b8307db29a5b03c1caeeeacf6049f3a2c)), closes [#248](https://github.com/GSTJ/react-native-magic-modal/issues/248) [#196](https://github.com/GSTJ/react-native-magic-modal/issues/196)
-* **ci:** move onto the node 24 action majors and unbreak the docs build ([#251](https://github.com/GSTJ/react-native-magic-modal/issues/251)) ([65b5e2c](https://github.com/GSTJ/react-native-magic-modal/commit/65b5e2c699a02b8d8faaa5faab3762fc987e9e45)), closes [#241](https://github.com/GSTJ/react-native-magic-modal/issues/241) [#239](https://github.com/GSTJ/react-native-magic-modal/issues/239) [#224](https://github.com/GSTJ/react-native-magic-modal/issues/224) [#248](https://github.com/GSTJ/react-native-magic-modal/issues/248) [#244](https://github.com/GSTJ/react-native-magic-modal/issues/244) [#245](https://github.com/GSTJ/react-native-magic-modal/issues/245) [#249](https://github.com/GSTJ/react-native-magic-modal/issues/249)
+- **ci:** auto-merge the release sync PR past the required check ([#255](https://github.com/GSTJ/react-native-magic-modal/issues/255)) ([86dd808](https://github.com/GSTJ/react-native-magic-modal/commit/86dd808b8307db29a5b03c1caeeeacf6049f3a2c)), closes [#248](https://github.com/GSTJ/react-native-magic-modal/issues/248) [#196](https://github.com/GSTJ/react-native-magic-modal/issues/196)
+- **ci:** move onto the node 24 action majors and unbreak the docs build ([#251](https://github.com/GSTJ/react-native-magic-modal/issues/251)) ([65b5e2c](https://github.com/GSTJ/react-native-magic-modal/commit/65b5e2c699a02b8d8faaa5faab3762fc987e9e45)), closes [#241](https://github.com/GSTJ/react-native-magic-modal/issues/241) [#239](https://github.com/GSTJ/react-native-magic-modal/issues/239) [#224](https://github.com/GSTJ/react-native-magic-modal/issues/224) [#248](https://github.com/GSTJ/react-native-magic-modal/issues/248) [#244](https://github.com/GSTJ/react-native-magic-modal/issues/244) [#245](https://github.com/GSTJ/react-native-magic-modal/issues/245) [#249](https://github.com/GSTJ/react-native-magic-modal/issues/249)
 
 ### :stars: New Features :stars:
 
-* **modal:** support gesture-handler 2.x alongside 3.x ([#257](https://github.com/GSTJ/react-native-magic-modal/issues/257)) ([939c982](https://github.com/GSTJ/react-native-magic-modal/commit/939c98215b52a567f40b235310270fb55ffe30b4))
+- **modal:** support gesture-handler 2.x alongside 3.x ([#257](https://github.com/GSTJ/react-native-magic-modal/issues/257)) ([939c982](https://github.com/GSTJ/react-native-magic-modal/commit/939c98215b52a567f40b235310270fb55ffe30b4))
 
 ## [8.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-7.1.0...magic-modal-8.0.0) (2026-07-27)
 
 ### ⚠ BREAKING CHANGES
 
-* **modal:** the `react-native-gesture-handler` peer range moves from
-`>=2.20.0` to `>=3.0.0`. `usePanGesture` only exists in 3.x, so there's no
-2.x-compatible path. The modal's own API is unchanged. A
-`GestureHandlerRootView` above the portal also becomes mandatory, since 3.x
-throws where 2.x only logged a warning. Expo SDK 55 still pins gesture-handler
-to 2.30, so Expo projects installing 3.x need it in `expo.install.exclude`, or
-can stay on `react-native-magic-modal` 7.x until Expo moves the pin.
+- **modal:** the `react-native-gesture-handler` peer range moves from
+  `>=2.20.0` to `>=3.0.0`. `usePanGesture` only exists in 3.x, so there's no
+  2.x-compatible path. The modal's own API is unchanged. A
+  `GestureHandlerRootView` above the portal also becomes mandatory, since 3.x
+  throws where 2.x only logged a warning. Expo SDK 55 still pins gesture-handler
+  to 2.30, so Expo projects installing 3.x need it in `expo.install.exclude`, or
+  can stay on `react-native-magic-modal` 7.x until Expo moves the pin.
 
 ### :hammer: Bug Fixes :hammer:
 
-* **ci:** stop registering two [@typescript-eslint](https://github.com/typescript-eslint) plugin instances ([#236](https://github.com/GSTJ/react-native-magic-modal/issues/236)) ([a8ce4f9](https://github.com/GSTJ/react-native-magic-modal/commit/a8ce4f92768f0b78e7149b2f3ee7b2c492ec3ab1)), closes [#228](https://github.com/GSTJ/react-native-magic-modal/issues/228) [#233](https://github.com/GSTJ/react-native-magic-modal/issues/233) [#219](https://github.com/GSTJ/react-native-magic-modal/issues/219)
-* **deps:** drop the duplicate hasown entry that broke the lockfile ([#220](https://github.com/GSTJ/react-native-magic-modal/issues/220)) ([76f92fe](https://github.com/GSTJ/react-native-magic-modal/commit/76f92fe2f1bf37c17a84115671bb81efcdb9e3f3))
+- **ci:** stop registering two [@typescript-eslint](https://github.com/typescript-eslint) plugin instances ([#236](https://github.com/GSTJ/react-native-magic-modal/issues/236)) ([a8ce4f9](https://github.com/GSTJ/react-native-magic-modal/commit/a8ce4f92768f0b78e7149b2f3ee7b2c492ec3ab1)), closes [#228](https://github.com/GSTJ/react-native-magic-modal/issues/228) [#233](https://github.com/GSTJ/react-native-magic-modal/issues/233) [#219](https://github.com/GSTJ/react-native-magic-modal/issues/219)
+- **deps:** drop the duplicate hasown entry that broke the lockfile ([#220](https://github.com/GSTJ/react-native-magic-modal/issues/220)) ([76f92fe](https://github.com/GSTJ/react-native-magic-modal/commit/76f92fe2f1bf37c17a84115671bb81efcdb9e3f3))
 
 ### :stars: New Features :stars:
 
-* **modal:** move swipe-to-dismiss onto gesture-handler's usePanGesture ([#241](https://github.com/GSTJ/react-native-magic-modal/issues/241)) ([61a4080](https://github.com/GSTJ/react-native-magic-modal/commit/61a4080c75af410c85a94346c6024b1c635d0016))
+- **modal:** move swipe-to-dismiss onto gesture-handler's usePanGesture ([#241](https://github.com/GSTJ/react-native-magic-modal/issues/241)) ([61a4080](https://github.com/GSTJ/react-native-magic-modal/commit/61a4080c75af410c85a94346c6024b1c635d0016))
 
 ## [7.1.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-7.0.3...magic-modal-7.1.0) (2026-07-25)
 
 ### :stars: New Features :stars:
 
-* **modal:** add update() to swap a modal's content in place ([#217](https://github.com/GSTJ/react-native-magic-modal/issues/217)) ([24a939f](https://github.com/GSTJ/react-native-magic-modal/commit/24a939f2bf00d825c44e43b06bc4919759fce628))
+- **modal:** add update() to swap a modal's content in place ([#217](https://github.com/GSTJ/react-native-magic-modal/issues/217)) ([24a939f](https://github.com/GSTJ/react-native-magic-modal/commit/24a939f2bf00d825c44e43b06bc4919759fce628))
 
 ### :hammer: Bug Fixes :hammer:
 
-* **ci:** stop turbo from swallowing the docs task ([#215](https://github.com/GSTJ/react-native-magic-modal/issues/215)) ([18966e0](https://github.com/GSTJ/react-native-magic-modal/commit/18966e09880e26e6255af25ebc1eb119dade9e88))
+- **ci:** stop turbo from swallowing the docs task ([#215](https://github.com/GSTJ/react-native-magic-modal/issues/215)) ([18966e0](https://github.com/GSTJ/react-native-magic-modal/commit/18966e09880e26e6255af25ebc1eb119dade9e88))
 
 ## 7.0.3 (2026-07-25)
 
 ### :hammer: Bug Fixes :hammer:
 
-* **modal:** stop the swipe gesture from eating taps ([#205](https://github.com/GSTJ/react-native-magic-modal/issues/205)) ([dc0a98c](https://github.com/GSTJ/react-native-magic-modal/commit/dc0a98c3413f85b0497ee07dd252ac34f464d83a))
+- **modal:** stop the swipe gesture from eating taps ([#205](https://github.com/GSTJ/react-native-magic-modal/issues/205)) ([dc0a98c](https://github.com/GSTJ/react-native-magic-modal/commit/dc0a98c3413f85b0497ee07dd252ac34f464d83a))
 
 ### :link: Testing Updated :link:
 
-* bring jest back to life and run it in CI ([#201](https://github.com/GSTJ/react-native-magic-modal/issues/201)) ([1864ea9](https://github.com/GSTJ/react-native-magic-modal/commit/1864ea9a74a803e2ead35e02a243b70e8d6721b6))
+- bring jest back to life and run it in CI ([#201](https://github.com/GSTJ/react-native-magic-modal/issues/201)) ([1864ea9](https://github.com/GSTJ/react-native-magic-modal/commit/1864ea9a74a803e2ead35e02a243b70e8d6721b6))
 
 ## 7.0.2 (2026-05-19)
 
 ### :curly_loop: Continuous Integrations :curly_loop:
 
-* Published by the #192 release run, which pushed to npm and then failed before the version bump landed on main
-* Align package.json version with npm publish 7.0.2
+- Published by the #192 release run, which pushed to npm and then failed before the version bump landed on main
+- Align package.json version with npm publish 7.0.2
 
 ## 7.0.1 (2026-05-19)
 
 ### :curly_loop: Continuous Integrations :curly_loop:
 
-* Fixed release-it git push + docs caching (#186)
-* Align package.json version with npm publish 7.0.1
+- Fixed release-it git push + docs caching (#186)
+- Align package.json version with npm publish 7.0.1
 
 ## 7.0.0 (2026-05-19)
 
 ### ⚠ BREAKING CHANGES
 
-* Minimum peer versions bumped to align with the React Native ecosystem
+- Minimum peer versions bumped to align with the React Native ecosystem
   required by Reanimated 4 and `scheduleOnRN` (replacing the deprecated
   `runOnJS`):
-  * `react` `>=18.0.0`
-  * `react-native` `>=0.81.0`
-  * `react-native-gesture-handler` `>=2.20.0`
-  * `react-native-reanimated` `>=4.0.0`
-  * `react-native-worklets` `>=0.5.0` (optional peer; ships with Reanimated 4)
-* Consumers on older RN/Reanimated versions must upgrade their app before
+  - `react` `>=18.0.0`
+  - `react-native` `>=0.81.0`
+  - `react-native-gesture-handler` `>=2.20.0`
+  - `react-native-reanimated` `>=4.0.0`
+  - `react-native-worklets` `>=0.5.0` (optional peer; ships with Reanimated 4)
+- Consumers on older RN/Reanimated versions must upgrade their app before
   taking this release.
 
 ### :sparkles: Internal :sparkles:
 
-* Replace deprecated `runOnJS` with `scheduleOnRN` from `react-native-worklets`.
-* Kitchen-sink example bumped to Expo SDK 55 (RN 0.83.6, React 19.2,
+- Replace deprecated `runOnJS` with `scheduleOnRN` from `react-native-worklets`.
+- Kitchen-sink example bumped to Expo SDK 55 (RN 0.83.6, React 19.2,
   Reanimated 4.3.1) end-to-end.
 
 ## 6.0.2 (2024-12-16)
@@ -95,14 +100,14 @@ can stay on `react-native-magic-modal` 7.x until Expo moves the pin.
 
 ### ⚠ BREAKING CHANGES
 
-* Removes individual `fullWindowOverlay` config from
-`magicModal.show`. Introduces `magicModal.enableFullWindowOverlay()` and
-`magicModal.disableFullWindowOverlay()` in order to control overlay
-behavior globally. This fixes exit animations on iOS.
+- Removes individual `fullWindowOverlay` config from
+  `magicModal.show`. Introduces `magicModal.enableFullWindowOverlay()` and
+  `magicModal.disableFullWindowOverlay()` in order to control overlay
+  behavior globally. This fixes exit animations on iOS.
 
 ### :dash: Code Improvements :dash:
 
-* configure full window overlay globally to address exit animation issues ([#125](https://github.com/GSTJ/react-native-magic-modal/issues/125)) ([e797c20](https://github.com/GSTJ/react-native-magic-modal/commit/e797c20d9ca82aeeff68fcd1b5a7947bc98f57c7))
+- configure full window overlay globally to address exit animation issues ([#125](https://github.com/GSTJ/react-native-magic-modal/issues/125)) ([e797c20](https://github.com/GSTJ/react-native-magic-modal/commit/e797c20d9ca82aeeff68fcd1b5a7947bc98f57c7))
 
 ## 5.1.21 (2024-12-15)
 
@@ -114,17 +119,15 @@ behavior globally. This fixes exit animations on iOS.
 
 ## 5.1.17 (2024-10-16)
 
-
 ### :hammer: Bug Fixes :hammer:
 
-* cjs errors while importing & add fullWindowOverlay option ([#113](https://github.com/GSTJ/react-native-magic-modal/issues/113)) ([274a2a3](https://github.com/GSTJ/react-native-magic-modal/commit/274a2a3be8896eeb7568615a42a0323e6f2c78cb)), closes [#112](https://github.com/GSTJ/react-native-magic-modal/issues/112) [#110](https://github.com/GSTJ/react-native-magic-modal/issues/110) [#91](https://github.com/GSTJ/react-native-magic-modal/issues/91) [#89](https://github.com/GSTJ/react-native-magic-modal/issues/89)
+- cjs errors while importing & add fullWindowOverlay option ([#113](https://github.com/GSTJ/react-native-magic-modal/issues/113)) ([274a2a3](https://github.com/GSTJ/react-native-magic-modal/commit/274a2a3be8896eeb7568615a42a0323e6f2c78cb)), closes [#112](https://github.com/GSTJ/react-native-magic-modal/issues/112) [#110](https://github.com/GSTJ/react-native-magic-modal/issues/110) [#91](https://github.com/GSTJ/react-native-magic-modal/issues/91) [#89](https://github.com/GSTJ/react-native-magic-modal/issues/89)
 
 ## 5.1.16 (2024-07-19)
 
-
 ### :hammer: Bug Fixes :hammer:
 
-* fix magic modal for react compiler users ([fee1735](https://github.com/GSTJ/react-native-magic-modal/commit/fee1735cc56371b809e8a8746cb8a04c31bdfc1a))
+- fix magic modal for react compiler users ([fee1735](https://github.com/GSTJ/react-native-magic-modal/commit/fee1735cc56371b809e8a8746cb8a04c31bdfc1a))
 
 ## 5.1.15 (2024-07-19)
 
@@ -158,10 +161,9 @@ behavior globally. This fixes exit animations on iOS.
 
 ## 5.1.0 (2024-07-16)
 
-
 ### :stars: New Features :stars:
 
-* make example web-compatible & mark functions as worklets ([#92](https://github.com/GSTJ/react-native-magic-modal/issues/92)) ([713ee86](https://github.com/GSTJ/react-native-magic-modal/commit/713ee86c5f0c50b326fe06f9585f6bb4fbea8723))
+- make example web-compatible & mark functions as worklets ([#92](https://github.com/GSTJ/react-native-magic-modal/issues/92)) ([713ee86](https://github.com/GSTJ/react-native-magic-modal/commit/713ee86c5f0c50b326fe06f9585f6bb4fbea8723))
 
 ## 5.0.3 (2024-07-16)
 
@@ -171,14 +173,13 @@ behavior globally. This fixes exit animations on iOS.
 
 ## 5.0.0 (2024-06-14)
 
-
 ### ⚠ BREAKING CHANGES
 
-* improve type safety and docs
+- improve type safety and docs
 
 ### :stars: New Features :stars:
 
-* improve type safety and docs ([d3a7884](https://github.com/GSTJ/react-native-magic-modal/commit/d3a78842b7da87436abd163dc8ac0735a7264e7c))
+- improve type safety and docs ([d3a7884](https://github.com/GSTJ/react-native-magic-modal/commit/d3a78842b7da87436abd163dc8ac0735a7264e7c))
 
 ## 4.0.8 (2024-06-14)
 
@@ -188,10 +189,9 @@ behavior globally. This fixes exit animations on iOS.
 
 ## 4.0.5 (2024-06-08)
 
-
 ### :curly_loop: Continuous Integrations :curly_loop:
 
-* revert release config ([f6fb9a9](https://github.com/GSTJ/react-native-magic-modal/commit/f6fb9a907d59f35136d3baa51ebb1f3cbc22b084))
+- revert release config ([f6fb9a9](https://github.com/GSTJ/react-native-magic-modal/commit/f6fb9a907d59f35136d3baa51ebb1f3cbc22b084))
 
 ## [4.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/2.1.8...4.0.5) (2024-06-08)
 
