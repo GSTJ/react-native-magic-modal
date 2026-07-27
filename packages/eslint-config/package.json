@@ -23,7 +23,7 @@
     ]
   },
   "dependencies": {
-    "@eslint/compat": "^1.2.8",
+    "@eslint/compat": "^2.0.0",
     "@next/eslint-plugin-next": "^15.3.3",
     "@shopify/eslint-plugin": "^48.0.2",
     "eslint": "^9.28.0",
