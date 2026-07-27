@@ -9,7 +9,7 @@ import type {
 } from "../constants/types";
 import {
   // HideReturn is used in JS Doc
-  // eslint-disable-next-line unused-imports/no-unused-imports, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   HideReturn,
 } from "../constants/types";
 

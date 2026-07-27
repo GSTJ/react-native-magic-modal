@@ -2,8 +2,6 @@
 
 import eslint from "@eslint/js";
 import shopify from "@shopify/eslint-plugin";
-import typescript from "@typescript-eslint/eslint-plugin";
-import parser from "@typescript-eslint/parser";
 import eslintComments from "eslint-plugin-eslint-comments";
 import importPlugin from "eslint-plugin-import";
 import jest from "eslint-plugin-jest";
@@ -45,7 +43,11 @@ const baseConfig = tseslint.config(
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {
-      "@typescript-eslint": typescript,
+      // Must be the same plugin instance tseslint.configs.* registers above,
+      // otherwise ESLint throws `Cannot redefine plugin "@typescript-eslint"`
+      // as soon as the direct dependency and typescript-eslint's own copy
+      // resolve to different versions.
+      "@typescript-eslint": tseslint.plugin,
       "unused-imports": unusedImports,
       import: importPlugin,
       "prefer-arrow-functions": preferArrowFunctions,
@@ -54,7 +56,7 @@ const baseConfig = tseslint.config(
       "testing-library": testingLibrary,
     },
     languageOptions: {
-      parser,
+      parser: tseslint.parser,
       parserOptions: {
         projectService: true,
       },
