@@ -9,9 +9,9 @@ import {
 
 import { magicModal, useMagicModal } from "react-native-magic-modal";
 
-interface KeyboardAvoidingModalProps {
+type KeyboardAvoidingModalProps = {
   initialText?: string;
-}
+};
 
 const MAX_TEXT_LENGTH = 50;
 

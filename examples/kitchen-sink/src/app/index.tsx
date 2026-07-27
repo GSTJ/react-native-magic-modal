@@ -45,9 +45,9 @@ const showModal = async () => {
   console.log("Modal closed with response:", await modalResponse.promise);
 };
 
-interface ModalResponse {
+type ModalResponse = {
   message: string;
-}
+};
 
 const wait = (ms: number) =>
   new Promise<void>((resolve) => {

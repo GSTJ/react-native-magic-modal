@@ -21,7 +21,7 @@ type GestureHandlerModule = typeof GestureHandler;
  * `usePanGesture` actually accepts, so a rename upstream breaks `tsc` instead
  * of the app.
  */
-interface FallbackPanGestureConfig {
+type FallbackPanGestureConfig = {
   enabled?: boolean;
   minDistance?: number;
   onBegin?: (
@@ -42,11 +42,11 @@ interface FallbackPanGestureConfig {
   onFinalize?: (
     event: GestureStateChangeEvent<PanGestureHandlerEventPayload>,
   ) => void;
-}
+};
 
-interface AnimatedEventStandIn {
+type AnimatedEventStandIn = {
   _argMapping: unknown[];
-}
+};
 
 /** gesture-handler 3.x's `PanGestureConfig`, or the fallback above on 2.x. */
 export type PanGestureConfigCompat = GestureHandlerModule extends {

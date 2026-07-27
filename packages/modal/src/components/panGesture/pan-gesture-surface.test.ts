@@ -10,12 +10,12 @@
  * fresh registry, because the constant is read exactly once per process.
  */
 
-interface IsolatedModules {
+type IsolatedModules = {
   picked: unknown;
   v2: unknown;
   v3: unknown;
   hasPanGestureHook: boolean;
-}
+};
 
 /**
  * The surfaces have to come out of the same registry as `PanGestureSurface`

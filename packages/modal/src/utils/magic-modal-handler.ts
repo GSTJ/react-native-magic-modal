@@ -46,13 +46,13 @@ const hideAll: GlobalHideAllFunction = () => {
   // Not all tests are necessarily using the provider.
   return magicModalRef.current?.hideAll();
 };
-export interface IModal {
+export type IModal = {
   show: typeof show;
   hide: typeof hide;
   hideAll: typeof hideAll;
   enableFullWindowOverlay: typeof enableFullWindowOverlay;
   disableFullWindowOverlay: typeof disableFullWindowOverlay;
-}
+};
 
 /**
  * @example

@@ -34,10 +34,10 @@ export const directions = ["up", "down", "left", "right"] as const;
  */
 export const expectedMinDistance = 10;
 
-interface PanVelocity {
+type PanVelocity = {
   velocityX: number;
   velocityY: number;
-}
+};
 
 /** Clears the default `swipeVelocityThreshold` by a wide margin. */
 export const fastVelocity = {

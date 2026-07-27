@@ -3,15 +3,15 @@
  * gesture-handler majors hand their pan callbacks an event carrying these, so
  * typing the worklets this narrowly lets one set of them drive either API.
  */
-export interface SwipeTranslationEvent {
+export type SwipeTranslationEvent = {
   translationX: number;
   translationY: number;
-}
+};
 
-export interface SwipeVelocityEvent {
+export type SwipeVelocityEvent = {
   velocityX: number;
   velocityY: number;
-}
+};
 
 /**
  * What `MagicModal` needs from a pan gesture, spelled out independently of
@@ -24,15 +24,15 @@ export interface SwipeVelocityEvent {
  * so hanging the dismissal off either would fire it on taps that failed the
  * slop check.
  */
-export interface SwipeGestureSpec {
+export type SwipeGestureSpec = {
   enabled: boolean;
   minDistance: number;
   onStart: () => void;
   onUpdate: (event: SwipeTranslationEvent) => void;
   onEnd: (event: SwipeVelocityEvent) => void;
-}
+};
 
-export interface PanGestureSurfaceProps {
+export type PanGestureSurfaceProps = {
   swipe: SwipeGestureSpec;
   children: React.ReactNode;
-}
+};
