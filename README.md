@@ -64,6 +64,19 @@ Install the package:
 yarn add react-native-magic-modal
 ```
 
+Minimum peer versions:
+
+| Peer                           | Minimum |
+| ------------------------------ | ------- |
+| `react`                        | 18.0.0  |
+| `react-native`                 | 0.81.0  |
+| `react-native-gesture-handler` | 3.0.0   |
+| `react-native-reanimated`      | 4.0.0   |
+
+The gesture-handler floor is a hard one from `react-native-magic-modal` 8.0.0 on: swipe-to-dismiss is built on the `usePanGesture` hook, which only exists in 3.x. Stay on 7.x if you're pinned to gesture-handler 2.x.
+
+On Expo, that pin is worth checking. SDK 55 still asks for `react-native-gesture-handler@~2.30.0`, so `npx expo install` will pull 2.x and `npx expo-doctor` will flag 3.x as a major mismatch. Installing 3.x anyway works, and you can quiet the check by adding the package to `expo.install.exclude` in your `package.json`, the way `examples/kitchen-sink` does. Otherwise stay on `react-native-magic-modal` 7.x until Expo moves its pin.
+
 ## Quickstart
 
 Insert a `MagicModalPortal` at the top of your application structure, and a `GestureHandlerRootView` if you haven't already:
@@ -83,6 +96,8 @@ export default function App() {
 ```
 
 Tip: the root `_layout.tsx` is usually the best place to put it in a project using expo-router.
+
+The `GestureHandlerRootView` is required. The portal renders a `GestureDetector` for the swipe gesture, and gesture-handler 3.x throws when one renders without a root view above it. 2.x only logged a warning, so apps that skipped it got away with it.
 
 ## Examples
 
@@ -213,7 +228,9 @@ const UploadModal = ({ progress }) => (
 );
 
 const handleUpload = async (file) => {
-  const { modalID, update } = magicModal.show(() => <UploadModal progress={0} />);
+  const { modalID, update } = magicModal.show(() => (
+    <UploadModal progress={0} />
+  ));
 
   await uploadFile(file, {
     onProgress: (progress) => update(() => <UploadModal progress={progress} />),

@@ -1,6 +1,12 @@
 import React from "react";
 import { Text } from "react-native";
-import { act, fireEvent, render, screen } from "@testing-library/react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  act,
+  fireEvent,
+  render as rntlRender,
+  screen,
+} from "@testing-library/react-native";
 
 import { MagicModalHideReason } from "../../constants/types";
 import { magicModal } from "../../utils/magicModalHandler";
@@ -11,6 +17,15 @@ const content = "Taveira";
 const ModalContent = ({ testID }: { testID: string }) => (
   <Text testID={testID}>{content}</Text>
 );
+
+/**
+ * gesture-handler 3.x throws from `GestureDetector` when there is no
+ * `GestureHandlerRootView` above it, where 2.x only warned. The portal renders
+ * a `GestureDetector` for the swipe gesture, so every render here needs the
+ * root view, same as in a real app.
+ */
+const render = (ui: React.ReactElement) =>
+  rntlRender(<GestureHandlerRootView>{ui}</GestureHandlerRootView>);
 
 describe("MagicModalPortal", () => {
   it("renders children only after show is called", async () => {

@@ -1,6 +1,7 @@
+import type { PanGestureConfig } from "react-native-gesture-handler";
 import React, { memo, useMemo } from "react";
 import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { GestureDetector, usePanGesture } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -92,104 +93,137 @@ export const MagicModal = memo(
       [height, width],
     );
 
-    const pan = Gesture.Pan()
-      .enabled(!!config.swipeDirection)
-      // Matches the platform touch slop. Anything smaller (we used to use 1)
-      // lets finger jitter during a tap activate the pan, which cancels the
-      // touch on whatever the user was actually pressing inside the modal.
-      .minDistance(TOUCH_SLOP)
-      .onStart(() => {
-        "worklet";
+    /**
+     * `usePanGesture` memoizes on the identity of the config object it is
+     * handed, and re-pushes the whole config to the native side whenever that
+     * identity changes. Building the object inline would do that on every
+     * render, so it lives in a `useMemo` keyed on everything the worklets
+     * close over.
+     *
+     * The callback names are gesture-handler v3's. The v2 builder equivalents
+     * were `.onStart` (`onActivate`), `.onUpdate` (`onUpdate`) and `.onEnd`
+     * (`onDeactivate`). `onDeactivate` is deliberate: it is the callback wired
+     * to `CALLBACK_TYPE.END`, which is what `.onEnd` registered, so
+     * `SWIPE_COMPLETE` still resolves at the same point in the gesture
+     * lifecycle. `onFinalize` (`CALLBACK_TYPE.FINALIZE`) also runs after
+     * gestures that never activated, and using it here would fire the
+     * dismissal spring on taps that failed the slop check.
+     */
+    const panConfig = useMemo<PanGestureConfig>(
+      () => ({
+        enabled: !!config.swipeDirection,
+        // Matches the platform touch slop. Anything smaller (we used to use 1)
+        // lets finger jitter during a tap activate the pan, which cancels the
+        // touch on whatever the user was actually pressing inside the modal.
+        minDistance: TOUCH_SLOP,
+        onActivate: () => {
+          "worklet";
 
-        prevTranslationX.value = translationX.value;
-        prevTranslationY.value = translationY.value;
-      })
-      .onUpdate((event) => {
-        "worklet";
+          prevTranslationX.value = translationX.value;
+          prevTranslationY.value = translationY.value;
+        },
+        onUpdate: (event) => {
+          "worklet";
 
-        const translationValue = isHorizontal
-          ? event.translationX
-          : event.translationY;
+          const translationValue = isHorizontal
+            ? event.translationX
+            : event.translationY;
 
-        const prevTranslationValue = isHorizontal
-          ? prevTranslationX.value
-          : prevTranslationY.value;
+          const prevTranslationValue = isHorizontal
+            ? prevTranslationX.value
+            : prevTranslationY.value;
 
-        const shouldDampMap = {
-          up: translationValue > 0,
-          down: translationValue < 0,
-          left: translationValue > 0,
-          right: translationValue < 0,
-        } satisfies Record<Direction, boolean>;
+          const shouldDampMap = {
+            up: translationValue > 0,
+            down: translationValue < 0,
+            left: translationValue > 0,
+            right: translationValue < 0,
+          } satisfies Record<Direction, boolean>;
 
-        const shouldDamp =
-          shouldDampMap[config.swipeDirection ?? defaultDirection];
+          const shouldDamp =
+            shouldDampMap[config.swipeDirection ?? defaultDirection];
 
-        const dampedTranslation = shouldDamp
-          ? prevTranslationValue + translationValue * config.dampingFactor
-          : prevTranslationValue + translationValue;
+          const dampedTranslation = shouldDamp
+            ? prevTranslationValue + translationValue * config.dampingFactor
+            : prevTranslationValue + translationValue;
 
-        if (isHorizontal) {
-          translationX.value = dampedTranslation;
-        } else {
-          translationY.value = dampedTranslation;
-        }
-      })
-      .onEnd((event) => {
-        "worklet";
+          if (isHorizontal) {
+            translationX.value = dampedTranslation;
+          } else {
+            translationY.value = dampedTranslation;
+          }
+        },
+        onDeactivate: (event) => {
+          "worklet";
 
-        const velocityThreshold = config.swipeVelocityThreshold;
+          const velocityThreshold = config.swipeVelocityThreshold;
 
-        const shouldHideMap = {
-          up: event.velocityY < -velocityThreshold,
-          down: event.velocityY > velocityThreshold,
-          right: event.velocityX > velocityThreshold,
-          left: event.velocityX < -velocityThreshold,
-        } satisfies Record<Direction, boolean>;
+          const shouldHideMap = {
+            up: event.velocityY < -velocityThreshold,
+            down: event.velocityY > velocityThreshold,
+            right: event.velocityX > velocityThreshold,
+            left: event.velocityX < -velocityThreshold,
+          } satisfies Record<Direction, boolean>;
 
-        const shouldHide =
-          shouldHideMap[config.swipeDirection ?? defaultDirection];
+          const shouldHide =
+            shouldHideMap[config.swipeDirection ?? defaultDirection];
 
-        if (!shouldHide) {
-          translationX.value = withSpring(0, {
-            velocity: event.velocityX,
-            damping: 75,
-          });
-          translationY.value = withSpring(0, {
-            velocity: event.velocityY,
-            damping: 75,
-          });
-          return;
-        }
-
-        const mainTranslation = isHorizontal ? translationX : translationY;
-
-        mainTranslation.value = withSpring(
-          rangeMap[config.swipeDirection ?? defaultDirection],
-          { velocity: event.velocityX, overshootClamping: true },
-          (success) => {
-            "worklet";
-            if (!success) return;
-
-            // TODO: Re-enable after figuring out the Platform.OS
-            // usage inside a worklet.
-            // if (Platform.OS !== "web") {
-            scheduleOnRN(hide, {
-              reason: MagicModalHideReason.SWIPE_COMPLETE,
+          if (!shouldHide) {
+            translationX.value = withSpring(0, {
+              velocity: event.velocityX,
+              damping: 75,
             });
-            //   return;
-            // }
+            translationY.value = withSpring(0, {
+              velocity: event.velocityY,
+              damping: 75,
+            });
+            return;
+          }
 
-            // runOnJS(setIsSwipeComplete)(true);
+          const mainTranslation = isHorizontal ? translationX : translationY;
 
-            // // Set immediate is needed so the hide function is called
-            // // after "isSwipeComplete" is set to true.
-            // runOnJS(setImmediate)(() =>
-            //   hide({ reason: MagicModalHideReason.SWIPE_COMPLETE }),
-            // );
-          },
-        );
-      });
+          mainTranslation.value = withSpring(
+            rangeMap[config.swipeDirection ?? defaultDirection],
+            { velocity: event.velocityX, overshootClamping: true },
+            (success) => {
+              "worklet";
+              if (!success) return;
+
+              // TODO: Re-enable after figuring out the Platform.OS
+              // usage inside a worklet.
+              // if (Platform.OS !== "web") {
+              scheduleOnRN(hide, {
+                reason: MagicModalHideReason.SWIPE_COMPLETE,
+              });
+              //   return;
+              // }
+
+              // runOnJS(setIsSwipeComplete)(true);
+
+              // // Set immediate is needed so the hide function is called
+              // // after "isSwipeComplete" is set to true.
+              // runOnJS(setImmediate)(() =>
+              //   hide({ reason: MagicModalHideReason.SWIPE_COMPLETE }),
+              // );
+            },
+          );
+        },
+      }),
+      [
+        config.dampingFactor,
+        config.swipeDirection,
+        config.swipeVelocityThreshold,
+        hide,
+        isHorizontal,
+        prevTranslationX,
+        prevTranslationY,
+        rangeMap,
+        translationX,
+        translationY,
+      ],
+    );
+
+    const pan = usePanGesture(panConfig);
 
     const animatedStyles = useAnimatedStyle(() => {
       "worklet";
