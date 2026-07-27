@@ -23,8 +23,8 @@ importers:
   .:
     devDependencies:
       magic-codemods:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.1.0
+        version: 1.1.0
       turbo:
         specifier: ^2.5.4
         version: 2.10.7
@@ -87,14 +87,14 @@ importers:
         specifier: 1.20.1
         version: 1.20.1
       magic-oxfmt-config:
-        specifier: ^1.0.0
-        version: 1.0.0(oxfmt@0.60.0)
+        specifier: ^1.1.0
+        version: 1.1.0(oxfmt@0.60.0)
       magic-oxlint-config:
-        specifier: ^1.0.0
-        version: 1.0.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
+        specifier: ^1.1.0
+        version: 1.1.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
       magic-tsconfig:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.1.0
+        version: 1.1.0
       oxfmt:
         specifier: 0.60.0
         version: 0.60.0
@@ -148,14 +148,14 @@ importers:
         specifier: ^16.0.0
         version: 16.0.0
       magic-oxfmt-config:
-        specifier: ^1.0.0
-        version: 1.0.0(oxfmt@0.60.0)
+        specifier: ^1.1.0
+        version: 1.1.0(oxfmt@0.60.0)
       magic-oxlint-config:
-        specifier: ^1.0.0
-        version: 1.0.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
+        specifier: ^1.1.0
+        version: 1.1.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
       magic-tsconfig:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.1.0
+        version: 1.1.0
       oxfmt:
         specifier: 0.60.0
         version: 0.60.0
@@ -4611,13 +4611,13 @@ packages:
     resolution: {integrity: sha512-wpGPwyg/xrSp4H4Db4xYSeAr6+cFQGHfspHzDUdYxswDnUW0L5Ov63UuJiSr8NMSpyaChO4u1n0MXUvVPtrN6A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  magic-codemods@1.0.0:
-    resolution: {integrity: sha512-X5oxZZrm0wuzbpOOWBROwXo3OOBPLTaiC54NzBDXWlGa+V0hDcJU8oYvE1lqgrdkuSpI08dbNn2IXMjL0ySMYA==}
+  magic-codemods@1.1.0:
+    resolution: {integrity: sha512-u+L9X1yLfZwxwY8lVOpCNgFkzRnFY7TEGahUizkiLgEJyx22jcxRiVKhSj1xz4R469xsRMz4iO5I7VTkY0oP7Q==}
     engines: {node: '>=22'}
     hasBin: true
 
-  magic-oxfmt-config@1.0.0:
-    resolution: {integrity: sha512-scXKgtJSEWSC4nVSQxccPzABbcRn3hBeieF/uB0mF8+Xrk0+6atlNIcP2fRfPT5oTPZ8GAyRdBggQrPqbHnVag==}
+  magic-oxfmt-config@1.1.0:
+    resolution: {integrity: sha512-GxnwMVWyBMCP37e+rRct1bhkER10wOWO3B/N/aT58b+MVelpXBCA+L4U8vtMLMRIQNBiQs3mNsbM90WLb6W5Kg==}
     engines: {node: '>=22.18.0'}
     hasBin: true
     peerDependencies:
@@ -4626,8 +4626,8 @@ packages:
       oxfmt:
         optional: true
 
-  magic-oxlint-config@1.0.0:
-    resolution: {integrity: sha512-F1P+knzaNTZoW2YFBg1s/5xJyqHGcWA3wkRjy6BVB4fuhBEoY2Hnw0npIga8BSwbEMAqW4IQhMibHnKC+ZJ+MA==}
+  magic-oxlint-config@1.1.0:
+    resolution: {integrity: sha512-6QlcAx5zZuBFylQAPAQTX9kzOkTGcfUMp4YUwpiBMcCH05yHaVONBEYNKni6xF+qNrTyt9oHtD7gUsYAQKH++w==}
     engines: {node: '>=22.18.0'}
     peerDependencies:
       oxlint: '>=1.75.0'
@@ -4638,8 +4638,8 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
-  magic-tsconfig@1.0.0:
-    resolution: {integrity: sha512-UpRdb1iP4dy6GocRcoSznUdCEA+2AFK3b24tnciezr5MokxPNtNfZ9ELflSTeRrOkbBr/WTXnpO1wLDVb4xxyA==}
+  magic-tsconfig@1.1.0:
+    resolution: {integrity: sha512-4sDvMYhYXXTDyNX2HMgFY7LXRoAaLO958EONYt9pj4kLaT2ty59p5FR7ZgcTDnAkAsw7lPLfaVYLD4Kow1uQCQ==}
 
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
@@ -11357,15 +11357,15 @@ snapshots:
 
   macos-release@3.4.0: {}
 
-  magic-codemods@1.0.0:
+  magic-codemods@1.1.0:
     dependencies:
       ts-morph: 28.0.0
 
-  magic-oxfmt-config@1.0.0(oxfmt@0.60.0):
+  magic-oxfmt-config@1.1.0(oxfmt@0.60.0):
     optionalDependencies:
       oxfmt: 0.60.0
 
-  magic-oxlint-config@1.0.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0):
+  magic-oxlint-config@1.1.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0):
     dependencies:
       eslint-plugin-react-native: 5.0.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))
       eslint-plugin-safe-jsx: 1.3.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))
@@ -11378,7 +11378,7 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  magic-tsconfig@1.0.0: {}
+  magic-tsconfig@1.1.0: {}
 
   make-dir@4.0.0:
     dependencies:
