@@ -1,5 +1,36 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [8.0.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-7.1.0...magic-modal-8.0.0) (2026-07-27)
+
+### ⚠ BREAKING CHANGES
+
+* **modal:** the `react-native-gesture-handler` peer range moves from
+`>=2.20.0` to `>=3.0.0`. `usePanGesture` only exists in 3.x, so there's no
+2.x-compatible path. The modal's own API is unchanged. A
+`GestureHandlerRootView` above the portal also becomes mandatory, since 3.x
+throws where 2.x only logged a warning. Expo SDK 55 still pins gesture-handler
+to 2.30, so Expo projects installing 3.x need it in `expo.install.exclude`, or
+can stay on `react-native-magic-modal` 7.x until Expo moves the pin.
+
+### :hammer: Bug Fixes :hammer:
+
+* **ci:** stop registering two [@typescript-eslint](https://github.com/typescript-eslint) plugin instances ([#236](https://github.com/GSTJ/react-native-magic-modal/issues/236)) ([a8ce4f9](https://github.com/GSTJ/react-native-magic-modal/commit/a8ce4f92768f0b78e7149b2f3ee7b2c492ec3ab1)), closes [#228](https://github.com/GSTJ/react-native-magic-modal/issues/228) [#233](https://github.com/GSTJ/react-native-magic-modal/issues/233) [#219](https://github.com/GSTJ/react-native-magic-modal/issues/219)
+* **deps:** drop the duplicate hasown entry that broke the lockfile ([#220](https://github.com/GSTJ/react-native-magic-modal/issues/220)) ([76f92fe](https://github.com/GSTJ/react-native-magic-modal/commit/76f92fe2f1bf37c17a84115671bb81efcdb9e3f3))
+
+### :stars: New Features :stars:
+
+* **modal:** move swipe-to-dismiss onto gesture-handler's usePanGesture ([#241](https://github.com/GSTJ/react-native-magic-modal/issues/241)) ([61a4080](https://github.com/GSTJ/react-native-magic-modal/commit/61a4080c75af410c85a94346c6024b1c635d0016))
+
+## [7.1.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-7.0.3...magic-modal-7.1.0) (2026-07-25)
+
+### :hammer: Bug Fixes :hammer:
+
+* **ci:** stop turbo from swallowing the docs task ([#215](https://github.com/GSTJ/react-native-magic-modal/issues/215)) ([18966e0](https://github.com/GSTJ/react-native-magic-modal/commit/18966e09880e26e6255af25ebc1eb119dade9e88))
+
+### :stars: New Features :stars:
+
+* **modal:** add update() to swap a modal's content in place ([#217](https://github.com/GSTJ/react-native-magic-modal/issues/217)) ([24a939f](https://github.com/GSTJ/react-native-magic-modal/commit/24a939f2bf00d825c44e43b06bc4919759fce628))
+
 ## 7.0.2 (2026-05-19)
 
 ### :curly_loop: Continuous Integrations :curly_loop:
