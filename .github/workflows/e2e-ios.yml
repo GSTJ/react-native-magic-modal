@@ -7,6 +7,10 @@ on:
       - main
     types: [opened, reopened, synchronize, ready_for_review]
 
+# Default for both jobs. The approval gate widens it by one scope.
+permissions:
+  contents: read
+
 concurrency:
   # Key off the PR number (works across pull_request and pull_request_review
   # events). Falls back to ref for direct pushes / re-runs.
@@ -21,6 +25,10 @@ jobs:
   approval-gate:
     name: 🔐 Approval gate
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Reads the PR's review list.
+      pull-requests: read
     outputs:
       approved: ${{ steps.check.outputs.approved }}
     steps:
