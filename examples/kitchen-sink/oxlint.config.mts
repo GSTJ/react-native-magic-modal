@@ -1,8 +1,9 @@
 import expo from "magic-oxlint-config/expo";
-import { defineConfig } from "oxlint";
+import { defineConfig, type OxlintConfig } from "oxlint";
 
 export default defineConfig({
-  extends: [expo],
-  // `extends` drops `ignorePatterns` — see packages/modal/oxlint.config.mts.
+  // See packages/modal/oxlint.config.mts for why the cast and the repeated
+  // `ignorePatterns` are here.
+  extends: [expo as OxlintConfig],
   ignorePatterns: expo.ignorePatterns,
 });
