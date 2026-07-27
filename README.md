@@ -70,12 +70,14 @@ Minimum peer versions:
 | ------------------------------ | ------- |
 | `react`                        | 18.0.0  |
 | `react-native`                 | 0.81.0  |
-| `react-native-gesture-handler` | 3.0.0   |
+| `react-native-gesture-handler` | 2.20.0  |
 | `react-native-reanimated`      | 4.0.0   |
 
-The gesture-handler floor is a hard one from `react-native-magic-modal` 8.0.0 on: swipe-to-dismiss is built on the `usePanGesture` hook, which only exists in 3.x. Stay on 7.x if you're pinned to gesture-handler 2.x.
+Both gesture-handler majors work. Swipe-to-dismiss uses 3.x's `usePanGesture` hook when it's available and falls back to 2.x's `Gesture.Pan()` builder when it isn't.
 
-On Expo, that pin is worth checking. SDK 55 still asks for `react-native-gesture-handler@~2.30.0`, so `npx expo install` will pull 2.x and `npx expo-doctor` will flag 3.x as a major mismatch. Installing 3.x anyway works, and you can quiet the check by adding the package to `expo.install.exclude` in your `package.json`, the way `examples/kitchen-sink` does. Otherwise stay on `react-native-magic-modal` 7.x until Expo moves its pin.
+On Expo there's nothing to do: `npx expo install react-native-gesture-handler` gives you whatever your SDK bundles, which is 2.x on every SDK through 57, and `npx expo-doctor` stays clean. If you added `react-native-gesture-handler` to `expo.install.exclude` to quiet the version check on 8.0.0, drop it.
+
+8.0.0 required gesture-handler 3.x. If you're on 8.0.0 and pinned to 2.x, upgrade to 8.1.0 or later.
 
 ## Quickstart
 
@@ -97,7 +99,7 @@ export default function App() {
 
 Tip: the root `_layout.tsx` is usually the best place to put it in a project using expo-router.
 
-The `GestureHandlerRootView` is required. The portal renders a `GestureDetector` for the swipe gesture, and gesture-handler 3.x throws when one renders without a root view above it. 2.x only logged a warning, so apps that skipped it got away with it.
+The `GestureHandlerRootView` is required. The portal renders a `GestureDetector` for the swipe gesture, and gesture-handler 3.x throws when one renders without a root view above it. 2.x only logs a warning.
 
 ## Examples
 

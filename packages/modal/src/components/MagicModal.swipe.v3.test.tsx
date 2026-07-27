@@ -1,38 +1,48 @@
-import type { PanGestureConfig } from "react-native-gesture-handler";
 import React from "react";
-import { Text } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { act, render as rntlRender } from "@testing-library/react-native";
+import { act } from "@testing-library/react-native";
 
-import type { Direction } from "../constants/types";
+import type { PanGestureConfigCompat } from "./panGesture/gestureHandlerCompat";
 import { MagicModalHideReason } from "../constants/types";
 import { magicModal } from "../utils/magicModalHandler";
-import { MagicModalPortal } from "./MagicModalPortal/MagicModalPortal";
+import {
+  baseEvent,
+  directions,
+  expectedMinDistance,
+  fastVelocity,
+  ModalContent,
+  showModal,
+  slowVelocity,
+  waitForHide,
+} from "./MagicModal.swipe.harness";
 
 /**
- * The swipe gesture is the one part of the modal the public API can't drive:
- * it lives inside a gesture-handler hook and its callbacks are worklets. So we
+ * The swipe gesture is the one part of the modal the public API can't drive: it
+ * lives inside a gesture-handler hook and its callbacks are worklets. So we
  * intercept the config `MagicModal` hands to `usePanGesture` and call the
  * callbacks ourselves.
  *
- * The point of these tests is the callback *names*. gesture-handler 3.x has
- * both `onDeactivate` (what `.onEnd` used to be) and `onFinalize`, and
+ * The point of these tests is the callback *names*. gesture-handler 3.x has both
+ * `onDeactivate` (what 2.x's `.onEnd` used to be) and `onFinalize`, and
  * `onFinalize` additionally runs for gestures that never activated. Wiring the
  * dismissal to the wrong one leaves the modal looking correct in a manual test
- * while `SWIPE_COMPLETE` resolves at a different point in the gesture
- * lifecycle.
+ * while `SWIPE_COMPLETE` resolves at a different point in the gesture lifecycle.
+ *
+ * Defining `usePanGesture` in the mock also pins which surface renders:
+ * `hasPanGestureHook` reads it off the module, so this suite exercises the
+ * hook-based path whichever gesture-handler is installed. Its 2.x counterpart is
+ * `MagicModal.swipe.v2.test.tsx`.
  */
 jest.mock("react-native-gesture-handler", () => {
   const actual = jest.requireActual<Record<string, unknown>>(
     "react-native-gesture-handler",
   );
 
-  const capturedPanConfigs: PanGestureConfig[] = [];
+  const capturedPanConfigs: PanGestureConfigCompat[] = [];
 
   return {
     ...actual,
     capturedPanConfigs,
-    usePanGesture: (config: PanGestureConfig) => {
+    usePanGesture: (config: PanGestureConfigCompat) => {
       capturedPanConfigs.push(config);
       return { handlerTag: -1 };
     },
@@ -41,12 +51,8 @@ jest.mock("react-native-gesture-handler", () => {
 });
 
 const { capturedPanConfigs } = jest.requireMock<{
-  capturedPanConfigs: PanGestureConfig[];
+  capturedPanConfigs: PanGestureConfigCompat[];
 }>("react-native-gesture-handler");
-
-const content = "Taveira";
-
-const ModalContent = () => <Text testID="swipe-content">{content}</Text>;
 
 /** The most recent config handed to `usePanGesture`, i.e. the live one. */
 const latestPanConfig = () => {
@@ -59,46 +65,18 @@ const latestPanConfig = () => {
   return config;
 };
 
-const showModal = (swipeDirection: Direction | undefined) => {
-  rntlRender(
-    <GestureHandlerRootView>
-      <MagicModalPortal />
-    </GestureHandlerRootView>,
-  );
-
-  let promise: Promise<unknown> | undefined;
-
-  act(() => {
-    promise = magicModal.show(() => <ModalContent />, {
-      swipeDirection,
-    }).promise;
-  });
-
-  return promise;
-};
-
-const baseEvent = {
-  handlerTag: -1,
-  numberOfPointers: 1,
-  pointerType: 0,
-  x: 0,
-  y: 0,
-  absoluteX: 0,
-  absoluteY: 0,
-  stylusData: undefined,
-  translationX: 0,
-  translationY: 0,
-  changeX: 0,
-  changeY: 0,
-  velocityX: 0,
-  velocityY: 0,
-};
-
-type ActiveEvent = Parameters<NonNullable<PanGestureConfig["onActivate"]>>[0];
-type UpdateEvent = Parameters<
-  Extract<NonNullable<PanGestureConfig["onUpdate"]>, (event: never) => void>
+type ActiveEvent = Parameters<
+  NonNullable<PanGestureConfigCompat["onActivate"]>
 >[0];
-type EndEvent = Parameters<NonNullable<PanGestureConfig["onDeactivate"]>>[0];
+type UpdateEvent = Parameters<
+  Extract<
+    NonNullable<PanGestureConfigCompat["onUpdate"]>,
+    (event: never) => void
+  >
+>[0];
+type EndEvent = Parameters<
+  NonNullable<PanGestureConfigCompat["onDeactivate"]>
+>[0];
 
 const activeEvent = () => baseEvent as unknown as ActiveEvent;
 
@@ -106,11 +84,11 @@ const endEvent = (velocity: { velocityX: number; velocityY: number }) =>
   ({ ...baseEvent, ...velocity, canceled: false }) as unknown as EndEvent;
 
 /**
- * `onUpdate` is typed as the callback union'd with `Animated.event`, which
- * isn't callable. We only ever pass the callback form.
+ * `onUpdate` is typed as the callback union'd with `Animated.event`, which isn't
+ * callable. We only ever pass the callback form.
  */
 const runOnUpdate = (
-  config: PanGestureConfig,
+  config: PanGestureConfigCompat,
   translation: { translationX: number; translationY: number },
 ) => {
   const onUpdate = config.onUpdate as
@@ -119,15 +97,6 @@ const runOnUpdate = (
   onUpdate?.({ ...baseEvent, ...translation } as unknown as UpdateEvent);
 };
 
-const fastVelocity = {
-  up: { velocityX: 0, velocityY: -900 },
-  down: { velocityX: 0, velocityY: 900 },
-  left: { velocityX: -900, velocityY: 0 },
-  right: { velocityX: 900, velocityY: 0 },
-} satisfies Record<Direction, { velocityX: number; velocityY: number }>;
-
-const directions = ["up", "down", "left", "right"] as const;
-
 beforeEach(() => {
   // No `hideAll` here. The testing library unmounts the portal between tests
   // already, and hiding into an unmounted tree makes React warn about updates
@@ -135,7 +104,7 @@ beforeEach(() => {
   capturedPanConfigs.length = 0;
 });
 
-describe("MagicModal swipe gesture", () => {
+describe("MagicModal swipe gesture on gesture-handler 3.x", () => {
   it("hangs the dismissal off onDeactivate and leaves onFinalize alone", () => {
     showModal("down");
 
@@ -146,8 +115,8 @@ describe("MagicModal swipe gesture", () => {
     expect(typeof config.onDeactivate).toBe("function");
 
     // `onFinalize` also runs for gestures that never activated: a tap that
-    // failed the slop check, or a cancelled gesture. Anything hung off it
-    // would run the dismissal on paths `.onEnd` never fired on.
+    // failed the slop check, or a cancelled gesture. Anything hung off it would
+    // run the dismissal on paths `.onEnd` never fired on.
     expect(config.onFinalize).toBeUndefined();
     expect(config.onBegin).toBeUndefined();
   });
@@ -174,6 +143,12 @@ describe("MagicModal swipe gesture", () => {
     expect(latestPanConfig().enabled).toBe(false);
   });
 
+  it("forwards the touch slop as minDistance", () => {
+    showModal("down");
+
+    expect(latestPanConfig().minDistance).toBe(expectedMinDistance);
+  });
+
   it("keeps the same config object across re-renders", () => {
     showModal("down");
 
@@ -184,9 +159,9 @@ describe("MagicModal swipe gesture", () => {
       magicModal.show(() => <ModalContent />, { swipeDirection: "down" });
     });
 
-    // The first modal re-renders when a second one is pushed. Its config has
-    // to keep its identity: `usePanGesture` memoizes on it and re-pushes the
-    // whole config to the native side whenever it changes.
+    // The first modal re-renders when a second one is pushed. Its config has to
+    // keep its identity: `usePanGesture` memoizes on it and re-pushes the whole
+    // config to the native side whenever it changes.
     expect(capturedPanConfigs.length).toBeGreaterThan(seen);
     expect(capturedPanConfigs[0]).toBe(first);
   });
@@ -206,14 +181,7 @@ describe("MagicModal swipe gesture", () => {
         config.onActivate?.(activeEvent());
         config.onDeactivate?.(endEvent(fastVelocity[swipeDirection]));
 
-        // The dismissal spring runs for several frames and its completion
-        // callback hops from the UI thread back to JS via `scheduleOnRN`, so
-        // `hide` lands well after `onDeactivate` returns. Poll on timers, which
-        // is what drives the spring; awaiting the show promise in here instead
-        // deadlocks, because the frame loop doesn't advance inside `act`.
-        for (let i = 0; i < 100 && result === undefined; i++) {
-          await new Promise((resolve) => setTimeout(resolve, 20));
-        }
+        await waitForHide(() => result !== undefined);
       });
 
       expect(result).toEqual({
@@ -236,7 +204,7 @@ describe("MagicModal swipe gesture", () => {
       act(() => {
         config.onActivate?.(activeEvent());
         runOnUpdate(config, { translationX: 5, translationY: 5 });
-        config.onDeactivate?.(endEvent({ velocityX: 10, velocityY: 10 }));
+        config.onDeactivate?.(endEvent(slowVelocity));
       });
 
       await act(async () => {
