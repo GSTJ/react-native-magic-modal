@@ -23,10 +23,10 @@ export const PanGestureSurfaceV3 = ({
       minDistance: swipe.minDistance,
       onActivate: swipe.onStart,
       onUpdate: swipe.onUpdate,
-      // `CALLBACK_TYPE.END`, which is what 2.x's `.onEnd` registered, so
-      // SWIPE_COMPLETE resolves at the same point in the gesture lifecycle on
-      // both majors. `onFinalize` would additionally run after gestures that
-      // never activated.
+      // `onDeactivate` is wired to `CALLBACK_TYPE.END`, which is what 2.x's
+      // `.onEnd` registered, so SWIPE_COMPLETE resolves at the same point in
+      // the gesture lifecycle on both majors. `onFinalize` would additionally
+      // run after gestures that never activated.
       onDeactivate: swipe.onEnd,
     }),
     [swipe],
