@@ -1,0 +1,243 @@
+# GSTJ/react-native-magic-modal run 30231384635, 'Docs' on main @ 665722c, conclusion: failure
+# https://github.com/GSTJ/react-native-magic-modal/actions/runs/30231384635
+# ANSI stripped. Note 'version: 8' on pnpm/action-setup@v2, the isolated virtual store at
+# node_modules/.pnpm, and typedoc failing to resolve expo/tsconfig.base.
+
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9381495Z Current runner version: '2.336.0'
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9406973Z ##[group]Runner Image Provisioner
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9407904Z Hosted Compute Agent
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9408607Z Version: 20260707.563
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9409285Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9409975Z Build Date: 2026-07-07T19:33:50Z
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9411129Z Worker ID: {f484aee3-a5f8-4954-ad28-dce57f5d0b01}
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9411861Z Azure Region: westus3
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9412465Z ##[endgroup]
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9414197Z ##[group]Operating System
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9414844Z Ubuntu
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9415455Z 24.04.4
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9415958Z LTS
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9416445Z ##[endgroup]
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9417083Z ##[group]Runner Image
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9417672Z Image: ubuntu-24.04
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9418250Z Version: 20260720.247.2
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9419313Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260720.247/images/ubuntu/Ubuntu2404-Readme.md
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9421136Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260720.247
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9422123Z ##[endgroup]
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9423301Z ##[group]GITHUB_TOKEN Permissions
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9425406Z Contents: read
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9426094Z Metadata: read
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9426708Z Pages: write
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9427239Z ##[endgroup]
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9430305Z Secret source: Actions
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9431369Z Prepare workflow directory
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9784200Z Prepare all required actions
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:56.9827840Z Getting action download info
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:57.3250061Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:57.9874184Z Download action repository 'pnpm/action-setup@v2' (SHA:eae0cfeb286e66ffb5155f1a79b90583a127a68b)
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:58.9752333Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:59.1154229Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:59.2150388Z Download action repository 'actions/cache@v5.1.0' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+🚀 Deploy Docs	Set up job	2026-07-27T02:06:59.3125681Z Download action repository 'dtinth/setup-github-actions-caching-for-turbo@v1' (SHA:cc723b4600e40a6b8815b65701d8614b91e2669e)
+🚀 Deploy Docs	Set up job	2026-07-27T02:07:00.0495948Z Download action repository 'actions/configure-pages@v5' (SHA:983d7736d9b0ae728b81ab479565c72886d7745b)
+🚀 Deploy Docs	Set up job	2026-07-27T02:07:00.6685532Z Download action repository 'actions/upload-pages-artifact@v3' (SHA:56afc609e74202658d3ffba0e8f6dda462b719fa)
+🚀 Deploy Docs	Set up job	2026-07-27T02:07:00.9017910Z Download action repository 'actions/deploy-pages@v4' (SHA:d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e)
+🚀 Deploy Docs	Set up job	2026-07-27T02:07:01.9972391Z Getting action download info
+🚀 Deploy Docs	Set up job	2026-07-27T02:07:02.1148780Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+🚀 Deploy Docs	Set up job	2026-07-27T02:07:02.2810600Z Complete job name: 🚀 Deploy Docs
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3033529Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3035458Z ##[group]Run pnpm/action-setup@v2
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3035739Z with:
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3035933Z   version: 8
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3036135Z   dest: ~/setup-pnpm
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3036362Z   run_install: null
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3036592Z   package_json_file: package.json
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3036860Z   standalone: false
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3037065Z ##[endgroup]
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.3893404Z ##[group]Running self-installer...
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.7951472Z (node:2271) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:03.7953574Z (Use `node --trace-deprecation ...` to show where the warning was created)
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.0016829Z Progress: resolved 1, reused 0, downloaded 0, added 0
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.0107560Z Packages: +1
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.0108254Z +
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.5854487Z Packages are hard linked from the content-addressable store to the virtual store.
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.5855745Z   Content-addressable store is at: /home/runner/.local/share/pnpm/store/v3
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.5856504Z   Virtual store is at:             node_modules/.pnpm
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.6081920Z 
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.6082622Z dependencies:
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.6083084Z + pnpm 8.15.9 (11.17.0 is available)
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.6083422Z 
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:04.6115706Z Done in 1s
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:05.0027378Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:05.0191862Z ##[endgroup]
+🚀 Deploy Docs	🏗 Setup PNPM	2026-07-27T02:07:05.0192466Z Installation Completed!
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6554511Z ##[group]Run actions/cache@v5
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6554896Z with:
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6555229Z   path: /home/runner/setup-pnpm/node_modules/.bin/store/v3
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6555944Z   key: Linux-pnpm-store-7ceabdd9ca02099d85171f4dd256010b1ee0703caa3a757abcbf81bc8c250dcb
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6556600Z   restore-keys: Linux-pnpm-store-
+🚀 Deploy Docs	🏗 Setup PNPM cache	
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6556946Z   enableCrossOsArchive: false
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6557217Z   fail-on-cache-miss: false
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6557466Z   lookup-only: false
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6557684Z   save-always: false
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6557899Z env:
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6558148Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.6558470Z ##[endgroup]
+🚀 Deploy Docs	🏗 Setup PNPM cache	2026-07-27T02:07:08.9797019Z Cache not found for input keys: Linux-pnpm-store-7ceabdd9ca02099d85171f4dd256010b1ee0703caa3a757abcbf81bc8c250dcb, Linux-pnpm-store-
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9929653Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9930961Z ##[group]Run actions/setup-node@v4
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9931266Z with:
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9931481Z   node-version-file: .nvmrc
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9931728Z   always-auth: false
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9931954Z   check-latest: false
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9934529Z   token: ***
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9934748Z env:
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9935002Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:08.9935328Z ##[endgroup]
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:09.1306444Z Resolved .nvmrc as 22.23
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:09.1364121Z Found in cache @ /opt/hostedtoolcache/node/22.23.1/x64
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:09.1368358Z (node:2357) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:09.1369141Z (Use `node --trace-deprecation ...` to show where the warning was created)
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:09.1372138Z ##[group]Environment details
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:09.5345711Z node: v22.23.1
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:09.5346185Z npm: 10.9.8
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:09.5346540Z yarn: 1.22.22
+🚀 Deploy Docs	🏗 Setup Node	2026-07-27T02:07:09.5347403Z ##[endgroup]
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6259142Z ##[group]Run actions/cache@v5.1.0
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6259456Z with:
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6259651Z   path: node_modules
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6260098Z   key: Linux-node-modules-7ceabdd9ca02099d85171f4dd256010b1ee0703caa3a757abcbf81bc8c250dcb
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6260621Z   restore-keys: Linux-node-modules-
+🚀 Deploy Docs	📦 Cache Node Modules	
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6260910Z   enableCrossOsArchive: false
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6261163Z   fail-on-cache-miss: false
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6261400Z   lookup-only: false
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6261609Z   save-always: false
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6261809Z env:
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6262053Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.6262368Z ##[endgroup]
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:09.9651013Z Cache hit for: Linux-node-modules-7ceabdd9ca02099d85171f4dd256010b1ee0703caa3a757abcbf81bc8c250dcb
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:11.1983061Z Received 25165824 of 194930509 (12.9%), 24.0 MBs/sec
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:12.1990193Z Received 167772160 of 194930509 (86.1%), 80.0 MBs/sec
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:12.2772675Z Received 194930509 of 194930509 (100.0%), 89.4 MBs/sec
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:12.2776299Z Cache Size: ~186 MB (194930509 B)
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:12.2823261Z [command]/usr/bin/tar -xf /home/runner/work/_temp/303ab234-ffe3-4fd8-892d-07adcf7a5cef/cache.tzst -P -C /home/runner/work/react-native-magic-modal/react-native-magic-modal --use-compress-program unzstd
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:15.1958730Z Cache restored successfully
+🚀 Deploy Docs	📦 Cache Node Modules	2026-07-27T02:07:15.2128239Z Cache restored from key: Linux-node-modules-7ceabdd9ca02099d85171f4dd256010b1ee0703caa3a757abcbf81bc8c250dcb
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:15.2270583Z ##[group]Run pnpm install
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:15.2271133Z ^[[36;1mpnpm install^[[0m
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:15.2342177Z shell: /usr/bin/bash -e {0}
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:15.2342638Z env:
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:15.2343098Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:15.2343978Z ##[endgroup]
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:15.6972424Z Scope: all 6 workspace projects
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:15.7366732Z Recreating /home/runner/work/react-native-magic-modal/react-native-magic-modal/node_modules
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:18.5741788Z  WARN  Ignoring not compatible lockfile at /home/runner/work/react-native-magic-modal/react-native-magic-modal/pnpm-lock.yaml
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:18.7711486Z Progress: resolved 1, reused 0, downloaded 0, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:19.8265949Z Progress: resolved 47, reused 0, downloaded 35, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:20.8265208Z Progress: resolved 94, reused 0, downloaded 78, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:21.8295724Z Progress: resolved 151, reused 0, downloaded 136, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:22.8317293Z Progress: resolved 226, reused 0, downloaded 200, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:23.8325579Z Progress: resolved 321, reused 0, downloaded 295, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:24.8345096Z Progress: resolved 423, reused 0, downloaded 384, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:25.8344720Z Progress: resolved 613, reused 0, downloaded 562, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:26.8352643Z Progress: resolved 778, reused 0, downloaded 708, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:27.8354713Z Progress: resolved 918, reused 0, downloaded 821, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:28.8347348Z Progress: resolved 1131, reused 0, downloaded 1007, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:29.8410222Z Progress: resolved 1377, reused 0, downloaded 1226, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:30.9014140Z  WARN  11 deprecated subdependencies found: @babel/plugin-proposal-private-methods@7.18.6, @types/parse-path@7.1.0, abab@2.0.6, domexception@4.0.0, glob@7.2.3, inflight@1.0.6, rimraf@2.7.1, rimraf@3.0.2, uuid@7.0.3, uuid@8.3.2, whatwg-encoding@2.0.0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:30.9683416Z Progress: resolved 1512, reused 0, downloaded 1425, added 0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:30.9962479Z Packages: +1459
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:30.9963411Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:31.9701441Z Progress: resolved 1512, reused 0, downloaded 1449, added 627
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:32.9685366Z Progress: resolved 1512, reused 0, downloaded 1449, added 1457
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:33.1224442Z Progress: resolved 1512, reused 0, downloaded 1449, added 1459, done
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:33.4851773Z .../node_modules/@swc/core postinstall$ node postinstall.js
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:33.5423048Z .../node_modules/@swc/core postinstall: Done
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9945014Z 
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9945776Z devDependencies:
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9946223Z + turbo 2.10.7
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9946445Z 
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9969179Z  WARN  Issues with peer dependencies found
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9969790Z packages/eslint-config
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9970392Z ├─┬ @shopify/eslint-plugin 48.0.2
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9971060Z │ └── ✕ unmet peer eslint@^8.56.0: found 9.39.5
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9971804Z ├─┬ eslint-plugin-react-native-a11y 3.5.1
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9972691Z │ └── ✕ unmet peer eslint@"^3 || ^4 || ^5 || ^6 || ^7 || ^8": found 9.39.5
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9973524Z └─┬ eslint-plugin-reanimated 2.0.1
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9974599Z   ├─┬ @typescript-eslint/experimental-utils 5.33.0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9975579Z   │ ├── ✕ unmet peer eslint@"^6.0.0 || ^7.0.0 || ^8.0.0": found 9.39.5
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9976889Z   │ └─┬ @typescript-eslint/utils 5.33.0
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9977827Z   │   └── ✕ unmet peer eslint@"^6.0.0 || ^7.0.0 || ^8.0.0": found 9.39.5
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9978780Z   └─┬ eslint-plugin-ft-flow 2.0.3
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9979509Z     └── ✕ unmet peer eslint@^8.1.0: found 9.39.5
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9979884Z 
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9980062Z packages/modal
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9980624Z ├─┬ react-native-reanimated 4.3.1
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9981459Z │ └── ✕ unmet peer react-native-worklets@0.8.x: found 0.11.3
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9982111Z └─┬ expo 55.0.28
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9982635Z   └─┬ expo-modules-core 55.0.25
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9984139Z     └── ✕ unmet peer react-native-worklets@"^0.7.4 || ^0.8.0": found 0.11.3
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9984672Z 
+🚀 Deploy Docs	📦 Install Dependencies	2026-07-27T02:07:34.9985006Z Done in 19.7s
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0103189Z ##[group]Run pnpm run docs
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0103495Z ^[[36;1mpnpm run docs^[[0m
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0148216Z shell: /usr/bin/bash -e {0}
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0148490Z env:
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0148761Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0149113Z   TURBOGHA_PORT: 41230
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0149390Z   TURBO_API: http://localhost:41230
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0149684Z   TURBO_TOKEN: turbogha
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0149929Z   TURBO_TEAM: turbogha
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0150154Z   GITHUB_PAGES: true
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.0150380Z ##[endgroup]
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4120061Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4121020Z > magic@0.0.0 docs /home/runner/work/react-native-magic-modal/react-native-magic-modal
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4121989Z > turbo run docs
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4122136Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4538180Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4539789Z Attention:
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4540877Z Turborepo now collects completely anonymous telemetry regarding usage.
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4542185Z This information is used to shape the Turborepo roadmap and prioritize features.
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4544162Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4545465Z https://turborepo.dev/docs/telemetry
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.4545975Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.5165455Z  WARNING     • Remote caching unavailable (Could not connect to "http://localhost:41230")
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.5169840Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.5171340Z    • Packages in scope: @magic/kitchen-sink, @magic/prettier-config, @magic/tsconfig, magic-eslint-config, react-native-magic-modal
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.5172613Z    • Running docs in 5 packages
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:36.5172951Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.0597033Z ##[group]react-native-magic-modal:copy:readme
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.0597912Z cache bypass, force executing 6879f406a324ff57
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.0598257Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.0599110Z > react-native-magic-modal@8.0.0 copy:readme /home/runner/work/react-native-magic-modal/react-native-magic-modal/packages/modal
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.0600114Z > shx cp ../../README.md ./README.md
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.0600344Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.0600648Z ##[endgroup]
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5758866Z ^[[;31mreact-native-magic-modal:docs^[[;0m
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5790009Z ##[error]command (/home/runner/work/react-native-magic-modal/react-native-magic-modal/packages/modal) /home/runner/setup-pnpm/node_modules/.bin/pnpm run docs exited (1)
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5801644Z react-native-magic-modal#docs:  ERROR  command (/home/runner/work/react-native-magic-modal/react-native-magic-modal/packages/modal) /home/runner/setup-pnpm/node_modules/.bin/pnpm run docs exited (1)
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5803413Z cache miss, executing ae4877f7029d2082
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5804138Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5805122Z > react-native-magic-modal@8.0.0 docs /home/runner/work/react-native-magic-modal/react-native-magic-modal/packages/modal
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5806455Z > typedoc --excludeInternal --out docs ./src/index.ts
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5806911Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5808029Z ^[[96mtsconfig.json^[[0m:^[[93m2^[[0m:^[[93m15^[[0m - ^[[91merror^[[0m^[[90m TS6053: ^[[0mFile 'expo/tsconfig.base' not found.
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5808801Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5809475Z ^[[7m2^[[0m   "extends": ["expo/tsconfig.base", "@magic/tsconfig/base.json"],
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5810472Z ^[[7m ^[[0m ^[[91m              ~~~~~~~~~~~~~~~~~~~~^[[0m
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5810879Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5811323Z ^[[91m[error]^[[0m Found 1 errors and 0 warnings
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5812197Z  ELIFECYCLE  Command failed with exit code 1.
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5812890Z  ERROR  run failed: command  exited (1)
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5813262Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5813659Z  Tasks:    1 successful, 2 total
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5814645Z Cached:    0 cached, 2 total
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5814919Z   Time:    1.122s 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5815237Z Failed:    react-native-magic-modal#docs
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5815454Z 
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.5858597Z  ELIFECYCLE  Command failed with exit code 1.
+🚀 Deploy Docs	📚 Generate Docs	2026-07-27T02:07:37.6072083Z ##[error]Process completed with exit code 1.
+🚀 Deploy Docs	Post 🏗 Setup PNPM	2026-07-27T02:07:37.6605678Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+🚀 Deploy Docs	Post 🏗 Setup PNPM	2026-07-27T02:07:37.6606977Z Post job cleanup.
+🚀 Deploy Docs	Post 🏗 Setup PNPM	2026-07-27T02:07:37.7507655Z Pruning is unnecessary.

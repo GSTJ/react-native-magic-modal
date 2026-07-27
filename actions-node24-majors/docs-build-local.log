@@ -1,0 +1,82 @@
+# pnpm run docs on gstj/actions-node24-majors, commit 665722c
+# pnpm 10.34.5, node v26.5.0, nodeLinker: hoisted read from pnpm-workspace.yaml
+# the file the CI job could not find:
+node_modules/expo/tsconfig.base.json  633B
+
+
+> magic@0.0.0 docs /private/tmp/claude-501/-Users-jarvis-jarvis-lab/53f769e9-39ae-4cf6-9d1e-67157f66798d/scratchpad/rnmm-finish
+> turbo run docs
+
+• turbo 2.10.7
+
+   • Packages in scope: @magic/kitchen-sink, @magic/prettier-config, @magic/tsconfig, magic-eslint-config, react-native-magic-modal
+   • Running docs in 5 packages
+   • Remote caching disabled
+
+react-native-magic-modal:copy:readme: cache bypass, force executing 89ab7c4e73155c5c
+react-native-magic-modal:docs: cache bypass, force executing 578ab17fca7b1a2d
+react-native-magic-modal:copy:readme: 
+react-native-magic-modal:copy:readme: > react-native-magic-modal@8.0.0 copy:readme /private/tmp/claude-501/-Users-jarvis-jarvis-lab/53f769e9-39ae-4cf6-9d1e-67157f66798d/scratchpad/rnmm-finish/packages/modal
+react-native-magic-modal:copy:readme: > shx cp ../../README.md ./README.md
+react-native-magic-modal:copy:readme: 
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: > react-native-magic-modal@8.0.0 docs /private/tmp/claude-501/-Users-jarvis-jarvis-lab/53f769e9-39ae-4cf6-9d1e-67157f66798d/scratchpad/rnmm-finish/packages/modal
+react-native-magic-modal:docs: > typedoc --excludeInternal --out docs ./src/index.ts
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./src/components/MagicModalPortal/MagicModalPortal.tsx:36:3 - [warning] Encountered an unknown block tag @description
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 36     * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./src/utils/magicModalHandler.ts:76:5 - [warning] Encountered an unknown block tag @description
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 76       * @description Pushes a modal to the Stack, it will be displayed on top of the others.
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./src/utils/magicModalHandler.ts:91:5 - [warning] Encountered an unknown block tag @description
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 91       * @description Hides the given modal. Prefer using `hide` from `useMagicModal`, as it already infers the modalID.
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./src/utils/magicModalHandler.ts:97:5 - [warning] Encountered an unknown block tag @description
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 97       * @description Hides all modals in the stack. This function should be used sparingly, as it's generally preferable to hide modals individually from within the modal itself.
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./src/utils/magicModalHandler.ts:102:5 - [warning] Encountered an unknown block tag @description
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 102       * @description Enables the full window overlay globally. This is useful for modals that need to be displayed on top of native iOS modal screens. The function is no-op on non-iOS platforms.
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./src/utils/magicModalHandler.ts:109:5 - [warning] Encountered an unknown block tag @platform
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 109       * @platform ios
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./src/utils/magicModalHandler.ts:113:5 - [warning] Encountered an unknown block tag @description
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 113       * @description Disables the full window overlay globally. This is useful for modals that do not need to be displayed on top of native iOS modal screens. The function is no-op on non-iOS platforms.
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./src/utils/magicModalHandler.ts:120:5 - [warning] Encountered an unknown block tag @platform
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 120       * @platform ios
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./README.md:245:36 - [warning] The relative path examples/kitchen-sink is not a file and will not be copied to the output directory
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 245    Refer to the [kitchen-sink example](examples/kitchen-sink) for detailed usage scenarios.
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./README.md:279:29 - [warning] The relative path CONTRIBUTING.md is not a file and will not be copied to the output directory
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 279    See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository.
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: ./README.md:283:61 - [warning] The relative path LICENSE is not a file and will not be copied to the output directory
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: 283    React Native Magic Modal is licensed under the [MIT License](LICENSE).
+react-native-magic-modal:docs: 
+react-native-magic-modal:docs: [warning] DisableFullWindowOverlayFunction, defined in react-native-magic-modal/src/constants/types.ts, is referenced by magicModal.__type.disableFullWindowOverlay but not included in the documentation
+react-native-magic-modal:docs: [warning] EnableFullWindowOverlayFunction, defined in react-native-magic-modal/src/constants/types.ts, is referenced by magicModal.__type.enableFullWindowOverlay but not included in the documentation
+react-native-magic-modal:docs: [warning] GlobalHideFunction, defined in react-native-magic-modal/src/constants/types.ts, is referenced by magicModal.__type.hide but not included in the documentation
+react-native-magic-modal:docs: [warning] GlobalHideAllFunction, defined in react-native-magic-modal/src/constants/types.ts, is referenced by magicModal.__type.hideAll but not included in the documentation
+react-native-magic-modal:docs: [warning] GlobalShowFunction, defined in react-native-magic-modal/src/constants/types.ts, is referenced by magicModal.__type.show but not included in the documentation
+react-native-magic-modal:docs: [warning] HookHideFunction, defined in react-native-magic-modal/src/constants/types.ts, is referenced by ModalProps.__type.onBackButtonPress.__type.{ hide }.__type.hide but not included in the documentation
+react-native-magic-modal:docs: [info] html generated at ./docs
+react-native-magic-modal:docs: [warning] Found 0 errors and 17 warnings
+
+ Tasks:    2 successful, 2 total
+Cached:    0 cached, 2 total
+  Time:    1.399s 
+

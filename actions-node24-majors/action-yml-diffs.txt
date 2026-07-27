@@ -1,0 +1,39 @@
+action.yml diffs behind the four major bumps.
+Fetched from raw.githubusercontent.com at the tags below.
+
+========================================================================
+actions/cache v5.1.0 -> v6.1.0  (action.yml)
+========================================================================
+no differences
+
+========================================================================
+actions/checkout v6.1.0 -> v7.0.1  (action.yml)
+========================================================================
+no differences
+
+========================================================================
+actions/configure-pages v5.0.0 -> v6.0.0  (action.yml)
+========================================================================
+--- actions/configure-pages v5.0.0
++++ v6.0.0
+@@ -3,5 +3,5 @@
+ author: 'GitHub'
+ runs:
+-  using: 'node20'
++  using: 'node24'
+   main: 'dist/index.js'
+ inputs:
+
+========================================================================
+actions/deploy-pages v4.0.5 -> v5.0.0  (action.yml)
+========================================================================
+--- actions/deploy-pages v4.0.5
++++ v5.0.0
+@@ -3,5 +3,5 @@
+ author: 'GitHub'
+ runs:
+-  using: 'node20'
++  using: 'node24'
+   main: 'dist/index.js'
+ inputs:
+
