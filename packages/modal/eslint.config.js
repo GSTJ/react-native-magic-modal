@@ -1,5 +1,5 @@
 import { join } from "path";
-import { includeIgnoreFile } from "@eslint/compat";
+import { includeIgnoreFile } from "@eslint/config-helpers";
 import reactNativeConfig from "magic-eslint-config/react-native";
 
 /** @type {import('typescript-eslint').Config} */
