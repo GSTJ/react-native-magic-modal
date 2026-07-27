@@ -68,7 +68,7 @@ jobs:
         uses: dtinth/setup-github-actions-caching-for-turbo@v1
 
       - name: 🛠️ Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: 📚 Generate Docs
         run: pnpm run docs
