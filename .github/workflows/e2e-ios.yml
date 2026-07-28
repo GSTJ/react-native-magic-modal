@@ -255,6 +255,13 @@ jobs:
           # for the simulator SDK is "arm64 x86_64" — every file compiled twice
           # and every static library run through lipo.
           ARCH=$(uname -m)
+          # The destination names the device we are about to run on rather than
+          # `generic/platform=iOS Simulator`. Generic looks like the tidier
+          # choice for a build with no test action, but it leaves the asset
+          # catalog compiler with no runtime to target, and this image ships an
+          # Xcode whose iphonesimulator SDK (23A339) predates every installed
+          # runtime, so actool gives up with "iOS 26.0 Platform Not Installed".
+          # Naming the device tells it which runtime to thin for.
           # Build Release so the JS bundle is embedded — no Metro dependency at
           # runtime. This is what we want for e2e: the app must work without a
           # dev server attached. Turning the optimiser off inside the Release
@@ -279,7 +286,7 @@ jobs:
             -configuration Release \
             -sdk iphonesimulator \
             -derivedDataPath "$DERIVED_DATA" \
-            -destination "generic/platform=iOS Simulator" \
+            -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
             -skipPackagePluginValidation \
             -skipMacroValidation \
             -showBuildTimingSummary \
