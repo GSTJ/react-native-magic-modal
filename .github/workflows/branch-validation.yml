@@ -30,9 +30,15 @@ jobs:
       # generated API tables cannot merge and fail only during deployment.
       build-command: pnpm run build
       test-command: pnpm run test
-      # This repo's own gate: expo-doctor catches the duplicate react-native and
-      # the SDK drift the example app is prone to.
-      extra-command: pnpm run doctor
+      # This repo's own gates. expo-doctor catches the duplicate react-native
+      # and the SDK drift the example app is prone to. changelog:check renders
+      # a synthetic history of every commit type through the real changelog
+      # preset and fails if a breaking change goes missing — including one
+      # hanging off a hidden type, which is how a `ci!:` would vanish.
+      #
+      # One `extra-command`, so they're chained. `&&` short-circuits, which is
+      # what we want: either failing fails the job.
+      extra-command: pnpm run doctor && pnpm run changelog:check
 
   # main's ruleset requires a check literally named "👮‍♂️ Typecheck, Healthcheck,
   # Lint and Format". A called workflow always reports as

@@ -1,55 +1,11 @@
 import createPreset from "conventional-changelog-conventionalcommits";
 
-// One list, used twice: once as the preset the plugin loads, once to build the
-// preset we borrow `whatBump` from below. Declaring it here keeps the two from
-// drifting apart.
-const types = [
-  {
-    type: "fix",
-    section: ":hammer: Bug Fixes :hammer:",
-    hidden: false,
-  },
-  {
-    type: "feat",
-    section: ":stars: New Features :stars:",
-    hidden: false,
-  },
-  {
-    type: "refactor",
-    section: ":dash: Code Improvements :dash:",
-    hidden: false,
-  },
-  {
-    type: "perf",
-    section: ":dash: Code Improvements :dash:",
-    hidden: false,
-  },
-  {
-    type: "test",
-    section: ":link: Testing Updated :link:",
-    hidden: false,
-  },
-  {
-    type: "breaking",
-    section: ":boom: BREAKING CHANGE :boom:",
-    hidden: false,
-  },
-  {
-    type: "revert",
-    section: ":x: Removed :x:",
-    hidden: false,
-  },
-  {
-    type: "ci",
-    section: ":curly_loop: Continuous Integrations :curly_loop:",
-    hidden: false,
-  },
-  {
-    type: "chore",
-    section: ":curly_loop: What a drag! :curly_loop:",
-    hidden: true,
-  },
-];
+// One list, used three times: as the preset the plugin loads, to build the
+// preset we borrow `whatBump` from below, and by tools/changelog-check.mjs.
+// It lives in tools/changelog-preset.mjs so the check can't pass against a
+// policy the release doesn't use — that file also explains what each `effect`
+// buys.
+import { TYPES as types } from "./tools/changelog-preset.mjs";
 
 // Squash-merging a PR puts the PR description in the commit body, and Renovate
 // PR descriptions quote the upstream project's changelog verbatim. Several

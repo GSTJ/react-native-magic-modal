@@ -33,6 +33,9 @@
       "dependsOn": ["^topo"],
       "cache": false
     },
+    "changelog:check": {
+      "cache": false
+    },
     "typecheck": {
       "dependsOn": ["^topo", "^build"]
     },
