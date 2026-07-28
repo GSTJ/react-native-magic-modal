@@ -9,7 +9,7 @@
       "rangeStrategy": "in-range-only"
     },
     {
-      "description": "The e2e runner image is not a free bump. macos-26 dropped the iOS 26.0 simulator runtime and the iPhone SE (3rd generation) device, and xcodebuild fails the storyboard compile with \"iOS 26.0 Platform Not Installed\" (#284, reverted). Moves by hand once the app's deployment target moves with it.",
+      "description": "The e2e runner image is not a free bump, and the reason is not the image. Simulator runtimes are separate downloads now and an image only carries the ones its newest Xcode wants, so a runner bump has to be taken together with whichever Xcode the e2e job selects and whichever runtime that Xcode's SDK expects. #284 moved this to macos-26 and xcodebuild failed the storyboard compile with \"iOS 26.0 Platform Not Installed\"; #293 reverted it, then #292 fixed the Xcode selection and went back to macos-26. Moves by hand, with a green e2e run to show for it.",
       "matchDepNames": ["macos"],
       "enabled": false
     },
