@@ -132,6 +132,9 @@ importers:
       bunchee:
         specifier: ^6.0.3
         version: 6.12.1(typescript@5.9.3)
+      conventional-changelog-conventionalcommits:
+        specifier: ^10.2.1
+        version: 10.2.1
       cz-conventional-changelog:
         specifier: ^3.3.0
         version: 3.3.0(@types/node@26.1.1)(typescript@5.9.3)

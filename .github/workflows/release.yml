@@ -153,24 +153,41 @@ jobs:
           #     (`feat!:`, `fix(deps)!:`), which conventional-commits treats as
           #     a major on its own, with or without a footer,
           #   - its body contains a line starting with `BREAKING CHANGE:`
-          #     or `BREAKING-CHANGE:` (the conventional-commits footer).
+          #     or `BREAKING-CHANGE:` (the conventional-commits footer) AND a
+          #     human wrote it.
           # We can't use `git log --grep` here because that searches the
           # entire commit message; a PR description that mentions
           # "BREAKING CHANGE" in prose would falsely match. Iterate
           # commits with a unit separator and check each part explicitly.
+          #
+          # The author check is the same guard `packages/modal/.release-it.js`
+          # applies to the bump, kept here so the two agree. Squash-merging a
+          # PR puts the PR description in the commit body, and a Renovate
+          # description quotes the upstream project's changelog verbatim — so a
+          # dependency chore can carry someone else's `BREAKING CHANGE:` line
+          # and, without this, qualify for a release the repo never wanted.
+          # `%an` on a squash merge is the PR author, off the commit object, so
+          # nothing in a PR description can forge it. The `!` marker above is
+          # deliberate and still counts for anyone, which is the escape hatch
+          # for a human pushing a real breaking change onto a bot branch. An
+          # unrecognised author is treated as a human on purpose.
           UNIT=$'\x1f'
           REC=$'\x1e'
-          COMMITS=$(git log "$BOUNDARY..HEAD" --pretty=format:"%H${UNIT}%s${UNIT}%b${REC}")
+          COMMITS=$(git log "$BOUNDARY..HEAD" --pretty=format:"%H${UNIT}%an${UNIT}%s${UNIT}%b${REC}")
           QUALIFY=""
           while IFS= read -r -d "$REC" entry; do
             [ -z "$entry" ] && continue
             sha=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $1}')
-            subject=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $2}')
-            body=$(printf '%s' "$entry" | awk -F"$UNIT" '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i<NF?FS:"")}')
+            author=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $2}')
+            subject=$(printf '%s' "$entry" | awk -F"$UNIT" '{print $3}')
+            body=$(printf '%s' "$entry" | awk -F"$UNIT" '{for(i=4;i<=NF;i++) printf "%s%s", $i, (i<NF?FS:"")}')
             if printf '%s' "$subject" | grep -qE '\(modal\)|^[a-zA-Z]+(\([^)]*\))?!:'; then
               QUALIFY="${QUALIFY}${subject}"$'\n'
               continue
             fi
+            case "$author" in
+              'renovate[bot]'|'dependabot[bot]'|'github-actions[bot]') continue ;;
+            esac
             if printf '%s' "$body" | grep -qE '^BREAKING[- ]CHANGE:'; then
               QUALIFY="${QUALIFY}${subject}"$'\n'
             fi
