@@ -20,13 +20,21 @@
 #     overlap is free and also leaves it settled by the time Maestro starts,
 #   * no debug symbols, no index store, no warning spew.
 #
-# Measured, job wall time excluding runner queue. These hosted macOS runners
-# vary by a third between byte-identical runs, so the new rows are ranges over
-# several runs rather than single figures:
+# Measured, job wall time excluding runner queue. Read these as ranges, not
+# figures: these hosted macOS runners vary wildly, and three byte-identical cold
+# runs came in at 12m57, 16m37 and 27m37. Serial steps like `pnpm install` only
+# drifted 20s to 31s across the same three, so what is varying is how much
+# machine an N-way parallel compile actually gets.
 #
-#   old workflow                    22m04         (build step 14m07)
-#   new, every cache cold           13m00-17m20   (build step 8m45-10m30)
+#   old workflow, one run           22m04         (build step 14m07)
+#   new, every cache cold           13m00-27m40   (build step 8m45-20m30)
 #   new, caches warm                 8m30-14m00   (build step 4m45- 7m40)
+#
+# The part that is not noise, because it is a count and not a clock: the old
+# build compiled 676 source files 1385 times, once per simulator architecture,
+# and ran `pod install` three times per job — once in prebuild, once to pick up
+# the ccache flag, once inside `expo run:ios`. This one compiles each file once
+# and, on a warm cache, runs prebuild and pod install not at all.
 #
 # Warm is what an ordinary PR gets, because the caches are keyed on native
 # inputs only and this repo's library is pure TypeScript. All three hang off the
