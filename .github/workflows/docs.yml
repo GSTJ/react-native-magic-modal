@@ -43,7 +43,7 @@ jobs:
       # tsconfig extends `expo/tsconfig.base`, so typedoc died on
       # "File 'expo/tsconfig.base' not found".
       - name: 🏗 Setup PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: 🏗 Get PNPM store directory
         id: pnpm-cache
