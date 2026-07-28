@@ -7,9 +7,11 @@ import "@fontsource/instrument-serif/400-italic.css";
 import "./home.css";
 
 export const metadata: Metadata = {
-  title: "Magic Modal — React Native modals you can await",
+  title: {
+    absolute: "Awaitable React Native modals with Magic Modal",
+  },
   description:
-    "One root portal, independent stack entries, and typed results for React Native modal flows.",
+    "Open a React Native modal from any async flow, await its typed result, and keep concurrent prompts in one ordered stack.",
 };
 
 export default function Layout({ children }: LayoutProps<"/">) {

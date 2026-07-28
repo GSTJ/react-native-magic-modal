@@ -7,7 +7,7 @@ import {
 const presetSite = defineMagicDocs({
   name: "React Native Magic Modal",
   description:
-    "One root portal, independent stack entries, and typed results for React Native modal flows.",
+    "Open a React Native modal from any async flow, await its typed result, and keep concurrent prompts in one ordered stack.",
   repository: "https://github.com/GSTJ/react-native-magic-modal",
   siteUrl: "https://gstj.github.io/react-native-magic-modal",
   packageName: "react-native-magic-modal",

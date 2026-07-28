@@ -4,7 +4,16 @@ import type { MouseEvent } from "react";
 
 import { useCallback, useState } from "react";
 
-import { ArrowUpRight, RotateCcw } from "lucide-react";
+import {
+  ArrowUpRight,
+  Battery,
+  Check,
+  Heart,
+  RotateCcw,
+  Signal,
+  Star,
+  Wifi,
+} from "lucide-react";
 
 type Branch = "feedback" | "store" | null;
 type FlowStep = "rating" | "feedback" | "store" | "thanks" | "done";
@@ -223,7 +232,11 @@ export const OriginFlow = () => {
         <div className="mm-native-surface">
           <div className="mm-native-statusbar">
             <b>9:41</b>
-            <span aria-hidden="true">● ◒ ▰</span>
+            <span aria-hidden="true">
+              <Signal size={8} />
+              <Wifi size={8} />
+              <Battery size={9} />
+            </span>
           </div>
           <div className="mm-native-nav">
             <span>Moments</span>
@@ -246,7 +259,9 @@ export const OriginFlow = () => {
             </div>
             <div className="mm-feed-image">
               <span>first like</span>
-              <b>♥</b>
+              <b>
+                <Heart aria-hidden="true" fill="currentColor" size={16} />
+              </b>
             </div>
             <div className="mm-feed-copy">
               <i />
@@ -278,7 +293,7 @@ export const OriginFlow = () => {
               <code>{activeEntry}</code>
             </div>
             <h2>Rate the app</h2>
-            <p>From zero to five, how has it been so far?</p>
+            <p>How would you rate the app from zero to five?</p>
             <fieldset
               aria-label="Choose a rating from zero to five"
               className="mm-rating-options"
@@ -343,9 +358,11 @@ export const OriginFlow = () => {
             <span className="mm-sheet-handle" />
             <div className="mm-sheet-count">
               <span>02B</span>
-              <code>score ≥ 4</code>
+              <code>score &gt;= 4</code>
             </div>
-            <div className="mm-store-icon">★</div>
+            <div className="mm-store-icon">
+              <Star aria-hidden="true" fill="currentColor" size={16} />
+            </div>
             <h2>Would you leave a store rating?</h2>
             <p>Scores four and five reach this branch.</p>
             <div className="mm-sheet-actions">
@@ -374,7 +391,7 @@ export const OriginFlow = () => {
               <code>last modal</code>
             </div>
             <div className="mm-thanks-mark" aria-hidden="true">
-              ✓
+              <Check size={18} />
             </div>
             <h2>Thanks.</h2>
             <p>The last modal closes and the caller resumes.</p>
@@ -388,15 +405,17 @@ export const OriginFlow = () => {
           </article>
 
           <div
+            aria-hidden={!isDone}
             aria-live="polite"
             className={`mm-resolved-card ${isDone ? "is-visible" : ""}`}
+            inert={!isDone}
           >
             <span>{resultCopy.label}</span>
             <strong>{resultCopy.message}</strong>
             <pre>
               <code>{resultPayload}</code>
             </pre>
-            <button onClick={reset} type="button">
+            <button onClick={reset} tabIndex={isDone ? 0 : -1} type="button">
               Run it again
               <RotateCcw aria-hidden="true" size={14} />
             </button>

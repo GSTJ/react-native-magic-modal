@@ -4,8 +4,7 @@ description: Build imperative, awaitable, type-safe modal flows in React Native.
 ---
 
 React Native Magic Modal turns a modal interaction into a value you can await. Mount one portal
-near the root of your app, then show a modal from a component, navigation handler, service, or
-plain function.
+near the app root. Call `show()` from anywhere.
 
 ```tsx
 const result = await magicModal.show<ConfirmationResult>(() => (
@@ -25,12 +24,12 @@ if (
 <Cards>
   <Card
     title="Linear async flows"
-    description="Write the interaction in the order a person experiences it—show, await, branch."
+    description="Write the interaction in the order a person experiences it: show, await, branch."
     href="./guides/modal-flows"
   />
   <Card
     title="Typed results"
-    description="The value returned by the modal is inferred through the show and hide calls."
+    description="TypeScript infers the return value from show() and hide()."
     href="./reference/hide-results"
   />
   <Card
@@ -47,21 +46,18 @@ if (
 
 ## The mental model
 
-There are only three important pieces:
-
 1. [`MagicModalPortal`](./reference/magic-modal-portal) owns the modal stack. Mount it once.
 2. [`magicModal.show`](./reference/magic-modal) pushes content from anywhere and returns a promise.
 3. [`useMagicModal`](./reference/use-magic-modal) closes the current modal with typed data.
 
 <Callout type="info" title="Designed for application modals">
   For a scroll-heavy bottom sheet with snap points, use a dedicated bottom-sheet
-  library. Magic Modal is strongest when a modal represents a discrete
-  interaction or async decision.
+  library. Use Magic Modal for discrete interactions and async decisions.
 </Callout>
 
 ## Next step
 
-Install the package and its peers, then mount the portal in your app root.
+Install the package and its peers. Mount the portal in your app root.
 
 <Cards>
   <Card title="Install" href="./getting-started/installation" />

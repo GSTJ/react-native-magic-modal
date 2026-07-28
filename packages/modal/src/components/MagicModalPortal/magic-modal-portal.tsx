@@ -15,8 +15,8 @@ import React, {
 } from "react";
 import { BackHandler, Platform, StyleSheet, View } from "react-native";
 
-/** Do not import FullWindowOverlay from react-native-screens directly, as it screws up code splitting */
-import FullWindowOverlay from "react-native-screens/src/components/FullWindowOverlay";
+// eslint-disable-next-line import/no-namespace -- A named import is rewritten to a private screens path in the ESM build.
+import * as ReactNativeScreens from "react-native-screens";
 
 import { defaultConfig } from "../../constants/default-config";
 import { MagicModalHideReason } from "../../constants/types";
@@ -163,6 +163,10 @@ export const MagicModalPortal: React.FC = memo(() => {
   );
 
   useEffect(() => {
+    if (Platform.OS === "web") {
+      return;
+    }
+
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
@@ -232,7 +236,7 @@ export const MagicModalPortal: React.FC = memo(() => {
 
   const Overlay =
     fullWindowOverlayEnabled && Platform.OS === "ios"
-      ? FullWindowOverlay
+      ? ReactNativeScreens.FullWindowOverlay
       : React.Fragment;
 
   /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,

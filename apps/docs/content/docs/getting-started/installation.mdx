@@ -48,6 +48,56 @@ pnpm add react-native-magic-modal
 No gesture-handler exclusion is needed. Magic Modal 9 supports both the 2.x builder API and the 3.x
 hook API.
 
+## Next.js
+
+Install React Native Web:
+
+```bash
+pnpm add react-native-web
+```
+
+Next 16 uses Turbopack by default. Point React Native imports at React Native Web and resolve
+platform files first:
+
+```ts title="next.config.ts"
+import type { NextConfig } from "next";
+
+const config = {
+  transpilePackages: [
+    "react-native-magic-modal",
+    "react-native-gesture-handler",
+    "react-native-reanimated",
+    "react-native-screens",
+    "react-native-web",
+    "react-native-worklets",
+  ],
+  turbopack: {
+    resolveAlias: {
+      "react-native": "react-native-web",
+    },
+    resolveExtensions: [
+      ".web.tsx",
+      ".web.ts",
+      ".web.jsx",
+      ".web.js",
+      ".web.mjs",
+      ".web.cjs",
+      ".tsx",
+      ".ts",
+      ".jsx",
+      ".js",
+      ".mjs",
+      ".cjs",
+      ".json",
+    ],
+  },
+} satisfies NextConfig;
+
+export default config;
+```
+
+The interactive demo on this site uses this setup.
+
 ## Minimum versions
 
 | Package                      | Version |
@@ -77,14 +127,14 @@ module.exports = function (api) {
   return {
     presets: ["module:@react-native/babel-preset"],
     plugins: [
-      // Other plugins…
+      // Existing plugins
       "react-native-worklets/plugin",
     ],
   };
 };
 ```
 
-Then install iOS pods:
+Install iOS pods:
 
 ```bash
 npx pod-install
@@ -94,7 +144,7 @@ Expo's default Babel setup already includes the required plugin. `react-native-s
 iOS full-window overlay used by the portal; install it even if your navigator already brings it
 transitively.
 
-<Callout type="warn" title="Upgrading from 8.0.0?">
+<Callout type="warn" title="Upgrade from 8.0.0">
   Version 8.0.0 temporarily required Gesture Handler 3. Upgrade Magic Modal to 9
   or newer, and remove `react-native-gesture-handler` from
   `expo.install.exclude` if you added it.
