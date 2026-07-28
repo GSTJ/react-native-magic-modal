@@ -1,10 +1,12 @@
-<h1 align="center">React Native Magic Modal 🦄</h1>
+<h1 align="center">React Native Magic Modal</h1>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/50031755/182908700-6b94a470-0e5c-4af2-acba-b20acaffa0b8.png">
-  <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/50031755/182908700-6b94a470-0e5c-4af2-acba-b20acaffa0b8.png">
-  <img alt="React Native Magic Modal Banner" src="https://user-images.githubusercontent.com/50031755/182908700-6b94a470-0e5c-4af2-acba-b20acaffa0b8.png">
-</picture>
+<p align="center">Open a modal from any async flow. Await a typed result when it closes.</p>
+
+<img
+  alt="A rating flow moving from magicModal.show to a typed close result"
+  src="./media/magic-modal-demo.gif"
+/>
+
 <p align="center">
   <a aria-label="NPM Version" href="https://www.npmjs.com/package/react-native-magic-modal">
     <img alt="" src="https://img.shields.io/npm/v/react-native-magic-modal.svg?label=NPM&logo=npm&style=for-the-badge&color=0470FF&logoColor=white">
@@ -24,30 +26,24 @@
 > Magic Modal is a headless orchestration primitive: show modal content from anywhere, await a typed result, and keep styling in your own components.
 
 > [!TIP]
-> The complete guides and API reference live in the [documentation](https://gstj.github.io/react-native-magic-modal/docs/).
+> Guides and API reference live in the [documentation](https://gstj.github.io/react-native-magic-modal/docs/).
 
-## Features
+## Core API
 
-- 📲 [**Easy Integration**](#quickstart): Seamlessly integrate with your React Native app.
-- 🔄 [**Complex Flow Management**](#examples): Manage intricate modal sequences effortlessly.
-- 🔧 [**Customizable**](#usage): Tailor modals to fit your app's unique requirements.
-
-## Highlights
-
-React Native Magic Modal offers a superior experience compared to traditional modal implementations:
-
-- 🎨 [**Bring Your Own UI**](#examples): Style ordinary React Native content for iOS and Android.
-- 🚀 [**Developer Friendly**](#quickstart): Simple to use, with a focus on developer experience.
-- 🧩 [**Versatile**](#documentation): Adaptable to a wide range of modal scenarios.
+- `magicModal.show()` renders content in the portal and returns an entry handle with a promise.
+- `modalID` targets one entry for an update or close.
+- `update()` replaces the component rendered by an open entry.
+- `HideReturn<T>` records how the modal closed and carries submitted data.
+- Modal components remain ordinary React Native UI.
 
 ## Table of Contents
 
-- [**Installation**](#installation)
-- [**Quickstart**](#quickstart)
-- [**Examples**](#examples)
-- [**Documentation**](#documentation)
-- [**FAQ**](#faq)
-- [**Contributors**](#contributors)
+- [Installation](#installation)
+- [Quickstart](#quickstart)
+- [Examples](#examples)
+- [Documentation](#documentation)
+- [FAQ](#faq)
+- [Contributors](#contributors)
 
 ## Installation
 
