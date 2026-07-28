@@ -130,6 +130,9 @@ if (!home.includes(`${deploymentBasePath}/_next/`)) {
     "Home page does not reference base-path-prefixed Next assets.",
   );
 }
+if (!home.includes('data-home-version="2"')) {
+  throw new Error("Home page is missing the bespoke v2 landing marker.");
+}
 
 const generatedReference = await readFile(
   join(outputDirectory, "docs/reference/modal-props.md"),

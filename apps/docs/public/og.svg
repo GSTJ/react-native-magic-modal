@@ -1,37 +1,77 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="mark" x1="0" x2="1" y1="0" y2="1">
-      <stop stop-color="#9b87f5"/>
-      <stop offset=".5" stop-color="#6e56cf"/>
-      <stop offset="1" stop-color="#42d3a5"/>
+      <stop stop-color="#a997ff"/>
+      <stop offset=".52" stop-color="#765de1"/>
+      <stop offset="1" stop-color="#50dab0"/>
     </linearGradient>
-    <linearGradient id="title" x1="0" x2="1">
-      <stop stop-color="#a690ff"/>
-      <stop offset="1" stop-color="#46d6aa"/>
-    </linearGradient>
-    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
-      <path d="M56 0H0V56" fill="none" stroke="#9b87f5" stroke-opacity=".08"/>
-    </pattern>
-    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(1020 120) rotate(135) scale(520)">
-      <stop stop-color="#42d3a5" stop-opacity=".13"/>
-      <stop offset="1" stop-color="#42d3a5" stop-opacity="0"/>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(944 188) rotate(140) scale(480)">
+      <stop stop-color="#765de1" stop-opacity=".23"/>
+      <stop offset="1" stop-color="#765de1" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="trace" x1="0" x2="1">
+      <stop stop-color="#a997ff"/>
+      <stop offset="1" stop-color="#50dab0"/>
+    </linearGradient>
   </defs>
-  <rect width="1200" height="630" fill="#0d0b11"/>
-  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <rect width="1200" height="630" fill="#08080a"/>
   <rect width="1200" height="630" fill="url(#glow)"/>
-  <g transform="translate(76 72)">
-    <rect width="58" height="58" rx="17" fill="url(#mark)"/>
-    <path d="m15 43 6.6-23.4c.5-1.7 2.8-1.9 3.5-.2L29 29l9.4-3.6c1.7-.7 3 1.4 1.8 2.8L28 42.6c-1 1.3-3.1.4-3-1.2l.6-7.3-8.3 9.3c-1 1.1-2.8-.3-2.3-1.7Z" fill="#fff"/>
-    <circle cx="41" cy="15.5" r="3" fill="#d9fff3"/>
-    <text x="78" y="39" fill="#f5f1f8" font-family="Inter,Arial,sans-serif" font-size="27" font-weight="700">Magic Modal</text>
+
+  <g fill="none" stroke="#a997ff" stroke-opacity=".075">
+    <rect x="678" y="42" width="438" height="520" rx="68"/>
+    <rect x="712" y="72" width="370" height="460" rx="58"/>
+    <rect x="748" y="104" width="298" height="396" rx="48"/>
   </g>
-  <text x="76" y="255" fill="#f5f1f8" font-family="Inter,Arial,sans-serif" font-size="78" font-weight="700" letter-spacing="-4">Modal flows,</text>
-  <text x="76" y="344" fill="url(#title)" font-family="Inter,Arial,sans-serif" font-size="78" font-weight="700" letter-spacing="-4">without the ceremony.</text>
-  <text x="80" y="418" fill="#aaa2b6" font-family="Inter,Arial,sans-serif" font-size="27">Imperative, awaitable, type-safe modals for React Native.</text>
-  <g transform="translate(80 490)">
-    <rect width="420" height="62" rx="14" fill="#17131d" stroke="#30283a"/>
-    <text x="24" y="40" fill="#42d3a5" font-family="monospace" font-size="21">$</text>
-    <text x="53" y="40" fill="#f5f1f8" font-family="monospace" font-size="21">pnpm add react-native-magic-modal</text>
+
+  <g transform="translate(72 58)">
+    <rect width="52" height="52" rx="15" fill="url(#mark)"/>
+    <path d="m14 39 5.9-21c.4-1.5 2.5-1.7 3.1-.2l3.5 8.7 8.5-3.2c1.5-.6 2.7 1.2 1.6 2.5L25.7 38.7c-.9 1.1-2.8.4-2.7-1.1l.6-6.6-7.5 8.4c-.9 1-2.5-.3-2.1-1.5Z" fill="#fff"/>
+    <circle cx="37" cy="14" r="2.8" fill="#d9fff3"/>
+    <text x="70" y="35" fill="#f5f3f8" font-family="Arial,sans-serif" font-size="24" font-weight="700">Magic Modal</text>
+    <rect x="235" y="13" width="44" height="23" rx="12" fill="none" stroke="#34343e"/>
+    <text x="247" y="29" fill="#77737f" font-family="monospace" font-size="11">v9</text>
+  </g>
+
+  <text x="72" y="237" fill="#f5f3f8" font-family="Arial,sans-serif" font-size="70" font-weight="700" letter-spacing="-3.5">Open the modal.</text>
+  <text x="72" y="315" fill="#a997ff" font-family="Arial,sans-serif" font-size="70" font-weight="700" letter-spacing="-3.5">Await the answer.</text>
+  <text x="76" y="373" fill="#94919d" font-family="Arial,sans-serif" font-size="22">Imperative, awaitable, type-safe flows for React Native.</text>
+
+  <g transform="translate(76 430)">
+    <rect width="410" height="58" rx="13" fill="#0e0e12" stroke="#2b2b33"/>
+    <text x="20" y="37" fill="#50dab0" font-family="monospace" font-size="19">$</text>
+    <text x="47" y="37" fill="#f5f3f8" font-family="monospace" font-size="18">pnpm add react-native-magic-modal</text>
+  </g>
+
+  <g transform="translate(718 154)">
+    <rect width="408" height="350" rx="24" fill="#0e0e12" stroke="#34343e"/>
+    <path d="M0 47H408" stroke="#24242b"/>
+    <circle cx="22" cy="24" r="4" fill="#a997ff"/>
+    <text x="36" y="28" fill="#77737f" font-family="monospace" font-size="11">magic runtime</text>
+    <text x="318" y="28" fill="#50dab0" font-family="monospace" font-size="10">stack 01</text>
+
+    <text x="28" y="86" fill="#65616d" font-family="monospace" font-size="10">CALL</text>
+    <text x="28" y="112" fill="#d8d4de" font-family="monospace" font-size="14">magicModal.</text>
+    <text x="126" y="112" fill="#50dab0" font-family="monospace" font-size="14">show()</text>
+    <path d="M190 107H263" stroke="url(#trace)" stroke-width="2"/>
+    <path d="m263 107-8-5v10Z" fill="#a997ff"/>
+
+    <g transform="translate(245 72)">
+      <rect width="135" height="214" rx="16" fill="#e9e6ef"/>
+      <rect x="12" y="16" width="74" height="7" rx="4" fill="#c8c2ce"/>
+      <rect x="12" y="34" width="105" height="7" rx="4" fill="#d5d0da"/>
+      <rect x="8" y="98" width="119" height="104" rx="13" fill="#fbf9fd" stroke="#d9d3df"/>
+      <rect x="20" y="113" width="29" height="29" rx="8" fill="#e9e2ff"/>
+      <rect x="20" y="153" width="83" height="7" rx="4" fill="#2c2732"/>
+      <rect x="20" y="171" width="95" height="19" rx="6" fill="#765de1"/>
+    </g>
+
+    <text x="28" y="182" fill="#65616d" font-family="monospace" font-size="10">PROMISE</text>
+    <rect x="28" y="198" width="184" height="54" rx="10" fill="#131319" stroke="#2b2b33"/>
+    <circle cx="45" cy="225" r="5" fill="#50dab0"/>
+    <text x="61" y="229" fill="#50dab0" font-family="monospace" font-size="12">resolved</text>
+
+    <path d="M28 299H380" stroke="#24242b"/>
+    <text x="28" y="327" fill="#77737f" font-family="monospace" font-size="11">{ reason, data }</text>
   </g>
 </svg>

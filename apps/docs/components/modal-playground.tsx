@@ -1,138 +1,231 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import type { KeyboardEvent, RefObject } from "react";
 
-import { Check, ChevronRight, Sparkles, X } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
+
+import { Check, Layers3, RotateCcw, X } from "lucide-react";
+
+type Result = "waiting" | "confirmed" | "dismissed";
+
+const focusSoon = (target: RefObject<HTMLButtonElement | null>) => {
+  requestAnimationFrame(() => target.current?.focus());
+};
 
 export const ModalPlayground = () => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [result, setResult] = useState<"waiting" | "confirmed" | "cancelled">(
-    "waiting",
-  );
+  const [depth, setDepth] = useState(1);
+  const [result, setResult] = useState<Result>("waiting");
+  const launchButton = useRef<HTMLButtonElement>(null);
+  const confirmButton = useRef<HTMLButtonElement>(null);
+  const stackedButton = useRef<HTMLButtonElement>(null);
 
   const show = useCallback(() => {
+    setDepth(1);
     setResult("waiting");
-    setIsOpen(true);
+    focusSoon(confirmButton);
   }, []);
 
-  const finish = useCallback((next: "confirmed" | "cancelled") => {
+  const finish = useCallback((next: Exclude<Result, "waiting">) => {
+    setDepth(0);
     setResult(next);
-    setIsOpen(false);
+    focusSoon(launchButton);
   }, []);
 
-  const cancel = useCallback(() => finish("cancelled"), [finish]);
   const confirm = useCallback(() => finish("confirmed"), [finish]);
+  const dismiss = useCallback(() => finish("dismissed"), [finish]);
+
+  const showSecond = useCallback(() => {
+    setDepth(2);
+    focusSoon(stackedButton);
+  }, []);
+
+  const closeSecond = useCallback(() => {
+    setDepth(1);
+    focusSoon(confirmButton);
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDialogElement>) => {
+      if (event.key !== "Escape" || depth === 0) return;
+
+      event.preventDefault();
+      if (depth === 2) {
+        closeSecond();
+      } else {
+        dismiss();
+      }
+    },
+    [closeSecond, depth, dismiss],
+  );
+
+  let status = "Promise waiting for the modal.";
+  if (result === "confirmed") {
+    status = "Resolved with confirmed true.";
+  } else if (result === "dismissed") {
+    status = "Resolved with dismissal reason GLOBAL_HIDE_ALL.";
+  } else if (depth === 2) {
+    status =
+      "Two entries in the modal stack. The first promise is still waiting.";
+  }
 
   return (
-    <div className="playground-shell">
-      <div className="playground-toolbar">
-        <div className="traffic-lights" aria-hidden="true">
-          <i />
-          <i />
-          <i />
+    <section
+      aria-label="Interactive modal lifecycle demo"
+      className={`mh-runtime mh-runtime-${result}`}
+    >
+      <div className="mh-runtime-toolbar">
+        <div>
+          <Layers3 aria-hidden="true" size={15} />
+          <span>magic runtime</span>
         </div>
-        <span>checkout-flow.tsx</span>
-        <span className="playground-live">
+        <div className="mh-runtime-state">
           <i />
-          live
-        </span>
+          {depth > 0 ? `stack 0${depth}` : "stack empty"}
+        </div>
       </div>
 
-      <div className="playground-grid">
-        <div className="code-panel" aria-label="Example TypeScript code">
-          <div>
-            <span className="code-purple">const</span> result{" "}
-            <span className="code-purple">= await</span>
-          </div>
-          <div className="code-indent">
-            magicModal.<span className="code-green">show</span>
-            <span className="code-muted">&lt;Confirmation&gt;</span>(
-          </div>
-          <div className="code-indent-2">
-            () <span className="code-purple">=&gt;</span> &lt;
-            <span className="code-blue">ConfirmPurchase</span> /&gt;
-          </div>
-          <div className="code-indent">).promise;</div>
-          <div className="code-spacer" />
-          <div>
-            <span className="code-purple">if</span> (result.reason ===
-          </div>
-          <div className="code-indent">
-            <span className="code-blue">
-              MagicModalHideReason.INTENTIONAL_HIDE
-            </span>
-            ) {"{"}
-          </div>
-          <div className="code-indent">
-            <span className="code-green">completeOrder</span>(result.data);
-          </div>
-          <div>{"}"}</div>
+      <div className="mh-runtime-grid">
+        <div className="mh-runtime-code">
+          <span className="mh-runtime-caption">THE CALL SITE</span>
+          <pre aria-label="TypeScript example">
+            <code>
+              <span className="mh-code-dim">&#47;&#47; checkout-flow.tsx</span>
+              {"\n"}
+              <span className="mh-code-keyword">const</span> result{" "}
+              <span className="mh-code-keyword">= await</span>
+              {"\n  "}
+              magicModal.<span className="mh-code-call">show</span>
+              <span className="mh-code-type">&lt;Confirmation&gt;</span>
+              {"(\n    ConfirmPurchase,\n"}
+              {"  ).promise;\n\n"}
+              <span className="mh-code-keyword">if</span> (result.reason ===
+              {"\n  "}
+              <span className="mh-code-enum">
+                MagicModalHideReason.INTENTIONAL_HIDE
+              </span>
+              {") {\n  "}
+              completeOrder(result.data);
+              {"\n}"}
+            </code>
+          </pre>
 
-          <div className="promise-status">
-            <span className={`status-dot status-${result}`} />
-            {result === "waiting" && "Promise waiting for the modal…"}
-            {result === "confirmed" && "Resolved with { confirmed: true }"}
-            {result === "cancelled" && "Resolved with BACKDROP_PRESS"}
+          <div className="mh-runtime-events" aria-hidden="true">
+            <div className={depth > 0 ? "is-active" : ""}>
+              <span>CALL</span>
+              <code>show()</code>
+            </div>
+            <div className={depth > 0 ? "is-active" : ""}>
+              <span>PORTAL</span>
+              <code>{depth > 0 ? `#a71f · depth ${depth}` : "idle"}</code>
+            </div>
+            <div className={result === "waiting" ? "is-active" : "is-resolved"}>
+              <span>PROMISE</span>
+              <code>{result === "waiting" ? "pending" : "resolved"}</code>
+            </div>
           </div>
+
+          <p aria-live="polite" className="mh-runtime-output">
+            <span className={`mh-output-dot is-${result}`} />
+            {status}
+          </p>
         </div>
 
-        <div className="phone-stage">
-          <div className="phone">
-            <div className="phone-island" />
-            <div className="phone-header">
-              <Sparkles size={16} />
-              Magic Shop
+        <div className="mh-runtime-stage">
+          <span className="mh-runtime-caption">THE PORTAL</span>
+          <div className="mh-app-surface">
+            <div className="mh-app-topbar">
+              <span>Checkout</span>
+              <code>cart / 01</code>
             </div>
-            <div className="product-card">
-              <div className="product-orb">M</div>
-              <div>
-                <strong>Magic Pass</strong>
-                <span>$24 / lifetime</span>
+            <div className="mh-app-content" aria-hidden="true">
+              <div className="mh-app-product">
+                <i>M</i>
+                <div>
+                  <strong>Magic Pass</strong>
+                  <span>Lifetime access</span>
+                </div>
+                <b>$24</b>
               </div>
+              <div className="mh-app-row" />
+              <div className="mh-app-row is-short" />
             </div>
-            <button className="show-button" onClick={show} type="button">
-              Show modal
-              <ChevronRight size={16} />
-            </button>
 
             <div
-              aria-hidden={!isOpen}
-              className={`phone-backdrop ${isOpen ? "is-open" : ""}`}
-              inert={!isOpen}
+              aria-hidden={depth === 0}
+              className={`mh-stage-backdrop ${depth > 0 ? "is-open" : ""}`}
+              inert={depth === 0}
             >
               <button
-                aria-label="Dismiss modal"
-                className="phone-backdrop-dismiss"
-                onClick={cancel}
+                aria-label="Dismiss every demo modal"
+                className="mh-stage-dismiss"
+                onClick={dismiss}
                 type="button"
               />
               <dialog
-                aria-labelledby="demo-modal-title"
-                aria-modal="true"
-                className="demo-modal"
-                open
+                aria-hidden={depth === 2}
+                aria-labelledby="mh-confirm-title"
+                className="mh-demo-sheet"
+                inert={depth === 2}
+                onKeyDown={handleKeyDown}
+                open={depth > 0}
               >
                 <button
-                  aria-label="Close modal"
-                  className="modal-close"
-                  onClick={cancel}
+                  aria-label="Dismiss confirmation"
+                  className="mh-sheet-close"
+                  onClick={dismiss}
                   type="button"
                 >
-                  <X size={15} />
+                  <X aria-hidden="true" size={14} />
                 </button>
-                <div className="modal-icon">
-                  <Check size={20} />
+                <div className="mh-sheet-icon">
+                  <Check aria-hidden="true" size={19} />
                 </div>
-                <strong id="demo-modal-title">Confirm purchase?</strong>
-                <p>Your modal can return fully typed data to the caller.</p>
-                <button onClick={confirm} type="button">
-                  Confirm · $24
+                <strong id="mh-confirm-title">Confirm purchase?</strong>
+                <p>The caller stays paused until this interaction resolves.</p>
+                <div className="mh-sheet-actions">
+                  <button onClick={showSecond} type="button">
+                    Stack another
+                  </button>
+                  <button onClick={confirm} ref={confirmButton} type="button">
+                    Confirm · $24
+                  </button>
+                </div>
+              </dialog>
+
+              <dialog
+                aria-labelledby="mh-stack-title"
+                className={`mh-demo-alert ${depth === 2 ? "is-open" : ""}`}
+                onKeyDown={handleKeyDown}
+                open={depth === 2}
+              >
+                <code>#c240 · stack 02</code>
+                <strong id="mh-stack-title">Still there underneath.</strong>
+                <p>
+                  Close this entry and the first modal keeps its promise and
+                  position.
+                </p>
+                <button onClick={closeSecond} ref={stackedButton} type="button">
+                  Return to #a71f
                 </button>
               </dialog>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <div className="mh-runtime-controls">
+        <button onClick={show} ref={launchButton} type="button">
+          <RotateCcw aria-hidden="true" size={14} />
+          Run show()
+        </button>
+        <button disabled={depth !== 1} onClick={showSecond} type="button">
+          Stack another
+        </button>
+        <button disabled={depth === 0} onClick={dismiss} type="button">
+          hideAll()
+        </button>
+        <span>Try the flow · press Esc to pop the active entry</span>
+      </div>
+    </section>
   );
 };
