@@ -208,6 +208,18 @@ jobs:
           path: ${{ env.EXAMPLE_DIR }}/ios
           key: ios-dir-${{ steps.key.outputs.native }}
 
+      # Experiment: with prebuild skipped on an ios/ hit, nothing regenerates
+      # the Xcode project between runs, so a restored DerivedData may survive
+      # as a valid incremental state. The JS bundle phase is alwaysOutOfDate
+      # and reruns regardless, so a hit can never serve stale JS.
+      - name: ♻️ Restore DerivedData
+        id: dd-cache
+        if: ${{ github.event.inputs.cold != 'true' }}
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/DerivedData
+          key: dd-${{ steps.key.outputs.native }}
+
       - name: ♻️ Restore Maestro CLI
         id: maestro-cache
         if: ${{ github.event.inputs.cold != 'true' }}
@@ -331,6 +343,13 @@ jobs:
           path: ${{ env.EXAMPLE_DIR }}/ios
           key: ios-dir-${{ steps.key.outputs.native }}
 
+      - name: 💾 Save DerivedData
+        if: ${{ always() && steps.dd-cache.outputs.cache-hit != 'true' && steps.build.outcome == 'success' }}
+        uses: actions/cache/save@v6
+        with:
+          path: ~/DerivedData
+          key: dd-${{ steps.key.outputs.native }}
+
       - name: 💾 Save Maestro CLI
         if: ${{ always() && steps.maestro-cache.outputs.cache-hit != 'true' }}
         uses: actions/cache/save@v6
@@ -416,9 +435,10 @@ jobs:
             echo "| metric | value |"
             echo "| --- | --- |"
             echo "| ios/ cache | ${{ steps.ios-cache.outputs.cache-hit == 'true' && 'hit' || 'miss' }} |"
+            echo "| DerivedData cache | ${{ steps.dd-cache.outputs.cache-hit == 'true' && 'hit' || 'miss' }} |"
             echo "| DerivedData size | $(du -sh "$HOME/DerivedData" 2>/dev/null | cut -f1) |"
             echo "| ios/ size | $(du -sh "$EXAMPLE_DIR/ios" 2>/dev/null | cut -f1) |"
-          } >> "$GITHUB_STEP_SUMMARY"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: 📤 Upload Maestro debug output
         if: always()
