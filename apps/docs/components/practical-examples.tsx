@@ -314,10 +314,8 @@ export const PracticalExamples = () => {
   return (
     <section className="mm-examples" id="examples">
       <header data-reveal>
-        <span>03 / EXAMPLES</span>
-        <h2>
-          Await the result. <code>Keep going.</code>
-        </h2>
+        <span>COMMON FLOWS</span>
+        <h2>Await a result or update the open modal</h2>
         <p>
           Each action resolves or updates the current modal. The result decides
           what opens next.

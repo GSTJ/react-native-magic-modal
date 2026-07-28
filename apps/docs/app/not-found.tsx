@@ -8,11 +8,10 @@ export default function NotFound() {
   return (
     <main className="not-found">
       <MagicMark size={56} />
-      <span>404 · spell fizzled</span>
-      <h1>This page escaped the modal stack.</h1>
+      <span>404</span>
+      <h1>Page not found</h1>
       <p>
-        The API probably moved. Search the new reference or head back to the
-        docs.
+        This URL may have moved. Search the reference or return to the docs.
       </p>
       <Link href="/docs">
         <ArrowLeft size={16} />

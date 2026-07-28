@@ -107,20 +107,16 @@ export default function HomePage() {
         <div className="mm-hero-copy">
           <p className="mm-overline">
             <MagicMark size={24} />
-            Imperative modals for React Native
+            A modal stack for React Native
           </p>
-          <h1>
-            Open a modal.
-            <br />
-            Await the <em>result.</em>
-          </h1>
+          <h1>React Native modals you can await</h1>
           <p className="mm-hero-lede">
             Mount one <code>MagicModalPortal</code> at the app root. Call{" "}
             <code>show()</code> from any async flow and await the typed result.
           </p>
           <div className="mm-hero-actions">
             <a className="mm-run-link" href="#original-flow">
-              Try the original demo
+              Try the rating flow
               <ArrowRight aria-hidden="true" size={17} />
             </a>
             <a
@@ -130,7 +126,7 @@ export default function HomePage() {
               target="_blank"
             >
               <BookOpen aria-hidden="true" size={15} />
-              Why it was built
+              Read the origin story
               <ArrowUpRight aria-hidden="true" size={13} />
             </a>
           </div>
@@ -144,7 +140,7 @@ export default function HomePage() {
           className="mm-scroll-cue"
           href="#request"
         >
-          <span>The first use case</span>
+          <span>Why it exists</span>
           <ArrowDown aria-hidden="true" size={15} />
         </a>
       </section>
@@ -199,12 +195,9 @@ export default function HomePage() {
       </aside>
 
       <section className="mm-request" id="request">
-        <div className="mm-request-index" data-reveal>
-          <span>THE PROBLEM</span>
-          <strong>01</strong>
-        </div>
         <div className="mm-request-copy" data-reveal>
-          <h2>One hidden modal can break the next flow.</h2>
+          <span className="mm-section-number">WHY IT EXISTS</span>
+          <h2>Two callers can open a modal at the same time</h2>
           <p>
             The first Magic Modal flow asked for an app rating after a like. It
             could start from several screens and branch to feedback or the
@@ -254,7 +247,10 @@ export default function HomePage() {
           </article>
           <article>
             <span>CODE</span>
-            <strong>One flow, called from anywhere</strong>
+            <strong>
+              {ratingCallers.length} callers share{" "}
+              <code>startRatingFlow()</code>
+            </strong>
             <p>
               The shared flow owns the modal components and visibility state.
             </p>
@@ -272,8 +268,8 @@ export default function HomePage() {
 
       <section className="mm-live">
         <header data-reveal>
-          <span>02 / LIVE PACKAGE</span>
-          <h2>The package runs here.</h2>
+          <span>LIVE PACKAGE</span>
+          <h2>Test two calls in one stack</h2>
           <p>
             Start the rating flow and stack a notification over it. Close the
             top entry and the first promise is still waiting underneath.
@@ -288,8 +284,8 @@ export default function HomePage() {
 
       <section className="mm-owner">
         <div className="mm-section-copy" data-reveal>
-          <span className="mm-section-number">04 / THE PORTAL</span>
-          <h2>The root owns the stack.</h2>
+          <span className="mm-section-number">APP ROOT</span>
+          <h2>Mount one portal at the app root</h2>
           <p>
             Modal calls can come from anywhere in the app. Each{" "}
             <code>show()</code> gets an ID and promise, so one flow cannot
@@ -341,9 +337,9 @@ export default function HomePage() {
 
       <section className="mm-show">
         <div className="mm-show-heading" data-reveal>
-          <span>05 / SHOW</span>
+          <span>RETURN VALUE</span>
           <h2>
-            <code>show()</code> returns a handle.
+            What <code>magicModal.show()</code> returns
           </h2>
           <p>
             Await the close result, target this stack entry by ID, or replace
@@ -406,8 +402,10 @@ export default function HomePage() {
 
       <section className="mm-close">
         <div className="mm-close-heading" data-reveal>
-          <span>06 / HIDE</span>
-          <h2>Every close has a reason.</h2>
+          <span>CLOSE RESULTS</span>
+          <h2>
+            What <code>HideReturn&lt;T&gt;</code> records
+          </h2>
           <p>
             A submitted answer, backdrop tap, swipe, Android back press, and{" "}
             <code>hideAll()</code> resolve differently. Only{" "}
@@ -425,8 +423,8 @@ export default function HomePage() {
 
       <section className="mm-history">
         <div className="mm-history-heading" data-reveal>
-          <span>07 / HISTORY</span>
-          <h2>Bugs shaped the API.</h2>
+          <span>RELEASE HISTORY</span>
+          <h2>How the API changed</h2>
           <p>
             Apps needed stacked modals, targeted updates, typed close reasons,
             native overlays, and support for newer gesture APIs.
@@ -482,7 +480,7 @@ export default function HomePage() {
               <article>
                 <span>RATING FLOW</span>
                 <strong>How was your visit?</strong>
-                <small>One portal. One result.</small>
+                <small>The rating promise is still pending.</small>
                 <div>
                   {[1, 2, 3, 4, 5].map((score) => (
                     <b key={score}>{score}</b>
@@ -494,11 +492,7 @@ export default function HomePage() {
         </div>
         <div className="mm-final-copy" data-reveal>
           <span>GET STARTED</span>
-          <h2>
-            Build the
-            <br />
-            first <em>flow.</em>
-          </h2>
+          <h2>Add MagicModalPortal to your app root</h2>
           <p>
             The setup guide mounts the app-root portal and shows how to await a
             typed <code>HideReturn&lt;T&gt;</code>.

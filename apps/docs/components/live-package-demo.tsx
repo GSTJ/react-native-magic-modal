@@ -593,10 +593,10 @@ export const LivePackageDemo = () => {
         <div className="mm-package-grid">
           <div className="mm-package-copy">
             <span>ONE PORTAL ON THIS PAGE</span>
-            <h3>Open two entries in the same stack.</h3>
+            <h3>Stack a notification over the rating prompt</h3>
             <p>
-              Start the rating flow in a phone frame or watch update() drive the
-              web upload. Both use this page&apos;s portal.
+              Start the rating flow in the phone frame, or run update() in the
+              web panel. This page mounts one MagicModalPortal for both.
             </p>
             <div className="mm-package-actions">
               <button

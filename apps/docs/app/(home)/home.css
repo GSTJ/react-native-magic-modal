@@ -1,3 +1,9 @@
+html:has(.magic-home),
+body:has(.magic-home) {
+  background: #151411;
+  overscroll-behavior-y: none;
+}
+
 .magic-home {
   --mm-blue: #9f835b;
   --mm-blue-deep: #785f3f;
@@ -213,11 +219,11 @@
 }
 
 .mm-hero h1 {
-  font-size: clamp(4rem, 5.45vw, 5.6rem);
-  font-weight: 675;
-  letter-spacing: -0.073em;
-  line-height: 0.93;
-  max-width: 700px;
+  font-size: clamp(3.7rem, 5vw, 5rem);
+  font-weight: 640;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  max-width: 660px;
   text-wrap: balance;
 }
 
@@ -1221,21 +1227,13 @@
   border-top: 1px solid var(--mm-line);
   display: grid;
   gap: clamp(2rem, 4vw, 5rem);
-  grid-template-columns: 90px minmax(0, 1.18fr) minmax(330px, 0.72fr);
+  grid-template-columns: minmax(0, 1.18fr) minmax(330px, 0.72fr);
   margin: 0 auto;
   max-width: 1600px;
   padding: clamp(7rem, 11vw, 11rem) clamp(1.5rem, 7vw, 7rem);
   position: relative;
 }
 
-.mm-request-index {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.mm-request-index > span,
 .mm-section-number,
 .mm-show-heading > span,
 .mm-close-heading > span,
@@ -1248,23 +1246,19 @@
   letter-spacing: 0.05em;
 }
 
-.mm-request-index strong {
-  color: var(--mm-coral);
-  font-family: "Instrument Serif", serif;
-  font-size: 4.5rem;
-  font-style: italic;
-  font-weight: 400;
-  line-height: 0.9;
-}
-
 .mm-request-copy h2 {
   color: var(--mm-fg);
-  font-size: clamp(2.7rem, 4.7vw, 5rem);
-  font-weight: 650;
-  letter-spacing: -0.068em;
-  line-height: 0.94;
-  max-width: 780px;
-  text-wrap: balance;
+  font-size: clamp(2.5rem, 4vw, 4.25rem);
+  font-weight: 590;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  max-width: 720px;
+  text-wrap: pretty;
+}
+
+.mm-request-copy > .mm-section-number {
+  display: block;
+  margin-bottom: 1.2rem;
 }
 
 .mm-request-copy > p {
@@ -1435,11 +1429,11 @@
 }
 
 .mm-live > header h2 {
-  font-size: clamp(3.1rem, 5.6vw, 5.7rem);
-  font-weight: 650;
-  letter-spacing: -0.07em;
-  line-height: 0.93;
-  text-wrap: balance;
+  font-size: clamp(2.5rem, 4.2vw, 4.35rem);
+  font-weight: 590;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-wrap: pretty;
 }
 
 .mm-live > header p {
@@ -1529,13 +1523,13 @@
 }
 
 .mm-package-copy h3 {
-  font-size: clamp(2.5rem, 5vw, 4.75rem);
-  font-weight: 650;
-  letter-spacing: -0.065em;
-  line-height: 0.95;
+  font-size: clamp(2rem, 3.4vw, 3.4rem);
+  font-weight: 590;
+  letter-spacing: -0.042em;
+  line-height: 1.02;
   margin-top: 0.85rem;
-  max-width: 680px;
-  text-wrap: balance;
+  max-width: 620px;
+  text-wrap: pretty;
 }
 
 .mm-package-copy p {
@@ -2042,11 +2036,11 @@
 }
 
 .mm-examples > header h2 {
-  font-size: clamp(3.2rem, 5.7vw, 5.85rem);
-  font-weight: 650;
-  letter-spacing: -0.07em;
-  line-height: 0.92;
-  text-wrap: balance;
+  font-size: clamp(2.5rem, 4.2vw, 4.35rem);
+  font-weight: 590;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-wrap: pretty;
 }
 
 .mm-examples > header h2 code {
@@ -2426,12 +2420,12 @@
 }
 
 .mm-section-copy h2 {
-  font-size: clamp(3rem, 5.1vw, 5.15rem);
-  font-weight: 650;
-  letter-spacing: -0.066em;
-  line-height: 0.94;
+  font-size: clamp(2.5rem, 4vw, 4.25rem);
+  font-weight: 590;
+  letter-spacing: -0.045em;
+  line-height: 1;
   margin-top: 1.2rem;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .mm-section-copy > p {
@@ -2684,12 +2678,12 @@
 .mm-show-heading h2,
 .mm-close-heading h2,
 .mm-history-heading h2 {
-  font-size: clamp(3.2rem, 5.7vw, 5.85rem);
-  font-weight: 650;
-  letter-spacing: -0.07em;
-  line-height: 0.92;
+  font-size: clamp(2.5rem, 4.2vw, 4.35rem);
+  font-weight: 590;
+  letter-spacing: -0.045em;
+  line-height: 1;
   margin-top: 1.2rem;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .mm-show-heading h2 {
@@ -2699,9 +2693,9 @@
 .mm-show-heading h2 code {
   background: var(--mm-paper);
   color: var(--mm-ink);
-  font-size: 0.73em;
+  font-size: 0.68em;
   font-weight: 560;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.04em;
   padding: 0.04em 0.12em;
 }
 
@@ -2847,7 +2841,12 @@
 }
 
 .mm-close-heading h2 {
-  font-size: clamp(3.3rem, 5.5vw, 5.4rem);
+  font-size: clamp(2.5rem, 4vw, 4.2rem);
+}
+
+.mm-close-heading h2 code {
+  font-size: 0.68em;
+  letter-spacing: -0.04em;
 }
 
 .mm-close-heading > a {
@@ -3276,11 +3275,12 @@
 }
 
 .mm-final-copy h2 {
-  font-size: clamp(5rem, 9.5vw, 9.8rem);
-  font-weight: 660;
-  letter-spacing: -0.082em;
-  line-height: 0.77;
-  margin-top: clamp(2rem, 4vw, 4rem);
+  font-size: clamp(3.4rem, 5.8vw, 5.8rem);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 0.96;
+  margin-top: clamp(1.5rem, 3vw, 2.8rem);
+  text-wrap: pretty;
 }
 
 .mm-final-copy h2 em {
@@ -3671,7 +3671,6 @@
   border-color: var(--mm-dark-line);
 }
 
-.mm-request-index > span,
 .mm-request-copy aside > span {
   color: var(--mm-fg-muted);
 }
@@ -3848,8 +3847,8 @@
   }
 
   .mm-hero h1 {
-    font-size: clamp(4.2rem, 8.4vw, 6rem);
-    max-width: 800px;
+    font-size: clamp(3.6rem, 7vw, 4.8rem);
+    max-width: 700px;
   }
 
   .mm-origin-flow {
@@ -3885,7 +3884,7 @@
   }
 
   .mm-request {
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 1fr;
   }
 
   .mm-request-flags {
@@ -4039,9 +4038,9 @@
   }
 
   .mm-hero h1 {
-    font-size: clamp(3rem, 13vw, 3.55rem);
-    letter-spacing: -0.065em;
-    line-height: 0.94;
+    font-size: clamp(2.7rem, 11.5vw, 3.2rem);
+    letter-spacing: -0.045em;
+    line-height: 0.98;
     max-width: 540px;
   }
 
@@ -4326,18 +4325,8 @@
     padding: 6.5rem 1.7rem 7rem;
   }
 
-  .mm-request-index {
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .mm-request-index strong {
-    font-size: 3.1rem;
-  }
-
   .mm-request-copy {
-    margin-top: 2.2rem;
+    margin-top: 0;
   }
 
   .mm-request-copy > p {
@@ -4374,7 +4363,7 @@
   }
 
   .mm-examples > header h2 {
-    font-size: clamp(3rem, 13vw, 4rem);
+    font-size: clamp(2.2rem, 9.5vw, 2.8rem);
     margin-top: 1.2rem;
   }
 
@@ -4461,7 +4450,7 @@
   .mm-show-heading h2,
   .mm-close-heading h2,
   .mm-history-heading h2 {
-    font-size: clamp(3rem, 13vw, 4rem);
+    font-size: clamp(2.2rem, 9.5vw, 2.8rem);
   }
 
   .mm-section-copy > p,
@@ -4689,8 +4678,8 @@
   }
 
   .mm-final-copy h2 {
-    font-size: clamp(4.2rem, 20vw, 5.6rem);
-    line-height: 0.82;
+    font-size: clamp(2.8rem, 12vw, 3.5rem);
+    line-height: 0.98;
   }
 
   .mm-final-copy > p {
@@ -4745,7 +4734,7 @@
   }
 
   .mm-hero h1 {
-    font-size: clamp(2.82rem, 12.7vw, 3.25rem);
+    font-size: clamp(2.55rem, 11.5vw, 3rem);
   }
 
   .mm-hero-lede {
@@ -4920,7 +4909,7 @@
   }
 
   .mm-live > header h2 {
-    font-size: clamp(2.8rem, 12vw, 3.8rem);
+    font-size: clamp(2.2rem, 9.5vw, 2.85rem);
   }
 
   .mm-live-package {
@@ -4954,7 +4943,7 @@
   }
 
   .mm-package-copy h3 {
-    font-size: clamp(2.55rem, 12vw, 3.6rem);
+    font-size: clamp(1.95rem, 8.7vw, 2.55rem);
   }
 
   .mm-package-actions {
@@ -4998,7 +4987,7 @@
   }
 
   .mm-request-copy h2 {
-    font-size: clamp(2.5rem, 11vw, 3.35rem);
+    font-size: clamp(2.15rem, 9.2vw, 2.75rem);
   }
 
   .mm-request-copy > p {
