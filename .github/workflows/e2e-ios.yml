@@ -20,14 +20,18 @@
 #     overlap is free and also leaves it settled by the time Maestro starts,
 #   * no debug symbols, no index store, no warning spew.
 #
-# Measured on this branch, job wall time excluding runner queue:
+# Measured, job wall time excluding runner queue. These hosted macOS runners
+# vary by a third between byte-identical runs, so the new rows are ranges over
+# several runs rather than single figures:
 #
-#   old workflow                       22m04   (build step 14m07)
-#   new, every cache cold              12m57   (build step  8m45)
-#   new, ios/ and DerivedData warm      8m32   (build step  4m45)
+#   old workflow                    22m04         (build step 14m07)
+#   new, every cache cold           13m00-17m20   (build step 8m45-10m30)
+#   new, caches warm                 8m30-14m00   (build step 4m45- 7m40)
 #
-# The warm row is the one an ordinary PR gets. Both caches hang off the same
-# key, so a native change misses both together and lands on the cold row.
+# Warm is what an ordinary PR gets, because the caches are keyed on native
+# inputs only and this repo's library is pure TypeScript. All three hang off the
+# same inputs, so a native change misses them together and lands on the cold row
+# rather than in a half-warm state, which measured slower than starting cold.
 #
 # Not ccache. The old version of this file installed it, set
 # `apple.ccacheEnabled` and re-ran `pod install` to pick the flag up. CocoaPods
@@ -52,6 +56,16 @@ on:
     branches:
       - main
     types: [opened, reopened, synchronize, ready_for_review]
+  # Also run on main itself, for the same reason 🛠️ Branch Checkup does, plus
+  # one this workflow cares about more: Actions caches are scoped to the ref
+  # that wrote them, and a run can only read its own ref or the default branch.
+  # Without this trigger every cache below lived on refs/pull/N/merge and died
+  # with the PR, so each new PR paid the cold path and only its second push
+  # onwards ran warm. Writing them from main is what makes a PR's *first* run
+  # the warm one.
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       cold:
@@ -75,7 +89,8 @@ jobs:
   #   - a reviewer has approved the PR (including subsequent pushes to an
   #     already-approved PR), OR
   #   - somebody dispatched the workflow by hand, which already requires write
-  #     access to this repository.
+  #     access to this repository, OR
+  #   - the event is a push to main, which is already-reviewed code.
   approval-gate:
     name: 🔐 Approval gate
     runs-on: ubuntu-latest
@@ -93,12 +108,15 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login || github.event.review.pull_request.user.login }}
         run: |
           # Dispatching a workflow requires write access, so the actor is
-          # already trusted and there is no PR to look a review up on.
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "Manual dispatch by ${{ github.actor }}; running E2E."
-            echo "approved=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
+          # already trusted and there is no PR to look a review up on. A push to
+          # main is code that has already been reviewed and merged.
+          case "${{ github.event_name }}" in
+            workflow_dispatch|push)
+              echo "Event ${{ github.event_name }} by ${{ github.actor }} is trusted; running E2E."
+              echo "approved=true" >> "$GITHUB_OUTPUT"
+              exit 0
+              ;;
+          esac
           PR_NUM="${{ github.event.pull_request.number || github.event.review.pull_request.number }}"
           if [ -z "$PR_NUM" ]; then
             echo "No PR number; skipping."
