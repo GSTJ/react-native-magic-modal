@@ -58,12 +58,12 @@ const getResultCopy = (reason: ResultReason) => {
   if (reason === "INTENTIONAL_HIDE") {
     return {
       label: "RESOLVED",
-      message: "The async function kept going.",
+      message: "show(...).promise resolved.",
     };
   }
   return {
     label: "CLEARED",
-    message: "Every pending entry received a reason.",
+    message: "All entries resolved with GLOBAL_HIDE_ALL.",
   };
 };
 
@@ -217,7 +217,7 @@ export const OriginFlow = () => {
             <i />
             MagicModalPortal
           </span>
-          <code>{isDone ? "STACK · EMPTY" : "STACK · 1 ENTRY"}</code>
+          <code>{isDone ? "STACK: EMPTY" : "STACK: 1 ENTRY"}</code>
         </div>
 
         <div className="mm-native-surface">
@@ -295,7 +295,10 @@ export const OriginFlow = () => {
                 </button>
               ))}
             </fieldset>
-            <small>Pick a number to choose the branch.</small>
+            <small>
+              Scores 0 through 3 open feedback. Scores 4 and 5 open the store
+              prompt.
+            </small>
           </article>
 
           <article
@@ -309,7 +312,7 @@ export const OriginFlow = () => {
               <code>score &lt; 4</code>
             </div>
             <h2>What got in the way?</h2>
-            <p>A sentence is enough.</p>
+            <p>Choose the closest reason.</p>
             <div className="mm-feedback-options">
               {feedbackOptions.map((value) => (
                 <button
@@ -344,7 +347,7 @@ export const OriginFlow = () => {
             </div>
             <div className="mm-store-icon">★</div>
             <h2>Would you leave a store rating?</h2>
-            <p>It helps other people decide whether to try the app.</p>
+            <p>Scores four and five reach this branch.</p>
             <div className="mm-sheet-actions">
               <button onClick={finishBranch} type="button">
                 Not now
@@ -373,14 +376,14 @@ export const OriginFlow = () => {
             <div className="mm-thanks-mark" aria-hidden="true">
               ✓
             </div>
-            <h2>Thanks for the answer.</h2>
-            <p>That finishes the rating flow.</p>
+            <h2>Thanks.</h2>
+            <p>The last modal closes and the caller resumes.</p>
             <button
               className="mm-sheet-primary"
               onClick={finishFlow}
               type="button"
             >
-              Resolve the caller
+              Resolve the promise
             </button>
           </article>
 

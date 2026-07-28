@@ -63,7 +63,7 @@
 
       <circle cx="-14" cy="70" r="4" fill="#3157ff"/>
       <text x="0" y="74" fill="#aaa298" font-family="monospace" font-size="10">MagicModalPortal</text>
-      <text x="193" y="74" fill="#aaa298" font-family="monospace" font-size="10">STACK · 1</text>
+      <text x="193" y="74" fill="#aaa298" font-family="monospace" font-size="10">STACK: 1</text>
     </g>
   </g>
 

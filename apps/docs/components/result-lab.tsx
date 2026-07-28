@@ -56,7 +56,7 @@ export const ResultLab = () => {
   return (
     <div className="mm-result-lab" data-reason={reason}>
       <div className="mm-result-controls">
-        <span>Close the same entry five ways</span>
+        <span>One modal, five close results</span>
         <fieldset aria-label="Choose a modal close path">
           {outcomes.map((outcome) => (
             <button
@@ -77,7 +77,7 @@ export const ResultLab = () => {
         <div className="mm-result-sheet" aria-hidden="true">
           <span />
           <strong>Choose an answer</strong>
-          <p>The visible sheet is the same. Its exit is not.</p>
+          <p>Pick an answer or dismiss the sheet.</p>
           <button tabIndex={-1} type="button">
             Answer 42
           </button>
