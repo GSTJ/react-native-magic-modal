@@ -9,6 +9,11 @@
       "rangeStrategy": "in-range-only"
     },
     {
+      "description": "The e2e runner image is not a free bump. macos-26 dropped the iOS 26.0 simulator runtime and the iPhone SE (3rd generation) device, and xcodebuild fails the storyboard compile with \"iOS 26.0 Platform Not Installed\" (#284, reverted). Moves by hand once the app's deployment target moves with it.",
+      "matchDepNames": ["macos"],
+      "enabled": false
+    },
+    {
       "description": "@expo/metro-runtime rides the Expo SDK and is held at the SDK version by a pnpm-workspace.yaml override, which the file rule above doesn't reach. The shared preset covers metro and friends but its expo-* pattern doesn't match the scoped name.",
       "matchPackageNames": ["@expo/metro-runtime"],
       "rangeStrategy": "in-range-only"

@@ -135,6 +135,15 @@ jobs:
     name: 🧪 Maestro smoke tests (iOS sim)
     needs: approval-gate
     if: needs.approval-gate.outputs.approved == 'true'
+    # macos-26, which #293 reverted to macos-15. "iOS 26.0 Platform Not
+    # Installed" was real, but the image was not the cause: the Xcode step below
+    # used to take the *first* /Applications/Xcode_26*.app, which is 26.0.1,
+    # whose iphonesimulator SDK wants a 26.0 runtime that no image still ships.
+    # Selecting the newest Xcode instead (26.6, against the installed 26.5
+    # runtime) builds fine here, and the device picker no longer depends on
+    # iPhone SE (3rd generation) existing. Staying on macos-26 also keeps the
+    # runner Apple Silicon, which is what makes the single-arch build below the
+    # right call.
     runs-on: macos-26
     timeout-minutes: 45
     env:
