@@ -56,27 +56,37 @@ export type IModal = {
 
 /**
  * @example
- * ```js
- * // ...
- * import { magicModal } from 'react-native-magic-toast';
+ * ```tsx
+ * import {
+ *   MagicModalHideReason,
+ *   magicModal,
+ *   useMagicModal,
+ * } from "react-native-magic-modal";
  *
- * // ...
- * const ExampleModal = () => (
- *  const { hide } = useMagicModal<{ message: string }>();
- *  <Pressable onPress={() => hide({ message: "hey" })}>
- *    <Text>Test!</Text>
- *  </Pressable>
- * )
+ * const ExampleModal = () => {
+ *   const { hide } = useMagicModal<{ message: string }>();
  *
- * const result = magicModal.show(ExampleModal);
- * console.log(await result.promise); // Returns { reason: MagicModalHideReason.INTENTIONAL_HIDE, message: "hey" } when the modal is closed by the Pressable.
+ *   return (
+ *     <Pressable onPress={() => hide({ message: "hey" })}>
+ *       <Text>Close with data</Text>
+ *     </Pressable>
+ *   );
+ * };
+ *
+ * const result = await magicModal.show<{ message: string }>(
+ *   ExampleModal,
+ * ).promise;
+ *
+ * if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
+ *   console.log(result.data.message);
+ * }
  * ```
  */
 export const magicModal = {
   /**
    * @description Pushes a modal to the Stack, it will be displayed on top of the others.
-   * @param newComponent Recieves a function that returns a modal component.
-   * @param newConfig Recieves {@link NewConfigProps}  to override the default configs.
+   * @param newComponent Receives a function that returns a modal component.
+   * @param newConfig Receives {@link NewConfigProps} to override the default configs.
    * @returns `promise`, which resolves with the {@link hide} props when the Modal is closed (if it were closed automatically, without the manual use of {@link hide}, the return would be one of {@link HideReturn}), the `modalID`, and an `update` function that swaps the modal's content while it stays open.
    * @example
    * ```js
@@ -92,6 +102,8 @@ export const magicModal = {
    * @description Hides the given modal. Prefer using `hide` from `useMagicModal`, as it already infers the modalID.
    * You should use the `magicModal.hide` function directly  only when calling from outside the modal.
    * @param props Those props will be passed to the {@link show} resolve function.
+   * @param options Targets a specific stack entry by `modalID`. Omitting the ID falls back to the
+   * topmost modal for backwards compatibility and is deprecated.
    */
   hide,
   /**

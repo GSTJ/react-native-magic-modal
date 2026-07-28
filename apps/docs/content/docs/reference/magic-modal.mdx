@@ -1,0 +1,87 @@
+---
+title: magicModal
+description: Show, hide, update, and configure modals imperatively from any part of the app.
+---
+
+`magicModal` is the global imperative API. Its methods target the
+[`MagicModalPortal`](./magic-modal-portal) mounted in the active React tree.
+
+## show
+
+```ts
+show<T>(
+  component: React.FC,
+  config?: Partial<ModalProps>,
+): {
+  promise: Promise<HideReturn<T>>;
+  modalID: string;
+  update: (component: React.FC) => void;
+}
+```
+
+Pushes a modal to the top of the stack.
+
+```tsx
+const { modalID, promise, update } = magicModal.show<Profile>(
+  () => <ProfilePicker />,
+  {
+    backdropColor: "rgba(7, 6, 18, 0.72)",
+    swipeDirection: "down",
+  },
+);
+```
+
+| Return    | Purpose                                                |
+| --------- | ------------------------------------------------------ |
+| `promise` | Resolves once when this modal closes.                  |
+| `modalID` | Addresses this exact entry from outside its component. |
+| `update`  | Replaces its content without moving or resolving it.   |
+
+See [hide results](./hide-results) for promise narrowing and [update open content](../guides/updating-content)
+for remount behavior.
+
+## hide
+
+```ts
+hide<T>(data: T, options?: { modalID?: string }): void
+```
+
+Closes one modal imperatively and resolves its promise with an intentional result.
+
+```tsx
+const { modalID } = magicModal.show(() => <UploadModal />);
+
+magicModal.hide({ uploaded: true }, { modalID });
+```
+
+<Callout type="warn">
+  Prefer [`useMagicModal`](./use-magic-modal) inside modal content. Calling
+  `hide` without a `modalID` falls back to the top entry for compatibility and
+  is deprecated.
+</Callout>
+
+## hideAll
+
+```ts
+hideAll(): void
+```
+
+Closes every entry with `MagicModalHideReason.GLOBAL_HIDE_ALL`. Useful for logout boundaries and
+test cleanup; individual hides are clearer during normal interaction flows.
+
+## enableFullWindowOverlay
+
+```ts
+enableFullWindowOverlay(): void
+```
+
+Enables rendering above native iOS modal screens. This is the default and is a no-op outside iOS.
+
+## disableFullWindowOverlay
+
+```ts
+disableFullWindowOverlay(): void
+```
+
+Disables rendering above native iOS modal screens. See [native iOS overlays](../guides/native-overlays)
+for a safe `try`/`finally` pattern.

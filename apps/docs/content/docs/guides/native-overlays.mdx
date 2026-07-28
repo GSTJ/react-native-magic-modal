@@ -1,0 +1,26 @@
+---
+title: Native iOS overlays
+description: Control whether Magic Modal renders above native modal screens such as image pickers.
+---
+
+On iOS, Magic Modal can use a full-window overlay so application modals stay above native screens.
+This is enabled by default.
+
+Disable it before an interaction that should sit behind a native picker:
+
+```tsx
+magicModal.disableFullWindowOverlay();
+
+try {
+  await openImagePicker();
+} finally {
+  magicModal.enableFullWindowOverlay();
+}
+```
+
+Both methods are no-ops on non-iOS platforms.
+
+<Callout type="warn">
+  Always re-enable the overlay in `finally`. Otherwise a rejected native
+  interaction can silently change the layering of every later modal.
+</Callout>

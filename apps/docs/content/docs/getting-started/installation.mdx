@@ -1,0 +1,103 @@
+---
+title: Installation
+description: Install Magic Modal and the React Native gesture and animation peers.
+---
+
+## Install the package
+
+<Tabs groupId="package-manager" items={["pnpm", "npm", "Yarn", "Bun"]} persist>
+  <Tab value="pnpm">
+
+```bash
+pnpm add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+```
+
+  </Tab>
+  <Tab value="npm">
+
+```bash
+npm install react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+```
+
+  </Tab>
+  <Tab value="Yarn">
+
+```bash
+yarn add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+```
+
+  </Tab>
+  <Tab value="Bun">
+
+```bash
+bun add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+```
+
+  </Tab>
+</Tabs>
+
+## Expo
+
+Let Expo select native versions compatible with your SDK:
+
+```bash
+npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+pnpm add react-native-magic-modal
+```
+
+No gesture-handler exclusion is needed. Magic Modal 9 supports both the 2.x builder API and the 3.x
+hook API.
+
+## Minimum versions
+
+| Package                      | Version |
+| ---------------------------- | ------- |
+| React                        | 18.0.0  |
+| React Native                 | 0.81.0  |
+| React Native Gesture Handler | 2.20.0  |
+| React Native Reanimated      | 4.1.0   |
+| React Native Worklets        | 0.5.0   |
+| React Native Screens         | 4.19.0  |
+
+<Callout type="warn" title="Reanimated 4 requires the New Architecture">
+  Reanimated 4 only supports React Native's New Architecture. If your app still
+  runs on the legacy architecture, migrate it before installing Magic Modal 9.
+  Keep Worklets on a version supported by your Reanimated minor; Expo chooses
+  that pair for you.
+</Callout>
+
+## Bare React Native
+
+Add the Worklets Babel plugin **last** in your plugin list:
+
+```js title="babel.config.js"
+module.exports = function (api) {
+  api.cache(true);
+
+  return {
+    presets: ["module:@react-native/babel-preset"],
+    plugins: [
+      // Other plugins…
+      "react-native-worklets/plugin",
+    ],
+  };
+};
+```
+
+Then install iOS pods:
+
+```bash
+npx pod-install
+```
+
+Expo's default Babel setup already includes the required plugin. `react-native-screens` powers the
+iOS full-window overlay used by the portal; install it even if your navigator already brings it
+transitively.
+
+<Callout type="warn" title="Upgrading from 8.0.0?">
+  Version 8.0.0 temporarily required Gesture Handler 3. Upgrade Magic Modal to 9
+  or newer, and remove `react-native-gesture-handler` from
+  `expo.install.exclude` if you added it.
+</Callout>
+
+Continue to [set up the portal](./setup).

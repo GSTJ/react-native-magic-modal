@@ -6,9 +6,15 @@ on:
     branches:
       - main
     paths:
-      - "packages/modal/**"
-  # The path filter means a workflow-only change can't redeploy the site, so
-  # a broken docs build stays broken until packages/modal happens to move.
+      - ".github/workflows/docs.yml"
+      - "apps/docs/**"
+      - "packages/modal/package.json"
+      - "packages/modal/src/**"
+      - "README.md"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -48,7 +54,7 @@ jobs:
       - name: 🏗 Get PNPM store directory
         id: pnpm-cache
         run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+          echo "pnpm_cache_dir=$(pnpm store path)" >> "$GITHUB_OUTPUT"
 
       - name: 🏗 Setup PNPM cache
         uses: actions/cache@v6
@@ -73,7 +79,7 @@ jobs:
             ${{ runner.os }}-node-modules-
 
       - name: 📦 Install Dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: 🏗 Setup Turborepo Cache
         uses: dtinth/setup-github-actions-caching-for-turbo@v1
@@ -87,9 +93,9 @@ jobs:
       - name: 📩 Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: "./packages/modal/docs"
-          # typedoc writes a .nojekyll into the output. v4 stopped bundling
-          # dotfiles by default, so without this the deployed site loses it.
+          path: "./apps/docs/out"
+          # Next assets live under _next. Preserve .nojekyll so GitHub Pages
+          # serves that directory instead of handing the export to Jekyll.
           include-hidden-files: true
 
       - name: 🚀 Deploy to GitHub Pages

@@ -1,0 +1,57 @@
+---
+title: Compose modal flows
+description: Keep confirmation, response, and follow-up modals in one readable async function.
+---
+
+Because `show` returns a promise, a modal sequence reads like the interaction itself:
+
+```tsx
+type Confirmation = { confirmed: boolean };
+
+const confirmation = await magicModal.show<Confirmation>(() => (
+  <ConfirmationModal />
+)).promise;
+
+if (
+  confirmation.reason !== MagicModalHideReason.INTENTIONAL_HIDE ||
+  !confirmation.data.confirmed
+) {
+  return;
+}
+
+const response = await saveChanges();
+
+await magicModal.show(() => <ResultModal success={response.ok} />).promise;
+```
+
+## Cancellation is part of the result
+
+Do not assume every close has `data`. A backdrop press or swipe resolves the promise with only a
+reason:
+
+```tsx
+if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
+  submit(result.data);
+} else {
+  trackCancellation(result.reason);
+}
+```
+
+This discriminated union makes cancellation explicit and prevents accidental access to a value the
+user never submitted.
+
+## Stack another modal
+
+Calling `show` while one modal is open pushes another entry. Await the inner modal before deciding
+what to do with the original:
+
+```tsx
+const account = await magicModal.show<Account>(() => <AccountPicker />).promise;
+
+if (account.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
+  await magicModal.show(() => <AccountDetails account={account.data} />)
+    .promise;
+}
+```
+
+Each call has its own `modalID`, promise, configuration, and hide lifecycle.

@@ -6,7 +6,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", ".svelte-kit/**"]
+      "outputs": ["dist/**", "out/**", ".next/**", "!.next/cache/**", ".svelte-kit/**"]
     },
     "doctor": {
       "cache": false

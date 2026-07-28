@@ -1,0 +1,55 @@
+---
+title: Your first modal
+description: Show a component, close it from inside, and await typed data.
+---
+
+Define the data the interaction returns, then pass that type to both `show` and `useMagicModal`.
+
+```tsx
+import { Pressable, Text, View } from "react-native";
+import {
+  MagicModalHideReason,
+  magicModal,
+  useMagicModal,
+} from "react-native-magic-modal";
+
+type Confirmation = {
+  confirmed: boolean;
+};
+
+function ConfirmationModal() {
+  const { hide } = useMagicModal<Confirmation>();
+
+  return (
+    <View>
+      <Text>Delete this project?</Text>
+      <Pressable onPress={() => hide({ confirmed: true })}>
+        <Text>Delete</Text>
+      </Pressable>
+      <Pressable onPress={() => hide({ confirmed: false })}>
+        <Text>Keep it</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+export async function confirmDeletion() {
+  const result = await magicModal.show<Confirmation>(() => (
+    <ConfirmationModal />
+  )).promise;
+
+  if (result.reason !== MagicModalHideReason.INTENTIONAL_HIDE) {
+    return false;
+  }
+
+  return result.data.confirmed;
+}
+```
+
+The promise also resolves when the backdrop, Android back button, swipe gesture, or `hideAll` closes
+the modal. Checking `reason` narrows the union, so `data` only exists after an intentional hide.
+
+<Cards>
+  <Card title="Compose a multi-step flow" href="../guides/modal-flows" />
+  <Card title="Understand hide results" href="../reference/hide-results" />
+</Cards>

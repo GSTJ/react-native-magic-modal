@@ -1,0 +1,47 @@
+---
+title: Modal configuration
+description: Configure animation, backdrop, swipe behavior, callbacks, and container style.
+---
+
+Pass a partial configuration as the second argument to `magicModal.show`:
+
+```tsx
+magicModal.show(() => <SettingsModal />, {
+  animationInTiming: 220,
+  backdropColor: "rgba(8, 7, 20, 0.72)",
+  swipeDirection: "down",
+});
+```
+
+## Modal options
+
+<auto-type-table
+  path="../../../../../packages/modal/src/constants/types.ts"
+  name="NewConfigProps"
+/>
+
+`NewConfigProps` is the partial override accepted by `show`. The exported `ModalProps` type is the
+fully resolved internal shape after defaults are applied.
+
+## Direction
+
+```ts
+type Direction = "up" | "down" | "left" | "right";
+```
+
+Set `swipeDirection` to `undefined` to disable the dismiss gesture. This is recommended for
+[scrollable content](../guides/gestures-and-scroll).
+
+## Callback overrides
+
+Providing `onBackdropPress` or `onBackButtonPress` replaces the default close behavior. Call the
+supplied `hide` function yourself when the override should close:
+
+```tsx
+magicModal.show(() => <DraftModal />, {
+  onBackdropPress: ({ hide }) => {
+    saveDraft();
+    hide({ reason: MagicModalHideReason.BACKDROP_PRESS });
+  },
+});
+```

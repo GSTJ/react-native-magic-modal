@@ -8,7 +8,7 @@
     "modal",
     "react-native"
   ],
-  "homepage": "https://github.com/GSTJ/react-native-magic-modal#readme",
+  "homepage": "https://gstj.github.io/react-native-magic-modal/",
   "bugs": {
     "url": "https://github.com/GSTJ/react-native-magic-modal/issues"
   },
@@ -50,7 +50,6 @@
     "format:fix": "oxfmt .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "copy:readme": "shx cp ../../README.md ./README.md",
-    "docs": "typedoc --excludeInternal --out docs ./src/index.ts",
     "test": "jest",
     "release": "release-it --ci"
   },
@@ -73,24 +72,22 @@
     "oxlint": "1.75.0",
     "pod-install": "^1.0.0",
     "react-native": "0.83.10",
+    "react-native-reanimated": "4.2.3",
+    "react-native-screens": "4.23.0",
+    "react-native-worklets": "0.7.4",
     "react-test-renderer": "19.2.0",
     "release-it": "^21.0.0",
     "shx": "^0.4.0",
     "ts-jest": "^29.2.5",
     "ts-node-dev": "^2.0.0",
-    "typedoc": "^0.28.0",
     "typescript": "^5.7.2"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-native": ">=0.81.0",
     "react-native-gesture-handler": ">=2.20.0",
-    "react-native-reanimated": ">=4.0.0",
+    "react-native-reanimated": ">=4.1.0",
+    "react-native-screens": ">=4.19.0",
     "react-native-worklets": ">=0.5.0"
-  },
-  "peerDependenciesMeta": {
-    "react-native-worklets": {
-      "optional": true
-    }
   }
 }

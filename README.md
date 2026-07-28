@@ -17,14 +17,14 @@
   </a>
 </p>
 <p align="center">
-  <a href="#documentation">Docs</a> | <a href="https://github.com/gstj/react-native-magic-modal">GitHub</a> | <a href="#faq">FAQ</a> | <a href="https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96">Article</a>
+  <a href="https://gstj.github.io/react-native-magic-modal/docs/">Docs</a> | <a href="https://github.com/gstj/react-native-magic-modal">GitHub</a> | <a href="https://gstj.github.io/react-native-magic-modal/docs/faq/">FAQ</a> | <a href="https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96">Article</a>
 </p>
 
-> [!NOTE]  
-> Simplify your modal management in React Native with the **React Native Magic Modal** library. Effortlessly control modals, streamline complex flows, and create a seamless user experience.
+> [!NOTE]
+> Magic Modal is a headless orchestration primitive: show modal content from anywhere, await a typed result, and keep styling in your own components.
 
-> [!TIP]  
-> Our new version just got released with full support for multiple modals! See the [breaking changes](https://github.com/GSTJ/react-native-magic-modal/releases).
+> [!TIP]
+> The complete guides and API reference live in the [documentation](https://gstj.github.io/react-native-magic-modal/docs/).
 
 ## Features
 
@@ -36,7 +36,7 @@
 
 React Native Magic Modal offers a superior experience compared to traditional modal implementations:
 
-- 🎨 [**Stylish and Responsive**](#examples): Designed to look great on both iOS and Android.
+- 🎨 [**Bring Your Own UI**](#examples): Style ordinary React Native content for iOS and Android.
 - 🚀 [**Developer Friendly**](#quickstart): Simple to use, with a focus on developer experience.
 - 🧩 [**Versatile**](#documentation): Adaptable to a wide range of modal scenarios.
 
@@ -51,17 +51,10 @@ React Native Magic Modal offers a superior experience compared to traditional mo
 
 ## Installation
 
-Add peer dependencies to your project, if you haven't already:
+Install the package and its native peers:
 
 ```bash
-yarn add react-native-reanimated
-yarn add react-native-gesture-handler
-```
-
-Install the package:
-
-```bash
-yarn add react-native-magic-modal
+pnpm add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
 ```
 
 Minimum peer versions:
@@ -71,11 +64,18 @@ Minimum peer versions:
 | `react`                        | 18.0.0  |
 | `react-native`                 | 0.81.0  |
 | `react-native-gesture-handler` | 2.20.0  |
-| `react-native-reanimated`      | 4.0.0   |
+| `react-native-reanimated`      | 4.1.0   |
+| `react-native-worklets`        | 0.5.0   |
+| `react-native-screens`         | 4.19.0  |
 
 Both gesture-handler majors work. Swipe-to-dismiss uses 3.x's `usePanGesture` hook when it's available and falls back to 2.x's `Gesture.Pan()` builder otherwise.
 
-On Expo there's nothing to do: `npx expo install react-native-gesture-handler` gives you whatever your SDK bundles, which is 2.x on every SDK through 57, and `npx expo-doctor` stays clean.
+Reanimated 4 requires React Native's New Architecture. In a bare React Native app, add `"react-native-worklets/plugin"` last in `babel.config.js`, then run `npx pod-install`. Expo configures the plugin through its Babel preset; install compatible native versions with:
+
+```bash
+npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+pnpm add react-native-magic-modal
+```
 
 8.0.0 was the one version that required gesture-handler 3.x. If you're on it and pinned to 2.x, upgrade to 9.0.0 or later, and drop `react-native-gesture-handler` from `expo.install.exclude` if you added it to quiet the version check.
 
@@ -83,13 +83,13 @@ On Expo there's nothing to do: `npx expo install react-native-gesture-handler` g
 
 Insert a `MagicModalPortal` at the top of your application structure, and a `GestureHandlerRootView` if you haven't already:
 
-```javascript
+```tsx
 import { MagicModalPortal } from "react-native-magic-modal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <YourAppContent />
       <MagicModalPortal /> {/** After your app component hierarchy */}
     </GestureHandlerRootView>
@@ -113,16 +113,10 @@ Showcasing modal management on iOS and Android platforms:
 
 Here's the preferred usage pattern for the library:
 
-```js
+```tsx
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import {
-  MagicModalPortal,
-  magicModal,
-  useMagicModal,
-  MagicModalHideReason
-} from "react-native-magic-modal";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { magicModal, useMagicModal, MagicModalHideReason } from "react-native-magic-modal";
 
 type ConfirmationModalReturn = {
   success: boolean;
@@ -155,7 +149,8 @@ const ResponseModal = ({ text }) => {
 
 const handleConfirmationFlow = async () => {
   // You can call `show` with or without props, depending on the requirements of the modal.
-  const result = await magicModal.show<ConfirmationModalReturn>(() => <ConfirmationModal />).promise;
+  const result = await magicModal.show<ConfirmationModalReturn>(() => <ConfirmationModal />)
+    .promise;
 
   // Hide could potentially be a backdrop press, a back button press, or a swipe gesture.
   if (result.reason !== MagicModalHideReason.INTENTIONAL_HIDE) {
@@ -172,19 +167,16 @@ const handleConfirmationFlow = async () => {
 
 export const MainScreen = () => {
   return (
-    <GestureHandlerRootView>
-      <TouchableOpacity onPress={handleConfirmationFlow}>
-        <Text>Start the modal flow!</Text>
-      </TouchableOpacity>
-      <MagicModalPortal />
-    </GestureHandlerRootView>
+    <TouchableOpacity onPress={handleConfirmationFlow}>
+      <Text>Start the modal flow!</Text>
+    </TouchableOpacity>
   );
 };
 ```
 
 You can also hide modals imperatively outside of the modal context. For that, we provide the global `hide` method, that requires a modal id:
 
-```js
+```tsx
 import { magicModal } from "react-native-magic-modal";
 
 const QuickModal = ({ text }) => {
@@ -201,26 +193,23 @@ const handleQuickModal = async () => {
   // Wait for 2 seconds before closing the modal
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  // Note that it's usually preferrable to use the `hide` method from the modal context
+  // Note that it's usually preferable to use the `hide` method from the modal context
   // You can even put it inside useEffects to handle auto-dismissal for you.
   magicModal.hide(undefined, { modalID });
 };
 
 export const MainScreen = () => {
   return (
-    <GestureHandlerRootView>
-      <TouchableOpacity onPress={handleQuickModal}>
-        <Text>Show a quick modal</Text>
-      </TouchableOpacity>
-      <MagicModalPortal />
-    </GestureHandlerRootView>
+    <TouchableOpacity onPress={handleQuickModal}>
+      <Text>Show a quick modal</Text>
+    </TouchableOpacity>
   );
 };
 ```
 
 `show` also hands you an `update` function, for when the data driving the modal lives outside of it:
 
-```js
+```tsx
 import { magicModal } from "react-native-magic-modal";
 
 const UploadModal = ({ progress }) => (
@@ -230,9 +219,7 @@ const UploadModal = ({ progress }) => (
 );
 
 const handleUpload = async (file) => {
-  const { modalID, update } = magicModal.show(() => (
-    <UploadModal progress={0} />
-  ));
+  const { modalID, update } = magicModal.show(() => <UploadModal progress={0} />);
 
   await uploadFile(file, {
     onProgress: (progress) => update(() => <UploadModal progress={progress} />),

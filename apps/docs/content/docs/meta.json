@@ -1,0 +1,13 @@
+{
+  "title": "Magic Modal",
+  "pages": [
+    "index",
+    "---Start here---",
+    "getting-started",
+    "guides",
+    "reference",
+    "---Help---",
+    "faq",
+    "resources"
+  ]
+}
