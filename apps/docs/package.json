@@ -13,6 +13,9 @@
     "typecheck": "fumadocs-mdx && next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@fontsource-variable/instrument-sans": "5.3.0",
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@fontsource/instrument-serif": "5.3.0",
     "@orama/orama": "^3.1.18",
     "fumadocs-core": "16.12.1",
     "fumadocs-mdx": "15.2.0",

@@ -1,243 +1,364 @@
 import Link from "next/link";
 
-import { ArrowRight, Code2, ExternalLink, MoveRight } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  Code2,
+} from "lucide-react";
 
-import { FeatureLab } from "@/components/feature-lab";
+import { HomeEffects } from "@/components/home-effects";
 import { InstallCommand } from "@/components/install-command";
 import { LegacyAnchorRouter } from "@/components/legacy-anchor-router";
 import { MagicMark } from "@/components/magic-mark";
-import { ModalPlayground } from "@/components/modal-playground";
+import { OriginFlow } from "@/components/origin-flow";
+import { ResultLab } from "@/components/result-lab";
 
-const flow = [
+const history = [
   {
-    command: "magicModal.show<T>()",
+    date: "21 FEB 2022",
+    href: "https://github.com/GSTJ/react-native-magic-modal/commit/64612c8",
+    title: "One imperative portal.",
+    year: "2022",
     description:
-      "Open the interaction from a screen, effect, service, or plain async function.",
-    label: "CALL",
-    title: "Open it from where the decision happens.",
+      "The first release removed visibility props from the calling screen. A component factory went to the root; a close value came back.",
   },
   {
-    command: "result.promise",
+    date: "08 JUN 2024",
+    href: "https://github.com/GSTJ/react-native-magic-modal/pull/81",
+    title: "The portal became a stack.",
+    year: "2024",
     description:
-      "The portal renders the active entry while the caller waits without coordinating global state.",
-    label: "WAIT",
-    title: "Let the stack own the interaction.",
+      "Independent entries gained their own IDs and resolvers. Reanimated motion, typed close reasons, hideAll, and the iOS overlay followed.",
   },
   {
-    command: "result.data",
+    date: "27 JUL 2026",
+    href: "https://github.com/GSTJ/react-native-magic-modal/releases/tag/magic-modal-9.0.0",
+    title: "The awkward edges stayed public.",
+    year: "2026",
     description:
-      "Confirmation, cancellation, and dismissal return as a discriminated typed result.",
-    label: "CONTINUE",
-    title: "Pick the flow back up with an answer.",
+      "update() can replace externally driven content in place. Swipe dismissal now works across Gesture Handler 2 and 3.",
   },
 ] as const;
 
 export default function HomePage() {
   return (
-    <main className="magic-home-v2" data-home-version="2">
+    <main className="magic-home" data-home-version="3" data-magic-home>
       <LegacyAnchorRouter />
+      <HomeEffects />
 
-      <header className="mh-nav">
-        <Link aria-label="Magic Modal home" className="mh-nav-brand" href="/">
-          <MagicMark size={31} />
+      <header className="mm-nav">
+        <Link aria-label="Magic Modal home" className="mm-brand" href="/">
+          <MagicMark size={34} />
           <span>Magic Modal</span>
           <code>9.0.1</code>
         </Link>
         <nav aria-label="Main navigation">
-          <Link href="/docs">Docs</Link>
-          <Link href="/docs/guides/recipes">Recipes</Link>
+          <a href="#story">Story</a>
+          <Link href="/docs/getting-started/setup">Setup</Link>
+          <Link href="/docs/reference">API</Link>
           <a
-            href="https://www.npmjs.com/package/react-native-magic-modal"
-            rel="noreferrer"
-            target="_blank"
-          >
-            npm
-          </a>
-          <a
-            className="mh-nav-github"
+            aria-label="Magic Modal on GitHub"
+            className="mm-nav-github"
             href="https://github.com/GSTJ/react-native-magic-modal"
             rel="noreferrer"
             target="_blank"
           >
-            <Code2 aria-hidden="true" size={15} />
+            <Code2 aria-hidden="true" size={16} />
             <span>GitHub</span>
-            <ExternalLink aria-hidden="true" size={11} />
           </a>
         </nav>
       </header>
 
-      <section className="mh-hero">
-        <div aria-hidden="true" className="mh-contours">
-          <i />
-          <i />
-          <i />
-          <i />
-          <i />
-        </div>
-        <div className="mh-hero-copy">
-          <span className="mh-kicker">
-            IMPERATIVE <i>/</i> AWAITABLE <i>/</i> TYPE-SAFE
-          </span>
-          <h1>
-            Open the modal.
-            <br />
-            <em>Await the answer.</em>
-          </h1>
-          <p>
-            Show any React Native modal from anywhere in your app. Await a typed
-            result, then continue exactly where the flow left off.
+      <section className="mm-hero" id="story">
+        <div className="mm-hero-copy">
+          <p className="mm-overline">
+            <span />
+            React Native · open source since 2022
           </p>
-          <div className="mh-hero-actions">
-            <Link
-              className="mh-primary-action"
-              href="/docs/getting-started/installation"
-            >
-              Build your first flow
+          <h1>
+            Product called it a <em>simple flow.</em>
+            <br />
+            It needed four modals.
+          </h1>
+          <p className="mm-hero-lede">
+            In 2022 a rating prompt branched into feedback or a store review,
+            then ended with thanks. When its trigger moved outside React, Magic
+            Modal kept the conversation in one async function.
+          </p>
+          <div className="mm-hero-actions">
+            <a className="mm-run-link" href="#original-flow">
+              Choose a rating
               <ArrowRight aria-hidden="true" size={17} />
-            </Link>
-            <Link className="mh-secondary-action" href="/docs/reference">
-              Read the API
-            </Link>
+            </a>
+            <a
+              className="mm-article-link"
+              href="https://dev.to/gabrieltaveira/you-have-been-using-react-native-modals-wrong-7hd"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <BookOpen aria-hidden="true" size={15} />
+              The 2022 write-up
+              <ArrowUpRight aria-hidden="true" size={13} />
+            </a>
           </div>
           <InstallCommand />
         </div>
 
-        <ModalPlayground />
-      </section>
+        <OriginFlow />
 
-      <section aria-label="Project proof" className="mh-proof-rail">
         <a
-          href="https://github.com/GSTJ/react-native-magic-modal/stargazers"
-          rel="noreferrer"
-          target="_blank"
+          aria-label="Continue to the origin story"
+          className="mm-scroll-cue"
+          href="#request"
         >
-          <strong>600+</strong>
-          <span>GitHub stars</span>
+          <span>Why four?</span>
+          <ArrowDown aria-hidden="true" size={15} />
         </a>
-        <a
-          href="https://www.npmjs.com/package/react-native-magic-modal"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <strong>80k+</strong>
-          <span>downloads last year</span>
-        </a>
-        <div>
-          <strong>1</strong>
-          <span>portal at the root</span>
+      </section>
+
+      <section className="mm-request" id="request">
+        <div className="mm-request-index" data-reveal>
+          <span>THE REQUEST</span>
+          <strong>01</strong>
         </div>
-        <div>
-          <strong>T</strong>
-          <span>typed end to end</span>
+        <div className="mm-request-copy" data-reveal>
+          <p>
+            Rate the app after the first like. Under four stars, ask what went
+            wrong. Otherwise, ask for a store review. Either way, finish with a
+            thank-you.
+          </p>
+          <aside>
+            <span>Three screens later</span>
+            <p>
+              The same conversation needed to run after liking a post, a
+              comment, or a product. Later, the trigger moved outside React.
+            </p>
+          </aside>
+        </div>
+        <div aria-hidden="true" className="mm-request-flags" data-reveal>
+          <code>isRatingOpen</code>
+          <code>isFeedbackOpen</code>
+          <code>isStoreReviewOpen</code>
+          <code>isThanksOpen</code>
+          <span>four booleans still do not describe the conversation</span>
         </div>
       </section>
 
-      <section className="mh-flow-section">
-        <div className="mh-section-heading">
-          <span>The flow</span>
-          <h2>Show. Wait. Continue.</h2>
+      <section className="mm-owner">
+        <div className="mm-section-copy" data-reveal>
+          <span className="mm-section-number">02 / WHERE</span>
+          <h2>The screen was the wrong owner.</h2>
           <p>
-            Keep the interaction beside the code it unlocks. No callback ladder
-            and no navigation detour.
+            A Saga cannot render a component, and repeating a modal wrapper in
+            every feed item only moves the mess around. Mount the portal once.
+            Let the function that owns the decision start the conversation.
           </p>
+          <Link href="/docs/guides/modal-flows">
+            See the flow pattern
+            <ArrowRight aria-hidden="true" size={15} />
+          </Link>
         </div>
 
-        <ol className="mh-flow-list">
-          {flow.map(({ command, description, label, title }, index) => (
-            <li key={label}>
-              <div className="mh-flow-index">
-                <span>{label}</span>
-                <code>{command}</code>
-              </div>
-              <div>
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </div>
-              {index < flow.length - 1 && (
-                <MoveRight aria-hidden="true" size={18} />
-              )}
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <FeatureLab />
-
-      <section className="mh-mechanism">
-        <div className="mh-section-heading">
-          <span>One root</span>
-          <h2>The portal stays. The stack moves.</h2>
-          <p>
-            Mount one rendering boundary near the app root. Every call pushes an
-            entry there; every hide removes one and resolves its caller.
-          </p>
-        </div>
-
-        <div className="mh-mechanism-map">
-          <div className="mh-call-sites">
-            <span>CALL SITES</span>
-            <code>navigation.ts</code>
-            <code>checkout.tsx</code>
-            <code>session.ts</code>
+        <div className="mm-owner-map" data-reveal>
+          <div className="mm-owner-callers">
+            <span>CALLERS</span>
+            <code>post.tsx</code>
+            <code>comment.tsx</code>
+            <code>product.tsx</code>
+            <code>ratingSaga.ts</code>
           </div>
-          <div aria-hidden="true" className="mh-mechanism-line">
+          <div className="mm-owner-route" aria-hidden="true">
+            <i />
+            <span>startRatingFlow()</span>
+          </div>
+          <div className="mm-owner-function">
+            <span>ONE ASYNC FUNCTION</span>
+            <strong>startRatingFlow()</strong>
+            <code>owns the branch</code>
+          </div>
+          <div className="mm-owner-route is-portal" aria-hidden="true">
             <span>show()</span>
             <i />
           </div>
-          <div className="mh-portal-node">
-            <span>APP ROOT</span>
-            <strong>MagicModalPortal</strong>
-            <div aria-hidden="true">
+          <div className="mm-owner-portal">
+            <div>
+              <MagicMark size={44} />
+              <span>
+                <small>ONE ACTIVE REACT TREE</small>
+                <strong>MagicModalPortal</strong>
+              </span>
+            </div>
+            <div aria-hidden="true" className="mm-owner-sheet-stack">
+              <i />
               <i />
               <i />
               <i />
             </div>
           </div>
-          <div aria-hidden="true" className="mh-mechanism-line is-return">
-            <i />
-            <span>resolve()</span>
-          </div>
-          <div className="mh-result-node">
-            <span>CALLER RESUMES</span>
-            <code>
-              {"{ reason,"}
-              <br />
-              {"  data }"}
-            </code>
-          </div>
         </div>
       </section>
 
-      <section className="mh-final-cta">
-        <div>
-          <span>READY WHEN THE FLOW IS</span>
-          <h2>One portal. Then every modal is a call.</h2>
+      <section className="mm-show">
+        <div className="mm-show-heading" data-reveal>
+          <span>03 / THE HANDLE</span>
+          <h2>
+            What <code>show()</code> gives back.
+          </h2>
           <p>
-            Install Magic Modal and build the first interaction you can await.
+            Each call pushes one independent entry. The returned object is
+            everything outside code needs to wait for it, address it, or replace
+            its content.
           </p>
         </div>
-        <div>
-          <Link
-            className="mh-primary-action"
-            href="/docs/getting-started/setup"
-          >
-            Set up the portal
-            <ArrowRight aria-hidden="true" size={17} />
+
+        <div className="mm-show-object" data-reveal>
+          <pre aria-label="The object returned by magicModal.show">
+            <code>
+              <span>{"{"}</span>
+              {"\n  "}
+              <b>promise</b>
+              {": Promise<HideReturn<T>>;"}
+              {"\n  "}
+              <b>modalID</b>: string;
+              {"\n  "}
+              <b>update</b>
+              {": (next: React.FC) => void;"}
+              {"\n"}
+              <span>{"}"}</span>
+            </code>
+          </pre>
+          <span className="mm-show-object-tag">RETURNED IMMEDIATELY</span>
+        </div>
+
+        <dl className="mm-show-ledger">
+          <div data-reveal>
+            <dt>
+              <code>promise</code>
+              <span>01</span>
+            </dt>
+            <dd>Resolves once, when this exact entry closes.</dd>
+          </div>
+          <div data-reveal>
+            <dt>
+              <code>modalID</code>
+              <span>02</span>
+            </dt>
+            <dd>Identifies the entry when outside code needs to target it.</dd>
+          </div>
+          <div data-reveal>
+            <dt>
+              <code>update</code>
+              <span>03</span>
+            </dt>
+            <dd>
+              Mounts replacement content at the same position, with the same ID,
+              backdrop, configuration, and pending promise.
+            </dd>
+          </div>
+        </dl>
+
+        <p className="mm-update-note" data-reveal>
+          <span>One honest footnote</span>
+          The replacement component mounts from scratch. Local React state does
+          not survive an <code>update()</code>.
+        </p>
+      </section>
+
+      <section className="mm-close">
+        <div className="mm-close-heading" data-reveal>
+          <span>04 / THE EXIT</span>
+          <h2>Closing has a type.</h2>
+          <p>
+            A submitted answer and a dismiss gesture are different outcomes.
+            Data exists only after an intentional hide, so the caller has to
+            narrow the result before reading it.
+          </p>
+          <Link href="/docs/reference/hide-results">
+            Read HideReturn&lt;T&gt;
+            <ArrowRight aria-hidden="true" size={15} />
           </Link>
-          <InstallCommand compact />
+        </div>
+        <div data-reveal>
+          <ResultLab />
         </div>
       </section>
 
-      <footer className="mh-footer">
-        <Link className="mh-nav-brand" href="/">
-          <MagicMark size={25} />
-          <span>Magic Modal</span>
-        </Link>
-        <span>MIT · built in the open by GSTJ</span>
-        <a href="https://github.com/GSTJ/react-native-magic-modal">
-          Source
-          <ExternalLink aria-hidden="true" size={11} />
-        </a>
+      <section className="mm-history">
+        <div className="mm-history-heading" data-reveal>
+          <span>05 / FOUR YEARS</span>
+          <h2>The edge cases became the library.</h2>
+          <p>
+            The public API grew when production found another awkward seam—not
+            because the landing page needed another feature card.
+          </p>
+        </div>
+
+        <ol className="mm-history-list">
+          {history.map(({ date, description, href, title, year }) => (
+            <li data-reveal key={year}>
+              <a href={href} rel="noreferrer" target="_blank">
+                <span className="mm-history-year">{year}</span>
+                <span className="mm-history-date">{date}</span>
+                <strong>{title}</strong>
+                <p>{description}</p>
+                <ArrowUpRight aria-hidden="true" size={17} />
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="mm-final">
+        <div aria-hidden="true" className="mm-fifth-sheet">
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+          <span>5</span>
+        </div>
+        <div className="mm-final-copy" data-reveal>
+          <span>THE NEXT REQUEST</span>
+          <h2>
+            Go ahead.
+            <br />
+            Add the <em>fifth.</em>
+          </h2>
+          <p>
+            The branch can stay in one async function. The portal will handle
+            what appears on screen.
+          </p>
+          <div>
+            <Link href="/docs/getting-started/setup">
+              Set up the portal
+              <ArrowRight aria-hidden="true" size={17} />
+            </Link>
+            <InstallCommand compact />
+          </div>
+        </div>
+      </section>
+
+      <footer className="mm-footer">
+        <div>
+          <Link className="mm-brand" href="/">
+            <MagicMark size={29} />
+            <span>Magic Modal</span>
+          </Link>
+          <p>Made by Gabriel Taveira from a problem I kept meeting at work.</p>
+        </div>
+        <nav aria-label="Footer navigation">
+          <Link href="/docs">Docs</Link>
+          <a href="https://github.com/GSTJ/react-native-magic-modal/releases">
+            Releases
+          </a>
+          <a href="https://www.npmjs.com/package/react-native-magic-modal">
+            npm
+          </a>
+          <a href="https://github.com/GSTJ/react-native-magic-modal">Source</a>
+        </nav>
+        <span>MIT · maintained in the open since 2022</span>
       </footer>
     </main>
   );

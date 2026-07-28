@@ -13,25 +13,23 @@ export const MagicMark = ({
     viewBox="0 0 40 40"
     width={size}
   >
-    <defs>
-      <linearGradient id="magic-mark-gradient" x1="5" x2="35" y1="4" y2="36">
-        <stop stopColor="#9B87F5" />
-        <stop offset=".48" stopColor="#6E56CF" />
-        <stop offset="1" stopColor="#42D3A5" />
-      </linearGradient>
-    </defs>
-    <rect
-      fill="url(#magic-mark-gradient)"
-      height="36"
-      rx="12"
-      width="36"
-      x="2"
-      y="2"
+    <rect fill="#151411" height="36" rx="11" width="36" x="2" y="2" />
+    <path
+      d="M10 13.5a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v13"
+      stroke="#756F65"
+      strokeLinecap="round"
+      strokeWidth="2"
     />
     <path
-      d="m12 28 4.6-15.7c.35-1.18 1.98-1.28 2.46-.15L22 19l6.58-2.5c1.2-.46 2.14.98 1.31 1.96L21.2 28.7c-.75.89-2.2.29-2.1-.87l.45-5.18-5.9 6.6c-.7.78-1.95-.24-1.65-1.25Z"
-      fill="white"
+      d="M8 19.5a4 4 0 0 1 4-4h16a4 4 0 0 1 4 4V28a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4v-8.5Z"
+      fill="#F3EEE4"
     />
-    <circle cx="29" cy="10.5" fill="#D9FFF3" r="2.2" />
+    <path
+      d="M16 20.5h8"
+      stroke="#151411"
+      strokeLinecap="round"
+      strokeWidth="2"
+    />
+    <circle cx="30" cy="10" fill="#FF6342" r="2.5" />
   </svg>
 );

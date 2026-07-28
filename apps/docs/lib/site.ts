@@ -7,7 +7,7 @@ import {
 const presetSite = defineMagicDocs({
   name: "React Native Magic Modal",
   description:
-    "Imperative, type-safe modal flows for React Native. Show a modal from anywhere and await the result.",
+    "One root portal, independent stack entries, and typed results for React Native modal flows.",
   repository: "https://github.com/GSTJ/react-native-magic-modal",
   siteUrl: "https://gstj.github.io/react-native-magic-modal",
   packageName: "react-native-magic-modal",
