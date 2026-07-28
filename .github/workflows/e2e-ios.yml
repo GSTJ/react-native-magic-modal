@@ -141,15 +141,25 @@ jobs:
       - name: 🏗 Select Xcode 26 (Swift 6.1+ for expo-modules-core)
         id: xcode
         run: |
-          # expo-modules-core 55.x uses @MainActor extension syntax (Swift 6.1+).
-          # macos-15 default is Xcode 16.4 (Swift 6.0) which can't parse it.
-          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | head -1)
+          # expo-modules-core 55.x uses @MainActor extension syntax (Swift 6.1+),
+          # so Xcode has to be 26 or newer.
+          #
+          # `sort -V | tail -1`, not `head -1`. Simulator runtimes are separate
+          # downloads now and the image only ships the ones its newest Xcode
+          # wants, so selecting the lexically first Xcode_26* picked 26.0.1 and
+          # left it with an iphonesimulator SDK (23A339) that no installed
+          # runtime satisfies. actool failed with "iOS 26.0 Platform Not
+          # Installed" and xcodebuild could not resolve any simulator
+          # destination at all.
+          ls -d /Applications/Xcode*.app 2>/dev/null || true
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
           if [ -z "$XCODE_PATH" ]; then
             echo "No Xcode 26 found; falling back to default. Pods may not compile."
           else
             sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
           fi
           xcodebuild -version
+          xcrun simctl list runtimes
           echo "version=$(xcodebuild -version | head -1 | tr -d ' ')" >> "$GITHUB_OUTPUT"
 
       # Picking the device is instant; booting it is not. The boot is deferred
@@ -261,7 +271,10 @@ jobs:
           # catalog compiler with no runtime to target, and this image ships an
           # Xcode whose iphonesimulator SDK (23A339) predates every installed
           # runtime, so actool gives up with "iOS 26.0 Platform Not Installed".
-          # Naming the device tells it which runtime to thin for.
+          # Naming the device tells it which runtime to thin for, and makes
+          # -sdk iphonesimulator redundant: the destination already pins the
+          # platform, and passing both is how the SDK and the runtime ended up
+          # disagreeing in the first place.
           # Build Release so the JS bundle is embedded — no Metro dependency at
           # runtime. This is what we want for e2e: the app must work without a
           # dev server attached. Turning the optimiser off inside the Release
@@ -284,7 +297,6 @@ jobs:
             -workspace "$WORKSPACE" \
             -scheme "$SCHEME" \
             -configuration Release \
-            -sdk iphonesimulator \
             -derivedDataPath "$DERIVED_DATA" \
             -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
             -skipPackagePluginValidation \
