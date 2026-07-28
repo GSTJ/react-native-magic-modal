@@ -13,6 +13,12 @@ import reactNative from "magic-oxlint-config/react-native";
 export default extendConfig(reactNative, {
   overrides: [
     {
+      // tools/ holds the changelog preset and its control script. Printing to
+      // the terminal is what the control is for — the CI job reads its output.
+      files: ["tools/**"],
+      rules: { "no-console": "off" },
+    },
+    {
       // release-it only looks for this exact filename, so it misses the
       // preset's `*.config.{js,…}` glob even though it is a config file.
       files: [".release-it.js"],

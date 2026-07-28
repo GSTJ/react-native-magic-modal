@@ -29,6 +29,7 @@
     "typecheck": "turbo run typecheck",
     "start": "turbo run start",
     "test": "turbo run test",
+    "changelog:check": "turbo run changelog:check --filter=react-native-magic-modal",
     "build": "turbo run build",
     "release": "turbo run release --filter=react-native-magic-modal",
     "docs": "pnpm --filter @magic-modal/docs build",
