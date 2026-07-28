@@ -1,7 +1,7 @@
 {
   "name": "magic",
   "version": "0.0.0",
-  "packageManager": "pnpm@10.34.5",
+  "packageManager": "pnpm@11.17.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GSTJ/react-native-magic-modal.git"
@@ -40,6 +40,7 @@
     }
   },
   "devDependencies": {
+    "magic-codemods": "^1.1.0",
     "turbo": "^2.5.4"
   }
 }

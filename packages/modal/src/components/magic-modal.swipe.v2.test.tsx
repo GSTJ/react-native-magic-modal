@@ -1,9 +1,11 @@
+import type { LegacyPanGesture } from "./panGesture/pan-gesture-surface.v2";
+
 import React from "react";
+
 import { act } from "@testing-library/react-native";
 
-import type { LegacyPanGesture } from "./panGesture/PanGestureSurface.v2";
 import { MagicModalHideReason } from "../constants/types";
-import { magicModal } from "../utils/magicModalHandler";
+import { magicModal } from "../utils/magic-modal-handler";
 import {
   baseEvent,
   directions,
@@ -13,11 +15,11 @@ import {
   showModal,
   slowVelocity,
   waitForHide,
-} from "./MagicModal.swipe.harness";
+} from "./magic-modal.swipe.harness";
 
 /**
  * The gesture-handler 2.x half of the swipe coverage. Its 3.x counterpart is
- * `MagicModal.swipe.v3.test.tsx`; the assertions run in the same order so the
+ * `magic-modal.swipe.v3.test.tsx`; the assertions run in the same order so the
  * two read side by side.
  *
  * 2.x has no `usePanGesture`, so `MagicModal` builds a `Gesture.Pan()` instead.
@@ -34,7 +36,7 @@ import {
  * `.onEnd` moves when `SWIPE_COMPLETE` resolves while still looking correct in a
  * manual test.
  */
-jest.mock("react-native-gesture-handler", () => {
+jest.mock<Record<string, unknown>>("react-native-gesture-handler", () => {
   const actual = jest.requireActual<Record<string, unknown>>(
     "react-native-gesture-handler",
   );
@@ -183,7 +185,7 @@ describe("MagicModal swipe gesture on gesture-handler 2.x", () => {
         await waitForHide(() => result !== undefined);
       });
 
-      expect(result).toEqual({
+      expect(result).toStrictEqual({
         reason: MagicModalHideReason.SWIPE_COMPLETE,
       });
     },

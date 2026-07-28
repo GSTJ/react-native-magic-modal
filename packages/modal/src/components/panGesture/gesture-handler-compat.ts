@@ -3,9 +3,11 @@ import type {
   GestureUpdateEvent,
   PanGestureHandlerEventPayload,
 } from "react-native-gesture-handler";
+
 // A namespace import is the only way to read an export that might not be there.
 // `import { usePanGesture }` is a hard error on gesture-handler 2.x, both when
 // typechecking and, under a real ESM loader, at runtime.
+// eslint-disable-next-line import/no-namespace -- see above: the whole point of this module is reading an export that may not exist
 import * as GestureHandler from "react-native-gesture-handler";
 
 type GestureHandlerModule = typeof GestureHandler;
@@ -19,7 +21,7 @@ type GestureHandlerModule = typeof GestureHandler;
  * `usePanGesture` actually accepts, so a rename upstream breaks `tsc` instead
  * of the app.
  */
-interface FallbackPanGestureConfig {
+type FallbackPanGestureConfig = {
   enabled?: boolean;
   minDistance?: number;
   onBegin?: (
@@ -40,11 +42,11 @@ interface FallbackPanGestureConfig {
   onFinalize?: (
     event: GestureStateChangeEvent<PanGestureHandlerEventPayload>,
   ) => void;
-}
+};
 
-interface AnimatedEventStandIn {
+type AnimatedEventStandIn = {
   _argMapping: unknown[];
-}
+};
 
 /** gesture-handler 3.x's `PanGestureConfig`, or the fallback above on 2.x. */
 export type PanGestureConfigCompat = GestureHandlerModule extends {

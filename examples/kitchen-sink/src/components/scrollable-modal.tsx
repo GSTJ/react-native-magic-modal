@@ -1,15 +1,18 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+
 import { magicModal } from "react-native-magic-modal";
+
+const items = Array.from({ length: 20 }, (_, index) => `Item ${index + 1}`);
 
 const ScrollableModal: React.FC = () => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <Text>My Scrollable Modal</Text>
-        {Array.from({ length: 20 }).map((_, index) => (
-          <Text style={styles.scrollItem} key={index}>
-            Item {index + 1}
+        {items.map((item) => (
+          <Text style={styles.scrollItem} key={item}>
+            {item}
           </Text>
         ))}
       </ScrollView>

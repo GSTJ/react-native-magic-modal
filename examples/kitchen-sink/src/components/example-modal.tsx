@@ -1,9 +1,10 @@
 /* eslint-disable react-native/no-color-literals */
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+
 import { useMagicModal } from "react-native-magic-modal";
 
-import { showToast } from "./Toast";
+import { showToast } from "./toast";
 
 export const ExampleModal = ({ body }: { body?: string }) => {
   const { hide } = useMagicModal<string>();

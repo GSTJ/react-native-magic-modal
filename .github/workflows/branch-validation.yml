@@ -10,60 +10,42 @@ on:
       - main
 
 # Reads the tree and nothing else. The pnpm and turbo caches go through the
-# Actions cache service on the runtime token.
+# Actions cache service on the runtime token. Declared here because a called
+# workflow can never exceed the caller's grant.
 permissions:
   contents: read
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
+  # Install, lint, format and typecheck now live in GSTJ/magic, so every repo
+  # runs the same steps. `concurrency` is declared inside the reusable workflow,
+  # at job level — a `workflow_call` file never gets a run of its own, so a
+  # workflow-level group there would never apply.
   checkup:
+    # `@v1` is a moving major tag, so a fix in the shared workflow lands here on
+    # the next run. Never `@main` — an unreviewed merge over there would reach
+    # every repo's CI immediately.
+    uses: GSTJ/magic/.github/workflows/ci.yml@v1
+    with:
+      test-command: pnpm run test
+      # This repo's own gate: expo-doctor catches the duplicate react-native and
+      # the SDK drift the example app is prone to.
+      extra-command: pnpm run doctor
+
+  # main's ruleset requires a check literally named "👮‍♂️ Typecheck, Healthcheck,
+  # Lint and Format". A called workflow always reports as
+  # "<caller job> / <called job>", so `checkup` can never produce that context —
+  # merging without this job would leave every future PR waiting on a check that
+  # never arrives. This one carries the name instead, and is deletable the day
+  # the ruleset is pointed at the shared workflow's own check, which is a
+  # repository settings change rather than a change to this repo.
+  #
+  # `if: always()` matters: a job skipped because its dependency failed reports
+  # as skipped, and a skipped required check counts as passed.
+  validate:
     name: 👮‍♂️ Typecheck, Healthcheck, Lint and Format
+    needs: checkup
+    if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: 🏗 Setup Repo
-        uses: actions/checkout@v7
-
-      - name: 🏗 Setup PNPM
-        uses: pnpm/action-setup@v4
-
-      - name: 🏗 Get PNPM store directory
-        id: pnpm-cache
-        run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: 🏗 Setup PNPM cache
-        uses: actions/cache@v6
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: 🏗 Setup Node
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: .nvmrc
-
-      - name: 📦 Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: 👨‍⚕️ Expo Doctor
-        run: pnpm run doctor
-
-      - name: 🏗 Setup Turborepo Cache
-        uses: dtinth/setup-github-actions-caching-for-turbo@v1
-
-      - name: 🧪 Typecheck
-        run: pnpm run typecheck
-
-      - name: 🧹 Lint
-        run: pnpm run lint
-
-      - name: 🧪 Test
-        run: pnpm run test
-
-      - name: 💅 Format
-        run: pnpm run format
+      - name: Fail unless the shared workflow passed
+        run: '[ "${{ needs.checkup.result }}" = "success" ]'

@@ -17,7 +17,7 @@ export default {
         origin: "https://kitchen-sink.expo.dev",
       },
     ],
-    "./plugins/withExpoModulesCoreSwiftStrictConcurrency",
+    "./plugins/with-expo-modules-core-swift-strict-concurrency",
   ],
   platforms: ["ios", "android", "web"],
   splash: {

@@ -1,9 +1,11 @@
+import type { PanGestureConfigCompat } from "./panGesture/gesture-handler-compat";
+
 import React from "react";
+
 import { act } from "@testing-library/react-native";
 
-import type { PanGestureConfigCompat } from "./panGesture/gestureHandlerCompat";
 import { MagicModalHideReason } from "../constants/types";
-import { magicModal } from "../utils/magicModalHandler";
+import { magicModal } from "../utils/magic-modal-handler";
 import {
   baseEvent,
   directions,
@@ -13,7 +15,7 @@ import {
   showModal,
   slowVelocity,
   waitForHide,
-} from "./MagicModal.swipe.harness";
+} from "./magic-modal.swipe.harness";
 
 /**
  * The swipe gesture is the one part of the modal the public API can't drive: it
@@ -30,9 +32,9 @@ import {
  * Defining `usePanGesture` in the mock also pins which surface renders:
  * `hasPanGestureHook` reads it off the module, so this suite exercises the
  * hook-based path whichever gesture-handler is installed. Its 2.x counterpart is
- * `MagicModal.swipe.v2.test.tsx`.
+ * `magic-modal.swipe.v2.test.tsx`.
  */
-jest.mock("react-native-gesture-handler", () => {
+jest.mock<Record<string, unknown>>("react-native-gesture-handler", () => {
   const actual = jest.requireActual<Record<string, unknown>>(
     "react-native-gesture-handler",
   );
@@ -92,7 +94,8 @@ const runOnUpdate = (
   translation: { translationX: number; translationY: number },
 ) => {
   const onUpdate = config.onUpdate as
-    ((event: UpdateEvent) => void) | undefined;
+    | ((event: UpdateEvent) => void)
+    | undefined;
 
   onUpdate?.({ ...baseEvent, ...translation } as unknown as UpdateEvent);
 };
@@ -184,7 +187,7 @@ describe("MagicModal swipe gesture on gesture-handler 3.x", () => {
         await waitForHide(() => result !== undefined);
       });
 
-      expect(result).toEqual({
+      expect(result).toStrictEqual({
         reason: MagicModalHideReason.SWIPE_COMPLETE,
       });
     },

@@ -1,5 +1,3 @@
-import React from "react";
-
 import type {
   DisableFullWindowOverlayFunction,
   EnableFullWindowOverlayFunction,
@@ -7,6 +5,9 @@ import type {
   GlobalHideFunction,
   GlobalShowFunction,
 } from "../constants/types";
+
+import React from "react";
+
 import {
   // HideReturn is used in JS Doc
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,13 +46,13 @@ const hideAll: GlobalHideAllFunction = () => {
   // Not all tests are necessarily using the provider.
   return magicModalRef.current?.hideAll();
 };
-export interface IModal {
+export type IModal = {
   show: typeof show;
   hide: typeof hide;
   hideAll: typeof hideAll;
   enableFullWindowOverlay: typeof enableFullWindowOverlay;
   disableFullWindowOverlay: typeof disableFullWindowOverlay;
-}
+};
 
 /**
  * @example

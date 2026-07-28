@@ -1,5 +1,17 @@
+/* eslint-disable react/react-compiler -- Every hit in this file is
+ * `sharedValue.value = …` inside a `"worklet"`. Assigning to `.value` is
+ * Reanimated's only way to drive an animation from the UI thread, and the rule
+ * reads it as mutating a hook's return value. Nothing here is a React render
+ * mutation. `react/react-compiler` is a nursery rule; DECISIONS.md in GSTJ/magic
+ * says to switch it off locally when it misbehaves rather than contort the code.
+ */
+
+import type { Direction, ModalChildren, ModalProps } from "../constants/types";
+import type { SwipeGestureSpec } from "./panGesture";
+
 import React, { memo, useMemo } from "react";
 import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -19,12 +31,10 @@ import Animated, {
 } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
 
-import type { Direction, ModalChildren, ModalProps } from "../constants/types";
-import type { SwipeGestureSpec } from "./panGesture";
-import { defaultDirection } from "../constants/defaultConfig";
+import { defaultDirection } from "../constants/default-config";
 import { MagicModalHideReason } from "../constants/types";
-import { styles } from "./MagicModalPortal/MagicModalPortal.styles";
-import { useInternalMagicModal } from "./MagicModalProvider";
+import { useInternalMagicModal } from "./magic-modal-provider";
+import { styles } from "./MagicModalPortal/magic-modal-portal.styles";
 import { PanGestureSurface } from "./panGesture";
 
 export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -100,12 +110,12 @@ export const MagicModal = memo(
      *
      * The callback names are gesture-handler 2.x's, and `PanGestureSurface`
      * maps them to whichever API the installed major exposes. See
-     * `panGesture/PanGestureSurface.types.ts` for the mapping and for why
+     * `panGesture/pan-gesture-surface.types.ts` for the mapping and for why
      * nothing hangs off `onFinalize`.
      */
     const swipe = useMemo<SwipeGestureSpec>(
       () => ({
-        enabled: !!config.swipeDirection,
+        enabled: Boolean(config.swipeDirection),
         // Matches the platform touch slop. Anything smaller (we used to use 1)
         // lets finger jitter during a tap activate the pan, which cancels the
         // touch on whatever the user was actually pressing inside the modal.
@@ -183,8 +193,9 @@ export const MagicModal = memo(
               "worklet";
               if (!success) return;
 
-              // TODO: Re-enable after figuring out the Platform.OS
-              // usage inside a worklet.
+              // Web used to take the branch below instead. It is off because
+              // `Platform.OS` can't be read from inside a worklet; the old
+              // wiring is kept commented for whoever picks that back up.
               // if (Platform.OS !== "web") {
               scheduleOnRN(hide, {
                 reason: MagicModalHideReason.SWIPE_COMPLETE,
@@ -274,20 +285,20 @@ export const MagicModal = memo(
           <Animated.View
             style={[styles.overlay, styles.pointerEventsBoxNone, config.style]}
             entering={
-              !isSwipeComplete
-                ? (config.entering ??
+              isSwipeComplete
+                ? undefined
+                : (config.entering ??
                   defaultAnimationInMap[
                     config.swipeDirection ?? defaultDirection
                   ].duration(config.animationInTiming))
-                : undefined
             }
             exiting={
-              !isSwipeComplete
-                ? (config.exiting ??
+              isSwipeComplete
+                ? undefined
+                : (config.exiting ??
                   defaultAnimationOutMap[
                     config.swipeDirection ?? defaultDirection
                   ].duration(config.animationOutTiming))
-                : undefined
             }
           >
             <PanGestureSurface swipe={swipe}>

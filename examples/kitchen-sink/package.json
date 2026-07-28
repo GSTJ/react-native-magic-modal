@@ -1,35 +1,20 @@
 {
   "name": "@magic/kitchen-sink",
-  "description": "Example app for react-native-magic-modal",
   "version": "0.0.1",
   "private": true,
+  "description": "Example app for react-native-magic-modal",
   "main": "index.js",
   "scripts": {
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "start": "expo start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
-    "lint:fix": "pnpm lint --fix",
-    "format:fix": "prettier --write . --ignore-path ../../.gitignore",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "oxlint --report-unused-disable-directives",
+    "lint:fix": "oxlint --report-unused-disable-directives --fix",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "doctor": "pnpm expo-doctor"
-  },
-  "expo": {
-    "doctor": {
-      "reactNativeDirectoryCheck": {
-        "exclude": [
-          "react-native-magic-modal"
-        ]
-      }
-    },
-    "install": {
-      "exclude": [
-        "react-native-reanimated",
-        "react-native-gesture-handler"
-      ]
-    }
   },
   "dependencies": {
     "@expo/metro-runtime": "~55.0.12",
@@ -51,10 +36,26 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@magic/prettier-config": "workspace:*",
-    "@magic/tsconfig": "workspace:*",
     "expo-doctor": "1.20.1",
-    "magic-eslint-config": "workspace:*"
+    "magic-oxfmt-config": "^1.2.0",
+    "magic-oxlint-config": "^1.2.0",
+    "magic-tsconfig": "^1.2.0",
+    "oxfmt": "0.60.0",
+    "oxlint": "1.75.0"
   },
-  "prettier": "@magic/prettier-config"
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "react-native-magic-modal"
+        ]
+      }
+    },
+    "install": {
+      "exclude": [
+        "react-native-reanimated",
+        "react-native-gesture-handler"
+      ]
+    }
+  }
 }

@@ -1,45 +1,22 @@
 {
-  "rebaseWhen": "behind-base-branch",
-  "postUpdateOptions": ["pnpmDedupe"],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["github>GSTJ/magic"],
   "packageRules": [
     {
-      "matchDepTypes": ["devDependencies"],
-      "automerge": true
-    },
-    {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
-    },
-    {
-      "description": "The example app's runtime versions are dictated by the installed Expo SDK, and expo-doctor fails the build when they drift. Refresh the lockfile inside the declared ranges, never widen them. SDK jumps are done by hand.",
+      "description": "The example app's runtime versions are dictated by the installed Expo SDK, and expo-doctor fails the build when they drift. The shared preset names the usual suspects; this widens it to everything the example app declares. Refresh the lockfile inside the declared ranges, never widen them. SDK jumps are done by hand.",
       "matchFileNames": ["examples/kitchen-sink/package.json"],
       "matchDepTypes": ["dependencies", "devDependencies"],
       "rangeStrategy": "in-range-only"
     },
     {
-      "description": "Metro is pinned to whatever line React Native ships with, same reason. @expo/metro-runtime rides the Expo SDK and is held at the SDK version by a pnpm-workspace.yaml override, which the file rule above doesn't reach.",
-      "matchPackageNames": [
-        "metro",
-        "metro-config",
-        "metro-resolver",
-        "@expo/metro-runtime"
-      ],
+      "description": "@expo/metro-runtime rides the Expo SDK and is held at the SDK version by a pnpm-workspace.yaml override, which the file rule above doesn't reach. The shared preset covers metro and friends but its expo-* pattern doesn't match the scoped name.",
+      "matchPackageNames": ["@expo/metro-runtime"],
       "rangeStrategy": "in-range-only"
     },
     {
-      "description": "react-test-renderer has to match the installed react exactly or @testing-library/react-native refuses to run the suite. React's version comes from the Expo SDK, so this one moves by hand alongside it.",
-      "matchPackageNames": ["react-test-renderer"],
-      "enabled": false
-    },
-    {
-      "description": "packages/modal builds and tests against the same react-native the example app runs, which the Expo SDK dictates. Bumping it on its own installs a second copy and expo-doctor fails on the duplicate. Moves by hand with the SDK.",
+      "description": "Stricter than the shared preset, which only holds react-native to in-range. packages/modal builds and tests against the same react-native the example app runs, which the Expo SDK dictates. Bumping it on its own installs a second copy and expo-doctor fails on the duplicate. Moves by hand with the SDK.",
       "matchPackageNames": ["react-native", "@react-native/{/,}**"],
       "enabled": false
-    },
-    {
-      "description": "typescript-eslint ships @typescript-eslint/eslint-plugin and /parser, and ESLint throws `Cannot redefine plugin` if a separate copy of the plugin ends up in the tree. Bump them together.",
-      "matchPackageNames": ["typescript-eslint", "@typescript-eslint/{/,}**"],
-      "groupName": "typescript-eslint"
     }
   ]
 }

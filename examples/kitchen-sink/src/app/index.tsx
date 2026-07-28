@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-color-literals */
 import type { Direction } from "react-native-magic-modal";
+
 import React from "react";
 import {
   Platform,
@@ -8,15 +9,18 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-import { magicModal, MagicModalHideReason } from "react-native-magic-modal";
-import { ZoomIn, ZoomOut } from "react-native-reanimated";
+
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-import { ExampleModal } from "@/components/ExampleModal";
-import { showKeyboardAvoidingModal } from "@/components/KeyboardAvoidingModal";
-import { showScrollableModal } from "@/components/ScrollableModal";
-import { showToast } from "../components/Toast";
+import { magicModal, MagicModalHideReason } from "react-native-magic-modal";
+import { ZoomIn, ZoomOut } from "react-native-reanimated";
+
+import { ExampleModal } from "@/components/example-modal";
+import { showKeyboardAvoidingModal } from "@/components/keyboard-avoiding-modal";
+import { showScrollableModal } from "@/components/scrollable-modal";
+
+import { showToast } from "../components/toast";
 
 const showModal = async () => {
   const swipeDirection = ["up", "down", "left", "right"][
@@ -30,7 +34,7 @@ const showModal = async () => {
   });
 
   // eslint-disable-next-line no-console
-  console.log("Modal ID: " + modalResponse.modalID);
+  console.log(`Modal ID: ${modalResponse.modalID}`);
 
   // Closing the modal automatically, programmatically
   setTimeout(() => {
@@ -41,18 +45,19 @@ const showModal = async () => {
   console.log("Modal closed with response:", await modalResponse.promise);
 };
 
-interface ModalResponse {
+type ModalResponse = {
   message: string;
-}
+};
+
+const wait = (ms: number) =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, ms);
+  });
 
 const showReplacingModals = async () => {
   const modalResponse = magicModal.show<ModalResponse>(() => <ExampleModal />);
 
-  await new Promise<void>((resolve) =>
-    setTimeout(() => {
-      resolve();
-    }, 1000),
-  );
+  await wait(1000);
 
   magicModal.hide<ModalResponse>(
     { message: "close timeout" },
@@ -71,7 +76,7 @@ const showReplacingModals = async () => {
   });
 };
 
-const showUndismissableModal = async () => {
+const showUndismissableModal = () => {
   magicModal.show(() => <ExampleModal />, {
     onBackButtonPress: () => {},
     onBackdropPress: () => {},
@@ -79,7 +84,7 @@ const showUndismissableModal = async () => {
   });
 };
 
-const showZoomInModal = async () => {
+const showZoomInModal = () => {
   magicModal.show(() => <ExampleModal />, {
     entering: ZoomIn,
     exiting: ZoomOut,
@@ -88,11 +93,6 @@ const showZoomInModal = async () => {
     animationOutTiming: 1000,
   });
 };
-
-const wait = (ms: number) =>
-  new Promise<void>((resolve) => {
-    setTimeout(resolve, ms);
-  });
 
 const showUpdatingModal = async () => {
   const { modalID, update } = magicModal.show(() => (
@@ -115,7 +115,7 @@ const showNoFullWindowOverlayModal = async () => {
   magicModal.enableFullWindowOverlay();
 };
 
-export default () => {
+const KitchenSinkScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <StatusBar style="dark" />
@@ -192,6 +192,8 @@ export default () => {
     </ScrollView>
   );
 };
+
+export default KitchenSinkScreen;
 
 export const styles = StyleSheet.create({
   container: {

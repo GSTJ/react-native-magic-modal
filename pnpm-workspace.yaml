@@ -1,5 +1,4 @@
 packages:
-  - tools/*
   - packages/*
   - examples/*
 
@@ -20,5 +19,20 @@ overrides:
 patchedDependencies:
   "minimatch@3.1.5": "patches/minimatch@3.1.5.patch"
 
-onlyBuiltDependencies:
-  - "@swc/core"
+# pnpm 11 renamed `onlyBuiltDependencies` to `allowBuilds`, which is a map so a
+# package can also be explicitly denied.
+allowBuilds:
+  "@swc/core": true
+
+# pnpm 11 quarantines anything published in the last 24 hours and enforces it on
+# `--frozen-lockfile`, so CI refuses a lockfile that adopts a release on its
+# publish day. These four were adopted deliberately within that window. Delete
+# each line once the version ages past it — they are no-ops from then on.
+minimumReleaseAgeExclude:
+  - "magic-oxlint-config@1.2.0"
+  - "magic-oxfmt-config@1.2.0"
+  - "magic-tsconfig@1.2.0"
+  - "magic-codemods@1.1.0"
+  # Our own plugin, published from this account 2026-07-27 — same first-party
+  # exemption the sibling repos carry. Version-pinned like the rest.
+  - "eslint-plugin-safe-jsx@1.3.0"

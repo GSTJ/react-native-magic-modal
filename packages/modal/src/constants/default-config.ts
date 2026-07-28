@@ -1,4 +1,5 @@
 import type { ModalProps } from "./types";
+
 import { ANIMATION_DURATION_IN_MS } from "./animations";
 
 export const defaultDirection = "down";

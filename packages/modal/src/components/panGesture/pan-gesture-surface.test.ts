@@ -10,12 +10,12 @@
  * fresh registry, because the constant is read exactly once per process.
  */
 
-interface IsolatedModules {
+type IsolatedModules = {
   picked: unknown;
   v2: unknown;
   v3: unknown;
   hasPanGestureHook: boolean;
-}
+};
 
 /**
  * The surfaces have to come out of the same registry as `PanGestureSurface`
@@ -28,24 +28,27 @@ const loadWith = (gestureHandlerOverrides: Record<string, unknown>) => {
   let loaded: IsolatedModules | undefined;
 
   jest.isolateModules(() => {
-    jest.doMock("react-native-gesture-handler", () => ({
-      ...jest.requireActual<Record<string, unknown>>(
-        "react-native-gesture-handler",
-      ),
-      ...gestureHandlerOverrides,
-    }));
+    jest.doMock<Record<string, unknown>>(
+      "react-native-gesture-handler",
+      () => ({
+        ...jest.requireActual<Record<string, unknown>>(
+          "react-native-gesture-handler",
+        ),
+        ...gestureHandlerOverrides,
+      }),
+    );
 
     const { PanGestureSurface } = load<{ PanGestureSurface: unknown }>(
       "./index",
     );
     const { PanGestureSurfaceV2 } = load<{ PanGestureSurfaceV2: unknown }>(
-      "./PanGestureSurface.v2",
+      "./pan-gesture-surface.v2",
     );
     const { PanGestureSurfaceV3 } = load<{ PanGestureSurfaceV3: unknown }>(
-      "./PanGestureSurface.v3",
+      "./pan-gesture-surface.v3",
     );
     const { hasPanGestureHook } = load<{ hasPanGestureHook: boolean }>(
-      "./gestureHandlerCompat",
+      "./gesture-handler-compat",
     );
 
     loaded = {

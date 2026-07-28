@@ -1,7 +1,8 @@
 import * as React from "react";
+
 import { ScrollViewStyleReset } from "expo-router/html";
 
-export default ({ children }: { children: React.ReactNode }) => (
+const Root = ({ children }: { children: React.ReactNode }) => (
   <html lang="en">
     <head>
       <meta charSet="utf-8" />
@@ -16,3 +17,5 @@ export default ({ children }: { children: React.ReactNode }) => (
     <body>{children}</body>
   </html>
 );
+
+export default Root;

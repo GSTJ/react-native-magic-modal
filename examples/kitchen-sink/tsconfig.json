@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": ["expo/tsconfig.base", "@magic/tsconfig/base.json"],
+  "extends": ["expo/tsconfig.base", "magic-tsconfig/base.json"],
   "compilerOptions": {
     "jsx": "react-native",
     "baseUrl": ".",
@@ -8,8 +8,7 @@
       "@/*": ["./src/*"],
       "react-native-magic-modal": ["../../packages/modal/src"],
       "react-native-magic-modal/*": ["../../packages/modal/src/*"]
-    },
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    }
   },
   "include": ["."],
   "exclude": ["node_modules", "android", "ios"]

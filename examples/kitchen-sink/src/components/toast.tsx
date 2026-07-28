@@ -1,9 +1,11 @@
 /* eslint-disable react-native/no-color-literals */
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
+
+import { StatusBar } from "expo-status-bar";
+
 import { magicModal, useMagicModal } from "react-native-magic-modal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
 
 const Toast = () => {
   const insets = useSafeAreaInsets();

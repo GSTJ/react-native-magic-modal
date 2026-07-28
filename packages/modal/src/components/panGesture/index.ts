@@ -1,11 +1,11 @@
-import { hasPanGestureHook } from "./gestureHandlerCompat";
-import { PanGestureSurfaceV2 } from "./PanGestureSurface.v2";
-import { PanGestureSurfaceV3 } from "./PanGestureSurface.v3";
+import { hasPanGestureHook } from "./gesture-handler-compat";
+import { PanGestureSurfaceV2 } from "./pan-gesture-surface.v2";
+import { PanGestureSurfaceV3 } from "./pan-gesture-surface.v3";
 
 export type {
   PanGestureSurfaceProps,
   SwipeGestureSpec,
-} from "./PanGestureSurface.types";
+} from "./pan-gesture-surface.types";
 
 /**
  * The swipe surface for the installed gesture-handler.

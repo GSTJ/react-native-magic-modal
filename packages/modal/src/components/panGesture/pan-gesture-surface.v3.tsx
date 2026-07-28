@@ -1,9 +1,11 @@
+import type { PanGestureConfigCompat } from "./gesture-handler-compat";
+import type { PanGestureSurfaceProps } from "./pan-gesture-surface.types";
+
 import React, { useMemo } from "react";
+
 import { GestureDetector } from "react-native-gesture-handler";
 
-import type { PanGestureConfigCompat } from "./gestureHandlerCompat";
-import type { PanGestureSurfaceProps } from "./PanGestureSurface.types";
-import { usePanGestureCompat } from "./gestureHandlerCompat";
+import { usePanGestureCompat } from "./gesture-handler-compat";
 
 /**
  * Swipe surface for gesture-handler 3.x, built on the `usePanGesture` hook.

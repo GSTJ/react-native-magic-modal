@@ -1,10 +1,12 @@
 /* eslint-disable react-native/no-color-literals */
 import type { Direction } from "react-native-magic-modal";
+
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+
 import { magicModal, MagicModalHideReason } from "react-native-magic-modal";
 
-import { ExampleModal } from "@/components/ExampleModal";
+import { ExampleModal } from "@/components/example-modal";
 
 const directions = ["up", "down", "left", "right"] as const;
 
@@ -25,7 +27,7 @@ const initialReasons = {
  * reason" line. A Maestro flow can then assert that the modal it opened is the
  * one that got dismissed, and one screenshot covers all four directions.
  */
-export default () => {
+const SwipeScreen = () => {
   const [reasons, setReasons] =
     React.useState<Record<Direction, string>>(initialReasons);
 
@@ -73,6 +75,8 @@ export default () => {
     </View>
   );
 };
+
+export default SwipeScreen;
 
 const styles = StyleSheet.create({
   container: {
