@@ -14,9 +14,20 @@
 #     defaults to — 676 source files were being compiled 1385 times,
 #   * a cache of the prebuilt ios/ directory, Pods included, so `expo prebuild`
 #     and `pod install` only run when a native input actually changed,
+#   * a cache of DerivedData on the same key, so an ordinary PR relinks instead
+#     of recompiling,
 #   * the simulator boots alongside the compile, which is the one place the
 #     overlap is free and also leaves it settled by the time Maestro starts,
 #   * no debug symbols, no index store, no warning spew.
+#
+# Measured on this branch, job wall time excluding runner queue:
+#
+#   old workflow                       22m04   (build step 14m07)
+#   new, every cache cold              12m57   (build step  8m45)
+#   new, ios/ and DerivedData warm      8m32   (build step  4m45)
+#
+# The warm row is the one an ordinary PR gets. Both caches hang off the same
+# key, so a native change misses both together and lands on the cold row.
 #
 # Not ccache. The old version of this file installed it, set
 # `apple.ccacheEnabled` and re-ran `pod install` to pick the flag up. CocoaPods
@@ -187,9 +198,11 @@ jobs:
       # packages/modal is deliberately absent: the library is pure TypeScript
       # with no podspec and no ios/ directory, so a change to it cannot alter
       # the native build. That is what makes the common PR in this repo a cache
-      # hit. JS sources are absent for the same reason plus one more — the Xcode
-      # bundling phase is marked alwaysOutOfDate, so it reruns on every build no
-      # matter what these caches hold, and the bundle is always current.
+      # hit. If the library ever grows native code, add it to this list or the
+      # caches below will serve a build that does not contain it. JS sources are
+      # absent for a second reason as well — the Xcode bundling phase is marked
+      # alwaysOutOfDate ("will be run during every build"), so it reruns no
+      # matter what these caches hold and the bundle is always current.
       #
       # This file is absent too. xcodebuild flags do not change what prebuild
       # produces, so keying on it would only mean every CI tweak threw away a
@@ -208,10 +221,13 @@ jobs:
           path: ${{ env.EXAMPLE_DIR }}/ios
           key: ios-dir-${{ steps.key.outputs.native }}
 
-      # Experiment: with prebuild skipped on an ios/ hit, nothing regenerates
-      # the Xcode project between runs, so a restored DerivedData may survive
-      # as a valid incremental state. The JS bundle phase is alwaysOutOfDate
-      # and reruns regardless, so a hit can never serve stale JS.
+      # With prebuild skipped on an ios/ hit, nothing regenerates the Xcode
+      # project between runs, so a restored DerivedData is still a valid
+      # incremental state and the build step drops from 8m45 to 4m45. Same key
+      # as ios/ on purpose: a restored ios/ against an empty DerivedData is the
+      # one combination that is slower than starting cold, so the two should
+      # never miss independently. 1.2 GB, which is why nothing else in this
+      # workflow keeps a cache it does not need.
       - name: ♻️ Restore DerivedData
         id: dd-cache
         if: ${{ github.event.inputs.cold != 'true' }}
