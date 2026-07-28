@@ -74,7 +74,11 @@ jobs:
     name: 🧪 Maestro smoke tests (iOS sim)
     needs: approval-gate
     if: needs.approval-gate.outputs.approved == 'true'
-    runs-on: macos-26
+    # Not macos-26: that image ships iOS 26.2/26.4/26.5 simulator runtimes but
+    # not 26.0, and xcodebuild fails the storyboard compile with "iOS 26.0
+    # Platform Not Installed". macos-15 has 26.0 alongside Xcode 26. #284 moved
+    # it and broke the build; this puts it back.
+    runs-on: macos-15
     timeout-minutes: 60
     env:
       EXAMPLE_DIR: examples/kitchen-sink
