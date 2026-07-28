@@ -1,3 +1,38 @@
+# ✍️ Description:
+# Smoke-test the kitchen-sink example with Maestro flows on approved PRs.
+#
+# The whole thing is one macOS job on purpose. Sharding the flows across a
+# matrix was measured and rejected: the two flows execute in 16 seconds, but
+# Maestro spends ~60s per invocation starting its XCUITest driver, and a second
+# runner would also pay job setup, checkout, a .app transfer and another
+# simulator boot. Splitting 16 seconds of work behind 4 minutes of fixed cost
+# makes the job slower, free runners or not. Revisit if the flow set grows past
+# a few minutes of actual execution.
+#
+# Speed comes from not doing redundant work instead:
+#   * one architecture instead of the two-slice universal binary that Release
+#     defaults to — 676 source files were being compiled 1385 times,
+#   * a cache of the prebuilt ios/ directory, Pods included, so `expo prebuild`
+#     and `pod install` only run when a native input actually changed,
+#   * the simulator boots alongside the compile, which is the one place the
+#     overlap is free and also leaves it settled by the time Maestro starts,
+#   * no debug symbols, no index store, no warning spew.
+#
+# Not ccache. The old version of this file installed it, set
+# `apple.ccacheEnabled` and re-ran `pod install` to pick the flag up. CocoaPods
+# wires ccache in through the CC/CXX build settings, and Xcode 26's build system
+# ignores those for compilation, so the launcher was never executed: the last
+# run to use it finished with "Cache size (GiB): 0.0 / 5.0". Measured, not
+# assumed.
+#
+# Also not `expo run:ios`. It re-runs `pod install`, waits on a Metro that
+# --no-bundler never started, and finishes by opening
+# `<scheme>://expo-development-client/?url=http://<lan-ip>:8081` on the device.
+# This app has no expo-dev-client, so that deep link resolves to nothing and is
+# pure downside — it is the step that intermittently fails with
+# LSApplicationWorkspaceErrorDomain 115. Driving xcodebuild and simctl directly
+# removes it rather than retrying it.
+
 name: 📱 E2E iOS (Maestro)
 on:
   pull_request_review:
@@ -6,6 +41,12 @@ on:
     branches:
       - main
     types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      cold:
+        description: "Ignore every cache (measures the cold path)"
+        type: boolean
+        default: false
 
 # Default for both jobs. The approval gate widens it by one scope.
 permissions:
@@ -21,7 +62,9 @@ jobs:
   # Run the (expensive) macOS build when:
   #   - the PR is opened/updated by the repo owner (GSTJ), OR
   #   - a reviewer has approved the PR (including subsequent pushes to an
-  #     already-approved PR).
+  #     already-approved PR), OR
+  #   - somebody dispatched the workflow by hand, which already requires write
+  #     access to this repository.
   approval-gate:
     name: 🔐 Approval gate
     runs-on: ubuntu-latest
@@ -38,6 +81,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login || github.event.review.pull_request.user.login }}
         run: |
+          # Dispatching a workflow requires write access, so the actor is
+          # already trusted and there is no PR to look a review up on.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual dispatch by ${{ github.actor }}; running E2E."
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           PR_NUM="${{ github.event.pull_request.number || github.event.review.pull_request.number }}"
           if [ -z "$PR_NUM" ]; then
             echo "No PR number; skipping."
@@ -75,27 +125,43 @@ jobs:
     needs: approval-gate
     if: needs.approval-gate.outputs.approved == 'true'
     runs-on: macos-26
-    timeout-minutes: 60
+    timeout-minutes: 45
     env:
       EXAMPLE_DIR: examples/kitchen-sink
       APP_ID: com.gstj.reactnativemagicmodalexample
+      # Bump to invalidate every cache this workflow keeps.
+      CACHE_EPOCH: v1
+      MAESTRO_VERSION: "2.7.0"
+      MAESTRO_CLI_NO_ANALYTICS: "1"
 
     steps:
       - name: 🏗 Setup Repo
         uses: actions/checkout@v7
 
       - name: 🏗 Select Xcode 26 (Swift 6.1+ for expo-modules-core)
+        id: xcode
         run: |
           # expo-modules-core 55.x uses @MainActor extension syntax (Swift 6.1+).
           # macos-15 default is Xcode 16.4 (Swift 6.0) which can't parse it.
           XCODE_PATH=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | head -1)
           if [ -z "$XCODE_PATH" ]; then
             echo "No Xcode 26 found; falling back to default. Pods may not compile."
-            xcodebuild -version
           else
             sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
-            xcodebuild -version
           fi
+          xcodebuild -version
+          echo "version=$(xcodebuild -version | head -1 | tr -d ' ')" >> "$GITHUB_OUTPUT"
+
+      # Picking the device is instant; booting it is not. The boot is deferred
+      # to the step just before xcodebuild so it overlaps the compile.
+      - name: 📱 Pick iOS simulator
+        id: sim
+        run: |
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys; d=json.load(sys.stdin)['devices']; \
+            rt=sorted(k for k in d if 'iOS' in k); \
+            print([x['udid'] for x in d[rt[-1]] if 'iPhone' in x['name']][-1])")
+          echo "Using simulator UDID: $UDID"
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
 
       - name: 🏗 Setup PNPM
         uses: pnpm/action-setup@v4
@@ -106,133 +172,213 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
-      - name: 🏗 Setup Ruby (for CocoaPods)
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.4.10"
-          bundler-cache: false
-
-      - name: 🏗 Install CocoaPods
-        run: gem install cocoapods --no-document
-
-      - name: 🏗 Get PNPM store directory
-        id: pnpm-cache
+      # Everything that decides what `expo prebuild` + `pod install` produce.
+      #
+      # packages/modal is deliberately absent: the library is pure TypeScript
+      # with no podspec and no ios/ directory, so a change to it cannot alter
+      # the native build. That is what makes the common PR in this repo a cache
+      # hit. JS sources are absent for the same reason plus one more — the Xcode
+      # bundling phase is marked alwaysOutOfDate, so it reruns on every build no
+      # matter what these caches hold, and the bundle is always current.
+      #
+      # This file is absent too. xcodebuild flags do not change what prebuild
+      # produces, so keying on it would only mean every CI tweak threw away a
+      # gigabyte of warm cache. If you change how prebuild or pod install
+      # themselves are invoked, bump CACHE_EPOCH.
+      - name: 🔑 Compute native cache key
+        id: key
         run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+          echo "native=${CACHE_EPOCH}-${{ steps.xcode.outputs.version }}-${{ hashFiles('pnpm-lock.yaml', 'patches/**', '.nvmrc', 'examples/kitchen-sink/package.json', 'examples/kitchen-sink/app.config.ts', 'examples/kitchen-sink/plugins/**', 'examples/kitchen-sink/assets/**') }}" >> "$GITHUB_OUTPUT"
 
-      - name: 🏗 Setup PNPM cache
-        uses: actions/cache@v6
+      - name: ♻️ Restore prebuilt ios/ (Pods included)
+        id: ios-cache
+        if: ${{ github.event.inputs.cold != 'true' }}
+        uses: actions/cache/restore@v6
         with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          path: ${{ env.EXAMPLE_DIR }}/ios
+          key: ios-dir-${{ steps.key.outputs.native }}
+
+      - name: ♻️ Restore Maestro CLI
+        id: maestro-cache
+        if: ${{ github.event.inputs.cold != 'true' }}
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/.maestro
+          key: maestro-${{ env.MAESTRO_VERSION }}
+
+      - name: 🏗 Install Maestro CLI
+        run: |
+          if [ ! -x "$HOME/.maestro/bin/maestro" ]; then
+            curl -fsSL "https://get.maestro.mobile.dev" | bash
+          fi
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
 
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 🏗 Install ccache (Pods enable it via expo-build-properties)
-        run: |
-          brew install ccache
-          ccache --version
-          ccache --max-size=2G
-          echo "CCACHE_DIR=$HOME/.ccache" >> "$GITHUB_ENV"
-          echo "CCACHE_SLOPPINESS=clang_index_store,file_macro,include_file_mtime,include_file_ctime,time_macros" >> "$GITHUB_ENV"
-          echo "CCACHE_FILECLONE=true" >> "$GITHUB_ENV"
-          echo "CCACHE_DEPEND=true" >> "$GITHUB_ENV"
-          echo "CCACHE_INODECACHE=true" >> "$GITHUB_ENV"
-
-      # Split restore + save so the warmed caches get uploaded even when the
-      # later maestro step fails. actions/cache only saves on whole-job
-      # success; restore/save lets us save unconditionally.
-      - name: 🗄 Restore ccache compiler cache
-        id: ccache-restore
-        uses: actions/cache/restore@v6
-        with:
-          path: ~/.ccache
-          key: ${{ runner.os }}-ccache-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-ccache-
-
-      - name: 🗄 Restore CocoaPods (specs + downloaded sources)
-        id: pods-cache-restore
-        uses: actions/cache/restore@v6
-        with:
-          path: |
-            ~/.cocoapods
-            ~/Library/Caches/CocoaPods
-          key: ${{ runner.os }}-pods-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-cache-
-
-      - name: 🗄 Restore iOS Pods/build/DerivedData
-        id: ios-cache-restore
-        uses: actions/cache/restore@v6
-        with:
-          path: |
-            ${{ env.EXAMPLE_DIR }}/ios/Pods
-            ${{ env.EXAMPLE_DIR }}/ios/build
-            ~/Library/Developer/Xcode/DerivedData
-          # Pods.lock changes when any native dep version moves; keying on
-          # the workspace lockfile is a safe proxy until ios/Podfile.lock
-          # is tracked in git.
-          key: ${{ runner.os }}-ios-pods-derived-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-ios-pods-derived-
-
-      - name: 🏗 Install Maestro CLI
-        run: |
-          curl -fsSL "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
-
-      - name: 🔎 Verify Maestro
-        run: maestro --version
-
-      - name: 📱 Boot iOS Simulator
-        id: boot-sim
-        run: |
-          # Use the latest iPhone simulator already available on the runner image.
-          DEVICE_UDID=$(xcrun simctl list devices available -j \
-            | python3 -c "import json,sys; d=json.load(sys.stdin)['devices']; \
-            rt=sorted([k for k in d if 'iOS' in k]); \
-            uuids=[x['udid'] for x in d[rt[-1]] if 'iPhone' in x['name']]; \
-            print(uuids[-1])")
-          echo "Using simulator UDID: $DEVICE_UDID"
-          xcrun simctl boot "$DEVICE_UDID" || true
-          xcrun simctl bootstatus "$DEVICE_UDID" -b
-          echo "device_udid=$DEVICE_UDID" >> "$GITHUB_OUTPUT"
-
-      - name: 🛠 Expo prebuild (iOS)
+      - name: 🛠 Expo prebuild (iOS) + install pods
+        if: ${{ steps.ios-cache.outputs.cache-hit != 'true' }}
         working-directory: ${{ env.EXAMPLE_DIR }}
-        # No --clean so cached ios/Pods + DerivedData stay usable across runs.
-        run: pnpm expo prebuild --platform ios
-
-      - name: 🧰 Enable ccache in Podfile.properties.json
-        working-directory: ${{ env.EXAMPLE_DIR }}
-        # RN 0.83 Podfile reads `apple.ccacheEnabled` and wires ccache via
-        # react_native_post_install when true.
         run: |
-          python3 -c "
-          import json, pathlib
-          p = pathlib.Path('ios/Podfile.properties.json')
-          d = json.loads(p.read_text())
-          d['apple.ccacheEnabled'] = 'true'
-          p.write_text(json.dumps(d, indent=2))
-          print(p.read_text())
-          "
-          # The Podfile invokes pod install during prebuild — re-run it so
-          # the ccache flag actually takes effect.
-          cd ios && pod install
+          # The runner image already ships Ruby and CocoaPods, so there is no
+          # ruby/setup-ruby + `gem install` round trip to get wrong.
+          pnpm expo prebuild --platform ios --no-install
+          cd ios
+          pod --version
+          pod install
+          # Prebuild pins NODE_BINARY to whatever node it found. The hosted
+          # toolcache path moves when the runner image bumps Node, and this file
+          # rides along in the cache, so drop it and let .xcode.env resolve node
+          # from PATH at build time instead.
+          rm -f .xcode.env.local
 
-      - name: 🏗 Build & install iOS app on simulator
-        working-directory: ${{ env.EXAMPLE_DIR }}
-        run: pnpm expo run:ios --configuration Release --no-bundler --device "${{ steps.boot-sim.outputs.device_udid }}"
+      # simctl boot returns as soon as the boot starts; only bootstatus blocks.
+      # Right here is the one place the overlap is free. Earlier, next to
+      # `pnpm install` or `pod install`, the boot competes for the same disk and
+      # those steps slow down more than the boot saves. Later, after the build,
+      # the simulator is technically booted but has not settled and Maestro pays
+      # for it. Booting against the compile costs the build very little and
+      # hands Maestro a warm device.
+      - name: 📱 Start simulator boot
+        run: xcrun simctl boot "${{ steps.sim.outputs.udid }}" || true
 
-      - name: 📊 ccache stats
-        if: always()
-        run: ccache --show-stats || true
+      - name: 🏗 Build iOS app for simulator (Release, bundled JS)
+        id: build
+        run: |
+          # An .xcworkspace is a directory, so plain `ls` prints what is inside
+          # it rather than its name. -d is what makes this the workspace.
+          WORKSPACE=$(ls -d "$EXAMPLE_DIR"/ios/*.xcworkspace | head -1)
+          SCHEME=$(basename "$WORKSPACE" .xcworkspace)
+          DERIVED_DATA="$HOME/DerivedData"
+          # macos-26 runners are Apple Silicon, so the simulator only ever needs
+          # the arm64 slice. Release otherwise defaults to ARCHS_STANDARD, which
+          # for the simulator SDK is "arm64 x86_64" — every file compiled twice
+          # and every static library run through lipo.
+          ARCH=$(uname -m)
+          # Build Release so the JS bundle is embedded — no Metro dependency at
+          # runtime. This is what we want for e2e: the app must work without a
+          # dev server attached. Turning the optimiser off inside the Release
+          # configuration gets most of the compile-time win of Debug without
+          # changing which app gets built: NDEBUG and the bundled JS still come
+          # from the configuration, and the JS itself is Hermes bytecode either
+          # way, so only native frames run slower on a machine that has nothing
+          # else to do.
+          #
+          # Warnings are off and xcbeautify only echoes tasks that failed, so a
+          # green build prints a handful of lines instead of the thousands it
+          # used to stream. If this xcbeautify does not know --quiet, fall
+          # through to cat rather than losing a long build to a flag typo.
+          FMT=(cat)
+          if command -v xcbeautify >/dev/null 2>&1 && echo "" | xcbeautify --quiet >/dev/null 2>&1; then
+            FMT=(xcbeautify --quiet)
+          fi
+          set -o pipefail
+          xcodebuild \
+            -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -derivedDataPath "$DERIVED_DATA" \
+            -destination "generic/platform=iOS Simulator" \
+            -skipPackagePluginValidation \
+            -skipMacroValidation \
+            -showBuildTimingSummary \
+            ARCHS="$ARCH" \
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            EXPO_NO_CAPABILITY_SYNC=1 \
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            DEBUG_INFORMATION_FORMAT=dwarf \
+            GCC_GENERATE_DEBUGGING_SYMBOLS=NO \
+            SWIFT_SERIALIZE_DEBUGGING_OPTIONS=NO \
+            GCC_WARN_INHIBIT_ALL_WARNINGS=YES \
+            SWIFT_SUPPRESS_WARNINGS=YES \
+            GCC_OPTIMIZATION_LEVEL=0 \
+            SWIFT_OPTIMIZATION_LEVEL=-Onone \
+            build | "${FMT[@]}"
+          APP_PATH=$(find "$DERIVED_DATA/Build/Products/Release-iphonesimulator" -maxdepth 2 -name "*.app" | head -1)
+          if [ -z "$APP_PATH" ]; then
+            echo "::error::No .app produced"
+            exit 1
+          fi
+          echo "APP_PATH=$APP_PATH" >> "$GITHUB_ENV"
+
+      # Save before the flows run, so a red Maestro run still leaves the next
+      # build warm. Gated on a miss so we don't re-upload identical contents.
+      - name: 💾 Save prebuilt ios/
+        if: ${{ always() && steps.ios-cache.outputs.cache-hit != 'true' && steps.build.outcome == 'success' }}
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ env.EXAMPLE_DIR }}/ios
+          key: ios-dir-${{ steps.key.outputs.native }}
+
+      - name: 💾 Save Maestro CLI
+        if: ${{ always() && steps.maestro-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v6
+        with:
+          path: ~/.maestro
+          key: maestro-${{ env.MAESTRO_VERSION }}
+
+      - name: 📲 Install app on simulator
+        timeout-minutes: 10
+        run: |
+          UDID="${{ steps.sim.outputs.udid }}"
+
+          # `simctl bootstatus -b` blocks forever if the device wedged instead
+          # of finishing its boot, and a step with no bound on it will happily
+          # eat the whole job timeout. Bound the wait, and if it expires, erase
+          # and boot the device again rather than giving up.
+          wait_for_boot() {
+            xcrun simctl bootstatus "$UDID" -b &
+            local pid=$! waited=0
+            while kill -0 "$pid" 2>/dev/null; do
+              sleep 5
+              waited=$((waited + 5))
+              if [ "$waited" -ge "$1" ]; then
+                kill "$pid" 2>/dev/null || true
+                wait "$pid" 2>/dev/null || true
+                return 1
+              fi
+            done
+            wait "$pid"
+          }
+
+          if ! wait_for_boot 240; then
+            echo "::warning::Simulator did not finish booting in 240s; restarting it"
+            xcrun simctl shutdown "$UDID" || true
+            xcrun simctl erase "$UDID" || true
+            xcrun simctl boot "$UDID"
+            wait_for_boot 240 || {
+              echo "::error::Simulator never booted"
+              xcrun simctl list devices
+              exit 1
+            }
+          fi
+
+          xcrun simctl install "$UDID" "$APP_PATH"
+
+          # Absorb the first cold launch here rather than inside Maestro. This
+          # is where LaunchServices intermittently answers
+          # LSApplicationWorkspaceErrorDomain 115 on a simulator that has only
+          # just finished booting, and a failure here is cheap to retry whereas
+          # a failure inside a flow reads as a product bug and costs a rerun of
+          # the whole job. Terminate afterwards so Maestro's own launchApp
+          # starts from a clean process either way.
+          for attempt in 1 2 3; do
+            if xcrun simctl launch "$UDID" "$APP_ID"; then
+              break
+            fi
+            if [ "$attempt" = 3 ]; then
+              echo "::error::App failed to launch after 3 attempts"
+              exit 1
+            fi
+            echo "::warning::Launch attempt $attempt failed; retrying in 10s"
+            sleep 10
+          done
+          xcrun simctl terminate "$UDID" "$APP_ID" || true
 
       - name: 🧪 Run Maestro smoke flows
+        timeout-minutes: 15
         working-directory: ${{ env.EXAMPLE_DIR }}
         run: |
           # The four swipe-dismiss flows are deliberately not here yet. They
@@ -244,6 +390,17 @@ jobs:
             .maestro/smoke-launch.yaml \
             .maestro/smoke-modal-open-close.yaml
 
+      - name: 📊 Build stats
+        if: always()
+        run: |
+          {
+            echo "| metric | value |"
+            echo "| --- | --- |"
+            echo "| ios/ cache | ${{ steps.ios-cache.outputs.cache-hit == 'true' && 'hit' || 'miss' }} |"
+            echo "| DerivedData size | $(du -sh "$HOME/DerivedData" 2>/dev/null | cut -f1) |"
+            echo "| ios/ size | $(du -sh "$EXAMPLE_DIR/ios" 2>/dev/null | cut -f1) |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: 📤 Upload Maestro debug output
         if: always()
         uses: actions/upload-artifact@v7
@@ -254,32 +411,3 @@ jobs:
             ${{ env.EXAMPLE_DIR }}/.maestro/**/*.png
           if-no-files-found: ignore
           retention-days: 7
-
-      # Save caches even when a later step (maestro) fails. Each save is
-      # gated on the cache not already being a key hit so we don't waste
-      # GHA cache quota re-uploading identical contents.
-      - name: 💾 Save ccache compiler cache
-        if: always() && steps.ccache-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v6
-        with:
-          path: ~/.ccache
-          key: ${{ steps.ccache-restore.outputs.cache-primary-key }}
-
-      - name: 💾 Save CocoaPods cache
-        if: always() && steps.pods-cache-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v6
-        with:
-          path: |
-            ~/.cocoapods
-            ~/Library/Caches/CocoaPods
-          key: ${{ steps.pods-cache-restore.outputs.cache-primary-key }}
-
-      - name: 💾 Save iOS Pods/build/DerivedData cache
-        if: always() && steps.ios-cache-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v6
-        with:
-          path: |
-            ${{ env.EXAMPLE_DIR }}/ios/Pods
-            ${{ env.EXAMPLE_DIR }}/ios/build
-            ~/Library/Developer/Xcode/DerivedData
-          key: ${{ steps.ios-cache-restore.outputs.cache-primary-key }}
