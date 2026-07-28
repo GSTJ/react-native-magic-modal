@@ -27,6 +27,20 @@
       "description": "Stricter than the shared preset, which only holds react-native to in-range. packages/modal builds and tests against the same react-native the example app runs, which the Expo SDK dictates. Bumping it on its own installs a second copy and expo-doctor fails on the duplicate. Moves by hand with the SDK.",
       "matchPackageNames": ["react-native", "@react-native/{/,}**"],
       "enabled": false
+    },
+    {
+      "description": "The workspace is hoisted, so whichever react wins the root node_modules is the one packages/modal tests against, whatever any single package.json says. #305 moved react to 19.2.8 for the docs app alone: the example app got a nested 19.2.0, 19.2.8 hoisted to the root and landed under jest beside the SDK's react-test-renderer 19.2.0, and @testing-library/react-native's peer check killed three of four suites. expo-doctor failed on the duplicate react-dom on top of that. The shared preset disables react-test-renderer for the same reason and its Expo rule says react is the SDK's to pick, but the pattern list leaves react and react-dom out. Holding them costs nothing: apps/docs is a static export and every release note in that range is React Server Components and Server Actions. Moves by hand with the SDK.",
+      "matchPackageNames": ["react", "react-dom"],
+      "enabled": false
+    },
+    {
+      "description": "Reanimated and Worklets version-gate each other at runtime and the Expo SDK picks the pair. The file rule above only reaches examples/kitchen-sink, so Renovate kept proposing these on the packages/modal side alone: #306 took reanimated 4.5.3 there, which installed a second copy beside the example app's 4.2.3 for expo-doctor to fail on and asserted on its `react-native-worklets: 0.10.x - 0.11.x` peer against the SDK's 0.7.4, killing three of four suites. Moving Worklets up to 0.10.3 to satisfy that peer fails expo-doctor the other way, on the SDK mismatch, since Worklets is not on the example app's expo.install.exclude list. react-native-screens sits in the same position and is held with them. Moves by hand with the SDK.",
+      "matchPackageNames": [
+        "react-native-reanimated",
+        "react-native-worklets",
+        "react-native-screens"
+      ],
+      "enabled": false
     }
   ]
 }
