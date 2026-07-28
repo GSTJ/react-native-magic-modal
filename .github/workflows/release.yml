@@ -96,8 +96,15 @@ jobs:
       - name: 📦 Install Dependencies
         run: pnpm install
 
+      # Pinned to a commit, not the `v1` tag. This is the only third-party
+      # action in the repo that isn't `actions/*` or `pnpm/*`, it sits on a
+      # personal account, and it hasn't been pushed to since June 2024. It also
+      # leaves an HTTP server running on localhost for the rest of the job, and
+      # this job is the one that puts NPM_TOKEN on disk a few steps down. A
+      # mutable tag there means someone else's account decides what runs next to
+      # our publish credentials. SHA is v1.3.0, what `v1` already resolved to.
       - name: 🏗 Setup Turborepo Cache
-        uses: dtinth/setup-github-actions-caching-for-turbo@v1
+        uses: dtinth/setup-github-actions-caching-for-turbo@cc723b4600e40a6b8815b65701d8614b91e2669e # v1.3.0
 
       - name: 🛠️ Build
         run: pnpm run build
@@ -211,7 +218,7 @@ jobs:
         run: |
           git config --global user.email "gabrielstaveira@gmail.com"
           git config --global user.name "Gabriel Taveira"
-          npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+          npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
           pnpm run release
 
       # A release happens rarely, so the steps below it can sit unexecuted for

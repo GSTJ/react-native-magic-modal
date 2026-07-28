@@ -81,8 +81,12 @@ jobs:
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      # Same pin as release.yml, and for the same reason. This job carries
+      # `pages: write` and `id-token: write`, so whatever runs here can publish
+      # to the project's Pages site. SHA is v1.3.0, what `v1` already resolved
+      # to.
       - name: 🏗 Setup Turborepo Cache
-        uses: dtinth/setup-github-actions-caching-for-turbo@v1
+        uses: dtinth/setup-github-actions-caching-for-turbo@cc723b4600e40a6b8815b65701d8614b91e2669e # v1.3.0
 
       - name: 🛠️ Setup Pages
         uses: actions/configure-pages@v6
