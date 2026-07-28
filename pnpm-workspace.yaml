@@ -16,6 +16,19 @@ overrides:
   "tmp": "^0.2.6"
   "brace-expansion": "^5.0.8"
   "uuid": "^14.0.0"
+  # Both of these reach us through next in apps/docs, and bumping next fixes
+  # neither. It pins `"postcss": "8.4.31"` exactly and takes `sharp: "^0.34.5"`
+  # as an optional dep, still true on 16.2.12, the latest release. An override
+  # is the only lever.
+  #
+  # postcss 8.4.31 is GHSA-qx2v-qp2m-jg93, GHSA-6g55-p6wh-862q and
+  # GHSA-r28c-9q8g-f849. 8.5.23 was already in the tree for @tailwindcss/postcss,
+  # so this dedupes to one copy rather than adding a version.
+  "postcss": "^8.5.23"
+  # sharp 0.34.5 inherits the libvips CVEs in GHSA-f88m-g3jw-g9cj. The docs site
+  # is a static export, so next never runs the image optimizer and never loads
+  # sharp, but it ships in the lockfile either way, so it gets patched.
+  "sharp": "^0.35.3"
 
 patchedDependencies:
   "minimatch@3.1.5": "patches/minimatch@3.1.5.patch"
