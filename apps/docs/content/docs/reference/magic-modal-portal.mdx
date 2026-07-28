@@ -1,0 +1,34 @@
+---
+title: MagicModalPortal
+description: Mount the modal stack once near the root of the React Native application.
+---
+
+```ts
+const MagicModalPortal: React.FC;
+```
+
+The portal owns modal state and exposes it to the global [`magicModal`](./magic-modal) object.
+
+```tsx
+<GestureHandlerRootView style={{ flex: 1 }}>
+  <NavigationContainer>
+    <AppNavigator />
+  </NavigationContainer>
+  <MagicModalPortal />
+</GestureHandlerRootView>
+```
+
+## Placement rules
+
+- Mount exactly one active portal.
+- Keep it inside `GestureHandlerRootView`.
+- Place it after the main app content so it renders above that content.
+- Keep it outside individual screens so navigation does not destroy active flows.
+
+Calling an imperative method before a portal mounts throws:
+
+```text
+MagicModalPortal not found. Please wrap your component with MagicModalPortal.
+```
+
+See [set up the portal](../getting-started/setup) for standard and Expo Router examples.

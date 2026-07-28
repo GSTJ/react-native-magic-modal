@@ -1,9 +1,20 @@
 import type Animated from "react-native-reanimated";
 
+import type { StyleProp, ViewStyle } from "react-native";
+
+/** A component factory rendered as the body of a modal stack entry. */
 export type ModalChildren = React.FC;
 
+/**
+ * Controls the entrance, exit, and optional swipe-to-dismiss direction.
+ * Pass `undefined` as `swipeDirection` to disable swipe dismissal.
+ */
 export type Direction = "up" | "down" | "left" | "right";
 
+/**
+ * The discriminated result resolved by `magicModal.show<T>().promise`.
+ * `data` exists only when the modal was intentionally hidden.
+ */
 export type HideReturn<T> =
   | {
       reason:
@@ -28,7 +39,7 @@ export type ModalProps = {
   animationOutTiming: number;
 
   /**
-   * If true, the backdrop will be hidden.
+   * Hides the backdrop and removes its press target.
    * @default false
    */
   hideBackdrop: boolean;
@@ -58,11 +69,11 @@ export type ModalProps = {
   onBackdropPress: (({ hide }: { hide: HookHideFunction }) => void) | undefined;
 
   /**
-   * Custom style for the modal.
+   * Custom React Native style for the animated modal container.
    * @default {}
    * @example { backgroundColor: 'red', padding: 10 }
    */
-  style: Record<string, unknown>;
+  style: StyleProp<ViewStyle>;
 
   /**
    * Damping factor for the swipe gesture.
@@ -71,7 +82,7 @@ export type ModalProps = {
   dampingFactor: number;
 
   /**
-   * Direction of the modal animation.
+   * Direction of the default modal animation and swipe-to-dismiss gesture.
    * Set to undefined to disable the swipe gesture.
    * @default "down"
    * @example "up"
@@ -111,13 +122,20 @@ export type DisableFullWindowOverlayFunction = () => void;
 
 export type HookHideFunction = <T>(props: HideReturn<T>) => void;
 
+/** Per-modal overrides accepted by `magicModal.show`. */
 export type NewConfigProps = Partial<ModalProps>;
 
+/** Explains why a modal promise resolved. */
 export enum MagicModalHideReason {
+  /** The default backdrop handler closed the modal. */
   BACKDROP_PRESS = "BACKDROP_PRESS",
+  /** A swipe exceeded the configured velocity threshold. */
   SWIPE_COMPLETE = "SWIPE_COMPLETE",
+  /** Android's system back action closed the modal. */
   BACK_BUTTON_PRESS = "BACK_BUTTON_PRESS",
+  /** Modal code supplied data through a hide function. */
   INTENTIONAL_HIDE = "INTENTIONAL_HIDE",
+  /** `magicModal.hideAll()` cleared the stack. */
   GLOBAL_HIDE_ALL = "GLOBAL_HIDE_ALL",
 }
 

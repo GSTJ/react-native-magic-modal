@@ -1,0 +1,28 @@
+---
+title: Update open content
+description: Swap externally driven modal content while preserving its stack position and promise.
+---
+
+`show` returns an `update` function scoped to the new modal:
+
+```tsx
+const { modalID, update } = magicModal.show(() => <UploadModal progress={0} />);
+
+await uploadFile(file, {
+  onProgress(progress) {
+    update(() => <UploadModal progress={progress} />);
+  },
+});
+
+magicModal.hide(undefined, { modalID });
+```
+
+The modal keeps the same stack position, backdrop, configuration, ID, and pending promise. Only its
+component is replaced.
+
+<Callout type="warn" title="The new component mounts from scratch">
+  Local React state from the old component is not preserved. Use `update` when
+  the source of truth already lives outside the modal. If the modal owns the
+  state, update it normally inside the component with state, context, or a
+  store.
+</Callout>

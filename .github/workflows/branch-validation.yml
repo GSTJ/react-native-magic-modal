@@ -26,6 +26,9 @@ jobs:
     # every repo's CI immediately.
     uses: GSTJ/magic/.github/workflows/ci.yml@v1
     with:
+      # Includes the statically exported docs app, so broken routes, MDX, or
+      # generated API tables cannot merge and fail only during deployment.
+      build-command: pnpm run build
       test-command: pnpm run test
       # This repo's own gate: expo-doctor catches the duplicate react-native and
       # the SDK drift the example app is prone to.

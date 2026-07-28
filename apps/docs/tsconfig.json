@@ -1,0 +1,20 @@
+{
+  "extends": "magic-tsconfig/nextjs.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@/*": ["./*"],
+      "collections/*": ["./.source/*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "next-env.d.ts",
+    "source.config.ts"
+  ],
+  "exclude": ["node_modules", "out"]
+}

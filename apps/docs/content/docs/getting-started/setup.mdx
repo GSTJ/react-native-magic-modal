@@ -1,0 +1,50 @@
+---
+title: Set up the portal
+description: Add one MagicModalPortal under GestureHandlerRootView at the root of your app.
+---
+
+`MagicModalPortal` renders every modal in the stack. Mount it once, after your application content,
+inside `GestureHandlerRootView`.
+
+```tsx title="App.tsx"
+import { MagicModalPortal } from "react-native-magic-modal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+export default function App() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <YourApp />
+      <MagicModalPortal />
+    </GestureHandlerRootView>
+  );
+}
+```
+
+The gesture root is required even if your first modal does not use swipe-to-dismiss. The portal owns
+the gesture surface and Gesture Handler 3 throws if it renders outside a root view.
+
+## Expo Router
+
+The root layout is usually the clearest place for both components:
+
+```tsx title="app/_layout.tsx"
+import { Stack } from "expo-router";
+import { MagicModalPortal } from "react-native-magic-modal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+export default function RootLayout() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Stack />
+      <MagicModalPortal />
+    </GestureHandlerRootView>
+  );
+}
+```
+
+<Callout type="info">
+  Keep the portal outside individual screens. It should survive navigation so a
+  flow can start on one screen and resolve after navigation changes.
+</Callout>
+
+Continue by [showing your first modal](./first-modal).

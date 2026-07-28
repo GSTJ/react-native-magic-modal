@@ -1,0 +1,59 @@
+---
+title: FAQ and troubleshooting
+description: Answers for modal stacks, scroll views, native overlays, and common setup errors.
+---
+
+## Can multiple modals be open?
+
+Yes. Every `show` pushes an independent stack entry with its own ID, configuration, promise, and
+content.
+
+## Can a modal contain a ScrollView?
+
+Yes, but disable the modal's swipe gesture so it does not compete with scrolling:
+
+```tsx
+magicModal.show(() => <ScrollableModal />, {
+  swipeDirection: undefined,
+});
+```
+
+For snap points and complex nested gestures, use a dedicated bottom-sheet library.
+
+## Why does Gesture Handler say there is no root view?
+
+The portal must be rendered inside `GestureHandlerRootView`:
+
+```tsx
+<GestureHandlerRootView style={{ flex: 1 }}>
+  <App />
+  <MagicModalPortal />
+</GestureHandlerRootView>
+```
+
+## Why does `magicModal` say the portal was not found?
+
+An imperative call ran before `MagicModalPortal` mounted, or the active React tree does not contain
+one. Mount one portal at the app root and avoid module-scope `show` calls during startup.
+
+## Why is the modal above an image picker on iOS?
+
+The full-window overlay is enabled. Temporarily call
+`magicModal.disableFullWindowOverlay()`, then restore it in `finally`. See
+[native iOS overlays](./guides/native-overlays).
+
+## Does Gesture Handler 2 work?
+
+Yes. Magic Modal 9 supports Gesture Handler 2.20+ and 3.x. Version 8.0.0 was the temporary exception.
+
+## How do I close a modal from outside it?
+
+Keep the ID returned by `show`:
+
+```tsx
+const { modalID } = magicModal.show(() => <StatusModal />);
+
+magicModal.hide(undefined, { modalID });
+```
+
+Inside modal content, prefer [`useMagicModal`](./reference/use-magic-modal).

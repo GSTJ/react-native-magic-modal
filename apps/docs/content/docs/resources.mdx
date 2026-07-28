@@ -1,0 +1,41 @@
+---
+title: Resources
+description: Examples, releases, contributing guidance, and support for React Native Magic Modal.
+---
+
+<Cards>
+  <Card
+    title="Kitchen sink"
+    description="Runnable Expo examples for gestures, scroll, keyboard input, custom motion, stacks, and overlays."
+    href="https://github.com/GSTJ/react-native-magic-modal/tree/main/examples/kitchen-sink"
+    external
+  />
+  <Card
+    title="Releases"
+    description="Version notes, compatibility changes, and migration context."
+    href="https://github.com/GSTJ/react-native-magic-modal/releases"
+    external
+  />
+  <Card
+    title="Contributing"
+    description="Set up the monorepo, run checks, and prepare a focused contribution."
+    href="https://github.com/GSTJ/react-native-magic-modal/blob/main/CONTRIBUTING.md"
+    external
+  />
+  <Card
+    title="Issues"
+    description="Report a bug or propose an improvement with a reproducible example."
+    href="https://github.com/GSTJ/react-native-magic-modal/issues"
+    external
+  />
+</Cards>
+
+## Before opening an issue
+
+Include your React Native, Expo (if applicable), Gesture Handler, Reanimated, Worklets, and Magic
+Modal versions. For gesture or layering bugs, a small reproduction is substantially more useful
+than a screenshot alone.
+
+Run `npx expo-doctor` in Expo projects and confirm that
+[`MagicModalPortal`](./reference/magic-modal-portal) is mounted exactly once before reporting a
+setup problem.

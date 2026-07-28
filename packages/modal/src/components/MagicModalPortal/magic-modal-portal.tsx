@@ -37,15 +37,20 @@ type ModalStackItem = {
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
  * @example
- * ```js
+ * Mount exactly one portal, after the app content, inside `GestureHandlerRootView`.
+ *
+ * ```tsx
+ * import { GestureHandlerRootView } from "react-native-gesture-handler";
  * import { MagicModalPortal } from 'react-native-magic-modal';
  *
  * export default function App() {
  *   return (
- *     <SomeRandomProvider>
- *       <MagicModalPortal />  // <-- On the top of the app component hierarchy
- *       <Router /> // Your app router or something could follow below
- *     </SomeRandomProvider>
+ *     <GestureHandlerRootView style={{ flex: 1 }}>
+ *       <SomeRandomProvider>
+ *         <Router />
+ *         <MagicModalPortal />
+ *       </SomeRandomProvider>
+ *     </GestureHandlerRootView>
  *   );
  * }
  * ```

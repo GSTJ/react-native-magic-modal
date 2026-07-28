@@ -1,0 +1,44 @@
+---
+title: Hide results
+description: Narrow the close reason to safely distinguish submitted data from cancellation.
+---
+
+Every `show<T>().promise` resolves to `HideReturn<T>`:
+
+```ts
+type HideReturn<T> =
+  | {
+      reason:
+        | MagicModalHideReason.BACKDROP_PRESS
+        | MagicModalHideReason.SWIPE_COMPLETE
+        | MagicModalHideReason.BACK_BUTTON_PRESS
+        | MagicModalHideReason.GLOBAL_HIDE_ALL;
+    }
+  | {
+      reason: MagicModalHideReason.INTENTIONAL_HIDE;
+      data: T;
+    };
+```
+
+Check the reason before reading `data`:
+
+```tsx
+const result = await magicModal.show<FormValues>(() => <FormModal />).promise;
+
+if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
+  await save(result.data);
+}
+```
+
+## MagicModalHideReason
+
+| Value               | Trigger                                                          |
+| ------------------- | ---------------------------------------------------------------- |
+| `INTENTIONAL_HIDE`  | `useMagicModal().hide(data)` or `magicModal.hide(data, options)` |
+| `BACKDROP_PRESS`    | The user presses the backdrop and the default handler closes     |
+| `BACK_BUTTON_PRESS` | Android's hardware/software back action closes                   |
+| `SWIPE_COMPLETE`    | A dismiss gesture clears the velocity threshold                  |
+| `GLOBAL_HIDE_ALL`   | `magicModal.hideAll()` clears the stack                          |
+
+Cancellation results intentionally contain no `data`. This forces callers to handle dismissal
+instead of treating it like a submitted value.

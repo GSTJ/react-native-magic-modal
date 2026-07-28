@@ -1,8 +1,9 @@
 export default {
   preset: "jest-expo",
-  // Worklets ships a resolver that skips its `.native` entrypoints, which
-  // otherwise throw "Native part of Worklets doesn't seem to be initialized".
-  resolver: "react-native-worklets/jest/resolver.js",
+  // Worklets 0.7 exposes a mock, while its web resolver starts at 0.8.
+  moduleNameMapper: {
+    "^react-native-worklets$": "react-native-worklets/lib/module/mock",
+  },
   testResultsProcessor: "jest-junit",
   transformIgnorePatterns: [
     "node_modules/(?!((jest-)?react-native|react-native-gesture-handler|react-native-reanimated|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)",

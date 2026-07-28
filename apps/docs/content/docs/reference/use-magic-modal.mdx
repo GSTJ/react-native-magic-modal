@@ -1,0 +1,58 @@
+---
+title: useMagicModal
+description: Close the current modal from inside its component with inferred return data.
+---
+
+```ts
+useMagicModal<T = void>(): {
+  hide(data: T): void;
+}
+```
+
+`useMagicModal` binds `hide` to the current stack entry, so no modal ID is needed.
+
+<Callout type="warn" title="Modal content only">
+  Call this hook from a component rendered by `magicModal.show`. Outside that
+  provider, `hide` is a silent no-op; it cannot discover or close a global stack
+  entry.
+</Callout>
+
+```tsx
+type Profile = {
+  name: string;
+};
+
+function ProfileModal() {
+  const { hide } = useMagicModal<Profile>();
+
+  return (
+    <Pressable onPress={() => hide({ name: "Ada" })}>
+      <Text>Choose Ada</Text>
+    </Pressable>
+  );
+}
+```
+
+Use the same generic with `show`:
+
+```tsx
+const result = await magicModal.show<Profile>(() => <ProfileModal />).promise;
+
+if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
+  console.log(result.data.name);
+}
+```
+
+For a modal that returns no data:
+
+```tsx
+const { hide } = useMagicModal();
+
+<Button title="Done" onPress={() => hide()} />;
+```
+
+<Callout type="info">
+  `hide` always creates an `INTENTIONAL_HIDE` result. Backdrop, back-button,
+  swipe, and global cleanup results are produced by their respective close
+  paths.
+</Callout>

@@ -17,6 +17,7 @@ export const useInternalMagicModal = () => {
 
 /**
  * A hook to hide the modal from inside the modal component.
+ * Outside modal content, the returned hide function is a no-op.
  * @example
  * ```tsx
  * const { hide } = useMagicModal<{ message: string }>();

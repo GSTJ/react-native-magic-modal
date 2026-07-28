@@ -1,0 +1,69 @@
+---
+title: Introduction
+description: Build imperative, awaitable, type-safe modal flows in React Native.
+---
+
+React Native Magic Modal turns a modal interaction into a value you can await. Mount one portal
+near the root of your app, then show a modal from a component, navigation handler, service, or
+plain function.
+
+```tsx
+const result = await magicModal.show<ConfirmationResult>(() => (
+  <ConfirmationModal />
+)).promise;
+
+if (
+  result.reason === MagicModalHideReason.INTENTIONAL_HIDE &&
+  result.data.confirmed
+) {
+  completePurchase();
+}
+```
+
+## Why use it?
+
+<Cards>
+  <Card
+    title="Linear async flows"
+    description="Write the interaction in the order a person experiences it—show, await, branch."
+    href="./guides/modal-flows"
+  />
+  <Card
+    title="Typed results"
+    description="The value returned by the modal is inferred through the show and hide calls."
+    href="./reference/hide-results"
+  />
+  <Card
+    title="Modal stacks"
+    description="Show multiple modals, address them by ID, and update content without replacing the stack entry."
+    href="./reference/magic-modal"
+  />
+  <Card
+    title="Gesture control"
+    description="Choose a swipe direction, tune motion, or disable swipe for scrollable content."
+    href="./guides/gestures-and-scroll"
+  />
+</Cards>
+
+## The mental model
+
+There are only three important pieces:
+
+1. [`MagicModalPortal`](./reference/magic-modal-portal) owns the modal stack. Mount it once.
+2. [`magicModal.show`](./reference/magic-modal) pushes content from anywhere and returns a promise.
+3. [`useMagicModal`](./reference/use-magic-modal) closes the current modal with typed data.
+
+<Callout type="info" title="Designed for application modals">
+  For a scroll-heavy bottom sheet with snap points, use a dedicated bottom-sheet
+  library. Magic Modal is strongest when a modal represents a discrete
+  interaction or async decision.
+</Callout>
+
+## Next step
+
+Install the package and its peers, then mount the portal in your app root.
+
+<Cards>
+  <Card title="Install" href="./getting-started/installation" />
+  <Card title="Set up the portal" href="./getting-started/setup" />
+</Cards>

@@ -66,14 +66,17 @@ web-build/
 **/*/.expo
 
 **/*/.next
+**/.source/
+*.tsbuildinfo
 
 **/*/ios
 **/*/android
 
 .turbo
 dist
+out
 junit.xml
-docs
+/packages/modal/docs/
 
 **/modal/README.md
 

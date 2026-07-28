@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/GSTJ/react-native-magic-modal/issues"
   },
-  "homepage": "https://github.com/GSTJ/react-native-magic-modal#readme",
+  "homepage": "https://gstj.github.io/react-native-magic-modal/",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
@@ -31,7 +31,8 @@
     "test": "turbo run test",
     "build": "turbo run build",
     "release": "turbo run release --filter=react-native-magic-modal",
-    "docs": "turbo run docs",
+    "docs": "pnpm --filter @magic-modal/docs build",
+    "docs:dev": "pnpm --filter @magic-modal/docs dev",
     "doctor": "turbo run doctor"
   },
   "config": {
