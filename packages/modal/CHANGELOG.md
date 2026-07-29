@@ -1,5 +1,27 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [9.1.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-9.0.1...magic-modal-9.1.0) (2026-07-29)
+
+### :hammer: Bug Fixes :hammer:
+
+* **changelog:** render the types that reach the tarball ([#307](https://github.com/GSTJ/react-native-magic-modal/issues/307)) ([f241ff9](https://github.com/GSTJ/react-native-magic-modal/commit/f241ff9ae91a90f4f79dbe1aed601abeee94ccfe)), references [#298](https://github.com/GSTJ/react-native-magic-modal/issues/298) [#300](https://github.com/GSTJ/react-native-magic-modal/issues/300) [#304](https://github.com/GSTJ/react-native-magic-modal/issues/304)
+* **ci:** pin the turbo cache action and gate e2e on writable reviewers ([#315](https://github.com/GSTJ/react-native-magic-modal/issues/315)) ([429258d](https://github.com/GSTJ/react-native-magic-modal/commit/429258d9a1e9050e5ee4870fa77fd3d8604f6d62)), references [#309](https://github.com/GSTJ/react-native-magic-modal/issues/309)
+* **docs:** override postcss and sharp past next's vulnerable pins ([#309](https://github.com/GSTJ/react-native-magic-modal/issues/309)) ([b0169bf](https://github.com/GSTJ/react-native-magic-modal/commit/b0169bf3580fab8231add273a6030b4e4552fca3)), references [#28](https://github.com/GSTJ/react-native-magic-modal/issues/28) [#30](https://github.com/GSTJ/react-native-magic-modal/issues/30) [#31](https://github.com/GSTJ/react-native-magic-modal/issues/31) [#32](https://github.com/GSTJ/react-native-magic-modal/issues/32) [#314](https://github.com/GSTJ/react-native-magic-modal/issues/314)
+
+### :stars: New Features :stars:
+
+* **modal:** run the portal on the web and rebuild the docs site ([#310](https://github.com/GSTJ/react-native-magic-modal/issues/310)) ([b159af2](https://github.com/GSTJ/react-native-magic-modal/commit/b159af2145843dc1ca7c00944c57ad2f23192eef))
+
+### :curly_loop: What a drag! :curly_loop:
+
+* **deps:** update dependency next to v16.2.12 ([#314](https://github.com/GSTJ/react-native-magic-modal/issues/314)) ([a2280e1](https://github.com/GSTJ/react-native-magic-modal/commit/a2280e1cbe18a82a6f25d6e10de5f0dfec6a4af3))
+* **release:** sync magic modal version with npm 9.0.1 ([#304](https://github.com/GSTJ/react-native-magic-modal/issues/304)) ([183d581](https://github.com/GSTJ/react-native-magic-modal/commit/183d58175441891efa37caf8ef4d97629fd3fdcc))
+* **renovate:** hold react and the reanimated pair to the Expo SDK line ([#311](https://github.com/GSTJ/react-native-magic-modal/issues/311)) ([d1f3353](https://github.com/GSTJ/react-native-magic-modal/commit/d1f33538262fbd4f9f81cb53b3fa7fee19d11f2b)), references [#305](https://github.com/GSTJ/react-native-magic-modal/issues/305) [#306](https://github.com/GSTJ/react-native-magic-modal/issues/306) [#305](https://github.com/GSTJ/react-native-magic-modal/issues/305) [#306](https://github.com/GSTJ/react-native-magic-modal/issues/306)
+
+### :books: Documentation :books:
+
+* add a security policy ([#308](https://github.com/GSTJ/react-native-magic-modal/issues/308)) ([d9604a0](https://github.com/GSTJ/react-native-magic-modal/commit/d9604a0535ae050298654f8d534302839f8739f5))
+
 ## [9.0.1](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-9.0.0...magic-modal-9.0.1) (2026-07-28)
 
 ### :hammer: Bug Fixes :hammer:
