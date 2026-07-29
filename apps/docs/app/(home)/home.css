@@ -4023,6 +4023,34 @@ body:has(.magic-home) {
     max-width: 360px;
     width: 100%;
   }
+
+  /* The four-column footer's tracks are 650px of hard minimums plus three
+     clamp(2rem, 5vw, 5rem) gaps, and they start at the 5vw left padding, so
+     their right edge sits at 650 + 0.2 * viewport. That is inside the viewport
+     only from 812.5px up. Under it the body clips the overflow instead of
+     scrolling, so the license line and the version were cut off on every width
+     down to 701px. Two columns here, the same shape the max-width: 700px block
+     below gives the footer. */
+  .mm-footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mm-footer-intro,
+  .mm-footer-meta {
+    grid-column: 1 / -1;
+  }
+
+  .mm-footer-meta {
+    border-top: 1px solid var(--mm-dark-line);
+    grid-auto-flow: column;
+    justify-content: space-between;
+    justify-items: start;
+    padding-top: 1.25rem;
+  }
+
+  .mm-footer-meta span {
+    text-align: left;
+  }
 }
 
 @media (max-width: 700px) {
