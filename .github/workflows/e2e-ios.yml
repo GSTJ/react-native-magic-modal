@@ -94,8 +94,8 @@ concurrency:
 jobs:
   # Run the (expensive) macOS build when:
   #   - the PR is opened/updated by the repo owner (GSTJ), OR
-  #   - a reviewer has approved the PR (including subsequent pushes to an
-  #     already-approved PR), OR
+  #   - a reviewer who can write here has approved the PR (including subsequent
+  #     pushes to an already-approved PR), OR
   #   - somebody dispatched the workflow by hand, which already requires write
   #     access to this repository, OR
   #   - the event is a push to main, which is already-reviewed code.
@@ -145,9 +145,20 @@ jobs:
             echo "approved=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          # Otherwise look up the latest review per reviewer on this PR.
+          # Otherwise look up the latest review on this PR, counting only
+          # reviewers who can write here. This repo is public, so anyone with a
+          # GitHub account can submit an APPROVED review on a fork PR. Without
+          # the author_association filter, two throwaway accounts (one to open,
+          # one to approve) are enough to run 45 minutes of macos-26 on
+          # attacker-controlled code. Nothing is leaked either way, the job has
+          # `contents: read` and no secrets, but it is billed compute.
           STATE=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUM/reviews" \
-            --jq '[.[] | select(.state=="APPROVED" or .state=="CHANGES_REQUESTED")] | sort_by(.submitted_at) | last | .state' \
+            --jq '[.[]
+                   | select(.state=="APPROVED" or .state=="CHANGES_REQUESTED")
+                   | select(.author_association=="OWNER"
+                            or .author_association=="MEMBER"
+                            or .author_association=="COLLABORATOR")]
+                  | sort_by(.submitted_at) | last | .state' \
             || echo "")
           if [ "$STATE" = "APPROVED" ]; then
             echo "PR is approved."
