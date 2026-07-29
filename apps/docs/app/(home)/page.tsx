@@ -24,30 +24,6 @@ import {
 } from "@/components/project-metadata-values";
 import { ResultLab } from "@/components/result-lab";
 
-const history = [
-  {
-    href: "https://github.com/GSTJ/react-native-magic-modal/commit/64612c8",
-    isoDate: "2022-02-21T00:00:00.000Z",
-    title: "First release.",
-    description:
-      "show() moved visibility state out of the screen and returned a value when the modal closed.",
-  },
-  {
-    href: "https://github.com/GSTJ/react-native-magic-modal/pull/81",
-    isoDate: "2024-06-08T00:00:00.000Z",
-    title: "Stacks and typed close reasons.",
-    description:
-      "Each entry gained its own ID and promise. This release also added hideAll(), swipe gestures, and the iOS full-window overlay.",
-  },
-  {
-    href: "https://github.com/GSTJ/react-native-magic-modal/releases/tag/magic-modal-9.0.0",
-    isoDate: "2026-07-27T00:00:00.000Z",
-    title: "In-place updates and Gesture Handler 3.",
-    description:
-      "update() can replace an open modal in place. Swipe dismissal now supports Gesture Handler 2 and 3.",
-  },
-] as const;
-
 const ratingCallers = [
   "post.tsx",
   "comment.tsx",
@@ -61,16 +37,6 @@ const repeatedRatingState = [
   "isStoreReviewOpen",
   "isThanksOpen",
 ] as const;
-
-const formatMilestone = (isoDate: string) =>
-  new Intl.DateTimeFormat("en-US", {
-    day: "2-digit",
-    month: "short",
-    timeZone: "UTC",
-    year: "numeric",
-  })
-    .format(new Date(isoDate))
-    .toUpperCase();
 
 export default function HomePage() {
   return (
@@ -419,36 +385,6 @@ export default function HomePage() {
         <div data-reveal>
           <ResultLab />
         </div>
-      </section>
-
-      <section className="mm-history">
-        <div className="mm-history-heading" data-reveal>
-          <span>RELEASE HISTORY</span>
-          <h2>How the API changed</h2>
-          <p>
-            Apps needed stacked modals, targeted updates, typed close reasons,
-            native overlays, and support for newer gesture APIs.
-          </p>
-        </div>
-
-        <ol className="mm-history-list">
-          {history.map(({ description, href, isoDate, title }) => {
-            const year = new Date(isoDate).getUTCFullYear();
-            return (
-              <li data-reveal key={isoDate}>
-                <a href={href} rel="noreferrer" target="_blank">
-                  <span className="mm-history-year">{year}</span>
-                  <span className="mm-history-date">
-                    {formatMilestone(isoDate)}
-                  </span>
-                  <strong>{title}</strong>
-                  <p>{description}</p>
-                  <ArrowUpRight aria-hidden="true" size={17} />
-                </a>
-              </li>
-            );
-          })}
-        </ol>
       </section>
 
       <section className="mm-final">
