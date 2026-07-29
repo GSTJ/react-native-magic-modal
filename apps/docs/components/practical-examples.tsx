@@ -1,18 +1,20 @@
 "use client";
 
-import type { CSSProperties, MouseEvent } from "react";
+import type { NewConfigProps } from "react-native-magic-modal";
+
+import type { MouseEvent } from "react";
 
 import {
   useCallback,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 
 import { gsap } from "gsap";
 import { ArrowRight, Check, Upload } from "lucide-react";
+import { MagicModalHideReason, magicModal } from "react-native-magic-modal";
 
 type ExampleID = "confirm" | "follow-up" | "update";
 type ExamplePhase =
@@ -32,6 +34,23 @@ type Example = {
   note: string;
   type: ExampleID;
 };
+
+type UploadResult = "cancelled" | "done";
+type UploadHandle = ReturnType<typeof magicModal.show<UploadResult>>;
+
+const uploadCheckpointSize = 25;
+
+const uploadModalConfig = {
+  animationInTiming: 0,
+  animationOutTiming: 0,
+  hideBackdrop: true,
+  style: { display: "none" },
+  swipeDirection: undefined,
+} satisfies NewConfigProps;
+
+const UploadCheckpoint = ({ progress }: { progress: number }) => (
+  <span aria-hidden="true" data-magic-modal-upload-progress={progress} hidden />
+);
 
 const confirmExample: Example = {
   code: `const result = await magicModal
@@ -101,11 +120,7 @@ const nextExample: Record<Exclude<ExampleID, "update">, ExampleID> = {
   "follow-up": "update",
 };
 
-const getPreview = (
-  activeID: ExampleID,
-  phase: ExamplePhase,
-  progress: number,
-) => {
+const getPreview = (activeID: ExampleID, phase: ExamplePhase) => {
   if (activeID === "confirm") {
     if (phase === "resolved") {
       return {
@@ -156,10 +171,10 @@ const getPreview = (
 
   if (phase === "uploading") {
     return {
-      action: `Uploading ${progress}%`,
+      action: "Uploading",
       body: "update() remounts the sheet at each checkpoint.",
       disabled: true,
-      result: `${progress}% | promise pending`,
+      result: "Promise pending",
       title: "Upload in progress",
     };
   }
@@ -168,7 +183,7 @@ const getPreview = (
       action: "Close modal",
       body: "The upload finished. The same promise is still pending.",
       disabled: false,
-      result: "100% | promise pending",
+      result: "Promise pending",
       title: "Upload complete",
     };
   }
@@ -185,7 +200,7 @@ const getPreview = (
     action: "Start upload",
     body: "video-final.mp4",
     disabled: false,
-    result: "0% | promise pending",
+    result: "Promise pending",
     title: "Ready to upload",
   };
 };
@@ -195,14 +210,52 @@ export const PracticalExamples = () => {
   const [phase, setPhase] = useState<ExamplePhase>("ready");
   const [progress, setProgress] = useState(0);
   const panelRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLProgressElement>(null);
+  const uploadHandleRef = useRef<UploadHandle | null>(null);
+  const uploadRunRef = useRef(0);
+  const uploadTweenRef = useRef<ReturnType<typeof gsap.to> | null>(null);
+  const mountedRef = useRef(true);
   const active = findExample(activeID);
-  const preview = getPreview(activeID, phase, progress);
+  const preview = getPreview(activeID, phase);
 
-  const openExample = useCallback((id: ExampleID) => {
-    setActiveID(id);
-    setPhase("ready");
-    setProgress(0);
+  const stopUpload = useCallback(() => {
+    uploadRunRef.current += 1;
+    uploadTweenRef.current?.kill();
+    uploadTweenRef.current = null;
+
+    if (progressBarRef.current) {
+      progressBarRef.current.value = 0;
+    }
+
+    const handle = uploadHandleRef.current;
+    uploadHandleRef.current = null;
+
+    if (handle) {
+      try {
+        magicModal.hide<UploadResult>("cancelled", {
+          modalID: handle.modalID,
+        });
+      } catch (error) {
+        const portalUnmounted =
+          error instanceof Error &&
+          error.message.includes("MagicModalPortal not found");
+
+        if (!portalUnmounted) {
+          throw error;
+        }
+      }
+    }
   }, []);
+
+  const openExample = useCallback(
+    (id: ExampleID) => {
+      stopUpload();
+      setActiveID(id);
+      setPhase("ready");
+      setProgress(0);
+    },
+    [stopUpload],
+  );
 
   const selectExample = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
@@ -210,6 +263,108 @@ export const PracticalExamples = () => {
     },
     [openExample],
   );
+
+  const startUpload = useCallback(() => {
+    stopUpload();
+
+    const runID = uploadRunRef.current;
+    const handle = magicModal.show<UploadResult>(
+      () => <UploadCheckpoint progress={0} />,
+      uploadModalConfig,
+    );
+
+    uploadHandleRef.current = handle;
+    setProgress(0);
+    setPhase("uploading");
+
+    void handle.promise.then((result) => {
+      if (!mountedRef.current || uploadRunRef.current !== runID) {
+        return;
+      }
+
+      uploadHandleRef.current = null;
+      uploadTweenRef.current?.kill();
+      uploadTweenRef.current = null;
+
+      if (
+        result.reason === MagicModalHideReason.INTENTIONAL_HIDE &&
+        result.data === "done"
+      ) {
+        setPhase("complete");
+        return;
+      }
+
+      if (progressBarRef.current) {
+        progressBarRef.current.value = 0;
+      }
+      setProgress(0);
+      setPhase("ready");
+    });
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (reduceMotion) {
+      if (progressBarRef.current) {
+        progressBarRef.current.value = 100;
+      }
+      handle.update(() => <UploadCheckpoint progress={100} />);
+      setProgress(100);
+      setPhase("uploaded");
+      return;
+    }
+
+    const animatedProgress = { value: 0 };
+    let lastCheckpoint = 0;
+    let lastProgress = 0;
+
+    if (progressBarRef.current) {
+      progressBarRef.current.value = 0;
+    }
+
+    uploadTweenRef.current = gsap.to(animatedProgress, {
+      duration: 2.8,
+      ease: "power2.inOut",
+      onComplete: () => {
+        if (!mountedRef.current || uploadRunRef.current !== runID) {
+          return;
+        }
+
+        if (lastCheckpoint < 100) {
+          handle.update(() => <UploadCheckpoint progress={100} />);
+        }
+        setProgress(100);
+        setPhase("uploaded");
+        uploadTweenRef.current = null;
+      },
+      onUpdate: () => {
+        if (!mountedRef.current || uploadRunRef.current !== runID) {
+          return;
+        }
+
+        const nextProgress = Math.round(animatedProgress.value);
+        const nextCheckpoint =
+          Math.floor(nextProgress / uploadCheckpointSize) *
+          uploadCheckpointSize;
+
+        if (progressBarRef.current) {
+          progressBarRef.current.value = animatedProgress.value;
+        }
+
+        if (nextProgress !== lastProgress) {
+          lastProgress = nextProgress;
+          setProgress(nextProgress);
+        }
+
+        if (nextCheckpoint > lastCheckpoint) {
+          lastCheckpoint = nextCheckpoint;
+          handle.update(() => <UploadCheckpoint progress={nextCheckpoint} />);
+        }
+      },
+      value: 100,
+    });
+  }, [stopUpload]);
 
   const runPreview = useCallback(() => {
     if (activeID === "confirm") {
@@ -222,16 +377,24 @@ export const PracticalExamples = () => {
       return;
     }
     if (phase === "ready") {
-      setProgress(0);
-      setPhase("uploading");
+      startUpload();
       return;
     }
     if (phase === "uploaded") {
-      setPhase("complete");
+      const handle = uploadHandleRef.current;
+
+      if (!handle) {
+        setPhase("complete");
+        return;
+      }
+
+      magicModal.hide<UploadResult>("done", {
+        modalID: handle.modalID,
+      });
       return;
     }
     if (phase === "complete") openExample("confirm");
-  }, [activeID, openExample, phase]);
+  }, [activeID, openExample, phase, startUpload]);
 
   useEffect(() => {
     if (activeID === "confirm" && phase === "resolved") {
@@ -254,30 +417,14 @@ export const PracticalExamples = () => {
     }
   }, [activeID, openExample, phase]);
 
-  const progressStyle = useMemo(
-    () =>
-      ({
-        "--mm-example-progress": `${progress}%`,
-      }) as CSSProperties,
-    [progress],
-  );
-
   useEffect(() => {
-    if (activeID !== "update" || phase !== "uploading") return;
+    mountedRef.current = true;
 
-    const interval = window.setInterval(() => {
-      setProgress((current) => {
-        const next = Math.min(current + 8, 100);
-        if (next === 100) {
-          window.clearInterval(interval);
-          window.setTimeout(() => setPhase("uploaded"), 260);
-        }
-        return next;
-      });
-    }, 110);
-
-    return () => window.clearInterval(interval);
-  }, [activeID, phase]);
+    return () => {
+      mountedRef.current = false;
+      stopUpload();
+    };
+  }, [stopUpload]);
 
   useLayoutEffect(() => {
     if (!panelRef.current) return;
@@ -386,12 +533,20 @@ export const PracticalExamples = () => {
               <h3>{preview.title}</h3>
               <p>{preview.body}</p>
               {active.type === "update" && (
-                <div
-                  aria-label={`${progress}% uploaded`}
-                  className="mm-example-progress"
-                  style={progressStyle}
-                >
-                  <span />
+                <div className="mm-example-progress-row">
+                  <progress
+                    aria-label="Upload progress"
+                    aria-valuetext={`${progress}% uploaded. ${
+                      phase === "complete"
+                        ? "Promise resolved."
+                        : "Promise pending."
+                    }`}
+                    className="mm-example-progress"
+                    max={100}
+                    ref={progressBarRef}
+                    value={progress}
+                  />
+                  <output aria-hidden="true">{progress}%</output>
                 </div>
               )}
               <button
