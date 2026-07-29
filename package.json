@@ -32,8 +32,8 @@
     "changelog:check": "turbo run changelog:check --filter=react-native-magic-modal",
     "build": "turbo run build",
     "release": "turbo run release --filter=react-native-magic-modal",
-    "docs": "pnpm --filter @magic-modal/docs build",
-    "docs:dev": "pnpm --filter @magic-modal/docs dev",
+    "docs": "pnpm --filter react-native-magic-modal build && pnpm --filter @magic-modal/docs build",
+    "docs:dev": "pnpm --filter react-native-magic-modal build && pnpm --filter @magic-modal/docs dev",
     "doctor": "turbo run doctor"
   },
   "config": {

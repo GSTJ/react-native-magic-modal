@@ -4,9 +4,13 @@
   "description": "A magic modal that can be used imperatively from anywhere! 🦄",
   "keywords": [
     "android",
+    "expo",
     "ios",
     "modal",
-    "react-native"
+    "nextjs",
+    "react-native",
+    "react-native-web",
+    "web"
   ],
   "homepage": "https://gstj.github.io/react-native-magic-modal/",
   "bugs": {
@@ -43,7 +47,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "bunchee",
+    "build": "bunchee && node tools/wrap-entrypoints.mjs && node tools/check-web-build.mjs",
     "lint": "oxlint --report-unused-disable-directives",
     "lint:fix": "oxlint --report-unused-disable-directives --fix",
     "format": "oxfmt --check .",

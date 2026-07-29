@@ -10,28 +10,40 @@ export const MagicMark = ({
     className={className}
     fill="none"
     height={size}
-    viewBox="0 0 40 40"
+    viewBox="0 0 48 48"
     width={size}
   >
-    <defs>
-      <linearGradient id="magic-mark-gradient" x1="5" x2="35" y1="4" y2="36">
-        <stop stopColor="#9B87F5" />
-        <stop offset=".48" stopColor="#6E56CF" />
-        <stop offset="1" stopColor="#42D3A5" />
-      </linearGradient>
-    </defs>
-    <rect
-      fill="url(#magic-mark-gradient)"
-      height="36"
-      rx="12"
-      width="36"
-      x="2"
-      y="2"
+    <rect fill="#151411" height="44" rx="13" width="44" x="2" y="2" />
+    <path
+      d="m23.5 6.5-4.2 14.1 10.1-5.1-5.9-9Z"
+      fill="#9DF7C7"
+      stroke="#151411"
+      strokeLinejoin="round"
+      strokeWidth="1.4"
     />
     <path
-      d="m12 28 4.6-15.7c.35-1.18 1.98-1.28 2.46-.15L22 19l6.58-2.5c1.2-.46 2.14.98 1.31 1.96L21.2 28.7c-.75.89-2.2.29-2.1-.87l.45-5.18-5.9 6.6c-.7.78-1.95-.24-1.65-1.25Z"
-      fill="white"
+      d="M16.2 20.3c2.9-3.1 6.8-4.5 10.8-3.7 5.7 1.1 9.1 6.2 8 11.8-.9 4.7-5 8.1-9.9 8.1h-9.3c-1.6 0-2.8-1.3-2.8-2.8v-5.4c0-3 .9-5.8 3.2-8Z"
+      fill="#FFFDF7"
     />
-    <circle cx="29" cy="10.5" fill="#D9FFF3" r="2.2" />
+    <path
+      d="m17.1 21.1-5.2-3.4 1.2 7.1"
+      fill="#FF4FA3"
+      stroke="#151411"
+      strokeLinejoin="round"
+      strokeWidth="1.4"
+    />
+    <path
+      d="M16.1 22.1c-2.3 2.3-3.4 5.2-3.1 8.9l4.7-2.2-2.1 5.3 5-1.6-1.1 4h5.6c-4-4.2-3.7-10.6-9-14.4Z"
+      fill="#7C5CFF"
+    />
+    <circle cx="29.8" cy="24.8" fill="#151411" r="1.35" />
+    <path
+      d="M39 7.5c.45 2.55 1.95 4.05 4.5 4.5-2.55.45-4.05 1.95-4.5 4.5-.45-2.55-1.95-4.05-4.5-4.5 2.55-.45 4.05-1.95 4.5-4.5Z"
+      fill="#FF4FA3"
+    />
+    <path
+      d="M38.2 28.8c.28 1.6 1.2 2.52 2.8 2.8-1.6.28-2.52 1.2-2.8 2.8-.28-1.6-1.2-2.52-2.8-2.8 1.6-.28 2.52-1.2 2.8-2.8Z"
+      fill="#9DF7C7"
+    />
   </svg>
 );

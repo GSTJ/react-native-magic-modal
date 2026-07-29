@@ -39,10 +39,6 @@
   border-color: var(--color-fd-border);
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   font-family:
     "Avenir Next",

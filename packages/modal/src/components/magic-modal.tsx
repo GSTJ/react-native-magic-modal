@@ -10,7 +10,13 @@ import type { Direction, ModalChildren, ModalProps } from "../constants/types";
 import type { SwipeGestureSpec } from "./panGesture";
 
 import React, { memo, useMemo } from "react";
-import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 
 import Animated, {
   Extrapolation,
@@ -236,7 +242,7 @@ export const MagicModal = memo(
           { translateY: translationY.value },
         ],
       };
-    });
+    }, [translationX, translationY]);
 
     const animatedBackdropStyles = useAnimatedStyle(() => {
       "worklet";
@@ -252,16 +258,23 @@ export const MagicModal = memo(
           Extrapolation.CLAMP,
         ),
       };
-    });
+    }, [
+      config.swipeDirection,
+      isHorizontal,
+      rangeMap,
+      translationX,
+      translationY,
+    ]);
 
     const isBackdropVisible = !config.hideBackdrop;
+    const webExitingAnimation = Platform.OS === "web" ? undefined : FadeOut;
 
     return (
       <View style={[StyleSheet.absoluteFill, styles.pointerEventsBoxNone]}>
         <Animated.View
           pointerEvents={isBackdropVisible ? "auto" : "none"}
           entering={FadeIn.duration(config.animationInTiming)}
-          exiting={FadeOut.duration(config.animationOutTiming)}
+          exiting={webExitingAnimation?.duration(config.animationOutTiming)}
           style={styles.backdropContainer}
         >
           <AnimatedPressable
@@ -293,7 +306,7 @@ export const MagicModal = memo(
                   ].duration(config.animationInTiming))
             }
             exiting={
-              isSwipeComplete
+              isSwipeComplete || Platform.OS === "web"
                 ? undefined
                 : (config.exiting ??
                   defaultAnimationOutMap[
