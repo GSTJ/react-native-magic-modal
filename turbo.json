@@ -16,18 +16,17 @@
       "persistent": true
     },
     "lint": {
-      "dependsOn": ["^topo", "^build"],
-      "outputs": ["node_modules/.cache/.lintcache"]
+      "dependsOn": ["^topo", "^build"]
     },
+    "format": {},
+    // Both of these rewrite the tree, so a cache hit has nothing to restore and
+    // replaying one skips oxlint and oxfmt.
     "lint:fix": {
-      "dependsOn": ["^topo", "^build"],
-      "outputs": ["node_modules/.cache/.lintcache"]
-    },
-    "format": {
-      "outputs": ["node_modules/.cache/.formatcache"]
+      "cache": false,
+      "dependsOn": ["^topo", "^build"]
     },
     "format:fix": {
-      "outputs": ["node_modules/.cache/.formatcache"]
+      "cache": false
     },
     "test": {
       "dependsOn": ["^topo"],
@@ -42,19 +41,17 @@
     "copy:readme": {
       "cache": false
     },
+    // packages/modal/README.md is gitignored and only exists once
+    // `copy:readme` generates it, so the publish has to depend on it.
+    // `^copy:readme` would ask for the task in this package's dependencies, and
+    // react-native-magic-modal has no workspace dependencies, so that resolves
+    // to nothing.
+    //
+    // Uncached because publishing is a one-shot side effect with nothing on
+    // disk for a hit to restore.
     "release": {
-      "dependsOn": ["^copy:readme"],
-      "outputs": ["node_modules/.cache/release.json"]
-    },
-    "docs": {
-      "dependsOn": ["^copy:readme"],
-      "outputs": ["docs/**", "node_modules/.cache/docs.json"]
-    },
-    "clean": {
-      "cache": false
-    },
-    "//#clean": {
-      "cache": false
+      "cache": false,
+      "dependsOn": ["copy:readme"]
     }
   }
 }
