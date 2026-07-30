@@ -17,6 +17,8 @@ const requiredFiles = [
   "index.html",
   "llms-full.txt",
   "llms.txt",
+  "r/magic-modal.json",
+  "r/registry.json",
   "robots.txt",
   "sitemap.xml",
   ...Object.keys(legacyRedirects),

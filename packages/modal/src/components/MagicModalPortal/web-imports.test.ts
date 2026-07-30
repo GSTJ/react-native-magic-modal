@@ -2,19 +2,27 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 describe("web-compatible package imports", () => {
-  it("loads FullWindowOverlay through the public react-native-screens entry", () => {
-    const portalSource = readFileSync(
+  it("keeps FullWindowOverlay behind a browser-specific boundary", () => {
+    const overlaySource = readFileSync(
       join(
         process.cwd(),
-        "src/components/MagicModalPortal/magic-modal-portal.tsx",
+        "src/components/MagicModalPortal/full-window-overlay.tsx",
+      ),
+      "utf8",
+    );
+    const browserOverlaySource = readFileSync(
+      join(
+        process.cwd(),
+        "src/components/MagicModalPortal/full-window-overlay.browser.tsx",
       ),
       "utf8",
     );
 
-    expect(portalSource).toContain(
+    expect(overlaySource).toContain(
       'import * as ReactNativeScreens from "react-native-screens";',
     );
-    expect(portalSource).not.toContain("react-native-screens/src/");
+    expect(overlaySource).not.toContain("react-native-screens/src/");
+    expect(browserOverlaySource).not.toContain('from "react-native-screens"');
   });
 
   it("declares web dependencies for both animated styles", () => {

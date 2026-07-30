@@ -1,7 +1,5 @@
 "use client";
 
-import type { NewConfigProps } from "react-native-magic-modal";
-
 import type { MouseEvent } from "react";
 
 import {
@@ -14,7 +12,8 @@ import {
 
 import { gsap } from "gsap";
 import { ArrowRight, Check, Upload } from "lucide-react";
-import { MagicModalHideReason, magicModal } from "react-native-magic-modal";
+
+import { SyntaxCode } from "@/components/syntax-code";
 
 type ExampleID = "confirm" | "follow-up" | "update";
 type ExamplePhase =
@@ -34,23 +33,6 @@ type Example = {
   note: string;
   type: ExampleID;
 };
-
-type UploadResult = "cancelled" | "done";
-type UploadHandle = ReturnType<typeof magicModal.show<UploadResult>>;
-
-const uploadCheckpointSize = 25;
-
-const uploadModalConfig = {
-  animationInTiming: 0,
-  animationOutTiming: 0,
-  hideBackdrop: true,
-  style: { display: "none" },
-  swipeDirection: undefined,
-} satisfies NewConfigProps;
-
-const UploadCheckpoint = ({ progress }: { progress: number }) => (
-  <span aria-hidden="true" data-magic-modal-upload-progress={progress} hidden />
-);
 
 const confirmExample: Example = {
   code: `const result = await magicModal
@@ -106,8 +88,8 @@ upload.onProgress((progress) => {
 await promise;`,
     file: "upload.tsx",
     id: "update",
-    label: "Update in place",
-    note: "Progress replaces the active component without closing it.",
+    label: "Advanced content replacement",
+    note: "Progress controlled outside the modal.",
     type: "update",
   },
 ];
@@ -211,7 +193,6 @@ export const PracticalExamples = () => {
   const [progress, setProgress] = useState(0);
   const panelRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLProgressElement>(null);
-  const uploadHandleRef = useRef<UploadHandle | null>(null);
   const uploadRunRef = useRef(0);
   const uploadTweenRef = useRef<ReturnType<typeof gsap.to> | null>(null);
   const mountedRef = useRef(true);
@@ -225,25 +206,6 @@ export const PracticalExamples = () => {
 
     if (progressBarRef.current) {
       progressBarRef.current.value = 0;
-    }
-
-    const handle = uploadHandleRef.current;
-    uploadHandleRef.current = null;
-
-    if (handle) {
-      try {
-        magicModal.hide<UploadResult>("cancelled", {
-          modalID: handle.modalID,
-        });
-      } catch (error) {
-        const portalUnmounted =
-          error instanceof Error &&
-          error.message.includes("MagicModalPortal not found");
-
-        if (!portalUnmounted) {
-          throw error;
-        }
-      }
     }
   }, []);
 
@@ -268,38 +230,8 @@ export const PracticalExamples = () => {
     stopUpload();
 
     const runID = uploadRunRef.current;
-    const handle = magicModal.show<UploadResult>(
-      () => <UploadCheckpoint progress={0} />,
-      uploadModalConfig,
-    );
-
-    uploadHandleRef.current = handle;
     setProgress(0);
     setPhase("uploading");
-
-    void handle.promise.then((result) => {
-      if (!mountedRef.current || uploadRunRef.current !== runID) {
-        return;
-      }
-
-      uploadHandleRef.current = null;
-      uploadTweenRef.current?.kill();
-      uploadTweenRef.current = null;
-
-      if (
-        result.reason === MagicModalHideReason.INTENTIONAL_HIDE &&
-        result.data === "done"
-      ) {
-        setPhase("complete");
-        return;
-      }
-
-      if (progressBarRef.current) {
-        progressBarRef.current.value = 0;
-      }
-      setProgress(0);
-      setPhase("ready");
-    });
 
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -309,14 +241,12 @@ export const PracticalExamples = () => {
       if (progressBarRef.current) {
         progressBarRef.current.value = 100;
       }
-      handle.update(() => <UploadCheckpoint progress={100} />);
       setProgress(100);
       setPhase("uploaded");
       return;
     }
 
     const animatedProgress = { value: 0 };
-    let lastCheckpoint = 0;
     let lastProgress = 0;
 
     if (progressBarRef.current) {
@@ -331,9 +261,6 @@ export const PracticalExamples = () => {
           return;
         }
 
-        if (lastCheckpoint < 100) {
-          handle.update(() => <UploadCheckpoint progress={100} />);
-        }
         setProgress(100);
         setPhase("uploaded");
         uploadTweenRef.current = null;
@@ -344,9 +271,6 @@ export const PracticalExamples = () => {
         }
 
         const nextProgress = Math.round(animatedProgress.value);
-        const nextCheckpoint =
-          Math.floor(nextProgress / uploadCheckpointSize) *
-          uploadCheckpointSize;
 
         if (progressBarRef.current) {
           progressBarRef.current.value = animatedProgress.value;
@@ -355,11 +279,6 @@ export const PracticalExamples = () => {
         if (nextProgress !== lastProgress) {
           lastProgress = nextProgress;
           setProgress(nextProgress);
-        }
-
-        if (nextCheckpoint > lastCheckpoint) {
-          lastCheckpoint = nextCheckpoint;
-          handle.update(() => <UploadCheckpoint progress={nextCheckpoint} />);
         }
       },
       value: 100,
@@ -381,16 +300,7 @@ export const PracticalExamples = () => {
       return;
     }
     if (phase === "uploaded") {
-      const handle = uploadHandleRef.current;
-
-      if (!handle) {
-        setPhase("complete");
-        return;
-      }
-
-      magicModal.hide<UploadResult>("done", {
-        modalID: handle.modalID,
-      });
+      setPhase("complete");
       return;
     }
     if (phase === "complete") openExample("confirm");
@@ -462,10 +372,10 @@ export const PracticalExamples = () => {
     <section className="mm-examples" id="examples">
       <header data-reveal>
         <span>COMMON FLOWS</span>
-        <h2>Await a result or update the open modal</h2>
+        <h2>Await a result and keep the flow in one place</h2>
         <p>
-          Each action resolves or updates the current modal. The result decides
-          what opens next.
+          The first two examples compose show(), hide(), and typed results. The
+          upload example uses update() for externally controlled progress.
         </p>
       </header>
 
@@ -511,8 +421,8 @@ export const PracticalExamples = () => {
               </i>
               <code>{active.file}</code>
             </div>
-            <pre>
-              <code>{active.code}</code>
+            <pre aria-label={`${active.file} source code`}>
+              <SyntaxCode code={active.code} />
             </pre>
           </div>
 

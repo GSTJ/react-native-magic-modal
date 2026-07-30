@@ -6,6 +6,7 @@ import {
   ArrowUpRight,
   BookOpen,
   Code2,
+  Heart,
 } from "lucide-react";
 
 import { HomeEffects } from "@/components/home-effects";
@@ -46,7 +47,6 @@ export default function HomePage() {
 
       <header className="mm-nav">
         <Link aria-label="Magic Modal home" className="mm-brand" href="/">
-          <MagicMark size={34} />
           <span>Magic Modal</span>
           <code>
             <ProjectVersion fallback="latest" />
@@ -73,12 +73,13 @@ export default function HomePage() {
         <div className="mm-hero-copy">
           <p className="mm-overline">
             <MagicMark size={24} />
-            A modal stack for React Native
+            Expo-ready on web, iOS, and Android
           </p>
           <h1>React Native modals you can await</h1>
           <p className="mm-hero-lede">
-            Mount one <code>MagicModalPortal</code> at the app root. Call{" "}
-            <code>show()</code> from any async flow and await the typed result.
+            Mount one <code>MagicModalPortal</code> at the root of your Expo
+            app. Call <code>show()</code> from any async flow and await the
+            typed result across web and native.
           </p>
           <div className="mm-hero-actions">
             <a className="mm-run-link" href="#original-flow">
@@ -308,8 +309,9 @@ export default function HomePage() {
             What <code>magicModal.show()</code> returns
           </h2>
           <p>
-            Await the close result, target this stack entry by ID, or replace
-            its component while the same promise stays pending.
+            Await the typed close result or target this stack entry by ID. The
+            advanced <code>update()</code> API replaces progress controlled
+            outside the modal.
           </p>
         </div>
 
@@ -350,19 +352,19 @@ export default function HomePage() {
           <div data-reveal>
             <dt>
               <code>update</code>
-              <span>03</span>
+              <span>ADVANCED</span>
             </dt>
             <dd>
-              Replaces the component while its ID, backdrop, stack position, and
-              pending promise stay put.
+              Remounts the component while its ID, stack position, and pending
+              promise stay put.
             </dd>
           </div>
         </dl>
 
         <p className="mm-update-note" data-reveal>
-          <span>UPDATE REMOUNTS</span>
-          <code>update()</code> starts a fresh component mount. Local React
-          state resets.
+          <span>USE SPARINGLY</span>
+          <code>update()</code> remounts the component and resets local React
+          state. Keep ordinary UI changes inside the modal.
         </p>
       </section>
 
@@ -428,7 +430,11 @@ export default function HomePage() {
         </div>
         <div className="mm-final-copy" data-reveal>
           <span>GET STARTED</span>
-          <h2>Add MagicModalPortal to your app root</h2>
+          <h2>
+            Add MagicModal
+            <wbr />
+            Portal to your app root
+          </h2>
           <p>
             The setup guide mounts the app-root portal and shows how to await a
             typed <code>HideReturn&lt;T&gt;</code>.
@@ -449,14 +455,28 @@ export default function HomePage() {
             <MagicMark size={29} />
             <span>Magic Modal</span>
           </Link>
-          <p>
-            Awaitable React Native modal flows with one portal and one ordered
-            stack.
-          </p>
-          <a href="https://github.com/GSTJ" rel="noreferrer" target="_blank">
-            Built by Gabriel Taveira
-            <ArrowUpRight aria-hidden="true" size={13} />
-          </a>
+          <h2>Keep modal flow logic outside your screens.</h2>
+          <p>Start with the setup guide or jump straight into the API.</p>
+          <div className="mm-footer-actions">
+            <a
+              className="mm-footer-author"
+              href="https://github.com/GSTJ"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Built by Gabriel Taveira
+              <ArrowUpRight aria-hidden="true" size={13} />
+            </a>
+            <a
+              className="mm-footer-sponsor"
+              href="https://github.com/sponsors/GSTJ"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <Heart aria-hidden="true" size={14} />
+              Sponsor me
+            </a>
+          </div>
         </div>
         <nav aria-label="Learn">
           <strong>Learn</strong>

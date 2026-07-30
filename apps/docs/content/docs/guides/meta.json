@@ -2,10 +2,11 @@
   "title": "Guides",
   "pages": [
     "modal-flows",
-    "updating-content",
     "gestures-and-scroll",
+    "accessibility",
     "recipes",
     "native-overlays",
-    "testing"
+    "testing",
+    "updating-content"
   ]
 }

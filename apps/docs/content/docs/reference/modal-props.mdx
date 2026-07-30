@@ -7,6 +7,7 @@ Pass a partial configuration as the second argument to `magicModal.show`:
 
 ```tsx
 magicModal.show(() => <SettingsModal />, {
+  accessibilityLabel: "Application settings",
   animationInTiming: 220,
   backdropColor: "rgba(8, 7, 20, 0.72)",
   swipeDirection: "down",
@@ -45,3 +46,6 @@ magicModal.show(() => <DraftModal />, {
   },
 });
 ```
+
+`onBackButtonPress` handles the shared system-dismiss path: Android back, web Escape, and the native
+accessibility escape action.

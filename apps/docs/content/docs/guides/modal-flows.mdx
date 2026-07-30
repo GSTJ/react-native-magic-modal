@@ -8,9 +8,9 @@ Because `show` returns a promise, a modal sequence reads like the interaction it
 ```tsx
 type Confirmation = { confirmed: boolean };
 
-const confirmation = await magicModal.show<Confirmation>(() => (
-  <ConfirmationModal />
-)).promise;
+const confirmation = await magicModal.show<Confirmation>(ConfirmationModal, {
+  accessibilityLabel: "Confirm changes",
+}).promise;
 
 if (
   confirmation.reason !== MagicModalHideReason.INTENTIONAL_HIDE ||
@@ -21,7 +21,9 @@ if (
 
 const response = await saveChanges();
 
-await magicModal.show(() => <ResultModal success={response.ok} />).promise;
+await magicModal.show(() => <ResultModal success={response.ok} />, {
+  accessibilityLabel: response.ok ? "Changes saved" : "Save failed",
+}).promise;
 ```
 
 ## Cancellation is part of the result
@@ -46,11 +48,14 @@ Calling `show` while one modal is open pushes another entry. Await the inner mod
 what to do with the original:
 
 ```tsx
-const account = await magicModal.show<Account>(() => <AccountPicker />).promise;
+const account = await magicModal.show<Account>(AccountPicker, {
+  accessibilityLabel: "Choose an account",
+}).promise;
 
 if (account.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
-  await magicModal.show(() => <AccountDetails account={account.data} />)
-    .promise;
+  await magicModal.show(() => <AccountDetails account={account.data} />, {
+    accessibilityLabel: "Account details",
+  }).promise;
 }
 ```
 

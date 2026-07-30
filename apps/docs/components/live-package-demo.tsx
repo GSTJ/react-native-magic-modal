@@ -42,8 +42,26 @@ const modalConfig = {
   animationInTiming: 180,
   animationOutTiming: 140,
   backdropColor: "rgba(13, 12, 10, 0.84)",
+  onBackdropPress: ({ hide }) => {
+    hide({ reason: MagicModalHideReason.BACKDROP_PRESS });
+  },
   swipeDirection: undefined,
 } satisfies NewConfigProps;
+
+const initialUploadProgress = 8;
+const uploadProgressUpdates = [
+  { from: 8, to: 14 },
+  { from: 14, to: 21 },
+  { from: 21, to: 29 },
+  { from: 29, to: 38 },
+  { from: 38, to: 48 },
+  { from: 48, to: 59 },
+  { from: 59, to: 69 },
+  { from: 69, to: 78 },
+  { from: 78, to: 86 },
+  { from: 86, to: 93 },
+  { from: 93, to: 100 },
+] as const;
 
 const wait = (milliseconds: number) =>
   new Promise<void>((resolve) => {
@@ -65,52 +83,61 @@ const describeResult = <T,>(result: HideReturn<T>) => {
 const ModalFrame = ({
   children,
   eyebrow,
-  surface = "mobile",
+  surface = "dialog",
   title,
+  variant,
 }: {
   children: React.ReactNode;
   eyebrow: string;
-  surface?: "mobile" | "web";
+  surface?: "dialog" | "web";
   title: string;
-}) => (
-  <dialog
-    aria-label={title}
-    aria-modal="true"
-    className={`mm-package-modal is-${surface}`}
-    open
-    tabIndex={-1}
-  >
-    <div aria-hidden="true" className="mm-package-surface-bar">
-      {surface === "mobile" ? (
-        <>
-          <span>9:41</span>
-          <i className="mm-package-island" />
-          <span>5G</span>
-        </>
-      ) : (
-        <>
+  variant:
+    | "feedback"
+    | "notification"
+    | "rating"
+    | "store"
+    | "thanks"
+    | "upload";
+}) => {
+  const titleId = React.useId();
+
+  return (
+    <section
+      aria-labelledby={titleId}
+      className={`mm-package-modal is-${surface} is-${variant}`}
+      data-modal-kind={variant}
+    >
+      {surface === "web" ? (
+        <div aria-hidden="true" className="mm-package-surface-bar">
           <strong>Release dashboard</strong>
           <code>app.example.com/releases</code>
-        </>
-      )}
-    </div>
-    <div className="mm-package-modal-heading">
-      <span aria-hidden="true" className="mm-package-spark" />
-      <div>
-        <span>{eyebrow}</span>
-        <h3>{title}</h3>
+        </div>
+      ) : null}
+      <div className="mm-package-modal-heading">
+        <span aria-hidden="true" className="mm-package-spark" />
+        <div>
+          <span>{eyebrow}</span>
+          <h3 id={titleId}>{title}</h3>
+        </div>
       </div>
-    </div>
-    {children}
-  </dialog>
-);
+      {children}
+    </section>
+  );
+};
 
 const ScorePrompt = () => {
   const { hide } = useMagicModal<number>();
 
   return (
-    <ModalFrame eyebrow="APP RATING" title="How was your experience?">
-      <p>Pick a score. The caller is waiting for this value.</p>
+    <ModalFrame
+      eyebrow="APP RATING"
+      title="How was your experience?"
+      variant="rating"
+    >
+      <p>
+        Pick a score, or press outside to cancel. The caller waits for either
+        result.
+      </p>
       <div className="mm-package-score">
         {[1, 2, 3, 4, 5].map((score) => (
           <button
@@ -131,10 +158,14 @@ const NotificationPrompt = () => {
   const { hide } = useMagicModal<"reviewed">();
 
   return (
-    <ModalFrame eyebrow="ANOTHER CALLER" title="Payment needs a review">
+    <ModalFrame
+      eyebrow="ANOTHER CALLER"
+      title="Payment needs a review"
+      variant="notification"
+    >
       <p>
-        This opened above the rating prompt. Close it and the rating promise
-        stays pending.
+        This notification opened above the rating prompt. Press outside to
+        dismiss it while the rating promise stays pending.
       </p>
       <div className="mm-package-modal-fact">
         <span>STACK POSITION</span>
@@ -155,7 +186,11 @@ const FeedbackPrompt = () => {
   const { hide } = useMagicModal<string>();
 
   return (
-    <ModalFrame eyebrow="FOLLOW-UP" title="What got in the way?">
+    <ModalFrame
+      eyebrow="FOLLOW-UP"
+      title="What got in the way?"
+      variant="feedback"
+    >
       <p>
         The same caller handles this branch after the rating promise resolves.
       </p>
@@ -175,10 +210,12 @@ const StorePrompt = () => {
   const { hide } = useMagicModal<"later" | "open">();
 
   return (
-    <ModalFrame eyebrow="STORE REVIEW" title="Leave a store rating?">
-      <p>
-        A high score reached this branch without adding state to the screen.
-      </p>
+    <ModalFrame
+      eyebrow="STORE REVIEW"
+      title="Leave a store rating?"
+      variant="store"
+    >
+      <p>The caller opened this prompt after receiving a high score.</p>
       <div className="mm-package-modal-actions">
         <button onClick={() => hide("later")} type="button">
           Maybe later
@@ -199,7 +236,11 @@ const ThanksPrompt = ({ detail }: { detail: string }) => {
   const { hide } = useMagicModal<void>();
 
   return (
-    <ModalFrame eyebrow="FLOW COMPLETE" title="Thanks for your time.">
+    <ModalFrame
+      eyebrow="FLOW COMPLETE"
+      title="Thanks for your time."
+      variant="thanks"
+    >
       <p>{detail}</p>
       <button
         className="mm-package-modal-primary"
@@ -212,22 +253,40 @@ const ThanksPrompt = ({ detail }: { detail: string }) => {
   );
 };
 
-const UploadPrompt = ({ progress }: { progress: number }) => {
+const UploadPrompt = ({
+  fromProgress,
+  progress,
+}: {
+  fromProgress: number;
+  progress: number;
+}) => {
   const { hide } = useMagicModal<"cancelled" | "done">();
+  const [displayedProgress, setDisplayedProgress] = useState(fromProgress);
   const complete = progress === 100;
+
+  useEffect(() => {
+    const animationFrame = window.requestAnimationFrame(() => {
+      setDisplayedProgress(progress);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+    };
+  }, [progress]);
 
   return (
     <ModalFrame
-      eyebrow="LIVE UPDATE"
+      eyebrow="ADVANCED UPDATE"
       surface="web"
       title={complete ? "Upload complete" : "Uploading release"}
+      variant="upload"
     >
-      <p>update() replaces the component in the open entry.</p>
+      <p>update() remounts content while keeping this entry open.</p>
       <progress
         aria-label={`Upload progress: ${progress}%`}
         className="mm-package-progress"
         max={100}
-        value={progress}
+        value={displayedProgress}
       />
       <div className="mm-package-progress-meta">
         <strong>{progress}%</strong>
@@ -270,7 +329,10 @@ export const LivePackageDemo = () => {
 
   const showTracked: ShowTracked = useCallback(
     <T,>(label: string, component: ModalChildren, config?: NewConfigProps) => {
-      const handle = magicModal.show<T>(component, config);
+      const handle = magicModal.show<T>(component, {
+        accessibilityLabel: label,
+        ...config,
+      });
       const entry = { id: handle.modalID, label };
 
       setActiveEntries((current) => [...current, entry]);
@@ -394,7 +456,7 @@ export const LivePackageDemo = () => {
         : null;
     const handle = showTracked<"cancelled" | "done">(
       "Upload progress",
-      () => <UploadPrompt progress={8} />,
+      () => <UploadPrompt fromProgress={0} progress={initialUploadProgress} />,
       modalConfig,
     );
     let resolved = false;
@@ -403,20 +465,26 @@ export const LivePackageDemo = () => {
       resolved = true;
     });
 
-    await [34, 67, 100].reduce(
-      (sequence, progress) =>
+    await uploadProgressUpdates.reduce(
+      (sequence, { from, to }) =>
         sequence.then(async () => {
-          await wait(560);
+          if (resolved) {
+            return;
+          }
+
+          await wait(240);
 
           if (resolved) {
             return;
           }
 
-          handle.update(() => <UploadPrompt progress={progress} />);
+          handle.update(() => (
+            <UploadPrompt fromProgress={from} progress={to} />
+          ));
           record({
-            id: `update-${handle.modalID}-${progress}`,
+            id: `update-${handle.modalID}-${to}`,
             label: "Upload content",
-            result: `UPDATED TO ${progress}%`,
+            result: `UPDATED TO ${to}%`,
           });
         }),
       Promise.resolve(),
@@ -480,96 +548,11 @@ export const LivePackageDemo = () => {
   }, [modalOpen]);
 
   useEffect(() => {
-    const root = rootRef.current;
-
-    if (!root) {
-      return;
-    }
-
-    const syncDialogs = () => {
-      const dialogs = [...root.querySelectorAll<HTMLDialogElement>("dialog")];
-      const topDialogIndex = dialogs.length - 1;
-
-      for (const [index, dialog] of dialogs.entries()) {
-        const hidden = index !== topDialogIndex;
-        dialog.inert = hidden;
-
-        if (hidden) {
-          dialog.setAttribute("aria-hidden", "true");
-        } else {
-          dialog.removeAttribute("aria-hidden");
-        }
-      }
-
-      dialogs.at(-1)?.focus();
-    };
-
-    const dialogObserver = new MutationObserver(syncDialogs);
-    dialogObserver.observe(root, { childList: true, subtree: true });
-
-    const focusTopDialog = window.setTimeout(syncDialogs, 30);
-
     if (!modalOpen && !ratingRunning && !updateRunning) {
       restoreFocusRef.current?.focus();
       restoreFocusRef.current = null;
     }
-
-    return () => {
-      dialogObserver.disconnect();
-      window.clearTimeout(focusTopDialog);
-    };
-  }, [activeEntries, modalOpen, ratingRunning, updateRunning]);
-
-  useEffect(() => {
-    if (!modalOpen) {
-      return;
-    }
-
-    const trapFocus = (event: KeyboardEvent) => {
-      if (event.key !== "Tab") {
-        return;
-      }
-
-      const root = rootRef.current;
-      const dialogs = root?.querySelectorAll<HTMLElement>("dialog");
-      const dialog = dialogs?.item((dialogs?.length ?? 1) - 1);
-
-      if (!dialog) {
-        return;
-      }
-
-      const focusable = [
-        ...dialog.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-        ),
-      ];
-
-      if (focusable.length === 0) {
-        event.preventDefault();
-        dialog.focus();
-        return;
-      }
-
-      const [first] = focusable;
-      const last = focusable.at(-1);
-
-      if (
-        event.shiftKey &&
-        (document.activeElement === first || document.activeElement === dialog)
-      ) {
-        event.preventDefault();
-        last?.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first?.focus();
-      }
-    };
-
-    document.addEventListener("keydown", trapFocus);
-    return () => {
-      document.removeEventListener("keydown", trapFocus);
-    };
-  }, [modalOpen]);
+  }, [modalOpen, ratingRunning, updateRunning]);
 
   return (
     <div
@@ -579,24 +562,25 @@ export const LivePackageDemo = () => {
       <div className="mm-live-package-content">
         <div className="mm-package-toolbar">
           <div>
-            <span>ACTUAL PACKAGE</span>
+            <span>EXPO PACKAGE</span>
             <code>Expo / iOS / Android / Web</code>
           </div>
           <div aria-live="polite" className="mm-package-count">
             <strong>{activeEntries.length}</strong>
             <span>
-              {activeEntries.length === 1 ? "open entry" : "open entries"}
+              {activeEntries.length === 1 ? "open modal" : "open modals"}
             </span>
           </div>
         </div>
 
         <div className="mm-package-grid">
           <div className="mm-package-copy">
-            <span>ONE PORTAL ON THIS PAGE</span>
-            <h3>Stack a notification over the rating prompt</h3>
+            <span>ONE PORTAL FOR EXPO APPS</span>
+            <h3>Run the same modal flow on web and native</h3>
             <p>
-              Start the rating flow in the phone frame, or run update() in the
-              web panel. This page mounts one MagicModalPortal for both.
+              Start the rating flow or stack a notification above it. The web
+              upload separately demonstrates the advanced update() API. The same
+              MagicModalPortal works across Expo for iOS, Android, and web.
             </p>
             <div className="mm-package-actions">
               <button
@@ -627,7 +611,7 @@ export const LivePackageDemo = () => {
                 }}
                 type="button"
               >
-                {updateRunning ? "Upload in progress" : "Start web upload"}
+                {updateRunning ? "Upload in progress" : "Advanced web upload"}
               </button>
             </div>
           </div>

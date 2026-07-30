@@ -9,7 +9,9 @@
 import type { Direction, ModalChildren, ModalProps } from "../constants/types";
 import type { SwipeGestureSpec } from "./panGesture";
 
-import React, { memo, useMemo } from "react";
+import type { ViewProps } from "react-native";
+
+import React, { memo, useCallback, useEffect, useMemo } from "react";
 import {
   Platform,
   Pressable,
@@ -46,6 +48,206 @@ import { PanGestureSurface } from "./panGesture";
 export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const TOUCH_SLOP = 10;
+const MODAL_DIALOG_TEST_ID = "magic-modal-dialog";
+
+const focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled]):not([type='hidden'])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[contenteditable='true']",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+const getFocusableElements = (dialog: HTMLElement) =>
+  [...dialog.querySelectorAll<HTMLElement>(focusableSelector)].filter(
+    (element) =>
+      element.getAttribute("aria-hidden") !== "true" &&
+      !element.closest("[inert]"),
+  );
+
+const focusFirstElement = (dialog: HTMLElement) => {
+  const autoFocusTarget = dialog.querySelector<HTMLElement>("[autofocus]");
+  const target = autoFocusTarget ?? getFocusableElements(dialog)[0] ?? dialog;
+
+  target.focus();
+};
+
+const getStackEntryAccessibilityProps = (
+  isTopmost: boolean,
+): Pick<
+  ViewProps,
+  | "accessibilityElementsHidden"
+  | "aria-hidden"
+  | "importantForAccessibility"
+  | "pointerEvents"
+> => ({
+  accessibilityElementsHidden: !isTopmost,
+  "aria-hidden": !isTopmost,
+  importantForAccessibility: isTopmost ? "auto" : "no-hide-descendants",
+  pointerEvents: isTopmost ? "box-none" : "none",
+});
+
+const getDialogAccessibilityProps = ({
+  accessibilityLabel,
+  isTopmost,
+  onSystemDismiss,
+}: {
+  accessibilityLabel: string | undefined;
+  isTopmost: boolean;
+  onSystemDismiss: () => void;
+}): Pick<
+  ViewProps,
+  | "accessibilityLabel"
+  | "accessibilityViewIsModal"
+  | "aria-modal"
+  | "importantForAccessibility"
+  | "onAccessibilityEscape"
+  | "role"
+  | "tabIndex"
+> => ({
+  accessibilityLabel: isTopmost ? accessibilityLabel : undefined,
+  accessibilityViewIsModal: isTopmost,
+  "aria-modal": isTopmost ? true : undefined,
+  importantForAccessibility: isTopmost ? "auto" : "no-hide-descendants",
+  onAccessibilityEscape: isTopmost ? onSystemDismiss : undefined,
+  role: isTopmost ? "dialog" : undefined,
+  tabIndex: isTopmost ? -1 : undefined,
+});
+
+const useWebModalFocus = ({
+  childrenIdentity,
+  dialogNode,
+  isTopmost,
+  onSystemDismiss,
+}: {
+  childrenIdentity: ModalChildren;
+  dialogNode: View | null;
+  isTopmost: boolean;
+  onSystemDismiss: () => void;
+}) => {
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const dialog = dialogNode as unknown as HTMLElement | null;
+    const focusToRestore =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+
+    return () => {
+      if (!focusToRestore) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => {
+        // React Strict Mode replays effects without removing the mounted
+        // dialog. That cleanup is not a real dismissal and must not return
+        // focus to the opener.
+        if (
+          dialog &&
+          document.contains(dialog) &&
+          dialog.getAttribute("aria-modal") === "true"
+        ) {
+          return;
+        }
+
+        if (!document.contains(focusToRestore)) {
+          return;
+        }
+
+        const activeDialog = document.querySelector<HTMLElement>(
+          `[data-testid="${MODAL_DIALOG_TEST_ID}"][aria-modal="true"]`,
+        );
+
+        if (
+          activeDialog &&
+          activeDialog !== dialog &&
+          !activeDialog.contains(focusToRestore)
+        ) {
+          return;
+        }
+
+        focusToRestore.focus();
+      });
+    };
+  }, [dialogNode]);
+
+  useEffect(() => {
+    if (!isTopmost || typeof document === "undefined") {
+      return;
+    }
+
+    const dialog = dialogNode as unknown as HTMLElement | null;
+
+    if (!dialog) {
+      return;
+    }
+
+    const focusFrame = window.requestAnimationFrame(() => {
+      if (!dialog.contains(document.activeElement)) {
+        focusFirstElement(dialog);
+      }
+    });
+
+    const keepFocusInside = (event: FocusEvent) => {
+      if (event.target instanceof Node && !dialog.contains(event.target)) {
+        focusFirstElement(dialog);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        onSystemDismiss();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusable = getFocusableElements(dialog);
+
+      if (focusable.length === 0) {
+        event.preventDefault();
+        dialog.focus();
+        return;
+      }
+
+      const [first] = focusable;
+      const last = focusable.at(-1);
+      const { activeElement } = document;
+
+      if (
+        event.shiftKey &&
+        (activeElement === first || activeElement === dialog)
+      ) {
+        event.preventDefault();
+        last?.focus();
+      } else if (
+        !event.shiftKey &&
+        (activeElement === last || !dialog.contains(activeElement))
+      ) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+
+    document.addEventListener("focusin", keepFocusInside);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      document.removeEventListener("focusin", keepFocusInside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [childrenIdentity, dialogNode, isTopmost, onSystemDismiss]);
+};
 
 export const defaultAnimationInMap = {
   up: FadeInUp,
@@ -65,11 +267,15 @@ export const MagicModal = memo(
   ({
     config,
     children: Children,
+    isTopmost,
   }: {
     config: ModalProps;
     children: ModalChildren;
+    isTopmost: boolean;
   }) => {
     const { hide } = useInternalMagicModal();
+    const [dialogNode, setDialogNode] = React.useState<View | null>(null);
+    const { onBackButtonPress } = config;
 
     const translationX = useSharedValue(0);
     const translationY = useSharedValue(0);
@@ -94,6 +300,22 @@ export const MagicModal = memo(
             hide({ reason: MagicModalHideReason.BACKDROP_PRESS });
           };
     }, [config, hide]);
+
+    const onSystemDismiss = useCallback(() => {
+      if (onBackButtonPress) {
+        onBackButtonPress({ hide });
+        return;
+      }
+
+      hide({ reason: MagicModalHideReason.BACK_BUTTON_PRESS });
+    }, [hide, onBackButtonPress]);
+
+    useWebModalFocus({
+      childrenIdentity: Children,
+      dialogNode,
+      isTopmost,
+      onSystemDismiss,
+    });
 
     const isHorizontal =
       config.swipeDirection === "left" || config.swipeDirection === "right";
@@ -268,9 +490,20 @@ export const MagicModal = memo(
 
     const isBackdropVisible = !config.hideBackdrop;
     const webExitingAnimation = Platform.OS === "web" ? undefined : FadeOut;
+    const stackEntryAccessibilityProps =
+      getStackEntryAccessibilityProps(isTopmost);
+    const dialogAccessibilityProps = getDialogAccessibilityProps({
+      accessibilityLabel: config.accessibilityLabel,
+      isTopmost,
+      onSystemDismiss,
+    });
 
     return (
-      <View style={[StyleSheet.absoluteFill, styles.pointerEventsBoxNone]}>
+      <View
+        {...stackEntryAccessibilityProps}
+        style={[StyleSheet.absoluteFill, styles.pointerEventsBoxNone]}
+        testID="magic-modal-stack-entry"
+      >
         <Animated.View
           pointerEvents={isBackdropVisible ? "auto" : "none"}
           entering={FadeIn.duration(config.animationInTiming)}
@@ -278,6 +511,11 @@ export const MagicModal = memo(
           style={styles.backdropContainer}
         >
           <AnimatedPressable
+            accessibilityElementsHidden
+            accessible={false}
+            aria-hidden
+            disabled={!isBackdropVisible}
+            importantForAccessibility="no-hide-descendants"
             testID="magic-modal-backdrop"
             style={[
               styles.backdrop,
@@ -316,12 +554,15 @@ export const MagicModal = memo(
           >
             <PanGestureSurface swipe={swipe}>
               <View
+                {...dialogAccessibilityProps}
                 collapsable={false}
+                ref={setDialogNode}
                 style={[
                   styles.childrenWrapper,
                   styles.pointerEventsBoxNone,
                   config.style,
                 ]}
+                testID={MODAL_DIALOG_TEST_ID}
               >
                 <Children />
               </View>

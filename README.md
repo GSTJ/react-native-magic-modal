@@ -1,15 +1,11 @@
 <h1 align="center">React Native Magic Modal</h1>
 
-<p align="center">Call <code>show()</code> from any async flow. Await a typed result that records how the modal closed.</p>
+<p align="center">Mount one portal. Open a modal from any async flow and await a typed result on Expo, React Native, or the web.</p>
 
-<a href="./media/magic-modal-demo.mp4">
-  <img
-    alt="A rating flow moving from magicModal.show to a typed close result"
-    src="./media/magic-modal-demo.gif"
-  />
-</a>
-
-<p align="center"><a href="./media/magic-modal-demo.mp4">Watch the MP4</a></p>
+<img
+  alt="A rating flow moving from magicModal.show to a typed close result"
+  src="https://raw.githubusercontent.com/GSTJ/react-native-magic-modal/main/media/magic-modal-demo.gif"
+/>
 
 <p align="center">
   <a aria-label="NPM Version" href="https://www.npmjs.com/package/react-native-magic-modal">
@@ -26,254 +22,192 @@
   <a href="https://gstj.github.io/react-native-magic-modal/docs/">Docs</a> | <a href="https://github.com/gstj/react-native-magic-modal">GitHub</a> | <a href="https://gstj.github.io/react-native-magic-modal/docs/faq/">FAQ</a> | <a href="https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96">Article</a>
 </p>
 
-> [!NOTE]
-> Magic Modal owns the flow. Your components own the UI. Open a modal from anywhere and await its typed result.
+## How it works
 
-> [!TIP]
-> Guides and API reference live in the [documentation](https://gstj.github.io/react-native-magic-modal/docs/).
+`MagicModalPortal` owns a stack near the application root. Each `show()` call pushes one entry and
+returns its ID plus a `Promise<HideReturn<T>>`. The modal calls `hide(data)` through
+`useMagicModal<T>()`. The caller resumes with submitted data or the exact dismissal reason.
 
-## Core API
+```tsx
+const result = await magicModal.show<ConfirmationResult>(ConfirmationModal, {
+  accessibilityLabel: "Confirm publish",
+}).promise;
 
-- `magicModal.show()` renders content in the portal and returns an entry handle with a promise.
-- `modalID` targets one entry for an update or close.
-- `update()` replaces the component rendered by an open entry.
-- `HideReturn<T>` records how the modal closed and carries submitted data.
-- Modal components remain ordinary React Native UI.
+if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
+  await publish(result.data);
+} else {
+  recordCancellation(result.reason);
+}
+```
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Quickstart](#quickstart)
-- [Try it](#try-it)
-- [Documentation](#documentation)
-- [FAQ](#faq)
-- [Contributors](#contributors)
+Every stack entry keeps its own component, configuration, ID, and promise. A second `show()` call
+can open above the current modal without mixing their results.
 
 ## Installation
 
-Install the package and its native peers:
+Use the command for the runtime you ship. Expo chooses versions compatible with the installed SDK.
+
+### Expo Web
 
 ```bash
-pnpm add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
-```
-
-Minimum peer versions:
-
-| Peer                           | Minimum |
-| ------------------------------ | ------- |
-| `react`                        | 18.0.0  |
-| `react-native`                 | 0.81.0  |
-| `react-native-gesture-handler` | 2.20.0  |
-| `react-native-reanimated`      | 4.1.0   |
-| `react-native-worklets`        | 0.5.0   |
-| `react-native-screens`         | 4.19.0  |
-
-Both gesture-handler majors work. Swipe-to-dismiss uses 3.x's `usePanGesture` hook when it's available and falls back to 2.x's `Gesture.Pan()` builder otherwise.
-
-Reanimated 4 requires React Native's New Architecture. In a bare React Native app, add `"react-native-worklets/plugin"` last in `babel.config.js`. Run `npx pod-install`. Expo configures the plugin through its Babel preset; install compatible native versions with:
-
-```bash
-npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
 pnpm add react-native-magic-modal
+npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-dom react-native-web @expo/metro-runtime
 ```
 
-Only 8.0.0 required gesture-handler 3.x. If you're on it and pinned to 2.x, upgrade to 9.0.0 or later, and drop `react-native-gesture-handler` from `expo.install.exclude` if you added it to quiet the version check.
+Read the [Expo guide](https://gstj.github.io/react-native-magic-modal/docs/platforms/expo/) for the
+portal and web command.
 
-## Quickstart
+### Expo iOS
 
-Mount a `MagicModalPortal` at the app root, and add a `GestureHandlerRootView` if you haven't already:
+```bash
+pnpm add react-native-magic-modal
+npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+```
+
+### Expo Android
+
+```bash
+pnpm add react-native-magic-modal
+npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+```
+
+iOS and Android use the same native dependency set. The
+[native guide](https://gstj.github.io/react-native-magic-modal/docs/platforms/ios-android/) covers
+pods, Android back handling, and iOS overlays.
+
+### Next.js
+
+```bash
+pnpm add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+```
+
+Copy the validated alias, extension order, and Client Component setup from the
+[Next.js guide](https://gstj.github.io/react-native-magic-modal/docs/platforms/nextjs/). A runnable
+App Router consumer lives in [`examples/next-web`](examples/next-web).
+
+For bare React Native, follow the
+[installation guide](https://gstj.github.io/react-native-magic-modal/docs/getting-started/installation/).
+
+## Mount the portal
+
+Expo and native applications mount one portal inside `GestureHandlerRootView`:
 
 ```tsx
-import { MagicModalPortal } from "react-native-magic-modal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { MagicModalPortal } from "react-native-magic-modal";
 
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <YourAppContent />
-      <MagicModalPortal /> {/** After your app component hierarchy */}
+      <YourApp />
+      <MagicModalPortal />
     </GestureHandlerRootView>
   );
 }
 ```
 
-In Expo Router, mount it in the root `_layout.tsx`.
+With Expo Router, put the same structure in the root `app/_layout.tsx`. Next.js mounts the portal
+inside a Client Component as shown in the [web setup](https://gstj.github.io/react-native-magic-modal/docs/platforms/nextjs/).
 
-The `GestureHandlerRootView` is required. The portal renders a `GestureDetector` for the swipe gesture, and gesture-handler 3.x throws when one renders without a root view above it. 2.x only logs a warning.
+## Return typed data
 
-## Try it
-
-The [interactive docs](https://gstj.github.io/react-native-magic-modal/) run the
-package directly in the browser. Try the mobile rating flow, stack a second
-caller, or watch `update()` drive a web upload.
-
-The [kitchen-sink app](examples/kitchen-sink) covers the native iOS and Android
-paths.
-
-## Usage
-
-Start with a modal that returns data to its caller:
+Use the same result type in `show<T>()` and `useMagicModal<T>()`:
 
 ```tsx
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { magicModal, useMagicModal, MagicModalHideReason } from "react-native-magic-modal";
+import { Pressable, Text, View } from "react-native";
+import { MagicModalHideReason, magicModal, useMagicModal } from "react-native-magic-modal";
 
-type ConfirmationModalReturn = {
-  success: boolean;
+type ConfirmationResult = {
+  confirmed: boolean;
 };
 
-const ConfirmationModal = () => {
-  const { hide } = useMagicModal<ConfirmationModalReturn>();
+function ConfirmationModal() {
+  const { hide } = useMagicModal<ConfirmationResult>();
 
   return (
     <View>
-      <TouchableOpacity onPress={() => hide({ success: true })}>
-        <Text>Confirm</Text>
-      </TouchableOpacity>
+      <Text accessibilityRole="header">Publish this release?</Text>
+      <Pressable accessibilityRole="button" onPress={() => hide({ confirmed: true })}>
+        <Text>Publish</Text>
+      </Pressable>
+      <Pressable accessibilityRole="button" onPress={() => hide({ confirmed: false })}>
+        <Text>Cancel</Text>
+      </Pressable>
     </View>
   );
-};
+}
 
-const ResponseModal = ({ text }) => {
-  const { hide } = useMagicModal();
+export async function confirmRelease() {
+  const result = await magicModal.show<ConfirmationResult>(ConfirmationModal, {
+    accessibilityLabel: "Publish this release",
+  }).promise;
 
-  return (
-    <View>
-      <Text>{text}</Text>
-      <TouchableOpacity onPress={() => hide()}>
-        <Text>Close</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const handleConfirmationFlow = async () => {
-  // The render callback can pass props to the modal.
-  const result = await magicModal.show<ConfirmationModalReturn>(() => <ConfirmationModal />)
-    .promise;
-
-  // Non-intentional closes include backdrop presses, Android back presses, and swipes.
   if (result.reason !== MagicModalHideReason.INTENTIONAL_HIDE) {
-    // User cancelled the flow
-    return;
+    return { confirmed: false, reason: result.reason };
   }
 
-  if (result.data.success) {
-    return magicModal.show(() => <ResponseModal text="Confirmed." />).promise;
-  }
-
-  return magicModal.show(() => <ResponseModal text="Confirmation failed." />).promise;
-};
-
-export const MainScreen = () => {
-  return (
-    <TouchableOpacity onPress={handleConfirmationFlow}>
-      <Text>Start confirmation flow</Text>
-    </TouchableOpacity>
-  );
-};
+  return result.data;
+}
 ```
 
-You can also close a modal outside its component. Pass its `modalID` to the
-global `hide` method:
-
-```tsx
-import { magicModal } from "react-native-magic-modal";
-
-const QuickModal = ({ text }) => {
-  return (
-    <View>
-      <Text>The caller will close this modal.</Text>
-    </View>
-  );
-};
-
-const handleQuickModal = async () => {
-  const { modalID } = magicModal.show(QuickModal);
-
-  // Wait for 2 seconds before closing the modal
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  // Prefer hide() from the modal context when the modal owns the close action.
-  // Call it from an effect to auto-dismiss the modal.
-  magicModal.hide(undefined, { modalID });
-};
-
-export const MainScreen = () => {
-  return (
-    <TouchableOpacity onPress={handleQuickModal}>
-      <Text>Show a quick modal</Text>
-    </TouchableOpacity>
-  );
-};
-```
-
-`show` also returns `update()` for data that lives outside the modal:
-
-```tsx
-import { magicModal } from "react-native-magic-modal";
-
-const UploadModal = ({ progress }) => (
-  <View>
-    <Text>Uploading, {progress}%</Text>
-  </View>
-);
-
-const handleUpload = async (file) => {
-  const { modalID, update } = magicModal.show(() => <UploadModal progress={0} />);
-
-  await uploadFile(file, {
-    onProgress: (progress) => update(() => <UploadModal progress={progress} />),
-  });
-
-  magicModal.hide(undefined, { modalID });
-};
-```
-
-The entry keeps its stack position, backdrop, and pending promise. Only the
-component changes. It mounts from scratch, so local `useState` resets. Keep
-modal-owned state in a store or context when it must survive an update.
-
-See the [kitchen-sink example](examples/kitchen-sink) for runnable iOS and Android flows.
+Backdrop presses, completed swipes, system-dismiss actions, and `hideAll()` resolve the same promise
+with distinct reasons. System dismissal includes Android back, web Escape, and the native
+accessibility escape action. TypeScript exposes `data` after the caller narrows the result to
+`INTENTIONAL_HIDE`.
 
 ## Documentation
 
-Read the [setup, guides, and API reference](https://gstj.github.io/react-native-magic-modal/).
+- [Expo Web, iOS, and Android](https://gstj.github.io/react-native-magic-modal/docs/platforms/expo/)
+- [Next.js and React Native Web](https://gstj.github.io/react-native-magic-modal/docs/platforms/nextjs/)
+- [Modal flows and stacks](https://gstj.github.io/react-native-magic-modal/docs/guides/modal-flows/)
+- [Hide results](https://gstj.github.io/react-native-magic-modal/docs/reference/hide-results/)
+- [Accessibility](https://gstj.github.io/react-native-magic-modal/docs/guides/accessibility/)
+- [Advanced content replacement](https://gstj.github.io/react-native-magic-modal/docs/guides/updating-content/)
+
+The [kitchen-sink Expo app](examples/kitchen-sink) contains runnable native flows. The
+[interactive site](https://gstj.github.io/react-native-magic-modal/) runs the package in the
+browser.
 
 ## FAQ
 
-**Q:** Can two modals be open at once?
+### Can multiple modals be open?
 
-**A:** Yes. Every `show()` call adds an independent stack entry with its own ID
-and promise.
+Yes. Every `show()` call creates an independent stack entry with its own ID, configuration, and
+promise.
 
----
+### Can a modal contain a ScrollView?
 
-**Q:** Can I put scrollable content inside a modal?
+Yes. Disable swipe dismissal so the gestures do not compete:
 
-**A:**
-Yes, but the scroll gesture conflicts with swipe dismissal. Pass
-`swipeDirection: undefined` to `magicModal.show()` for a scrollable modal.
+```tsx
+magicModal.show(ScrollableModal, {
+  swipeDirection: undefined,
+});
+```
 
-For a full bottom-sheet component, use
-[React Native Bottom Sheet](https://github.com/gorhom/react-native-bottom-sheet).
+Magic Modal does not implement snap points or nested scrolling.
 
----
+### How do I close a modal from outside its component?
 
-**Q:** Modals are appearing on top of native modal screens, such as the image picker. How can I fix this?
+Keep the ID returned by `show()`:
 
-**A:**
-Call `magicModal.disableFullWindowOverlay()` before opening the modal.
+```tsx
+const { modalID } = magicModal.show(StatusModal);
+magicModal.hide(undefined, { modalID });
+```
 
-Call `magicModal.enableFullWindowOverlay()` when the overlay should cover native
-screens again.
+Inside modal content, use `useMagicModal().hide()`.
+
+### How do I render below a native picker on iOS?
+
+Temporarily call `magicModal.disableFullWindowOverlay()`. Restore it in a `finally` block after the
+picker closes. The [native overlay guide](https://gstj.github.io/react-native-magic-modal/docs/guides/native-overlays/)
+contains the complete pattern.
 
 ## Contributors
 
-[See everyone who has contributed](https://github.com/GSTJ/react-native-magic-modal/graphs/contributors).
-
-See the [contributing guide](CONTRIBUTING.md).
+[See everyone who has contributed](https://github.com/GSTJ/react-native-magic-modal/graphs/contributors)
+and read the [contributing guide](CONTRIBUTING.md).
 
 ## License
 

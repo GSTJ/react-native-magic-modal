@@ -36,7 +36,9 @@ function ProfileModal() {
 Use the same generic with `show`:
 
 ```tsx
-const result = await magicModal.show<Profile>(() => <ProfileModal />).promise;
+const result = await magicModal.show<Profile>(ProfileModal, {
+  accessibilityLabel: "Choose a profile",
+}).promise;
 
 if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
   console.log(result.data.name);

@@ -1,15 +1,16 @@
 ---
 title: Introduction
-description: Build imperative, awaitable, type-safe modal flows in React Native.
+description: Build awaitable, type-safe modal flows on Expo, React Native, and the web.
 ---
 
-React Native Magic Modal turns a modal interaction into a value you can await. Mount one portal
-near the app root. Call `show()` from anywhere.
+React Native Magic Modal turns a modal interaction into a typed async result. Mount one
+`MagicModalPortal` near the application root. Call `show()` from an event, effect, service, or any
+other async flow.
 
 ```tsx
-const result = await magicModal.show<ConfirmationResult>(() => (
-  <ConfirmationModal />
-)).promise;
+const result = await magicModal.show<ConfirmationResult>(ConfirmationModal, {
+  accessibilityLabel: "Confirm purchase",
+}).promise;
 
 if (
   result.reason === MagicModalHideReason.INTENTIONAL_HIDE &&
@@ -19,47 +20,53 @@ if (
 }
 ```
 
-## Why use it?
+## Core model
 
 <Cards>
   <Card
-    title="Linear async flows"
-    description="Write the interaction in the order a person experiences it: show, await, branch."
-    href="./guides/modal-flows"
+    title="One root portal"
+    description="MagicModalPortal owns the stack while each screen keeps its normal component tree."
+    href="./reference/magic-modal-portal"
   />
   <Card
-    title="Typed results"
-    description="TypeScript infers the return value from show() and hide()."
+    title="Typed close results"
+    description="show<T>() and hide(data) connect the caller to submitted data and dismissal reasons."
     href="./reference/hide-results"
   />
   <Card
-    title="Modal stacks"
-    description="Show multiple modals, address them by ID, and update content without replacing the stack entry."
-    href="./reference/magic-modal"
+    title="Readable async flows"
+    description="Await a modal, branch on its result, and open the next step in the same function."
+    href="./guides/modal-flows"
   />
   <Card
-    title="Gesture control"
-    description="Choose a swipe direction, tune motion, or disable swipe for scrollable content."
-    href="./guides/gestures-and-scroll"
+    title="Web and native"
+    description="Use one API on Expo Web, iOS, Android, or a React Native Web application."
+    href="./platforms/expo"
   />
 </Cards>
 
 ## The mental model
 
 1. [`MagicModalPortal`](./reference/magic-modal-portal) owns the modal stack. Mount it once.
-2. [`magicModal.show`](./reference/magic-modal) pushes content from anywhere and returns a promise.
-3. [`useMagicModal`](./reference/use-magic-modal) closes the current modal with typed data.
+2. [`magicModal.show`](./reference/magic-modal) pushes one entry and returns its ID and promise.
+3. [`useMagicModal().hide`](./reference/use-magic-modal) closes that entry with typed data.
+4. The promise resolves to [`HideReturn<T>`](./reference/hide-results), including the close reason.
 
-<Callout type="info" title="Designed for application modals">
-  For a scroll-heavy bottom sheet with snap points, use a dedicated bottom-sheet
-  library. Use Magic Modal for discrete interactions and async decisions.
+Every `show()` call creates an independent stack entry. Opening another modal keeps the earlier
+entry and its promise in place.
+
+<Callout type="info" title="Application modals">
+  Magic Modal handles discrete interactions and async decisions. Snap points and
+  nested bottom-sheet scrolling are outside its scope.
 </Callout>
 
-## Next step
+## Set up a runtime
 
-Install the package and its peers. Mount the portal in your app root.
+Choose the installation for the target. Mount the portal near the application root.
 
 <Cards>
   <Card title="Install" href="./getting-started/installation" />
   <Card title="Set up the portal" href="./getting-started/setup" />
+  <Card title="Expo" href="./platforms/expo" />
+  <Card title="Next.js" href="./platforms/nextjs" />
 </Cards>

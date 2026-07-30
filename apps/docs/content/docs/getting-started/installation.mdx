@@ -1,124 +1,147 @@
 ---
 title: Installation
-description: Install Magic Modal and the React Native gesture and animation peers.
+description: Install the packages required by your target runtime.
 ---
 
-## Install the package
+Choose the runtime the application ships. Expo Web uses browser packages. Expo iOS and Android use
+the same native dependency set. A project that ships several targets installs the union of those
+sets.
+
+<Cards>
+  <Card
+    title="Expo Web"
+    description="Run the shared React Native API in the browser."
+    href="../platforms/expo#expo-web"
+  />
+  <Card
+    title="Expo iOS"
+    description="Install the native peers and run the iOS target."
+    href="../platforms/expo#expo-ios"
+  />
+  <Card
+    title="Expo Android"
+    description="Install the native peers and run the Android target."
+    href="../platforms/expo#expo-android"
+  />
+  <Card
+    title="Next.js"
+    description="Configure React Native Web in an App Router application."
+    href="../platforms/nextjs"
+  />
+</Cards>
+
+## Expo
+
+Add Magic Modal with the project's package manager:
 
 <Tabs groupId="package-manager" items={["pnpm", "npm", "Yarn", "Bun"]} persist>
   <Tab value="pnpm">
 
 ```bash
-pnpm add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+pnpm add react-native-magic-modal
 ```
 
   </Tab>
   <Tab value="npm">
 
 ```bash
-npm install react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+npm install react-native-magic-modal
 ```
 
   </Tab>
   <Tab value="Yarn">
 
 ```bash
-yarn add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+yarn add react-native-magic-modal
 ```
 
   </Tab>
   <Tab value="Bun">
 
 ```bash
-bun add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+bun add react-native-magic-modal
 ```
 
   </Tab>
 </Tabs>
 
-## Expo
+Install only the peer set used by the target.
 
-Let Expo select native versions compatible with your SDK:
+### Expo Web
+
+```bash
+npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-dom react-native-web @expo/metro-runtime
+```
+
+Continue with the [Expo Web setup](../platforms/expo#expo-web).
+
+### Expo iOS
 
 ```bash
 npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
-pnpm add react-native-magic-modal
 ```
 
-No gesture-handler exclusion is needed. Magic Modal 9 supports both the 2.x builder API and the 3.x
-hook API.
+Continue with the [Expo iOS setup](../platforms/expo#expo-ios).
+
+### Expo Android
+
+```bash
+npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+```
+
+Continue with the [Expo Android setup](../platforms/expo#expo-android). The iOS and Android commands
+match because both targets load the native package entry.
+
+Expo's Babel preset configures Worklets. A default Expo project does not need another Babel plugin
+entry.
 
 ## Next.js
 
-Install React Native Web:
+React and React DOM come with Next.js. Add Magic Modal and its browser runtime:
+
+<Tabs groupId="package-manager" items={["pnpm", "npm", "Yarn", "Bun"]} persist>
+  <Tab value="pnpm">
 
 ```bash
-pnpm add react-native-web
+pnpm add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
-Next 16 uses Turbopack by default. Point React Native imports at React Native Web and resolve
-platform files first:
+  </Tab>
+  <Tab value="npm">
 
-```ts title="next.config.ts"
-import type { NextConfig } from "next";
-
-const config = {
-  transpilePackages: [
-    "react-native-magic-modal",
-    "react-native-gesture-handler",
-    "react-native-reanimated",
-    "react-native-screens",
-    "react-native-web",
-    "react-native-worklets",
-  ],
-  turbopack: {
-    resolveAlias: {
-      "react-native": "react-native-web",
-    },
-    resolveExtensions: [
-      ".web.tsx",
-      ".web.ts",
-      ".web.jsx",
-      ".web.js",
-      ".web.mjs",
-      ".web.cjs",
-      ".tsx",
-      ".ts",
-      ".jsx",
-      ".js",
-      ".mjs",
-      ".cjs",
-      ".json",
-    ],
-  },
-} satisfies NextConfig;
-
-export default config;
+```bash
+npm install react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
-The interactive demo on this site uses this setup.
+  </Tab>
+  <Tab value="Yarn">
 
-## Minimum versions
+```bash
+yarn add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+```
 
-| Package                      | Version |
-| ---------------------------- | ------- |
-| React                        | 18.0.0  |
-| React Native                 | 0.81.0  |
-| React Native Gesture Handler | 2.20.0  |
-| React Native Reanimated      | 4.1.0   |
-| React Native Worklets        | 0.5.0   |
-| React Native Screens         | 4.19.0  |
+  </Tab>
+  <Tab value="Bun">
 
-<Callout type="warn" title="Reanimated 4 requires the New Architecture">
-  Reanimated 4 only supports React Native's New Architecture. If your app still
-  runs on the legacy architecture, migrate it before installing Magic Modal 9.
-  Keep Worklets on a version supported by your Reanimated minor; Expo chooses
-  that pair for you.
-</Callout>
+```bash
+bun add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+```
+
+  </Tab>
+</Tabs>
+
+The [Next.js guide](../platforms/nextjs) contains the validated Turbopack alias, extension order,
+transpilation list, and Client Component root.
 
 ## Bare React Native
 
-Add the Worklets Babel plugin **last** in your plugin list:
+Install the package and native peers:
+
+```bash
+pnpm add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+```
+
+Add the Worklets Babel plugin last:
 
 ```js title="babel.config.js"
 module.exports = function (api) {
@@ -140,14 +163,16 @@ Install iOS pods:
 npx pod-install
 ```
 
-Expo's default Babel setup already includes the required plugin. `react-native-screens` powers the
-iOS full-window overlay used by the portal; install it even if your navigator already brings it
-transitively.
+<Callout type="warn" title="Reanimated 4 requires the New Architecture">
+  Magic Modal 9 uses Reanimated 4. Migrate applications that still run React
+  Native's legacy architecture before upgrading. Expo selects compatible
+  Reanimated and Worklets versions for its SDK.
+</Callout>
 
 <Callout type="warn" title="Upgrade from 8.0.0">
-  Version 8.0.0 temporarily required Gesture Handler 3. Upgrade Magic Modal to 9
-  or newer, and remove `react-native-gesture-handler` from
-  `expo.install.exclude` if you added it.
+  Version 8.0.0 temporarily required Gesture Handler 3. Magic Modal 9 supports
+  Gesture Handler 2.20 and newer. Remove `react-native-gesture-handler` from
+  `expo.install.exclude` if the application added that workaround.
 </Callout>
 
 Continue to [set up the portal](./setup).

@@ -18,11 +18,11 @@ magicModal.show(() => <ScrollableModal />, {
 });
 ```
 
-For snap points and complex nested gestures, use a dedicated bottom-sheet library.
+Magic Modal does not implement snap points or nested scrolling.
 
 ## Why does Gesture Handler say there is no root view?
 
-The portal must be rendered inside `GestureHandlerRootView`:
+Expo and native applications render the portal inside `GestureHandlerRootView`:
 
 ```tsx
 <GestureHandlerRootView style={{ flex: 1 }}>
@@ -31,15 +31,24 @@ The portal must be rendered inside `GestureHandlerRootView`:
 </GestureHandlerRootView>
 ```
 
+A web-only Next.js application mounts the portal directly in its Client Component shell.
+
 ## Why does `magicModal` say the portal was not found?
 
 An imperative call ran before `MagicModalPortal` mounted, or the active React tree does not contain
 one. Mount one portal at the app root and avoid module-scope `show` calls during startup.
 
+## What accessibility behavior comes from the portal?
+
+The top stack entry receives modal semantics and an accessible name from the `accessibilityLabel`
+option. Web also traps focus, handles Escape, and restores focus after close. The modal component
+provides its visible heading, control labels, form errors, and status announcements. Follow the
+[accessibility guide](./guides/accessibility) for examples and the test checklist.
+
 ## Why is the modal above an image picker on iOS?
 
-The full-window overlay is enabled. Temporarily call
-`magicModal.disableFullWindowOverlay()`, then restore it in `finally`. See
+The full-window overlay is enabled. Call `magicModal.disableFullWindowOverlay()` before opening the
+picker. Restore it in `finally`. See
 [native iOS overlays](./guides/native-overlays).
 
 ## Does Gesture Handler 2 work?

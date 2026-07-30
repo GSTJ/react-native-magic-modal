@@ -1,6 +1,6 @@
 ---
 title: magicModal
-description: Show, hide, update, and configure modals imperatively from any part of the app.
+description: Show, hide, and configure stack entries from application code.
 ---
 
 `magicModal` is the global imperative API. Its methods target the
@@ -22,23 +22,22 @@ show<T>(
 Pushes a modal to the top of the stack.
 
 ```tsx
-const { modalID, promise, update } = magicModal.show<Profile>(
-  () => <ProfilePicker />,
-  {
-    backdropColor: "rgba(7, 6, 18, 0.72)",
-    swipeDirection: "down",
-  },
-);
+const { modalID, promise } = magicModal.show<Profile>(() => <ProfilePicker />, {
+  accessibilityLabel: "Choose a profile",
+  backdropColor: "rgba(7, 6, 18, 0.72)",
+  swipeDirection: "down",
+});
 ```
 
 | Return    | Purpose                                                |
 | --------- | ------------------------------------------------------ |
 | `promise` | Resolves once when this modal closes.                  |
 | `modalID` | Addresses this exact entry from outside its component. |
-| `update`  | Replaces its content without moving or resolving it.   |
+| `update`  | Advanced API that replaces and remounts its content.   |
 
-See [hide results](./hide-results) for promise narrowing and [update open content](../guides/updating-content)
-for remount behavior.
+See [hide results](./hide-results) for promise narrowing. Read
+[replace open content](../guides/updating-content) before using `update()`, since it remounts the
+rendered component.
 
 ## hide
 

@@ -68,6 +68,7 @@ web-build/
 **/*/.next
 **/.source/
 *.tsbuildinfo
+/apps/docs/public/r/
 
 **/*/ios
 **/*/android

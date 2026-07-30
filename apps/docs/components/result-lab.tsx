@@ -8,6 +8,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { MagicModalHideReason } from "react-native-magic-modal";
 
+import { SyntaxCode } from "@/components/syntax-code";
+
 type Answer = { answer: number };
 type CloseReason = HideReturn<Answer>["reason"];
 type LabPhase = "pending" | "resolved";
@@ -53,6 +55,21 @@ const createResult = (reason: CloseReason): HideReturn<Answer> =>
   reason === MagicModalHideReason.INTENTIONAL_HIDE
     ? { data: { answer: 42 }, reason }
     : { reason };
+
+const pendingCode = {
+  closing:
+    "const result = await handle.promise;\n// waiting for the close animation",
+  open: "const result = await handle.promise;\n// waiting for a close",
+} as const;
+
+const formatResultCode = (result: HideReturn<Answer>) => {
+  const data =
+    result.reason === MagicModalHideReason.INTENTIONAL_HIDE
+      ? `,\n  data: { answer: ${result.data.answer} }`
+      : "";
+
+  return `{\n  reason: MagicModalHideReason.${result.reason}${data}\n}`;
+};
 
 export const ResultLab = () => {
   const closingTimer = useRef<number | null>(null);
@@ -346,30 +363,20 @@ export const ResultLab = () => {
             <span>HideReturn&lt;Answer&gt;</span>
             <code>{receiptState}</code>
           </div>
-          {phase === "resolved" ? (
-            <pre key={selectedReason}>
-              <code>
-                <span>{"{"}</span>
-                {"\n  reason: "}
-                <b>MagicModalHideReason.</b>
-                <mark>{selectedReason}</mark>
-                {result?.reason === MagicModalHideReason.INTENTIONAL_HIDE && (
-                  <>
-                    {",\n  data: "}
-                    <em>{`{ answer: ${result.data.answer} }`}</em>
-                  </>
-                )}
-                {"\n"}
-                <span>{"}"}</span>
-              </code>
+          {phase === "resolved" && result ? (
+            <pre aria-label="Resolved promise result" key={selectedReason}>
+              <SyntaxCode code={formatResultCode(result)} language="ts" />
             </pre>
           ) : (
-            <pre>
-              <code>
-                {visualPhase === "closing"
-                  ? "const result = await handle.promise;\n// waiting for the close animation"
-                  : "const result = await handle.promise;\n// waiting for a close"}
-              </code>
+            <pre aria-label="Pending promise source code">
+              <SyntaxCode
+                code={
+                  visualPhase === "closing"
+                    ? pendingCode.closing
+                    : pendingCode.open
+                }
+                language="ts"
+              />
             </pre>
           )}
           <small>
