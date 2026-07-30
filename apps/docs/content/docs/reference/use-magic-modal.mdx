@@ -1,6 +1,6 @@
 ---
 title: useMagicModal
-description: Close the current modal from inside its component with inferred return data.
+description: Close the current stack entry from its own component and return typed data.
 ---
 
 ```ts
@@ -9,7 +9,8 @@ useMagicModal<T = void>(): {
 }
 ```
 
-`useMagicModal` binds `hide` to the current stack entry, so no modal ID is needed.
+`useMagicModal` is the close API for a component rendered by `magicModal.show`. Its context binds
+`hide` to the exact stack entry that rendered the component, so it does not need a modal ID.
 
 <Callout type="warn" title="Modal content only">
   Call this hook from a component rendered by `magicModal.show`. Outside that
@@ -17,31 +18,72 @@ useMagicModal<T = void>(): {
   entry.
 </Callout>
 
+## Complete typed flow
+
 ```tsx
-type Profile = {
-  name: string;
+import { Pressable, Text, View } from "react-native";
+import {
+  MagicModalHideReason,
+  magicModal,
+  useMagicModal,
+} from "react-native-magic-modal";
+
+type Confirmation = {
+  approved: boolean;
 };
 
-function ProfileModal() {
-  const { hide } = useMagicModal<Profile>();
+function ConfirmationModal() {
+  const { hide } = useMagicModal<Confirmation>();
 
   return (
-    <Pressable onPress={() => hide({ name: "Ada" })}>
-      <Text>Choose Ada</Text>
-    </Pressable>
+    <View>
+      <Text accessibilityRole="header">Publish this release?</Text>
+
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => hide({ approved: true })}
+      >
+        <Text>Publish</Text>
+      </Pressable>
+
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => hide({ approved: false })}
+      >
+        <Text>Keep editing</Text>
+      </Pressable>
+    </View>
   );
 }
-```
 
-Use the same generic with `show`:
+export async function requestPublishApproval() {
+  const result = await magicModal.show<Confirmation>(ConfirmationModal, {
+    accessibilityLabel: "Confirm release publication",
+  }).promise;
 
-```tsx
-const result = await magicModal.show<Profile>(() => <ProfileModal />).promise;
+  if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
+    return result.data.approved;
+  }
 
-if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
-  console.log(result.data.name);
+  console.info("Publish confirmation dismissed:", result.reason);
+  return false;
 }
 ```
+
+Pass the same return type to `useMagicModal<T>()` and `show<T>()`. TypeScript checks the value sent
+to `hide`, while the `reason` check narrows the awaited result before `data` is read.
+
+Backdrop press, swipe, Android Back, web Escape, and `hideAll()` resolve the promise with their own
+reason and no `data`. Use `try`/`catch` for errors from the async work that follows the modal result.
+
+## Hook or imperative API
+
+| Situation                                               | API                                     |
+| ------------------------------------------------------- | --------------------------------------- |
+| The current modal closes itself                         | `useMagicModal<T>().hide(data)`         |
+| Application code opens a modal and waits for its result | `magicModal.show<T>(component).promise` |
+| Code outside the modal closes one known entry           | `magicModal.hide(data, { modalID })`    |
+| A logout or reset boundary clears the stack             | `magicModal.hideAll()`                  |
 
 For a modal that returns no data:
 
@@ -56,3 +98,6 @@ const { hide } = useMagicModal();
   swipe, and global cleanup results are produced by their respective close
   paths.
 </Callout>
+
+Read [hide results](/docs/reference/hide-results) for the complete result union and every dismissal
+reason.

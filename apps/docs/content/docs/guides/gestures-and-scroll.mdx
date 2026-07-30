@@ -29,8 +29,8 @@ magicModal.show(() => <TermsModal />, {
 
 The backdrop and Android back button still close the modal unless you override their handlers.
 
-<Callout type="info" title="Building a bottom sheet?">
-  If the interaction needs snap points, nested scrolling, or continuously
-  draggable content, use a dedicated bottom-sheet library. Disabling swipe makes
-  ordinary modal forms and lists reliable.
+<Callout type="info" title="Bottom-sheet behavior">
+  Magic Modal does not implement snap points, nested scrolling, or continuously
+  draggable content. Disabling swipe keeps ordinary modal forms and lists
+  reliable.
 </Callout>

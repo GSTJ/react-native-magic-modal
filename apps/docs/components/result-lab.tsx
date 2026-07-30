@@ -8,39 +8,47 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { MagicModalHideReason } from "react-native-magic-modal";
 
+import { SyntaxCode } from "@/components/syntax-code";
+
 type Answer = { answer: number };
 type CloseReason = HideReturn<Answer>["reason"];
 type LabPhase = "pending" | "resolved";
 type VisualPhase = "closed" | "closing" | "open";
 
 const outcomes: {
+  ariaLabel: string;
   reason: CloseReason;
   short: string;
   trigger: string;
 }[] = [
   {
+    ariaLabel: "Resolve with answer 42",
     reason: MagicModalHideReason.INTENTIONAL_HIDE,
-    short: "answer",
+    short: "answer 42",
     trigger: "hide({ answer: 42 })",
   },
   {
+    ariaLabel: "Close by pressing the backdrop",
     reason: MagicModalHideReason.BACKDROP_PRESS,
-    short: "backdrop",
+    short: "tap backdrop",
     trigger: "tap the live backdrop",
   },
   {
+    ariaLabel: "Close by swiping down",
     reason: MagicModalHideReason.SWIPE_COMPLETE,
-    short: "swipe",
+    short: "swipe down",
     trigger: "complete the swipe",
   },
   {
+    ariaLabel: "Simulate the Android back button",
     reason: MagicModalHideReason.BACK_BUTTON_PRESS,
-    short: "Android back",
-    trigger: "simulate the Android system back action",
+    short: "simulate Android back",
+    trigger: "simulate BACK_BUTTON_PRESS on the web",
   },
   {
+    ariaLabel: "Close every modal with hideAll",
     reason: MagicModalHideReason.GLOBAL_HIDE_ALL,
-    short: "hideAll",
+    short: "run hideAll()",
     trigger: "magicModal.hideAll()",
   },
 ];
@@ -53,6 +61,21 @@ const createResult = (reason: CloseReason): HideReturn<Answer> =>
   reason === MagicModalHideReason.INTENTIONAL_HIDE
     ? { data: { answer: 42 }, reason }
     : { reason };
+
+const pendingCode = {
+  closing:
+    "const result = await handle.promise;\n// waiting for the close animation",
+  open: "const result = await handle.promise;\n// waiting for a close",
+} as const;
+
+const formatResultCode = (result: HideReturn<Answer>) => {
+  const data =
+    result.reason === MagicModalHideReason.INTENTIONAL_HIDE
+      ? `,\n  data: { answer: ${result.data.answer} }`
+      : "";
+
+  return `{\n  reason: MagicModalHideReason.${result.reason}${data}\n}`;
+};
 
 export const ResultLab = () => {
   const closingTimer = useRef<number | null>(null);
@@ -84,10 +107,8 @@ export const ResultLab = () => {
       closingTimer.current = null;
     }
 
-    if (reason === MagicModalHideReason.SWIPE_COMPLETE) {
-      setResult(createResult(reason));
-      setPhase("resolved");
-    }
+    setResult(createResult(reason));
+    setPhase("resolved");
 
     dragDistance.current = 0;
     dragStartY.current = null;
@@ -108,11 +129,6 @@ export const ResultLab = () => {
       closingReason.current = nextReason;
       setSelectedReason(nextReason);
       setVisualPhase("closing");
-
-      if (nextReason !== MagicModalHideReason.SWIPE_COMPLETE) {
-        setResult(createResult(nextReason));
-        setPhase("resolved");
-      }
 
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         finishClose();
@@ -255,7 +271,7 @@ export const ResultLab = () => {
     receiptState = hasData ? "with data" : "reason only";
   }
 
-  let controlsLabel = "Choose one close action";
+  let controlsLabel = "Test a close action";
   if (visualPhase === "closing") {
     controlsLabel = "Modal closing";
   }
@@ -275,6 +291,7 @@ export const ResultLab = () => {
         <fieldset aria-label="Choose how the modal closes">
           {outcomes.map((outcome) => (
             <button
+              aria-label={outcome.ariaLabel}
               aria-pressed={selectedReason === outcome.reason}
               data-reason={outcome.reason}
               disabled={controlsLocked}
@@ -286,11 +303,6 @@ export const ResultLab = () => {
               {outcome.short}
             </button>
           ))}
-          {phase === "resolved" && visualPhase === "closed" && (
-            <button className="mm-result-reset" onClick={reset} type="button">
-              Try another close action
-            </button>
-          )}
         </fieldset>
       </div>
 
@@ -312,7 +324,12 @@ export const ResultLab = () => {
           {visualPhase === "closed" ? (
             <div className="mm-result-closed">
               <strong>Modal closed</strong>
-              <span>Each modal starts with its own promise.</span>
+              <span>
+                The promise resolved. Restart here to test another path.
+              </span>
+              <button className="mm-result-reset" onClick={reset} type="button">
+                Restart flow
+              </button>
             </div>
           ) : (
             <>
@@ -330,7 +347,10 @@ export const ResultLab = () => {
                 <span />
               </button>
               <strong>Choose an answer</strong>
-              <p>Answer here, swipe down, or choose another close action.</p>
+              <p>
+                Answer here, tap the backdrop, swipe down, or use a close action
+                above.
+              </p>
               <button disabled={controlsLocked} onClick={answer} type="button">
                 Answer 42
               </button>
@@ -346,30 +366,20 @@ export const ResultLab = () => {
             <span>HideReturn&lt;Answer&gt;</span>
             <code>{receiptState}</code>
           </div>
-          {phase === "resolved" ? (
-            <pre key={selectedReason}>
-              <code>
-                <span>{"{"}</span>
-                {"\n  reason: "}
-                <b>MagicModalHideReason.</b>
-                <mark>{selectedReason}</mark>
-                {result?.reason === MagicModalHideReason.INTENTIONAL_HIDE && (
-                  <>
-                    {",\n  data: "}
-                    <em>{`{ answer: ${result.data.answer} }`}</em>
-                  </>
-                )}
-                {"\n"}
-                <span>{"}"}</span>
-              </code>
+          {phase === "resolved" && result ? (
+            <pre aria-label="Resolved promise result" key={selectedReason}>
+              <SyntaxCode code={formatResultCode(result)} language="ts" />
             </pre>
           ) : (
-            <pre>
-              <code>
-                {visualPhase === "closing"
-                  ? "const result = await handle.promise;\n// waiting for the close animation"
-                  : "const result = await handle.promise;\n// waiting for a close"}
-              </code>
+            <pre aria-label="Pending promise source code">
+              <SyntaxCode
+                code={
+                  visualPhase === "closing"
+                    ? pendingCode.closing
+                    : pendingCode.open
+                }
+                language="ts"
+              />
             </pre>
           )}
           <small>

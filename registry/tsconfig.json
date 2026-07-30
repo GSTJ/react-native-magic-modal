@@ -1,0 +1,13 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "baseUrl": "..",
+    "jsx": "react-native",
+    "noEmit": true,
+    "paths": {
+      "react-native-magic-modal": ["packages/modal/src/index.ts"]
+    },
+    "strict": true
+  },
+  "include": ["./**/*.tsx"]
+}

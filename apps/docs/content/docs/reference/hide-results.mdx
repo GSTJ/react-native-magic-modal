@@ -23,7 +23,9 @@ type HideReturn<T> =
 Check the reason before reading `data`:
 
 ```tsx
-const result = await magicModal.show<FormValues>(() => <FormModal />).promise;
+const result = await magicModal.show<FormValues>(FormModal, {
+  accessibilityLabel: "Edit profile",
+}).promise;
 
 if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
   await save(result.data);
@@ -36,9 +38,12 @@ if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
 | ------------------- | ---------------------------------------------------------------- |
 | `INTENTIONAL_HIDE`  | `useMagicModal().hide(data)` or `magicModal.hide(data, options)` |
 | `BACKDROP_PRESS`    | The user presses the backdrop and the default handler closes     |
-| `BACK_BUTTON_PRESS` | Android's hardware/software back action closes                   |
+| `BACK_BUTTON_PRESS` | Android back, web Escape, or native accessibility escape closes  |
 | `SWIPE_COMPLETE`    | A dismiss gesture clears the velocity threshold                  |
 | `GLOBAL_HIDE_ALL`   | `magicModal.hideAll()` clears the stack                          |
 
 Cancellation results intentionally contain no `data`. This forces callers to handle dismissal
 instead of treating it like a submitted value.
+
+`BACK_BUTTON_PRESS` keeps its original enum name for compatibility. It is the shared system-dismiss
+path across web and native runtimes.

@@ -60,9 +60,27 @@ jest.mock<Record<string, unknown>>("react-native-gesture-handler", () => {
   };
 });
 
+jest.mock<Record<string, unknown>>(
+  "react-native-reanimated/lib/module/animation/spring/spring",
+  () => {
+    const actual = jest.requireActual<{
+      withSpring: jest.MockableFunction;
+    }>("react-native-reanimated/lib/module/animation/spring/spring");
+
+    return {
+      ...actual,
+      withSpring: jest.fn(actual.withSpring),
+    };
+  },
+);
+
 const { capturedGestures } = jest.requireMock<{
   capturedGestures: LegacyPanGesture[];
 }>("react-native-gesture-handler");
+
+const { withSpring } = jest.requireMock<{
+  withSpring: jest.Mock;
+}>("react-native-reanimated/lib/module/animation/spring/spring");
 
 /** The most recent gesture handed to `GestureDetector`, i.e. the live one. */
 const latestGesture = () => {
@@ -94,6 +112,7 @@ beforeEach(() => {
   // already, and hiding into an unmounted tree makes React warn about updates
   // outside `act`.
   capturedGestures.length = 0;
+  withSpring.mockClear();
 });
 
 describe("MagicModal swipe gesture on gesture-handler 2.x", () => {
@@ -188,6 +207,36 @@ describe("MagicModal swipe gesture on gesture-handler 2.x", () => {
       expect(result).toStrictEqual({
         reason: MagicModalHideReason.SWIPE_COMPLETE,
       });
+    },
+  );
+
+  it.each([
+    ["down", { velocityX: 137, velocityY: 911 }, 911],
+    ["right", { velocityX: 922, velocityY: 149 }, 922],
+  ] as const)(
+    "seeds the %s dismissal spring with velocity from its movement axis",
+    async (swipeDirection, velocity, expectedVelocity) => {
+      const promise = showModal(swipeDirection);
+      const { handlers } = latestGesture();
+
+      let resolved = false;
+      void promise?.then(() => {
+        resolved = true;
+      });
+
+      await act(async () => {
+        handlers.onStart?.(activeEvent());
+        handlers.onEnd?.(endEvent(velocity), true);
+
+        await waitForHide(() => resolved);
+      });
+
+      expect(withSpring).toHaveBeenCalledTimes(1);
+      expect(withSpring).toHaveBeenCalledWith(
+        expect.any(Number),
+        expect.objectContaining({ velocity: expectedVelocity }),
+        expect.any(Function),
+      );
     },
   );
 

@@ -14,9 +14,9 @@
   </g>
 
   <g transform="translate(68 180)">
-    <text fill="#aaa298" font-family="monospace" font-size="12" letter-spacing="1.5">AWAITABLE MODAL FLOWS FOR REACT NATIVE</text>
-    <text y="94" fill="#f2ede3" font-family="Arial,sans-serif" font-size="65" font-weight="700" letter-spacing="-3">React Native modals</text>
-    <text y="165" fill="#f2ede3" font-family="Arial,sans-serif" font-size="65" font-weight="700" letter-spacing="-3">you can await</text>
+    <text fill="#aaa298" font-family="monospace" font-size="12" letter-spacing="1.5">WEB / iOS / ANDROID</text>
+    <text y="94" fill="#f2ede3" font-family="Arial,sans-serif" font-size="65" font-weight="700" letter-spacing="-3">Modals you can</text>
+    <text y="165" fill="#f2ede3" font-family="Arial,sans-serif" font-size="65" font-weight="700" letter-spacing="-3">await</text>
     <text y="223" fill="#aaa298" font-family="Arial,sans-serif" font-size="19">One portal keeps concurrent prompts in an ordered stack.</text>
 
     <g transform="translate(0 268)">

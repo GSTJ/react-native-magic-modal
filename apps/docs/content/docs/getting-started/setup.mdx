@@ -1,10 +1,11 @@
 ---
 title: Set up the portal
-description: Add one MagicModalPortal under GestureHandlerRootView at the root of your app.
+description: Mount one portal near the application root.
 ---
 
-`MagicModalPortal` renders every modal in the stack. Mount it once, after your application content,
-inside `GestureHandlerRootView`.
+`MagicModalPortal` owns the stack rendered by `magicModal.show()` and the context used by
+`useMagicModal()`. Mount it once after the application content. Native and shared Expo roots place
+it inside `GestureHandlerRootView`. A web-only Next.js shell mounts the portal directly.
 
 ```tsx title="App.tsx"
 import { MagicModalPortal } from "react-native-magic-modal";
@@ -20,8 +21,8 @@ export default function App() {
 }
 ```
 
-The gesture root is required even if your first modal does not use swipe-to-dismiss. The portal owns
-the gesture surface and Gesture Handler 3 throws if it renders outside a root view.
+The gesture root is required on native even if the first modal does not use swipe-to-dismiss. The
+portal owns the gesture surface, and native gesture handling requires a root view.
 
 ## Expo Router
 
@@ -43,8 +44,31 @@ export default function RootLayout() {
 ```
 
 <Callout type="info">
-  Keep the portal outside individual screens. It should survive navigation so a
-  flow can start on one screen and resolve after navigation changes.
+  Keep the portal outside individual screens. It stays mounted across
+  navigation. A flow can start on one screen and resolve after the active screen
+  changes.
 </Callout>
 
-Continue by [showing your first modal](./first-modal).
+## Pick your runtime
+
+The portal stays the same. Its root file and bundler setup depend on the runtime.
+
+<Cards>
+  <Card
+    title="Next.js and web"
+    description="Add the portal to a Client Component and map React Native to React Native Web."
+    href="/docs/platforms/nextjs"
+  />
+  <Card
+    title="Expo"
+    description="Use the same root and modal components on iOS, Android, and web."
+    href="/docs/platforms/expo"
+  />
+  <Card
+    title="iOS and Android"
+    description="Handle the Android back action and iOS native overlays."
+    href="/docs/platforms/ios-android"
+  />
+</Cards>
+
+Continue by [showing your first modal](/docs/getting-started/first-modal).

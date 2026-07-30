@@ -1,6 +1,6 @@
 ---
 title: Resources
-description: Examples, releases, contributing guidance, and support for React Native Magic Modal.
+description: Examples, releases, contributing guidance, and support for Magic Modal.
 ---
 
 <Cards>
@@ -9,6 +9,17 @@ description: Examples, releases, contributing guidance, and support for React Na
     description="Runnable Expo examples for gestures, scroll, keyboard input, custom motion, stacks, and overlays."
     href="https://github.com/GSTJ/react-native-magic-modal/tree/main/examples/kitchen-sink"
     external
+  />
+  <Card
+    title="Next.js consumer"
+    description="A tested App Router consumer with React Native Web, server rendering, hydration, and backdrop dismissal."
+    href="https://github.com/GSTJ/react-native-magic-modal/tree/main/examples/next-web"
+    external
+  />
+  <Card
+    title="Platform setup"
+    description="Installation and portal setup for Expo Web, iOS, Android, and Next.js."
+    href="/docs/platforms/expo"
   />
   <Card
     title="Releases"
@@ -32,10 +43,9 @@ description: Examples, releases, contributing guidance, and support for React Na
 
 ## Before opening an issue
 
-Include your React Native, Expo (if applicable), Gesture Handler, Reanimated, Worklets, and Magic
-Modal versions. For gesture or layering bugs, a small reproduction is substantially more useful
-than a screenshot alone.
+Include the Magic Modal, React Native, Expo, Gesture Handler, Reanimated, and Worklets versions used
+by the affected target. For gesture or layering bugs, include a small reproduction.
 
 Run `npx expo-doctor` in Expo projects and confirm that
-[`MagicModalPortal`](./reference/magic-modal-portal) is mounted exactly once before reporting a
+[`MagicModalPortal`](/docs/reference/magic-modal-portal) is mounted exactly once before reporting a
 setup problem.

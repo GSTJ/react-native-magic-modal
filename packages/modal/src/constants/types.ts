@@ -27,6 +27,17 @@ export type HideReturn<T> =
 
 export type ModalProps = {
   /**
+   * Accessible name announced for the modal container.
+   *
+   * Pass a localized, descriptive label. The library does not provide a
+   * hard-coded default because that would be redundant with the dialog role
+   * and impossible to localize correctly.
+   * @default undefined
+   * @example "Confirm account deletion"
+   */
+  accessibilityLabel: string | undefined;
+
+  /**
    * Duration of the animation when the modal is shown.
    * @default 250
    */
@@ -51,10 +62,11 @@ export type ModalProps = {
   backdropColor: string;
 
   /**
-   * Function to be called when the back button is pressed.
-   * You can override it to prevent the modal from closing on back button press.
+   * Runs when Android back, web Escape, or the native accessibility escape
+   * action asks the top modal to close. The handler can close the modal through
+   * `hide` or leave it open.
    * @default undefined
-   * @example ({ hide }) => { console.log('Back button pressed'); hide({ reason: MagicModalHideReason.BACK_BUTTON_PRESS }); }
+   * @example ({ hide }) => hide({ reason: MagicModalHideReason.BACK_BUTTON_PRESS })
    */
   onBackButtonPress:
     | (({ hide }: { hide: HookHideFunction }) => void)
@@ -131,7 +143,10 @@ export enum MagicModalHideReason {
   BACKDROP_PRESS = "BACKDROP_PRESS",
   /** A swipe exceeded the configured velocity threshold. */
   SWIPE_COMPLETE = "SWIPE_COMPLETE",
-  /** Android's system back action closed the modal. */
+  /**
+   * A system dismissal closed the modal: Android back, web Escape, or the
+   * native accessibility escape action. The name is kept for compatibility.
+   */
   BACK_BUTTON_PRESS = "BACK_BUTTON_PRESS",
   /** Modal code supplied data through a hide function. */
   INTENTIONAL_HIDE = "INTENTIONAL_HIDE",

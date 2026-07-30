@@ -3,7 +3,7 @@ title: Your first modal
 description: Show a component, close it from inside, and await typed data.
 ---
 
-Define the data the interaction returns, then pass that type to both `show` and `useMagicModal`.
+Define the data returned by the interaction. Pass that type to both `show` and `useMagicModal`.
 
 ```tsx
 import { Pressable, Text, View } from "react-native";
@@ -22,11 +22,17 @@ function ConfirmationModal() {
 
   return (
     <View>
-      <Text>Delete this project?</Text>
-      <Pressable onPress={() => hide({ confirmed: true })}>
+      <Text accessibilityRole="header">Delete this project?</Text>
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => hide({ confirmed: true })}
+      >
         <Text>Delete</Text>
       </Pressable>
-      <Pressable onPress={() => hide({ confirmed: false })}>
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => hide({ confirmed: false })}
+      >
         <Text>Keep it</Text>
       </Pressable>
     </View>
@@ -34,9 +40,9 @@ function ConfirmationModal() {
 }
 
 export async function confirmDeletion() {
-  const result = await magicModal.show<Confirmation>(() => (
-    <ConfirmationModal />
-  )).promise;
+  const result = await magicModal.show<Confirmation>(ConfirmationModal, {
+    accessibilityLabel: "Confirm project deletion",
+  }).promise;
 
   if (result.reason !== MagicModalHideReason.INTENTIONAL_HIDE) {
     return false;
@@ -46,10 +52,11 @@ export async function confirmDeletion() {
 }
 ```
 
-The promise also resolves when the backdrop, Android back button, swipe gesture, or `hideAll` closes
-the modal. Checking `reason` narrows the union, so `data` only exists after an intentional hide.
+The promise also resolves when the backdrop, swipe gesture, system-dismiss action, or `hideAll`
+closes the modal. System dismissal includes Android back, web Escape, and the native accessibility
+escape action. Checking `reason` narrows the union, so `data` only exists after an intentional hide.
 
 <Cards>
-  <Card title="Compose a multi-step flow" href="../guides/modal-flows" />
-  <Card title="Understand hide results" href="../reference/hide-results" />
+  <Card title="Compose a multi-step flow" href="/docs/guides/modal-flows" />
+  <Card title="Understand hide results" href="/docs/reference/hide-results" />
 </Cards>

@@ -1,4 +1,4 @@
-export { MagicModalPortal } from "./components/MagicModalPortal/magic-modal-portal";
+export { MagicModalPortal } from "./components/MagicModalPortal/magic-modal-portal.browser";
 export {
   MagicModalHideReason,
   type HideReturn,

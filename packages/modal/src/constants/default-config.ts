@@ -5,6 +5,7 @@ import { ANIMATION_DURATION_IN_MS } from "./animations";
 export const defaultDirection = "down";
 
 export const defaultConfig: ModalProps = {
+  accessibilityLabel: undefined,
   animationInTiming: ANIMATION_DURATION_IN_MS,
   animationOutTiming: ANIMATION_DURATION_IN_MS,
   hideBackdrop: false,

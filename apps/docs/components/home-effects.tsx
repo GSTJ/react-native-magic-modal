@@ -17,7 +17,7 @@ export const HomeEffects = () => {
     ];
     const revealTargets = many<HTMLElement>("[data-reveal]");
     const heroTargets = many<HTMLElement>(
-      ".mm-overline, .mm-hero h1, .mm-hero-lede, .mm-hero-actions, .mm-hero-copy > .mh-install-command",
+      ".mm-overline, .mm-hero h1, .mm-hero-lede, .mm-hero-actions, .mm-hero-copy > .mh-install",
     );
     const media = gsap.matchMedia();
 
