@@ -14,7 +14,6 @@ import { InstallCommand } from "@/components/install-command";
 import { LegacyAnchorRouter } from "@/components/legacy-anchor-router";
 import { LivePackageDemo } from "@/components/live-package-demo";
 import { MagicMark } from "@/components/magic-mark";
-import { OriginFlow } from "@/components/origin-flow";
 import { PracticalExamples } from "@/components/practical-examples";
 import {
   ProjectAge,
@@ -54,6 +53,9 @@ export default function HomePage() {
         </Link>
         <nav aria-label="Main navigation">
           <a href="#story">Story</a>
+          <Link className="mm-nav-mobile-docs" href="/docs">
+            Docs
+          </Link>
           <Link href="/docs/getting-started/setup">Setup</Link>
           <Link href="/docs/reference">API</Link>
           <a
@@ -82,8 +84,8 @@ export default function HomePage() {
             result on web, iOS, and Android.
           </p>
           <div className="mm-hero-actions">
-            <a className="mm-run-link" href="#original-flow">
-              Try the rating flow
+            <a className="mm-run-link" href="#live-package">
+              Test two callers
               <ArrowRight aria-hidden="true" size={17} />
             </a>
             <a
@@ -100,16 +102,77 @@ export default function HomePage() {
           <InstallCommand />
         </div>
 
-        <OriginFlow />
+        <figure className="mm-stack-story">
+          <div className="mm-stack-story-heading">
+            <span>LIVE STACK MODEL</span>
+            <strong>Two callers, two promises, one portal</strong>
+          </div>
+          <div className="mm-stack-story-stage">
+            <div className="mm-stack-caller is-rating">
+              <span>CALLER 01</span>
+              <code>feedback.tsx</code>
+              <b>show(RatingPrompt)</b>
+            </div>
+            <div className="mm-stack-caller is-payment">
+              <span>CALLER 02</span>
+              <code>checkout.tsx</code>
+              <b>show(PaymentReview)</b>
+            </div>
+            <div className="mm-stack-portal">
+              <MagicMark size={22} />
+              <span>
+                <small>APP ROOT</small>
+                <strong>MagicModalPortal</strong>
+              </span>
+            </div>
+            <div className="mm-stack-plane is-app">
+              <span>Application</span>
+            </div>
+            <article className="mm-stack-plane is-rating">
+              <span>ENTRY 01 · WAITING UNDERNEATH</span>
+              <strong>Rating prompt</strong>
+              <code>promise: pending</code>
+            </article>
+            <article className="mm-stack-plane is-payment">
+              <span>ENTRY 02 · TOPMOST</span>
+              <strong>Payment review</strong>
+              <code>promise: resolving...</code>
+            </article>
+          </div>
+          <figcaption>
+            <span>
+              Close the top entry and the rating promise keeps waiting below it.
+            </span>
+            <a href="#live-package">
+              Run this with the real package
+              <ArrowDown aria-hidden="true" size={13} />
+            </a>
+          </figcaption>
+        </figure>
 
         <a
-          aria-label="Continue to the origin story"
+          aria-label="Continue to the live package demo"
           className="mm-scroll-cue"
-          href="#request"
+          href="#live-package"
         >
-          <span>Why it exists</span>
+          <span>Run the real stack</span>
           <ArrowDown aria-hidden="true" size={15} />
         </a>
+      </section>
+
+      <section className="mm-live" id="live-package">
+        <header data-reveal>
+          <span>REAL PACKAGE · REAL PORTAL</span>
+          <h2>Open two callers. Keep both promises.</h2>
+          <p>
+            Run the concurrent flow, close the payment review on top, then
+            finish the rating still waiting underneath. The stack and promise
+            ledger update as the package runs.
+          </p>
+        </header>
+        <div>
+          <LivePackageDemo />
+        </div>
       </section>
 
       <aside aria-label="Project activity" className="mm-proof">
@@ -233,159 +296,63 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mm-live">
-        <header data-reveal>
-          <span>LIVE PACKAGE</span>
-          <h2>Test two calls in one stack</h2>
-          <p>
-            Start the rating flow and stack a notification over it. Close the
-            top entry and the first promise is still waiting underneath.
-          </p>
-        </header>
-        <div>
-          <LivePackageDemo />
-        </div>
-      </section>
-
       <PracticalExamples />
 
-      <section className="mm-owner">
-        <div className="mm-section-copy" data-reveal>
-          <span className="mm-section-number">APP ROOT</span>
-          <h2>Mount one portal at the app root</h2>
+      <section className="mm-lifecycle">
+        <header data-reveal>
+          <span>THE COMPLETE CALL</span>
+          <h2>
+            One <code>show()</code>, one stack entry, one typed result
+          </h2>
           <p>
-            Modal calls can come from anywhere in the app. Each{" "}
-            <code>show()</code> gets an ID and promise, so one flow cannot
-            overwrite the modal that was already open.
+            The caller gets a handle immediately. The portal owns the visible
+            entry while its promise waits, then the close reason travels back to
+            the same call site.
           </p>
-          <Link href="/docs/guides/modal-flows">
-            See the flow pattern
-            <ArrowRight aria-hidden="true" size={15} />
-          </Link>
-        </div>
+        </header>
 
-        <div className="mm-owner-map" data-reveal>
-          <div className="mm-owner-callers">
-            <span>CALLERS</span>
-            {ratingCallers.map((caller) => (
-              <code key={caller}>{caller}</code>
-            ))}
-          </div>
-          <div className="mm-owner-route" aria-hidden="true">
-            <i />
-            <span>startRatingFlow()</span>
-          </div>
-          <div className="mm-owner-function">
-            <span>FLOW</span>
-            <strong>startRatingFlow()</strong>
-            <code>rating(); branch(); thanks();</code>
-          </div>
-          <div className="mm-owner-route is-portal" aria-hidden="true">
-            <span>show()</span>
-            <i />
-          </div>
-          <div className="mm-owner-portal">
+        <ol className="mm-lifecycle-steps" data-reveal>
+          <li>
+            <span>01 · CALLER</span>
+            <strong>Open from any async flow</strong>
+            <code>const handle = magicModal.show(Prompt)</code>
+          </li>
+          <li>
+            <span>02 · PORTAL</span>
+            <strong>Keep its ID and promise in the stack</strong>
+            <code>{"{ modalID, promise, update }"}</code>
+          </li>
+          <li>
+            <span>03 · RESULT</span>
+            <strong>Resume the caller with the close reason</strong>
+            <code>const result = await handle.promise</code>
+          </li>
+        </ol>
+
+        <div className="mm-lifecycle-result">
+          <div className="mm-lifecycle-result-copy" data-reveal>
+            <span>TRY EVERY EXIT</span>
+            <h3>
+              See what <code>HideReturn&lt;T&gt;</code> sends back
+            </h3>
+            <p>
+              Submit data, tap the backdrop, swipe, press Android back, or close
+              the whole stack. Each path resolves with an explicit reason.
+            </p>
             <div>
-              <MagicMark size={44} />
-              <span>
-                <small>APP ROOT</small>
-                <strong>MagicModalPortal</strong>
-              </span>
-            </div>
-            <div aria-hidden="true" className="mm-owner-sheet-stack">
-              <i />
-              <i />
-              <i />
-              <i />
+              <Link href="/docs/guides/modal-flows">
+                See the flow pattern
+                <ArrowRight aria-hidden="true" size={15} />
+              </Link>
+              <Link href="/docs/reference/hide-results">
+                Read HideReturn&lt;T&gt;
+                <ArrowRight aria-hidden="true" size={15} />
+              </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="mm-show">
-        <div className="mm-show-heading" data-reveal>
-          <span>RETURN VALUE</span>
-          <h2>
-            What <code>magicModal.show()</code> returns
-          </h2>
-          <p>
-            Await the typed close result or target this stack entry by ID. The
-            advanced <code>update()</code> API replaces progress controlled
-            outside the modal.
-          </p>
-        </div>
-
-        <div className="mm-show-object" data-reveal>
-          <pre aria-label="The object returned by magicModal.show">
-            <code>
-              <span>{"{"}</span>
-              {"\n  "}
-              <b>promise</b>
-              {": Promise<HideReturn<T>>;"}
-              {"\n  "}
-              <b>modalID</b>: string;
-              {"\n  "}
-              <b>update</b>
-              {": (next: React.FC) => void;"}
-              {"\n"}
-              <span>{"}"}</span>
-            </code>
-          </pre>
-          <span className="mm-show-object-tag">AVAILABLE IMMEDIATELY</span>
-        </div>
-
-        <dl className="mm-show-ledger">
           <div data-reveal>
-            <dt>
-              <code>promise</code>
-              <span>01</span>
-            </dt>
-            <dd>Resolves when this entry closes.</dd>
+            <ResultLab />
           </div>
-          <div data-reveal>
-            <dt>
-              <code>modalID</code>
-              <span>02</span>
-            </dt>
-            <dd>Targets this entry from another call site.</dd>
-          </div>
-          <div data-reveal>
-            <dt>
-              <code>update</code>
-              <span>ADVANCED</span>
-            </dt>
-            <dd>
-              Remounts the component while its ID, stack position, and pending
-              promise stay put.
-            </dd>
-          </div>
-        </dl>
-
-        <p className="mm-update-note" data-reveal>
-          <span>USE SPARINGLY</span>
-          <code>update()</code> remounts the component and resets local React
-          state. Keep ordinary UI changes inside the modal.
-        </p>
-      </section>
-
-      <section className="mm-close">
-        <div className="mm-close-heading" data-reveal>
-          <span>CLOSE RESULTS</span>
-          <h2>
-            What <code>HideReturn&lt;T&gt;</code> records
-          </h2>
-          <p>
-            A submitted answer, backdrop tap, swipe, Android back press, and{" "}
-            <code>hideAll()</code> resolve differently. Only{" "}
-            <code>hide(data)</code> returns a payload.
-          </p>
-          <Link href="/docs/reference/hide-results">
-            Read HideReturn&lt;T&gt;
-            <ArrowRight aria-hidden="true" size={15} />
-          </Link>
-        </div>
-        <div data-reveal>
-          <ResultLab />
         </div>
       </section>
 

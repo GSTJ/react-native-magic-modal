@@ -589,24 +589,14 @@ export const LivePackageDemo = () => {
 
         <div className="mm-package-grid">
           <div className="mm-package-copy">
-            <span>ONE PORTAL AT THE APP ROOT</span>
-            <h3>One portal owns the stack</h3>
+            <span>THE CONCURRENT CALLER TEST</span>
+            <h3>Close the top. Keep the first call alive.</h3>
             <p>
-              Start the rating flow or stack a notification above it. The upload
-              example demonstrates the advanced update() API. Each demo mounts
-              through the same MagicModalPortal.
+              Two call sites open two real package modals through the same
+              portal. The payment review resolves first while the rating stays
+              mounted with its own pending promise.
             </p>
             <div className="mm-package-actions">
-              <button
-                disabled={ratingRunning || updateRunning}
-                onClick={(event) => {
-                  restoreFocusRef.current = event.currentTarget;
-                  void runRatingFlow(false);
-                }}
-                type="button"
-              >
-                {ratingRunning ? "Rating flow open" : "Start rating flow"}
-              </button>
               <button
                 disabled={ratingRunning || updateRunning}
                 onClick={(event) => {
@@ -615,7 +605,17 @@ export const LivePackageDemo = () => {
                 }}
                 type="button"
               >
-                Stack a notification
+                {ratingRunning ? "Two-caller flow active" : "Test two callers"}
+              </button>
+              <button
+                disabled={ratingRunning || updateRunning}
+                onClick={(event) => {
+                  restoreFocusRef.current = event.currentTarget;
+                  void runRatingFlow(false);
+                }}
+                type="button"
+              >
+                Start one caller
               </button>
               <button
                 disabled={ratingRunning || updateRunning}
@@ -637,13 +637,19 @@ export const LivePackageDemo = () => {
             </div>
             <pre>
               <code>
-                <span>const</span> result = <span>await</span> <b>magicModal</b>
-                {"\n  "}.show(RatingPrompt){"\n  "}.promise
+                <span>const</span> rating = <b>magicModal</b>.show(RatingPrompt)
+                {"\n"}
+                <span>const</span> review = <b>magicModal</b>
+                .show(PaymentReview)
+                {"\n\n"}
+                <span>await</span> review.promise
+                {"\n"}
+                <span>await</span> rating.promise
               </code>
             </pre>
             <footer>
               <a href="#examples">Open the Common Flows code examples</a>
-              <span>1 result per entry</span>
+              <span>2 IDs · 2 promises</span>
             </footer>
           </div>
         </div>
