@@ -7,7 +7,8 @@ description: Mount the modal stack once near the application root.
 const MagicModalPortal: React.FC;
 ```
 
-The portal owns modal state and exposes it to the global [`magicModal`](./magic-modal) object.
+The portal owns modal state and exposes it to the global [`magicModal`](/docs/reference/magic-modal)
+object.
 
 ```tsx
 <GestureHandlerRootView style={{ flex: 1 }}>
@@ -41,4 +42,4 @@ restoration. Pass `accessibilityLabel` in the `show()` configuration to name eac
 On Android, accessibility isolation for application siblings outside the portal remains the
 responsibility of the application root.
 
-See [set up the portal](../getting-started/setup) for standard and Expo Router examples.
+See [set up the portal](/docs/getting-started/setup) for standard and Expo Router examples.

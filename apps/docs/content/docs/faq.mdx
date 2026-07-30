@@ -43,13 +43,13 @@ one. Mount one portal at the app root and avoid module-scope `show` calls during
 The top stack entry receives modal semantics and an accessible name from the `accessibilityLabel`
 option. Web also traps focus, handles Escape, and restores focus after close. The modal component
 provides its visible heading, control labels, form errors, and status announcements. Follow the
-[accessibility guide](./guides/accessibility) for examples and the test checklist.
+[accessibility guide](/docs/guides/accessibility) for examples and the test checklist.
 
 ## Why is the modal above an image picker on iOS?
 
 The full-window overlay is enabled. Call `magicModal.disableFullWindowOverlay()` before opening the
 picker. Restore it in `finally`. See
-[native iOS overlays](./guides/native-overlays).
+[native iOS overlays](/docs/guides/native-overlays).
 
 ## Does Gesture Handler 2 work?
 
@@ -65,4 +65,4 @@ const { modalID } = magicModal.show(() => <StatusModal />);
 magicModal.hide(undefined, { modalID });
 ```
 
-Inside modal content, prefer [`useMagicModal`](./reference/use-magic-modal).
+Inside modal content, prefer [`useMagicModal`](/docs/reference/use-magic-modal).

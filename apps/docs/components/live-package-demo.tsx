@@ -45,7 +45,8 @@ const modalConfig = {
   onBackdropPress: ({ hide }) => {
     hide({ reason: MagicModalHideReason.BACKDROP_PRESS });
   },
-  swipeDirection: undefined,
+  swipeDirection: "down",
+  swipeVelocityThreshold: 360,
 } satisfies NewConfigProps;
 
 const initialUploadProgress = 8;
@@ -104,7 +105,7 @@ const ModalFrame = ({
   return (
     <section
       aria-labelledby={titleId}
-      className={`mm-package-modal is-${surface} is-${variant}`}
+      className={`mm-package-modal is-${surface}`}
       data-modal-kind={variant}
     >
       {surface === "web" ? (
@@ -130,13 +131,13 @@ const ScorePrompt = () => {
 
   return (
     <ModalFrame
-      eyebrow="APP RATING"
+      eyebrow="EXPERIENCE RATING"
       title="How was your experience?"
       variant="rating"
     >
       <p>
-        Pick a score, or press outside to cancel. The caller waits for either
-        result.
+        Pick a score. Click outside or swipe down to cancel. The timeline
+        records the score, BACKDROP_PRESS, or SWIPE_COMPLETE.
       </p>
       <div className="mm-package-score">
         {[1, 2, 3, 4, 5].map((score) => (
@@ -164,20 +165,26 @@ const NotificationPrompt = () => {
       variant="notification"
     >
       <p>
-        This notification opened above the rating prompt. Press outside to
-        dismiss it while the rating promise stays pending.
+        The notification is on top of an active rating modal. Click outside or
+        swipe down to close it while the rating stays open.{" "}
+        <code>hideAll()</code> closes both entries.
       </p>
       <div className="mm-package-modal-fact">
         <span>STACK POSITION</span>
         <strong>Top entry</strong>
       </div>
-      <button
-        className="mm-package-modal-primary"
-        onClick={() => hide("reviewed")}
-        type="button"
-      >
-        Review later
-      </button>
+      <div className="mm-package-modal-actions">
+        <button onClick={() => magicModal.hideAll()} type="button">
+          Hide all modals
+        </button>
+        <button
+          className="mm-package-modal-primary"
+          onClick={() => hide("reviewed")}
+          type="button"
+        >
+          Review later
+        </button>
+      </div>
     </ModalFrame>
   );
 };
@@ -211,8 +218,8 @@ const StorePrompt = () => {
 
   return (
     <ModalFrame
-      eyebrow="STORE REVIEW"
-      title="Leave a store rating?"
+      eyebrow="PUBLIC REVIEW"
+      title="Leave a public rating?"
       variant="store"
     >
       <p>The caller opened this prompt after receiving a high score.</p>
@@ -225,7 +232,7 @@ const StorePrompt = () => {
           onClick={() => hide("open")}
           type="button"
         >
-          Open the store
+          Open review page
         </button>
       </div>
     </ModalFrame>
@@ -281,7 +288,10 @@ const UploadPrompt = ({
       title={complete ? "Upload complete" : "Uploading release"}
       variant="upload"
     >
-      <p>update() remounts content while keeping this entry open.</p>
+      <p>
+        Each progress update replaces the modal content. Click outside or swipe
+        down to cancel.
+      </p>
       <progress
         aria-label={`Upload progress: ${progress}%`}
         className="mm-package-progress"
@@ -324,7 +334,9 @@ export const LivePackageDemo = () => {
   );
 
   const record = useCallback((entry: TimelineEntry) => {
-    setTimeline((current) => [entry, ...current].slice(0, 6));
+    React.startTransition(() => {
+      setTimeline((current) => [entry, ...current].slice(0, 6));
+    });
   }, []);
 
   const showTracked: ShowTracked = useCallback(
@@ -344,13 +356,15 @@ export const LivePackageDemo = () => {
         setActiveEntries((current) =>
           current.filter(({ id }) => id !== handle.modalID),
         );
-        setTimeline((current) =>
-          current.map((item) =>
-            item.id === handle.modalID
-              ? { ...item, result: describeResult(result) }
-              : item,
-          ),
-        );
+        React.startTransition(() => {
+          setTimeline((current) =>
+            current.map((item) =>
+              item.id === handle.modalID
+                ? { ...item, result: describeResult(result) }
+                : item,
+            ),
+          );
+        });
       });
 
       return handle;
@@ -419,7 +433,7 @@ export const LivePackageDemo = () => {
             : "The feedback prompt closed.";
       } else {
         const store = showTracked<"later" | "open">(
-          "Store prompt",
+          "Review prompt",
           StorePrompt,
           modalConfig,
         );
@@ -428,8 +442,8 @@ export const LivePackageDemo = () => {
         detail =
           storeResult.reason === MagicModalHideReason.INTENTIONAL_HIDE &&
           storeResult.data === "open"
-            ? "Store review selected."
-            : "Store review skipped.";
+            ? "Public review selected."
+            : "Public review skipped.";
       }
 
       const thanks = showTracked<void>(
@@ -562,8 +576,8 @@ export const LivePackageDemo = () => {
       <div className="mm-live-package-content">
         <div className="mm-package-toolbar">
           <div>
-            <span>EXPO PACKAGE</span>
-            <code>Expo / iOS / Android / Web</code>
+            <span>PLATFORM SUPPORT</span>
+            <code>Web / iOS / Android</code>
           </div>
           <div aria-live="polite" className="mm-package-count">
             <strong>{activeEntries.length}</strong>
@@ -575,12 +589,12 @@ export const LivePackageDemo = () => {
 
         <div className="mm-package-grid">
           <div className="mm-package-copy">
-            <span>ONE PORTAL FOR EXPO APPS</span>
-            <h3>Run the same modal flow on web and native</h3>
+            <span>ONE PORTAL AT THE APP ROOT</span>
+            <h3>One portal owns the stack</h3>
             <p>
-              Start the rating flow or stack a notification above it. The web
-              upload separately demonstrates the advanced update() API. The same
-              MagicModalPortal works across Expo for iOS, Android, and web.
+              Start the rating flow or stack a notification above it. The upload
+              example demonstrates the advanced update() API. Each demo mounts
+              through the same MagicModalPortal.
             </p>
             <div className="mm-package-actions">
               <button
@@ -611,7 +625,7 @@ export const LivePackageDemo = () => {
                 }}
                 type="button"
               >
-                {updateRunning ? "Upload in progress" : "Advanced web upload"}
+                {updateRunning ? "Upload in progress" : "Advanced upload"}
               </button>
             </div>
           </div>
@@ -628,7 +642,7 @@ export const LivePackageDemo = () => {
               </code>
             </pre>
             <footer>
-              <span>1 portal</span>
+              <a href="#examples">Open the Common Flows code examples</a>
               <span>1 result per entry</span>
             </footer>
           </div>

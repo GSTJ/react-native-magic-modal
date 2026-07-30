@@ -4,7 +4,7 @@ description: Show, hide, and configure stack entries from application code.
 ---
 
 `magicModal` is the global imperative API. Its methods target the
-[`MagicModalPortal`](./magic-modal-portal) mounted in the active React tree.
+[`MagicModalPortal`](/docs/reference/magic-modal-portal) mounted in the active React tree.
 
 ## show
 
@@ -35,8 +35,8 @@ const { modalID, promise } = magicModal.show<Profile>(() => <ProfilePicker />, {
 | `modalID` | Addresses this exact entry from outside its component. |
 | `update`  | Advanced API that replaces and remounts its content.   |
 
-See [hide results](./hide-results) for promise narrowing. Read
-[replace open content](../guides/updating-content) before using `update()`, since it remounts the
+See [hide results](/docs/reference/hide-results) for promise narrowing. Read
+[replace open content](/docs/guides/updating-content) before using `update()`, since it remounts the
 rendered component.
 
 ## hide
@@ -54,9 +54,9 @@ magicModal.hide({ uploaded: true }, { modalID });
 ```
 
 <Callout type="warn">
-  Prefer [`useMagicModal`](./use-magic-modal) inside modal content. Calling
-  `hide` without a `modalID` falls back to the top entry for compatibility and
-  is deprecated.
+  Prefer [`useMagicModal`](/docs/reference/use-magic-modal) inside modal
+  content. Calling `hide` without a `modalID` falls back to the top entry for
+  compatibility and is deprecated.
 </Callout>
 
 ## hideAll
@@ -82,5 +82,5 @@ Enables rendering above native iOS modal screens. This is the default and is a n
 disableFullWindowOverlay(): void
 ```
 
-Disables rendering above native iOS modal screens. See [native iOS overlays](../guides/native-overlays)
-for a safe `try`/`finally` pattern.
+Disables rendering above native iOS modal screens. See
+[native iOS overlays](/docs/guides/native-overlays) for a safe `try`/`finally` pattern.

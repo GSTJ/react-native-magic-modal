@@ -1,9 +1,9 @@
 ---
 title: Introduction
-description: Build awaitable, type-safe modal flows on Expo, React Native, and the web.
+description: Build awaitable, type-safe modal flows for web, iOS, and Android.
 ---
 
-React Native Magic Modal turns a modal interaction into a typed async result. Mount one
+Magic Modal turns a modal interaction into a typed async result. Mount one
 `MagicModalPortal` near the application root. Call `show()` from an event, effect, service, or any
 other async flow.
 
@@ -25,32 +25,32 @@ if (
 <Cards>
   <Card
     title="One root portal"
-    description="MagicModalPortal owns the stack while each screen keeps its normal component tree."
-    href="./reference/magic-modal-portal"
+    description="MagicModalPortal owns the stack while each view keeps its normal component tree."
+    href="/docs/reference/magic-modal-portal"
   />
   <Card
     title="Typed close results"
     description="show<T>() and hide(data) connect the caller to submitted data and dismissal reasons."
-    href="./reference/hide-results"
+    href="/docs/reference/hide-results"
   />
   <Card
     title="Readable async flows"
     description="Await a modal, branch on its result, and open the next step in the same function."
-    href="./guides/modal-flows"
+    href="/docs/guides/modal-flows"
   />
   <Card
-    title="Web and native"
-    description="Use one API on Expo Web, iOS, Android, or a React Native Web application."
-    href="./platforms/expo"
+    title="Web, iOS, and Android"
+    description="Use one API across web, iOS, and Android, with setup guides for Expo and Next.js."
+    href="/docs/platforms/expo"
   />
 </Cards>
 
 ## The mental model
 
-1. [`MagicModalPortal`](./reference/magic-modal-portal) owns the modal stack. Mount it once.
-2. [`magicModal.show`](./reference/magic-modal) pushes one entry and returns its ID and promise.
-3. [`useMagicModal().hide`](./reference/use-magic-modal) closes that entry with typed data.
-4. The promise resolves to [`HideReturn<T>`](./reference/hide-results), including the close reason.
+1. [`MagicModalPortal`](/docs/reference/magic-modal-portal) owns the modal stack. Mount it once.
+2. [`magicModal.show`](/docs/reference/magic-modal) pushes one entry and returns its ID and promise.
+3. [`useMagicModal().hide`](/docs/reference/use-magic-modal) closes that entry with typed data.
+4. The promise resolves to [`HideReturn<T>`](/docs/reference/hide-results), including the close reason.
 
 Every `show()` call creates an independent stack entry. Opening another modal keeps the earlier
 entry and its promise in place.
@@ -65,8 +65,8 @@ entry and its promise in place.
 Choose the installation for the target. Mount the portal near the application root.
 
 <Cards>
-  <Card title="Install" href="./getting-started/installation" />
-  <Card title="Set up the portal" href="./getting-started/setup" />
-  <Card title="Expo" href="./platforms/expo" />
-  <Card title="Next.js" href="./platforms/nextjs" />
+  <Card title="Install" href="/docs/getting-started/installation" />
+  <Card title="Set up the portal" href="/docs/getting-started/setup" />
+  <Card title="Expo" href="/docs/platforms/expo" />
+  <Card title="Next.js" href="/docs/platforms/nextjs" />
 </Cards>

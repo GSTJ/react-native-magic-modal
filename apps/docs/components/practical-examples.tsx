@@ -10,6 +10,8 @@ import {
   useState,
 } from "react";
 
+import Link from "next/link";
+
 import { gsap } from "gsap";
 import { ArrowRight, Check, Upload } from "lucide-react";
 
@@ -35,7 +37,19 @@ type Example = {
 };
 
 const confirmExample: Example = {
-  code: `const result = await magicModal
+  code: `type Confirmation = { confirmed: boolean };
+
+function DeletePostModal() {
+  const { hide } = useMagicModal<Confirmation>();
+
+  return (
+    <Button onPress={() => hide({ confirmed: true })}>
+      Delete post
+    </Button>
+  );
+}
+
+const result = await magicModal
   .show<Confirmation>(() => (
     <DeletePostModal />
   ))
@@ -374,8 +388,17 @@ export const PracticalExamples = () => {
         <span>COMMON FLOWS</span>
         <h2>Await a result and keep the flow in one place</h2>
         <p>
-          The first two examples compose show(), hide(), and typed results. The
-          upload example uses update() for externally controlled progress.
+          The first two examples compose show(), useMagicModal().hide(), and
+          typed results. The upload example uses update() for externally
+          controlled progress.
+          <br />
+          <Link
+            className="mm-article-link"
+            href="/docs/reference/use-magic-modal"
+          >
+            Read the useMagicModal reference
+            <ArrowRight aria-hidden="true" size={14} />
+          </Link>
         </p>
       </header>
 

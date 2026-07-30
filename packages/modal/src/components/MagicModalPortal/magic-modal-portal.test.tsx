@@ -291,6 +291,29 @@ describe("MagicModalPortal", () => {
     });
   });
 
+  it("keeps animated modal layers transparent to backdrop presses", () => {
+    render(<MagicModalPortal />);
+
+    act(() => {
+      magicModal.show(() => <ModalContent testID="swipeable-content" />, {
+        swipeDirection: "down",
+      });
+    });
+
+    expect(
+      screen.getByTestId("magic-modal-motion-layer", includeHiddenElements)
+        .props,
+    ).toMatchObject({
+      pointerEvents: "box-none",
+    });
+    expect(
+      screen.getByTestId("magic-modal-animation-layer", includeHiddenElements)
+        .props,
+    ).toMatchObject({
+      pointerEvents: "box-none",
+    });
+  });
+
   it("keeps the backdrop out of the accessibility tree", () => {
     render(<MagicModalPortal />);
 

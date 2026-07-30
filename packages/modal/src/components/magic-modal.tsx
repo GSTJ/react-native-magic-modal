@@ -413,10 +413,16 @@ export const MagicModal = memo(
           }
 
           const mainTranslation = isHorizontal ? translationX : translationY;
+          const mainVelocity = isHorizontal ? event.velocityX : event.velocityY;
 
           mainTranslation.value = withSpring(
             rangeMap[config.swipeDirection ?? defaultDirection],
-            { velocity: event.velocityX, overshootClamping: true },
+            {
+              damping: 40,
+              overshootClamping: true,
+              stiffness: 400,
+              velocity: mainVelocity,
+            },
             (success) => {
               "worklet";
               if (!success) return;
@@ -531,10 +537,14 @@ export const MagicModal = memo(
           />
         </Animated.View>
         <Animated.View
-          style={[styles.overlay, styles.pointerEventsBoxNone, animatedStyles]}
+          pointerEvents="box-none"
+          style={[styles.overlay, animatedStyles]}
+          testID="magic-modal-motion-layer"
         >
           <Animated.View
-            style={[styles.overlay, styles.pointerEventsBoxNone, config.style]}
+            pointerEvents="box-none"
+            style={[styles.overlay, config.style]}
+            testID="magic-modal-animation-layer"
             entering={
               isSwipeComplete
                 ? undefined
@@ -559,8 +569,8 @@ export const MagicModal = memo(
                 ref={setDialogNode}
                 style={[
                   styles.childrenWrapper,
-                  styles.pointerEventsBoxNone,
                   config.style,
+                  styles.pointerEventsBoxNone,
                 ]}
                 testID={MODAL_DIALOG_TEST_ID}
               >

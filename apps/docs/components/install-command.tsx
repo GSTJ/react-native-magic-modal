@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  type MouseEvent,
+  type ChangeEvent,
   useCallback,
   useEffect,
   useRef,
@@ -12,21 +12,25 @@ import { Check, Copy } from "lucide-react";
 
 const packageManagers = [
   {
+    args: "add react-native-magic-modal",
     command: "pnpm add react-native-magic-modal",
     id: "pnpm",
     label: "pnpm",
   },
   {
+    args: "install react-native-magic-modal",
     command: "npm install react-native-magic-modal",
     id: "npm",
     label: "npm",
   },
   {
+    args: "add react-native-magic-modal",
     command: "yarn add react-native-magic-modal",
     id: "yarn",
     label: "Yarn",
   },
   {
+    args: "add react-native-magic-modal",
     command: "bun add react-native-magic-modal",
     id: "bun",
     label: "Bun",
@@ -59,9 +63,10 @@ export const InstallCommand = ({ compact = false }: { compact?: boolean }) => {
   const resetTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
-  const command =
-    packageManagers.find((manager) => manager.id === packageManager)?.command ??
-    packageManagers[0].command;
+  const selectedManager =
+    packageManagers.find((manager) => manager.id === packageManager) ??
+    packageManagers[0];
+  const { args, command } = selectedManager;
 
   const copy = useCallback(async () => {
     try {
@@ -86,10 +91,10 @@ export const InstallCommand = ({ compact = false }: { compact?: boolean }) => {
   );
 
   const selectPackageManager = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) => {
+    (event: ChangeEvent<HTMLSelectElement>) => {
       clearTimeout(resetTimer.current);
       setCopyState("idle");
-      setPackageManager(event.currentTarget.value as PackageManager);
+      setPackageManager(event.target.value as PackageManager);
     },
     [],
   );
@@ -108,44 +113,37 @@ export const InstallCommand = ({ compact = false }: { compact?: boolean }) => {
       </>
     );
   } else if (copyState === "failed") {
-    copyFeedback = <>Select</>;
+    copyFeedback = <>Failed</>;
   }
 
   return (
     <div className={`mh-install ${compact ? "is-compact" : ""}`}>
-      <fieldset
-        aria-label="Choose a package manager"
-        className="mh-install-managers"
-      >
-        {packageManagers.map((manager) => (
-          <button
-            aria-pressed={packageManager === manager.id}
-            className={
-              packageManager === manager.id ? "is-selected" : undefined
-            }
-            key={manager.id}
-            onClick={selectPackageManager}
-            type="button"
-            value={manager.id}
-          >
-            {manager.label}
-          </button>
-        ))}
-      </fieldset>
-      <button
-        aria-label={`Copy install command: ${command}`}
-        className={`mh-install-command ${compact ? "is-compact" : ""}`}
-        onClick={copy}
-        type="button"
-      >
+      <div className={`mh-install-command ${compact ? "is-compact" : ""}`}>
         <span aria-hidden="true" className="mh-install-prompt">
           $
         </span>
-        <code>{command}</code>
-        <span aria-live="polite" className="mh-install-copy">
-          {copyFeedback}
-        </span>
-      </button>
+        <select
+          aria-label="Package manager"
+          className="mh-install-manager-select"
+          onChange={selectPackageManager}
+          value={packageManager}
+        >
+          {packageManagers.map((manager) => (
+            <option key={manager.id} value={manager.id}>
+              {manager.label}
+            </option>
+          ))}
+        </select>
+        <code>{args}</code>
+        <button
+          aria-label={`Copy install command: ${command}`}
+          className="mh-install-copy"
+          onClick={copy}
+          type="button"
+        >
+          <span aria-live="polite">{copyFeedback}</span>
+        </button>
+      </div>
     </div>
   );
 };

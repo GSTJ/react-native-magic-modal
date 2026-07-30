@@ -73,13 +73,13 @@ export default function HomePage() {
         <div className="mm-hero-copy">
           <p className="mm-overline">
             <MagicMark size={24} />
-            Expo-ready on web, iOS, and Android
+            One API for web, iOS, and Android
           </p>
-          <h1>React Native modals you can await</h1>
+          <h1>Modals you can await</h1>
           <p className="mm-hero-lede">
-            Mount one <code>MagicModalPortal</code> at the root of your Expo
-            app. Call <code>show()</code> from any async flow and await the
-            typed result across web and native.
+            Mount one <code>MagicModalPortal</code> at the root of your app.
+            Call <code>show()</code> from any async flow and await the typed
+            result on web, iOS, and Android.
           </p>
           <div className="mm-hero-actions">
             <a className="mm-run-link" href="#original-flow">
@@ -166,18 +166,18 @@ export default function HomePage() {
           <span className="mm-section-number">WHY IT EXISTS</span>
           <h2>Two callers can open a modal at the same time</h2>
           <p>
-            The first Magic Modal flow asked for an app rating after a like. It
-            could start from several screens and branch to feedback or the
-            store. Both paths ended with a thank-you.
+            The first Magic Modal flow collected feedback after someone liked a
+            post. Several views could start it, await a score, and open the
+            matching follow-up from one shared function.
           </p>
           <div className="mm-request-branches">
             <article>
-              <span>SCREEN OWNED</span>
+              <span>CALLER OWNED</span>
               <strong>
                 {repeatedRatingState.length} pieces of visibility state
               </strong>
               <p>
-                Every screen that can start the flow repeats the modal tree and
+                Every caller that can start the flow repeats the modal tree and
                 its cleanup.
               </p>
             </article>
@@ -185,7 +185,7 @@ export default function HomePage() {
               <span>PORTAL OWNED</span>
               <strong>{ratingCallers.length} callers share one function</strong>
               <p>
-                The flow lives outside the screens. Each caller awaits the same
+                The flow lives outside the UI. Each caller awaits the same
                 sequence.
               </p>
             </article>
@@ -392,9 +392,20 @@ export default function HomePage() {
       <section className="mm-final">
         <div aria-hidden="true" className="mm-final-device">
           <div className="mm-final-device-bar">
-            <span>9:41</span>
-            <i />
-            <span>5G</span>
+            <span className="mm-final-device-time">9:41</span>
+            <i className="mm-final-device-notch" />
+            <span className="mm-final-device-status">
+              <span className="mm-final-device-signal">
+                <i />
+                <i />
+                <i />
+                <i />
+              </span>
+              <b>5G</b>
+              <span className="mm-final-device-battery">
+                <i />
+              </span>
+            </span>
           </div>
           <div className="mm-final-device-screen">
             <header>
@@ -428,7 +439,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="mm-final-copy" data-reveal>
+        <div className="mm-final-copy">
           <span>GET STARTED</span>
           <h2>
             Add MagicModal
@@ -455,7 +466,7 @@ export default function HomePage() {
             <MagicMark size={29} />
             <span>Magic Modal</span>
           </Link>
-          <h2>Keep modal flow logic outside your screens.</h2>
+          <h2>Build your first awaitable modal flow.</h2>
           <p>Start with the setup guide or jump straight into the API.</p>
           <div className="mm-footer-actions">
             <a

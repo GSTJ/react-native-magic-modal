@@ -54,21 +54,23 @@ if (html.some((content) => /(?:href|src)="\/_next\//u.test(content))) {
 
 const internalLinks = [];
 for (const [index, content] of html.entries()) {
-  for (const match of content.matchAll(/\bhref="([^"]+)"/gu)) {
+  for (const match of content.matchAll(/<a\b[^>]*\shref="([^"]+)"/gu)) {
     const href = match[1].replaceAll("&amp;", "&");
 
-    if (
-      href === deploymentBasePath ||
-      href.startsWith(`${deploymentBasePath}/`) ||
-      href.startsWith(`${deploymentBasePath}#`) ||
-      href.startsWith(`${deploymentBasePath}?`)
-    ) {
+    if (!/^[a-z][a-z\d+.-]*:/iu.test(href) && !href.startsWith("//")) {
       internalLinks.push({ href, source: htmlFiles[index] });
     }
   }
 }
 
 const resolveInternalTarget = async (pathname) => {
+  if (
+    pathname !== deploymentBasePath &&
+    !pathname.startsWith(`${deploymentBasePath}/`)
+  ) {
+    return undefined;
+  }
+
   const relativePath = decodeURIComponent(
     pathname.slice(deploymentBasePath.length),
   ).replace(/^\/+/u, "");
@@ -95,7 +97,14 @@ const resolveInternalTarget = async (pathname) => {
 };
 
 const checkInternalLink = async ({ href, source }) => {
-  const url = new URL(href, "https://docs.magic-modal.dev");
+  const sourcePath = relative(outputDirectory, source).replaceAll("\\", "/");
+  const sourceUrlPath = sourcePath.endsWith("index.html")
+    ? sourcePath.slice(0, -"index.html".length)
+    : sourcePath;
+  const url = new URL(
+    href,
+    `https://docs.magic-modal.dev${deploymentBasePath}/${sourceUrlPath}`,
+  );
   const target = await resolveInternalTarget(url.pathname);
 
   if (!target) {
