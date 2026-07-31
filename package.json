@@ -31,7 +31,7 @@
     "test": "turbo run test",
     "changelog:check": "turbo run changelog:check --filter=magic-modal",
     "build": "turbo run build",
-    "release": "turbo run release --filter=magic-modal",
+    "release": "turbo run release --filter=magic-modal && pnpm --filter react-native-magic-modal run release",
     "docs": "pnpm --filter magic-modal build && pnpm --filter @magic-modal/docs build",
     "docs:dev": "pnpm --filter magic-modal build && pnpm --filter @magic-modal/docs dev",
     "registry:build": "shadcn build --output apps/docs/public/r && pnpm --filter @magic-modal/docs exec oxfmt public/r",
