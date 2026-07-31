@@ -48,17 +48,49 @@ run("pnpm", ["publish", "--no-git-checks", "--access", "public"]);
 
 // Deprecate after publishing, not before, and re-run it on every release.
 //
-// `npm deprecate pkg@"*"` resolves the range against the versions that exist at
-// the moment it runs and writes a `deprecated` field into each one. It is not a
-// standing rule: a version published afterwards is not deprecated, which is why
-// this cannot be a one-off command run by hand at v10. Every shim release has
-// to re-apply it or the newest version — the one `npm install
-// react-native-magic-modal` actually resolves to — would be the only
-// undeprecated version on the package, and nobody would ever see the notice.
+// `npm deprecate pkg@<range>` resolves the range against the versions that
+// exist at the moment it runs and writes a `deprecated` field into each one. It
+// is not a standing rule: a version published afterwards is not deprecated,
+// which is why this cannot be a one-off command run by hand at v10. Every shim
+// release has to re-apply it.
+//
+// The range is everything BELOW the version just published, not `*`, and the
+// newest version is deliberately left undeprecated. That is not a style choice,
+// it is forced by how npm resolves a bare `npm install <pkg>`:
+//
+//   npm-pick-manifest takes the `latest` dist-tag as a shortcut only when that
+//   manifest is not deprecated. Deprecate it and the shortcut is skipped, and
+//   resolution falls through to the highest version satisfying the range,
+//   whatever `latest` says.
+//
+// `react-native-magic-modal@11.0.0` is an accidental major that sits above
+// `latest` and cannot be removed: npm refuses to unpublish this package because
+// it has dependents in the registry. Its own `magic-modal@11.0.0` dependency
+// WAS unpublished, so 11.0.0 no longer installs at all, it fails to resolve.
+//
+// So deprecating the newest version here would point every bare
+// `npm install react-native-magic-modal` at a version that errors out. Measured,
+// not assumed: with 10.1.0 deprecated a bare install resolved to 11.0.0, and
+// undeprecating it moved resolution back to 10.1.0.
+//
+// The cost is that whoever installs `latest` sees no rename notice, which is the
+// exact thing the old `*` range was written to guarantee. There is no way to
+// have both while a higher version exists, and a missing notice beats a failed
+// install. Anyone on an older version still gets it, and the README, the npm
+// page and the repo all say the package was renamed.
+//
+// This can go back to `*` only once `latest` is itself above 11.0.0, since the
+// fallthrough would then land on `latest` anyway. Note that 11.0.0 is burned on
+// both packages and can never be republished, so that era starts at 11.0.1 or
+// 12.0.0.
 //
 // Deprecation is a warning printed at install time. It does not unpublish, does
 // not block installs and does not break existing lockfiles.
-run("npm", ["deprecate", `react-native-magic-modal@*`, DEPRECATION_MESSAGE]);
+run("npm", [
+  "deprecate",
+  `react-native-magic-modal@<${version}`,
+  DEPRECATION_MESSAGE,
+]);
 
 // Get the bump into the release commit's branch so the sync PR carries it to
 // main. release-it committed the real package's bump before this script ran, so
