@@ -3,7 +3,7 @@
 ## Reporting a Vulnerability
 
 Report it privately through GitHub's advisory form:
-https://github.com/GSTJ/react-native-magic-modal/security/advisories/new
+https://github.com/GSTJ/magic-modal/security/advisories/new
 
 Don't open a public issue for a security problem.
 

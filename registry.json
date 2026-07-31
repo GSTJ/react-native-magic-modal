@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "react-native-magic-modal",
-  "homepage": "https://gstj.github.io/react-native-magic-modal/",
+  "homepage": "https://gstj.github.io/magic-modal/",
   "items": [
     {
       "name": "magic-modal",

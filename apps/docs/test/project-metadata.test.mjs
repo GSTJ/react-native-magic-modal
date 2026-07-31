@@ -49,7 +49,7 @@ test("collects project metadata without rounding or fallback metrics", async () 
   assert.equal(metadata.versionLabel, "v9.0.1");
   assert.equal(
     metadata.releaseUrl,
-    "https://github.com/GSTJ/react-native-magic-modal/releases/tag/magic-modal-9.0.1",
+    "https://github.com/GSTJ/magic-modal/releases/tag/magic-modal-9.0.1",
   );
 });
 

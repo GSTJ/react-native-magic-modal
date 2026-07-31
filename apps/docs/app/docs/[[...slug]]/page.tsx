@@ -36,7 +36,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
       <div className="page-actions">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
-          githubUrl={`https://github.com/GSTJ/react-native-magic-modal/blob/main/apps/docs/content/docs/${page.path}`}
+          githubUrl={`https://github.com/GSTJ/magic-modal/blob/main/apps/docs/content/docs/${page.path}`}
           markdownUrl={markdownUrl}
         />
       </div>
