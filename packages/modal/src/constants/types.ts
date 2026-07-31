@@ -106,7 +106,28 @@ export type ModalProps = {
    * @default 500
    */
   swipeVelocityThreshold: number;
-} & Pick<React.ComponentProps<typeof Animated.View>, "entering" | "exiting">;
+} & {
+  /**
+   * Reanimated entering animation for the modal content.
+   *
+   * React Native only. The browser entry has no Reanimated in it, so it plays
+   * its own CSS-timed entrance built from `swipeDirection` and
+   * `animationInTiming` and ignores this.
+   * @default undefined
+   * @platform ios, android
+   */
+  entering?: React.ComponentProps<typeof Animated.View>["entering"];
+
+  /**
+   * Reanimated exiting animation for the modal content.
+   *
+   * React Native only, and only on iOS and Android for the same reason as
+   * {@link ModalProps.entering}.
+   * @default undefined
+   * @platform ios, android
+   */
+  exiting?: React.ComponentProps<typeof Animated.View>["exiting"];
+};
 
 /**
  * What the portal hands each entry in the modal stack.
