@@ -138,8 +138,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0(oxfmt@0.60.0)
       magic-oxlint-config:
-        specifier: ^1.2.0
-        version: 1.2.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
+        specifier: ^2.0.0
+        version: 2.0.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
       magic-tsconfig:
         specifier: ^1.2.0
         version: 1.2.0
@@ -324,8 +324,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0(oxfmt@0.60.0)
       magic-oxlint-config:
-        specifier: ^1.2.0
-        version: 1.2.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
+        specifier: ^2.0.0
+        version: 2.0.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
       magic-tsconfig:
         specifier: ^1.2.0
         version: 1.2.0
@@ -409,8 +409,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0(oxfmt@0.60.0)
       magic-oxlint-config:
-        specifier: ^1.2.0
-        version: 1.2.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
+        specifier: ^2.0.0
+        version: 2.0.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0)
       magic-tsconfig:
         specifier: ^1.2.0
         version: 1.2.0
@@ -6637,6 +6637,24 @@ packages:
   magic-oxlint-config@1.2.0:
     resolution: {integrity: sha512-QBqa4xdsLwi3a9yo8hGW5ZZwXdHzGBmz6GCK86nHza2r+8s9tztwP6mxIzP/8HGd6xbzP2zOfcwHsUIso3ROvQ==}
     engines: {node: '>=22.18.0'}
+    peerDependencies:
+      oxlint: '>=1.75.0'
+    peerDependenciesMeta:
+      oxlint:
+        optional: true
+
+  magic-oxlint-config@2.0.0:
+    resolution: {integrity: sha512-4fyDWv8aWqK14ykjhbSn1xtkOcTlDY1NK3G9h6QaRrcepWZ9bQ89ZduqBc+ZyeE0aoogQvcjS9O9hSfn/6lXIQ==}
+    engines: {node: '>=22.18.0'}
+    peerDependencies:
+      oxlint: '>=1.75.0'
+    peerDependenciesMeta:
+      oxlint:
+        optional: true
+
+  magic-oxlint-plugin@1.2.0:
+    resolution: {integrity: sha512-aW8MpAp1uFdEn1xXcIcZR7cI5GE+P/EOjwzEhFi/r0CrFOdIyEVZK9JpmK+P53jmu7c0+x6NlOxS4AY464yqDw==}
+    engines: {node: '>=22'}
     peerDependencies:
       oxlint: '>=1.75.0'
     peerDependenciesMeta:
@@ -15941,6 +15959,19 @@ snapshots:
       oxlint: 1.75.0
     transitivePeerDependencies:
       - eslint
+
+  magic-oxlint-config@2.0.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(oxlint@1.75.0):
+    dependencies:
+      eslint-plugin-safe-jsx: 1.3.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))
+      magic-oxlint-plugin: 1.2.0(oxlint@1.75.0)
+    optionalDependencies:
+      oxlint: 1.75.0
+    transitivePeerDependencies:
+      - eslint
+
+  magic-oxlint-plugin@1.2.0(oxlint@1.75.0):
+    optionalDependencies:
+      oxlint: 1.75.0
 
   magic-string@0.30.21:
     dependencies:
