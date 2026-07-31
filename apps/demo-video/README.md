@@ -16,10 +16,10 @@ signature the package no longer has.
 
 ## Rendering
 
-Rendering is manual and local. Nothing in CI runs it, and this package
-deliberately has no `build`, `lint` or `typecheck` script so that `pnpm build`
-and `pnpm typecheck` at the repo root keep the same task graph they had before
-it existed.
+Render locally before you open a PR that touches the composition. This package
+deliberately has no `build`, `lint` or `typecheck` script, so `pnpm build` and
+`pnpm typecheck` at the repo root keep the same task graph they had before it
+existed, and Remotion never enters Branch Checkup.
 
 ```bash
 pnpm --filter @magic-modal/demo-video dev        # Remotion Studio on :3000
@@ -61,3 +61,25 @@ It reads the mp4 rather than a PNG sequence on purpose. The same recipe over
 lossless frames lands around 1.0 MB instead of 1.6 MB, which is how we know the
 committed GIF was always a second pass over the encode — matching that keeps
 successive renders in the same size class as the one already in the README.
+
+## Publishing
+
+`.github/workflows/demo-video.yml` runs the same `render:all` on every push to
+`main` that touches this directory, and overwrites three objects in the
+`portfolio-assets` R2 bucket under the `magic-modal/` prefix:
+
+| Key                           | Served as                                                       |
+| ----------------------------- | --------------------------------------------------------------- |
+| `magic-modal/demo.mp4`        | `https://assets.gabrieltaveira.dev/magic-modal/demo.mp4`        |
+| `magic-modal/demo.gif`        | `https://assets.gabrieltaveira.dev/magic-modal/demo.gif`        |
+| `magic-modal/demo-poster.png` | `https://assets.gabrieltaveira.dev/magic-modal/demo-poster.png` |
+
+That bucket and its custom domain belong to GSTJ/gabriel-taveira-portfolio. This
+repo borrows a key prefix and adds no Cloudflare resources of its own. It needs
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as repository secrets, with
+Account > R2 > Edit on the account that owns the bucket.
+
+The job never writes back to the repository, so `media/` does not update itself.
+It is the committed fallback and the copy the README links today. Render locally
+in the PR that changes the composition; the workflow is what keeps the served
+copies in step afterwards, not a substitute for that.
