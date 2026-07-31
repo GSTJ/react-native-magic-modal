@@ -1,40 +1,21 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/header/graph.svg?title=React+Native+Magic+Modal&amp;subtitle=Awaitable%2C+type-safe+modals+for+React+Native+and+web&amp;logo=react&amp;mode=dark&amp;border=false" />
-    <img alt="React Native Magic Modal" src="https://shieldcn.dev/header/graph.svg?title=React+Native+Magic+Modal&amp;subtitle=Awaitable%2C+type-safe+modals+for+React+Native+and+web&amp;logo=react&amp;mode=light&amp;border=false" />
-  </picture>
+  <img
+    alt="A rating flow moving from magicModal.show to a typed close result"
+    src="https://raw.githubusercontent.com/GSTJ/react-native-magic-modal/main/media/magic-modal-demo.gif"
+  />
 </p>
 
 <p align="center">Mount one portal. Open a modal from any async flow and await a typed result on Expo, React Native, or the web.</p>
 
 <p align="center">
-  <a aria-label="npm version" href="https://www.npmjs.com/package/react-native-magic-modal"><picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/npm/react-native-magic-modal.svg?variant=branded&amp;size=xs" />
-    <img alt="npm version" src="https://shieldcn.dev/npm/react-native-magic-modal.svg?variant=branded&amp;size=xs&amp;mode=light" />
-  </picture></a>
-  <a aria-label="npm downloads" href="https://www.npmjs.com/package/react-native-magic-modal"><picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/npm/react-native-magic-modal/downloads.svg?variant=branded&amp;size=xs" />
-    <img alt="npm downloads" src="https://shieldcn.dev/npm/react-native-magic-modal/downloads.svg?variant=branded&amp;size=xs&amp;mode=light" />
-  </picture></a>
-  <a aria-label="GitHub stars" href="https://github.com/GSTJ/react-native-magic-modal/stargazers"><picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/stars.svg?variant=branded&amp;size=xs" />
-    <img alt="GitHub stars" src="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/stars.svg?variant=branded&amp;size=xs&amp;mode=light" />
-  </picture></a>
-  <a aria-label="license" href="https://github.com/GSTJ/react-native-magic-modal/blob/main/LICENSE"><picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/license.svg?variant=branded&amp;size=xs" />
-    <img alt="license" src="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/license.svg?variant=branded&amp;size=xs&amp;mode=light" />
-  </picture></a>
+  <a aria-label="npm version" href="https://www.npmjs.com/package/react-native-magic-modal"><img alt="npm version" src="https://shieldcn.dev/npm/react-native-magic-modal.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
+  <a aria-label="npm downloads" href="https://www.npmjs.com/package/react-native-magic-modal"><img alt="npm downloads" src="https://shieldcn.dev/npm/react-native-magic-modal/downloads.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
+  <a aria-label="GitHub stars" href="https://github.com/GSTJ/react-native-magic-modal/stargazers"><img alt="GitHub stars" src="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/stars.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
+  <a aria-label="license" href="https://github.com/GSTJ/react-native-magic-modal/blob/main/LICENSE"><img alt="license" src="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/license.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
 </p>
 
 <p align="center">
   <a href="https://gstj.github.io/react-native-magic-modal/docs/">Docs</a> | <a href="https://github.com/gstj/react-native-magic-modal">GitHub</a> | <a href="https://gstj.github.io/react-native-magic-modal/docs/faq/">FAQ</a> | <a href="https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96">Article</a>
-</p>
-
-<p align="center">
-  <img
-    alt="A rating flow moving from magicModal.show to a typed close result"
-    src="https://raw.githubusercontent.com/GSTJ/react-native-magic-modal/main/media/magic-modal-demo.gif"
-  />
 </p>
 
 ## How it works
