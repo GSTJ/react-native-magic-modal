@@ -16,7 +16,7 @@ import { readFile } from "node:fs/promises";
 import { syncManifest } from "./sync-manifest.mjs";
 
 const DEPRECATION_MESSAGE =
-  "Renamed to `magic-modal`. This package still works and still tracks every release — it depends on `magic-modal` and re-exports it — but new code should install `magic-modal` instead. See https://github.com/GSTJ/magic-modal";
+  "Renamed to `magic-modal`. This package still works and still tracks every release, since it depends on `magic-modal` and re-exports it, but new code should install `magic-modal` instead. See https://github.com/GSTJ/magic-modal";
 
 /**
  * @param {string} command
