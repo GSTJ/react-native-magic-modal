@@ -12,28 +12,55 @@ description: Show, hide, and configure stack entries from application code.
 show<T>(
   component: React.FC,
   config?: Partial<ModalProps>,
-): {
-  promise: Promise<HideReturn<T>>;
+): ModalHandle<T>
+
+type ModalHandle<T> = Promise<HideReturn<T>> & {
   modalID: string;
-  update: (component: React.FC) => void;
-}
+  update: (next: React.FC) => void;
+  hide: (data?: T) => void;
+  /** @deprecated await the handle directly */
+  promise: Promise<HideReturn<T>>;
+};
 ```
 
-Pushes a modal to the top of the stack.
+Pushes a modal to the top of the stack. The returned handle _is_ the promise, so await it:
 
 ```tsx
-const { modalID, promise } = magicModal.show<Profile>(() => <ProfilePicker />, {
+const result = await magicModal.show<Profile>(() => <ProfilePicker />, {
   accessibilityLabel: "Choose a profile",
   backdropColor: "rgba(7, 6, 18, 0.72)",
   swipeDirection: "down",
 });
 ```
 
-| Return    | Purpose                                                |
-| --------- | ------------------------------------------------------ |
-| `promise` | Resolves once when this modal closes.                  |
-| `modalID` | Addresses this exact entry from outside its component. |
-| `update`  | Advanced API that replaces and remounts its content.   |
+Keep the handle instead when the caller needs to drive the modal while it is open:
+
+```tsx
+const handle = magicModal.show<Profile>(() => <ProfilePicker />);
+
+handle.update(() => <ProfilePicker step={2} />);
+handle.hide({ id: "cached" });
+```
+
+| Member    | Purpose                                                          |
+| --------- | ---------------------------------------------------------------- |
+| _awaited_ | Resolves once when this modal closes.                            |
+| `modalID` | Addresses this exact entry from outside its component.           |
+| `update`  | Advanced API that replaces and remounts its content.             |
+| `hide`    | Closes this entry with an intentional result.                    |
+| `promise` | Deprecated alias of the handle. Kept so old destructuring works. |
+
+`const { promise, modalID, update } = magicModal.show(...)` still works exactly as before, and
+`promise` is the same object as the handle.
+
+<Callout type="warn">
+  The controls hang off the promise, so anything that adopts the handle hands
+  back a plain promise without them. Returning it straight from an `async`
+  function is the case that bites: `const open = async () =>
+  magicModal.show(Modal)` gives the caller a promise with no `modalID`,
+  `update`, or `hide`. Return it from a non-async function, or await it where
+  you open it.
+</Callout>
 
 See [hide results](/docs/reference/hide-results) for promise narrowing. Read
 [replace open content](/docs/guides/updating-content) before using `update()`, since it remounts the

@@ -1,4 +1,4 @@
-import type { HookHideFunction } from "../../constants/types";
+import type { HookHideFunction, ModalHandle } from "../../constants/types";
 
 import React, { useEffect } from "react";
 import { BackHandler, Pressable, Text } from "react-native";
@@ -76,6 +76,110 @@ describe("MagicModalPortal", () => {
       data: { answer: 42 },
     });
     expect(screen.queryByTestId("second")).toBeNull();
+  });
+
+  it("resolves the handle itself when it is awaited", async () => {
+    render(<MagicModalPortal />);
+
+    let handle: ModalHandle<{ answer: number }> | undefined;
+
+    act(() => {
+      handle = magicModal.show<{ answer: number }>(() => (
+        <ModalContent testID="awaited" />
+      ));
+    });
+
+    await expect(screen.findByTestId("awaited")).resolves.toBeTruthy();
+
+    act(() => {
+      magicModal.hide({ answer: 42 }, { modalID: handle?.modalID });
+    });
+
+    await expect(handle).resolves.toStrictEqual({
+      reason: MagicModalHideReason.INTENTIONAL_HIDE,
+      data: { answer: 42 },
+    });
+    expect(screen.queryByTestId("awaited")).toBeNull();
+  });
+
+  it("keeps the legacy promise property as an alias of the handle", async () => {
+    render(<MagicModalPortal />);
+
+    let handle: ModalHandle<unknown> | undefined;
+    let promise: Promise<unknown> | undefined;
+    let modalID = "";
+    let update: (component: React.FC) => void = () => {};
+
+    act(() => {
+      handle = magicModal.show(() => <ModalContent testID="legacy" />);
+      // The destructuring every existing caller writes.
+      ({ promise, modalID, update } = handle);
+    });
+
+    expect(promise).toBe(handle);
+    expect(modalID).toBe(handle?.modalID);
+
+    act(() => {
+      update(() => <ModalContent testID="legacy-updated" />);
+    });
+
+    await expect(screen.findByTestId("legacy-updated")).resolves.toBeTruthy();
+
+    act(() => {
+      magicModal.hide(undefined, { modalID });
+    });
+
+    await expect(promise).resolves.toStrictEqual({
+      reason: MagicModalHideReason.INTENTIONAL_HIDE,
+      data: undefined,
+    });
+  });
+
+  it("swaps content through the handle's update", async () => {
+    render(<MagicModalPortal />);
+
+    let handle: ModalHandle<unknown> | undefined;
+
+    act(() => {
+      handle = magicModal.show(() => <ModalContent testID="handle-before" />);
+    });
+
+    await expect(screen.findByTestId("handle-before")).resolves.toBeTruthy();
+
+    act(() => {
+      handle?.update(() => <ModalContent testID="handle-after" />);
+    });
+
+    await expect(screen.findByTestId("handle-after")).resolves.toBeTruthy();
+    expect(screen.queryByTestId("handle-before")).toBeNull();
+
+    act(() => {
+      magicModal.hideAll();
+    });
+  });
+
+  it("closes the modal through the handle's hide", async () => {
+    render(<MagicModalPortal />);
+
+    let handle: ModalHandle<{ answer: number }> | undefined;
+
+    act(() => {
+      handle = magicModal.show<{ answer: number }>(() => (
+        <ModalContent testID="handle-hide" />
+      ));
+    });
+
+    await expect(screen.findByTestId("handle-hide")).resolves.toBeTruthy();
+
+    act(() => {
+      handle?.hide({ answer: 7 });
+    });
+
+    await expect(handle).resolves.toStrictEqual({
+      reason: MagicModalHideReason.INTENTIONAL_HIDE,
+      data: { answer: 7 },
+    });
+    expect(screen.queryByTestId("handle-hide")).toBeNull();
   });
 
   it("resolves an intentional hide from the modal-scoped hook", async () => {

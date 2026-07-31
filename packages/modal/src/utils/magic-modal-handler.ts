@@ -9,9 +9,11 @@ import type {
 import React from "react";
 
 import {
-  // HideReturn is used in JS Doc
+  // HideReturn and ModalHandle are used in JS Doc
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   HideReturn,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ModalHandle,
 } from "../constants/types";
 
 export const magicModalRef = React.createRef<IModal>();
@@ -73,9 +75,7 @@ export type IModal = {
  *   );
  * };
  *
- * const result = await magicModal.show<{ message: string }>(
- *   ExampleModal,
- * ).promise;
+ * const result = await magicModal.show<{ message: string }>(ExampleModal);
  *
  * if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
  *   console.log(result.data.message);
@@ -87,7 +87,15 @@ export const magicModal = {
    * @description Pushes a modal to the Stack, it will be displayed on top of the others.
    * @param newComponent Receives a function that returns a modal component.
    * @param newConfig Receives {@link NewConfigProps} to override the default configs.
-   * @returns `promise`, which resolves with the {@link hide} props when the Modal is closed (if it were closed automatically, without the manual use of {@link hide}, the return would be one of {@link HideReturn}), the `modalID`, and an `update` function that swaps the modal's content while it stays open.
+   * @returns A {@link ModalHandle}: the promise that resolves with the {@link hide} props when the
+   * Modal is closed (if it were closed automatically, without the manual use of {@link hide}, the
+   * return would be one of {@link HideReturn}), carrying `modalID`, an `update` function that swaps
+   * the modal's content while it stays open, a `hide` function that closes this entry, and a
+   * deprecated `promise` alias of the handle itself.
+   * @example
+   * ```js
+   * const result = await magicModal.show(() => <ExampleModal />);
+   * ```
    * @example
    * ```js
    * const { update } = magicModal.show(() => <ExampleModal step={1} />);
@@ -96,6 +104,10 @@ export const magicModal = {
    * Prefer keeping state inside the modal component when you can. `update` is for data that
    * lives outside of it and can't reach in. The content is a new component, so it mounts from
    * scratch: anything the old one held in `useState` is gone.
+   *
+   * The controls hang off the promise, so awaiting the handle strips them. Returning it from an
+   * `async` function gives the caller a plain promise: return it from a normal function, or await
+   * it where the modal is opened.
    */
   show,
   /**
@@ -116,7 +128,7 @@ export const magicModal = {
    * @example
    * ```js
    * magicModal.disableFullWindowOverlay();
-   * await magicModal.show(() => <ExampleModal />).promise;
+   * await magicModal.show(() => <ExampleModal />);
    * magicModal.enableFullWindowOverlay();
    * ```
    * @platform ios
@@ -127,7 +139,7 @@ export const magicModal = {
    * @example
    * ```js
    * magicModal.disableFullWindowOverlay();
-   * await magicModal.show(() => <ExampleModal />).promise;
+   * await magicModal.show(() => <ExampleModal />);
    * magicModal.enableFullWindowOverlay();
    * ```
    * @platform ios

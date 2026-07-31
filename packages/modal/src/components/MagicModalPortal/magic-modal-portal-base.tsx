@@ -2,8 +2,12 @@ import type {
   GlobalHideFunction,
   GlobalShowFunction,
   GlobalUpdateFunction,
+  HideReturn,
   ModalChildren,
+  ModalHandle,
   ModalProps,
+  ModalUpdateFunction,
+  NewConfigProps,
 } from "../../constants/types";
 
 import type { ElementType } from "react";
@@ -32,6 +36,28 @@ type ModalStackItem = {
   config: ModalProps;
   hideCallback: (value: unknown) => void;
   hideFunction: (props: unknown) => void;
+};
+
+/**
+ * Hangs the stack-entry controls off the modal's own promise, so callers can
+ * `await magicModal.show(...)` and still reach `modalID`, `update` and `hide`.
+ *
+ * `promise` points back at the handle: it is the deprecated alias that keeps
+ * `const { promise } = magicModal.show(...)` working.
+ */
+const createModalHandle = <T,>(
+  promise: Promise<HideReturn<T>>,
+  controls: {
+    modalID: string;
+    update: ModalUpdateFunction;
+    hide: (data?: T) => void;
+  },
+): ModalHandle<T> => {
+  // `Object.assign` returns the intersection, which is every part of
+  // `ModalHandle` except the self-referential `promise` assigned below.
+  const handle = Object.assign(promise, controls) as ModalHandle<T>;
+  handle.promise = handle;
+  return handle;
 };
 /**
  * @description A magic portal that should stay on the top of the app component hierarchy for the modal to be displayed.
@@ -131,14 +157,21 @@ export const createMagicModalPortal = (
     );
 
     const show = useCallback<GlobalShowFunction>(
-      (newComponent, newConfig) => {
+      // Written generic rather than relying on the contextual type, so `T`
+      // has a name inside and the handle can be built without casting it.
+      <T,>(
+        newComponent: ModalChildren,
+        newConfig?: NewConfigProps,
+      ): ModalHandle<T> => {
         const modalID = generatePseudoRandomID();
 
         let hideCallback: (value: unknown) => void = () => {
           // Empty function
         };
-        const hidePromise = new Promise((resolve) => {
-          hideCallback = resolve;
+        // The stack is payload-agnostic: it resolves whatever the hide caller
+        // passed, and `T` is what the caller declared that payload to be.
+        const hidePromise = new Promise<HideReturn<T>>((resolve) => {
+          hideCallback = resolve as (value: unknown) => void;
         });
 
         const newModal = {
@@ -153,15 +186,19 @@ export const createMagicModalPortal = (
 
         setModals((prevModals) => [...prevModals, newModal]);
 
-        return {
-          // This is already typed by the GlobalShowFunction type Generic
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          promise: hidePromise as any,
+        return createModalHandle<T>(hidePromise, {
           modalID,
-          update: (updatedComponent: ModalChildren) => {
+          update: (updatedComponent) => {
             update(updatedComponent, { modalID });
           },
-        } as const;
+          hide: (data) => {
+            // Same wiring the `useMagicModal` hook uses from inside the modal.
+            newModal.hideFunction({
+              reason: MagicModalHideReason.INTENTIONAL_HIDE,
+              data,
+            });
+          },
+        });
       },
       [_hide, update],
     );

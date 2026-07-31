@@ -25,13 +25,14 @@
 ## How it works
 
 `MagicModalPortal` owns a stack near the application root. Each `show()` call pushes one entry and
-returns its ID plus a `Promise<HideReturn<T>>`. The modal calls `hide(data)` through
+returns an awaitable handle: a `Promise<HideReturn<T>>` carrying that entry's `modalID`, `update`,
+and `hide`. The modal calls `hide(data)` through
 `useMagicModal<T>()`. The caller resumes with submitted data or the exact dismissal reason.
 
 ```tsx
 const result = await magicModal.show<ConfirmationResult>(ConfirmationModal, {
   accessibilityLabel: "Confirm publish",
-}).promise;
+});
 
 if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
   await publish(result.data);
@@ -39,6 +40,9 @@ if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
   recordCancellation(result.reason);
 }
 ```
+
+`const { promise, modalID, update } = magicModal.show(...)` still works; `promise` is a deprecated
+alias of the handle itself.
 
 Every stack entry keeps its own component, configuration, ID, and promise. A second `show()` call
 can open above the current modal without mixing their results.
@@ -140,7 +144,7 @@ function ConfirmationModal() {
 export async function confirmRelease() {
   const result = await magicModal.show<ConfirmationResult>(ConfirmationModal, {
     accessibilityLabel: "Publish this release",
-  }).promise;
+  });
 
   if (result.reason !== MagicModalHideReason.INTENTIONAL_HIDE) {
     return { confirmed: false, reason: result.reason };

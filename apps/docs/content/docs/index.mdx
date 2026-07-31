@@ -10,7 +10,7 @@ other async flow.
 ```tsx
 const result = await magicModal.show<ConfirmationResult>(ConfirmationModal, {
   accessibilityLabel: "Confirm purchase",
-}).promise;
+});
 
 if (
   result.reason === MagicModalHideReason.INTENTIONAL_HIDE &&
@@ -19,6 +19,10 @@ if (
   completePurchase();
 }
 ```
+
+`show()` returns a handle that is itself the promise, carrying `modalID`, `update`, and `hide` for
+the entry it opened. The older `const { promise } = magicModal.show(...)` form still works:
+`promise` is an alias of the handle.
 
 ## Core model
 
@@ -48,7 +52,7 @@ if (
 ## The mental model
 
 1. [`MagicModalPortal`](/docs/reference/magic-modal-portal) owns the modal stack. Mount it once.
-2. [`magicModal.show`](/docs/reference/magic-modal) pushes one entry and returns its ID and promise.
+2. [`magicModal.show`](/docs/reference/magic-modal) pushes one entry and returns an awaitable handle.
 3. [`useMagicModal().hide`](/docs/reference/use-magic-modal) closes that entry with typed data.
 4. The promise resolves to [`HideReturn<T>`](/docs/reference/hide-results), including the close reason.
 
