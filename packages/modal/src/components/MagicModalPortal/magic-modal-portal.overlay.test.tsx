@@ -17,6 +17,8 @@ import {
 import { magicModal } from "../../utils/magic-modal-handler";
 import { MagicModal } from "../magic-modal";
 import { createMagicModalPortal } from "./magic-modal-portal-base";
+import { PortalContainer } from "./portal-container";
+import { subscribeToSystemBack } from "./system-back";
 
 /**
  * The iOS FullWindowOverlay is a native window. Left mounted with an empty
@@ -37,17 +39,29 @@ const FullWindowOverlayStub: ElementType = ({
   children?: ReactNode;
 }) => <View testID={OVERLAY_TEST_ID}>{children}</View>;
 
-const TestPortal = createMagicModalPortal({
-  FullWindowOverlay: FullWindowOverlayStub,
-  StackEntry: MagicModal,
-});
+/**
+ * The portal takes every platform decision as an argument, so whether the
+ * platform has a full-window overlay at all is passed in rather than read off
+ * `Platform.OS` at render time. The container and the back-button subscription
+ * are the real React Native ones.
+ */
+const createTestPortal = (isFullWindowOverlaySupported = true) =>
+  createMagicModalPortal({
+    FullWindowOverlay: FullWindowOverlayStub,
+    isFullWindowOverlaySupported,
+    PortalContainer,
+    StackEntry: MagicModal,
+    subscribeToSystemBack,
+  });
+
+const TestPortal = createTestPortal();
 
 const ModalContent = () => <Text testID="overlay-modal">Taveira</Text>;
 
-const render = () =>
+const render = (Portal: React.FC = TestPortal) =>
   rntlRender(
     <GestureHandlerRootView>
-      <TestPortal />
+      <Portal />
     </GestureHandlerRootView>,
   );
 
@@ -202,9 +216,8 @@ describe("MagicModalPortal full window overlay", () => {
     expect(screen.getByTestId("overlay-modal")).toBeTruthy();
   });
 
-  it("never mounts the overlay outside iOS", () => {
-    platform.replaceValue("android");
-    render();
+  it("never mounts the overlay where the platform has no full-window overlay", () => {
+    render(createTestPortal(false));
 
     act(() => {
       magicModal.show(ModalContent);

@@ -1,6 +1,11 @@
 import { MagicModal } from "../magic-modal";
-import { FullWindowOverlay } from "./full-window-overlay";
+import {
+  FullWindowOverlay,
+  isFullWindowOverlaySupported,
+} from "./full-window-overlay";
 import { createMagicModalPortal } from "./magic-modal-portal-base";
+import { PortalContainer } from "./portal-container";
+import { subscribeToSystemBack } from "./system-back";
 
 /**
  * Portal for the native iOS and Android runtime.
@@ -13,5 +18,8 @@ import { createMagicModalPortal } from "./magic-modal-portal-base";
  */
 export const MagicModalPortal = createMagicModalPortal({
   FullWindowOverlay,
+  isFullWindowOverlaySupported,
+  PortalContainer,
   StackEntry: MagicModal,
+  subscribeToSystemBack,
 });
