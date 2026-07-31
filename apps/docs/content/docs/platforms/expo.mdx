@@ -54,7 +54,9 @@ npx expo start --web
 ```
 
 This path keeps the same React Native component and `HideReturn<T>` contract used by the native
-targets.
+targets. Expo Web bundles through Metro under the `react-native` condition, so it loads the native
+entry and takes the full peer set even though it runs in a browser. The
+[Next.js guide](/docs/platforms/nextjs) covers the browser-only entry, which needs none of them.
 
 ## Expo iOS
 

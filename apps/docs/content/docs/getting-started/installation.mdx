@@ -3,9 +3,11 @@ title: Installation
 description: Install the packages required by your target runtime.
 ---
 
-Choose the runtime the application ships. Expo Web uses browser packages. Expo iOS and Android use
-the same native dependency set. A project that ships several targets installs the union of those
-sets.
+Choose the runtime the application ships. A browser-only application installs `magic-modal` and
+nothing else: the web entry ships with zero React Native dependencies. Expo and bare React Native
+load the native entry, which uses the full React Native stack, so those targets install the peer set
+below. Expo Web counts as native here — it bundles through Metro under the `react-native` condition.
+A project that ships several targets installs the union of those sets.
 
 <Cards>
   <Card
@@ -25,7 +27,7 @@ sets.
   />
   <Card
     title="Next.js"
-    description="Configure React Native Web in an App Router application."
+    description="Add the portal to an App Router application. No bundler configuration."
     href="/docs/platforms/nextjs"
   />
 </Cards>
@@ -105,43 +107,48 @@ match because both targets load the native package entry.
 Expo's Babel preset configures Worklets. A default Expo project does not need another Babel plugin
 entry.
 
-## Next.js
+## Next.js and other browser-only React apps
 
-React and React DOM come with Next.js. Add Magic Modal and its browser runtime:
+React and React DOM come with Next.js. Add Magic Modal:
 
 <Tabs groupId="package-manager" items={["pnpm", "npm", "Yarn", "Bun"]} persist>
   <Tab value="pnpm">
 
 ```bash
-pnpm add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+pnpm add magic-modal
 ```
 
   </Tab>
   <Tab value="npm">
 
 ```bash
-npm install magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+npm install magic-modal
 ```
 
   </Tab>
   <Tab value="Yarn">
 
 ```bash
-yarn add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+yarn add magic-modal
 ```
 
   </Tab>
   <Tab value="Bun">
 
 ```bash
-bun add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+bun add magic-modal
 ```
 
   </Tab>
 </Tabs>
 
-The [Next.js guide](/docs/platforms/nextjs) contains the validated Turbopack alias, extension order,
-transpilation list, and Client Component root.
+That is the whole install, and it is the same one for a plain React or Vite application: add
+`react` and `react-dom` yourself if the framework does not already bring them. There is no bundler
+configuration, no `react-native-web`, and no gesture or animation peer, because the browser entry
+renders DOM elements and imports nothing but `react`.
+
+The [Next.js guide](/docs/platforms/nextjs) covers the Client Component root and the browser
+behavior.
 
 ## Bare React Native
 

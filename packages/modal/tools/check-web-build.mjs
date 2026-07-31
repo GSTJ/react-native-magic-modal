@@ -237,10 +237,28 @@ if (
   );
 }
 
-if (!packageJSON.peerDependenciesMeta["react-native-screens"].optional) {
-  throw new Error(
-    "react-native-screens must stay optional for browser-only consumers.",
-  );
+// Every React Native peer has to stay optional. The browser entry imports none
+// of them, so a web-only install should not be warned about them or have npm
+// pull them in — with a pinned react, npm resolving react-native as a required
+// peer is an outright ERESOLVE. Native consumers are unaffected: the React
+// Native entry imports each one statically, so a missing package is a Metro
+// bundling error, not a silent degrade.
+const nativePeers = Object.keys(packageJSON.peerDependencies).filter(
+  (packageName) => nativeOnlyPackages.includes(packageName),
+);
+
+for (const packageName of nativePeers) {
+  if (!packageJSON.peerDependenciesMeta[packageName]?.optional) {
+    throw new Error(
+      `${packageName} must stay optional in peerDependenciesMeta for browser-only consumers.`,
+    );
+  }
+}
+
+// The other half of the same rule: react is the one peer the browser entry does
+// import, so it stays required.
+if (packageJSON.peerDependenciesMeta.react) {
+  throw new Error("react is a required peer of the browser entry.");
 }
 
 console.log(
@@ -250,3 +268,6 @@ console.log(
   `✓ Web bundle: ${formatBytes(minified)} minified, ${formatBytes(gzip)} gzipped (budget ${formatBytes(gzipBudgetInBytes)}), identical without the react-native alias`,
 );
 console.log("✓ Web SSR: the portal and its stylesheet render without a DOM");
+console.log(
+  `✓ Web peers: react is required, ${nativePeers.join(", ")} are optional`,
+);

@@ -1,90 +1,77 @@
 ---
 title: Next.js and web
-description: Run Magic Modal in a Next.js App Router application with React Native Web.
+description: Run Magic Modal in a Next.js App Router application.
 ---
 
-Magic Modal runs in the browser through React Native Web. Mount one portal in a Client Component,
-call `show()` from an event or effect, and await the same `HideReturn<T>` contract used by Expo.
+The browser entry renders plain DOM elements and imports nothing but `react`. Mount one portal in a
+Client Component, call `show()` from an event or effect, and await the same `HideReturn<T>` contract
+used by Expo.
 
 This guide targets the App Router with Next.js 16 and Turbopack. The repository fixture builds the
 published package boundary, hydrates it in Chrome, opens a modal, and verifies backdrop dismissal.
 
 ## Install
 
-React and React DOM already come with a Next.js application. Add Magic Modal and its runtime peers:
+React and React DOM already come with a Next.js application. Add Magic Modal:
 
 <Tabs groupId="package-manager" items={["pnpm", "npm", "Yarn", "Bun"]} persist>
   <Tab value="pnpm">
 
 ```bash
-pnpm add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+pnpm add magic-modal
 ```
 
   </Tab>
   <Tab value="npm">
 
 ```bash
-npm install magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+npm install magic-modal
 ```
 
   </Tab>
   <Tab value="Yarn">
 
 ```bash
-yarn add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+yarn add magic-modal
 ```
 
   </Tab>
   <Tab value="Bun">
 
 ```bash
-bun add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+bun add magic-modal
 ```
 
   </Tab>
 </Tabs>
 
-`react-native` supplies package types and peer resolution. The browser bundle resolves its component
-imports to `react-native-web`.
+That is the whole install. The web entry ships with zero React Native dependencies, so a browser
+application needs neither `react-native` nor `react-native-web`. The native entries still use the
+full React Native stack, and every React Native peer is optional in the manifest for exactly that
+reason.
 
 ## Configure Next.js
 
-Transpile the React Native packages. Resolve `.web` files before their native counterparts and map
-`react-native` to `react-native-web`:
+Nothing to configure. `next.config.ts` needs no `transpilePackages`, no `resolveAlias`, and no
+`.web.*` entry in `resolveExtensions` for Magic Modal:
 
 ```ts title="next.config.ts"
 import type { NextConfig } from "next";
 
 const config = {
   reactStrictMode: true,
-  transpilePackages: [
-    "react-native-gesture-handler",
-    "react-native-reanimated",
-  ],
-  turbopack: {
-    resolveAlias: {
-      "react-native": "react-native-web",
-    },
-    resolveExtensions: [
-      ".web.tsx",
-      ".web.ts",
-      ".web.jsx",
-      ".web.js",
-      ".web.mjs",
-      ".web.cjs",
-      ".tsx",
-      ".ts",
-      ".jsx",
-      ".js",
-      ".mjs",
-      ".cjs",
-      ".json",
-    ],
-  },
 } satisfies NextConfig;
 
 export default config;
 ```
+
+<Callout type="info" title="Upgrading from a React Native Web setup">
+  Earlier versions rendered through React Native Web and this guide shipped an
+  alias, an extension order, and a transpile list to make that work. Delete
+  those entries along with `react-native`, `react-native-web`,
+  `react-native-gesture-handler`, `react-native-reanimated`, and
+  `react-native-worklets` if nothing else in the application uses them.
+</Callout>
 
 The matching repository fixture is `examples/next-web`.
 
@@ -130,8 +117,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 Mount one `MagicModalPortal` for the whole application. Calls made before the shell mounts throw a
 `MagicModalPortal not found` error.
 
-Gesture Handler runs without `GestureHandlerRootView` on web. Shared Expo/native layouts keep the
-gesture root.
+There is no `GestureHandlerRootView` here, because there is no Gesture Handler in the browser bundle.
+Shared Expo and native layouts still keep the gesture root.
 
 ## Open a modal
 
@@ -262,11 +249,6 @@ Read [Accessibility](/docs/guides/accessibility) for focus order, explicit close
 modals, and test coverage.
 
 ## Troubleshooting
-
-### Next cannot resolve `react-native`
-
-Install both `react-native` and `react-native-web`. Copy the `resolveAlias` and `resolveExtensions`
-entries from this guide. Restart the Next.js development server.
 
 ### A server component imports the modal
 
