@@ -1175,8 +1175,7 @@ const InstallCard: React.FC = () => {
         }}
       >
         <span style={{ color: COLORS.coral }}>pnpm add </span>
-        {/* v10: rename this to `magic-modal` once the npm rename ships. */}
-        react-native-magic-modal
+        magic-modal
       </div>
       <div
         style={{
