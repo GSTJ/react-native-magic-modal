@@ -1,7 +1,7 @@
 <p align="center">
   <img
     alt="A rating flow moving from magicModal.show to a typed close result"
-    src="https://raw.githubusercontent.com/GSTJ/react-native-magic-modal/main/media/magic-modal-demo.gif"
+    src="https://raw.githubusercontent.com/GSTJ/magic-modal/main/media/magic-modal-demo.gif"
   />
 </p>
 
@@ -10,12 +10,12 @@
 <p align="center">
   <a aria-label="npm version" href="https://www.npmjs.com/package/react-native-magic-modal"><img alt="npm version" src="https://shieldcn.dev/npm/react-native-magic-modal.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
   <a aria-label="npm downloads" href="https://www.npmjs.com/package/react-native-magic-modal"><img alt="npm downloads" src="https://shieldcn.dev/npm/react-native-magic-modal/downloads.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
-  <a aria-label="GitHub stars" href="https://github.com/GSTJ/react-native-magic-modal/stargazers"><img alt="GitHub stars" src="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/stars.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
-  <a aria-label="license" href="https://github.com/GSTJ/react-native-magic-modal/blob/main/LICENSE"><img alt="license" src="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/license.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
+  <a aria-label="GitHub stars" href="https://github.com/GSTJ/magic-modal/stargazers"><img alt="GitHub stars" src="https://shieldcn.dev/github/GSTJ/magic-modal/stars.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
+  <a aria-label="license" href="https://github.com/GSTJ/magic-modal/blob/main/LICENSE"><img alt="license" src="https://shieldcn.dev/github/GSTJ/magic-modal/license.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
 </p>
 
 <p align="center">
-  <a href="https://gstj.github.io/react-native-magic-modal/docs/">Docs</a> | <a href="https://github.com/gstj/react-native-magic-modal">GitHub</a> | <a href="https://gstj.github.io/react-native-magic-modal/docs/faq/">FAQ</a> | <a href="https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96">Article</a>
+  <a href="https://gstj.github.io/magic-modal/docs/">Docs</a> | <a href="https://github.com/gstj/magic-modal">GitHub</a> | <a href="https://gstj.github.io/magic-modal/docs/faq/">FAQ</a> | <a href="https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96">Article</a>
 </p>
 
 ## How it works
@@ -57,7 +57,7 @@ pnpm add react-native-magic-modal
 npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-dom react-native-web @expo/metro-runtime
 ```
 
-Read the [Expo guide](https://gstj.github.io/react-native-magic-modal/docs/platforms/expo/) for the
+Read the [Expo guide](https://gstj.github.io/magic-modal/docs/platforms/expo/) for the
 portal and web command.
 
 ### Expo iOS
@@ -75,7 +75,7 @@ npx expo install react-native-gesture-handler react-native-reanimated react-nati
 ```
 
 iOS and Android use the same native dependency set. The
-[native guide](https://gstj.github.io/react-native-magic-modal/docs/platforms/ios-android/) covers
+[native guide](https://gstj.github.io/magic-modal/docs/platforms/ios-android/) covers
 pods, Android back handling, and iOS overlays.
 
 ### Next.js
@@ -85,11 +85,11 @@ pnpm add react-native-magic-modal react-native react-native-web react-native-ges
 ```
 
 Copy the validated alias, extension order, and Client Component setup from the
-[Next.js guide](https://gstj.github.io/react-native-magic-modal/docs/platforms/nextjs/). A runnable
+[Next.js guide](https://gstj.github.io/magic-modal/docs/platforms/nextjs/). A runnable
 App Router consumer lives in [`examples/next-web`](examples/next-web).
 
 For bare React Native, follow the
-[installation guide](https://gstj.github.io/react-native-magic-modal/docs/getting-started/installation/).
+[installation guide](https://gstj.github.io/magic-modal/docs/getting-started/installation/).
 
 ## Mount the portal
 
@@ -110,7 +110,7 @@ export default function App() {
 ```
 
 With Expo Router, put the same structure in the root `app/_layout.tsx`. Next.js mounts the portal
-inside a Client Component as shown in the [web setup](https://gstj.github.io/react-native-magic-modal/docs/platforms/nextjs/).
+inside a Client Component as shown in the [web setup](https://gstj.github.io/magic-modal/docs/platforms/nextjs/).
 
 ## Return typed data
 
@@ -160,15 +160,15 @@ accessibility escape action. TypeScript exposes `data` after the caller narrows 
 
 ## Documentation
 
-- [Expo Web, iOS, and Android](https://gstj.github.io/react-native-magic-modal/docs/platforms/expo/)
-- [Next.js and React Native Web](https://gstj.github.io/react-native-magic-modal/docs/platforms/nextjs/)
-- [Modal flows and stacks](https://gstj.github.io/react-native-magic-modal/docs/guides/modal-flows/)
-- [Hide results](https://gstj.github.io/react-native-magic-modal/docs/reference/hide-results/)
-- [Accessibility](https://gstj.github.io/react-native-magic-modal/docs/guides/accessibility/)
-- [Advanced content replacement](https://gstj.github.io/react-native-magic-modal/docs/guides/updating-content/)
+- [Expo Web, iOS, and Android](https://gstj.github.io/magic-modal/docs/platforms/expo/)
+- [Next.js and React Native Web](https://gstj.github.io/magic-modal/docs/platforms/nextjs/)
+- [Modal flows and stacks](https://gstj.github.io/magic-modal/docs/guides/modal-flows/)
+- [Hide results](https://gstj.github.io/magic-modal/docs/reference/hide-results/)
+- [Accessibility](https://gstj.github.io/magic-modal/docs/guides/accessibility/)
+- [Advanced content replacement](https://gstj.github.io/magic-modal/docs/guides/updating-content/)
 
 The [kitchen-sink Expo app](examples/kitchen-sink) contains runnable native flows. The
-[interactive site](https://gstj.github.io/react-native-magic-modal/) runs the package in the
+[interactive site](https://gstj.github.io/magic-modal/) runs the package in the
 browser.
 
 ## FAQ
@@ -204,12 +204,12 @@ Inside modal content, use `useMagicModal().hide()`.
 ### How do I render below a native picker on iOS?
 
 Temporarily call `magicModal.disableFullWindowOverlay()`. Restore it in a `finally` block after the
-picker closes. The [native overlay guide](https://gstj.github.io/react-native-magic-modal/docs/guides/native-overlays/)
+picker closes. The [native overlay guide](https://gstj.github.io/magic-modal/docs/guides/native-overlays/)
 contains the complete pattern.
 
 ## Contributors
 
-[See everyone who has contributed](https://github.com/GSTJ/react-native-magic-modal/graphs/contributors)
+[See everyone who has contributed](https://github.com/GSTJ/magic-modal/graphs/contributors)
 and read the [contributing guide](CONTRIBUTING.md).
 
 ## License

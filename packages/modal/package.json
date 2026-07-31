@@ -12,15 +12,15 @@
     "react-native-web",
     "web"
   ],
-  "homepage": "https://gstj.github.io/react-native-magic-modal/",
+  "homepage": "https://gstj.github.io/magic-modal/",
   "bugs": {
-    "url": "https://github.com/GSTJ/react-native-magic-modal/issues"
+    "url": "https://github.com/GSTJ/magic-modal/issues"
   },
   "license": "MIT",
   "author": "Gabriel Taveira <gabrielstaveira@gmail.com> (https://github.com/GSTJ)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GSTJ/react-native-magic-modal.git"
+    "url": "git+https://github.com/GSTJ/magic-modal.git"
   },
   "files": [
     "dist"

@@ -4,7 +4,7 @@
   "packageManager": "pnpm@11.17.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GSTJ/react-native-magic-modal.git"
+    "url": "git+https://github.com/GSTJ/magic-modal.git"
   },
   "author": "Gabriel Taveira <gabrielstaveira@gmail.com> (https://github.com/GSTJ)",
   "license": "MIT",
@@ -14,9 +14,9 @@
     "android"
   ],
   "bugs": {
-    "url": "https://github.com/GSTJ/react-native-magic-modal/issues"
+    "url": "https://github.com/GSTJ/magic-modal/issues"
   },
-  "homepage": "https://gstj.github.io/react-native-magic-modal/",
+  "homepage": "https://gstj.github.io/magic-modal/",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"

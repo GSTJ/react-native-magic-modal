@@ -59,7 +59,7 @@ export default function HomePage() {
           <a
             aria-label="Magic Modal on GitHub"
             className="mm-nav-github"
-            href="https://github.com/GSTJ/react-native-magic-modal"
+            href="https://github.com/GSTJ/magic-modal"
             rel="noreferrer"
             target="_blank"
           >
@@ -114,7 +114,7 @@ export default function HomePage() {
 
       <aside aria-label="Project activity" className="mm-proof">
         <a
-          href="https://github.com/GSTJ/react-native-magic-modal"
+          href="https://github.com/GSTJ/magic-modal"
           rel="noreferrer"
           target="_blank"
         >
@@ -136,7 +136,7 @@ export default function HomePage() {
           <ArrowUpRight aria-hidden="true" size={14} />
         </a>
         <a
-          href="https://github.com/GSTJ/react-native-magic-modal/releases/latest"
+          href="https://github.com/GSTJ/magic-modal/releases/latest"
           rel="noreferrer"
           target="_blank"
         >
@@ -147,7 +147,7 @@ export default function HomePage() {
           <ArrowUpRight aria-hidden="true" size={14} />
         </a>
         <a
-          href="https://github.com/GSTJ/react-native-magic-modal/blob/main/LICENSE"
+          href="https://github.com/GSTJ/magic-modal/blob/main/LICENSE"
           rel="noreferrer"
           target="_blank"
         >
@@ -223,7 +223,7 @@ export default function HomePage() {
             </p>
           </article>
           <a
-            href="https://github.com/GSTJ/react-native-magic-modal/blob/main/packages/modal/src/components/MagicModalPortal/magic-modal-portal.test.tsx"
+            href="https://github.com/GSTJ/magic-modal/blob/main/packages/modal/src/components/MagicModalPortal/magic-modal-portal.test.tsx"
             rel="noreferrer"
             target="_blank"
           >
@@ -499,14 +499,14 @@ export default function HomePage() {
         <nav aria-label="Project">
           <strong>Project</strong>
           <a
-            href="https://github.com/GSTJ/react-native-magic-modal"
+            href="https://github.com/GSTJ/magic-modal"
             rel="noreferrer"
             target="_blank"
           >
             GitHub
           </a>
           <a
-            href="https://github.com/GSTJ/react-native-magic-modal/releases"
+            href="https://github.com/GSTJ/magic-modal/releases"
             rel="noreferrer"
             target="_blank"
           >
@@ -520,7 +520,7 @@ export default function HomePage() {
             npm
           </a>
           <a
-            href="https://github.com/GSTJ/react-native-magic-modal/issues"
+            href="https://github.com/GSTJ/magic-modal/issues"
             rel="noreferrer"
             target="_blank"
           >
