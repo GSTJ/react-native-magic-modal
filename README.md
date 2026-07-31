@@ -1,8 +1,9 @@
 # Evidence branch
 
-Screen recordings and extracted frames for #329, #334 and #336, parked here only
-so the PR comments have something to link to. There is no source on this branch
-and nothing to review. **Never merge it.** Delete it once the PRs are closed.
+Screen recordings and extracted frames for #329, #334, #336 and #338, parked
+here only so the PR comments have something to link to. There is no source on
+this branch and nothing to review. **Never merge it.** Delete it once the PRs
+are closed.
 
 | File | PR | Recorded from |
 | --- | --- | --- |
@@ -11,6 +12,8 @@ and nothing to review. **Never merge it.** Delete it once the PRs are closed.
 | `videos/pr334-web.mp4` | #334 | `feat/web-light-bundle` @ `df04f15` |
 | `videos/pr336-native-sanity-ios.mp4` | #336 | `feat/web-dom-native` @ `14a24f5` |
 | `videos/pr336-web.mp4` | #336 | `feat/web-dom-native` @ `14a24f5` |
+| `frames/pr338-code-before.png` | #338 | `main` @ `326b018` |
+| `frames/pr338-code-after.png` | #338 | `feat/demo-video-generator` @ `69f8e84` |
 
 The iOS videos are `xcrun simctl io recordVideo` on a booted iPhone 17 Pro
 (iOS 26.5) running the kitchen-sink example built Release, driven by Maestro
@@ -28,3 +31,7 @@ overlays with `pointer-events: none`, and a CDP `Animation.setPlaybackRate` of
 untouched — the recording only scales the page's animation timelines.
 
 `frames/` holds stills pulled out of those same files.
+
+The two #338 frames are the odd ones out: nothing was recorded for them. They are
+`media/magic-modal-demo-poster.png` — frame 130 of the Remotion composition — as
+it stands on each branch, copied over unedited. No crop, no scaling.
