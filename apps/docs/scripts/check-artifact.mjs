@@ -48,8 +48,11 @@ const visit = async (directory) => {
 await visit(outputDirectory);
 
 const html = await Promise.all(htmlFiles.map((path) => readFile(path, "utf8")));
-if (html.some((content) => /(?:href|src)="\/_next\//u.test(content))) {
-  throw new Error("Found a Next asset URL without the GitHub Pages base path.");
+if (
+  deploymentBasePath &&
+  html.some((content) => /(?:href|src)="\/_next\//u.test(content))
+) {
+  throw new Error("Found a Next asset URL without the deployment base path.");
 }
 
 const internalLinks = [];

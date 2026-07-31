@@ -33,15 +33,16 @@ pnpm --filter @magic-modal/docs test
 pnpm --filter @magic-modal/docs typecheck
 ```
 
-Local routes include the production base path:
+The site is served from the root of its own domain, so local routes carry no
+base path:
 
 ```text
-http://localhost:3000/react-native-magic-modal/
+http://localhost:3000/
 ```
 
 `pnpm docs` checks the full static artifact after building. The check covers
-GitHub Pages asset prefixes, generated Markdown quality, agent-readable output,
-and every legacy TypeDoc URL.
+asset prefixes, generated Markdown quality, agent-readable output, and every
+legacy TypeDoc URL.
 
 ## Content rule
 
