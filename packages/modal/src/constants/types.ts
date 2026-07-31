@@ -108,6 +108,23 @@ export type ModalProps = {
   swipeVelocityThreshold: number;
 } & Pick<React.ComponentProps<typeof Animated.View>, "entering" | "exiting">;
 
+/**
+ * What the portal hands each entry in the modal stack.
+ *
+ * `magic-modal.tsx` and `magic-modal.browser.tsx` both satisfy this; the portal
+ * is handed whichever one the platform's entry point pulled in. The last two
+ * fields only ever move on the browser chrome — see `createMagicModalPortal`.
+ */
+export type ModalStackEntryProps = {
+  children: ModalChildren;
+  config: ModalProps;
+  /** True while the entry is dismissed but still playing its exit animation. */
+  isExiting: boolean;
+  isTopmost: boolean;
+  /** Drops the entry from the stack. Call it once the exit has finished. */
+  onExitFinished: () => void;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GenericFunction = (props: any) => any;
 

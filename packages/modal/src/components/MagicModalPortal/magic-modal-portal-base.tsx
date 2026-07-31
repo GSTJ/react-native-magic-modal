@@ -6,11 +6,12 @@ import type {
   ModalChildren,
   ModalHandle,
   ModalProps,
+  ModalStackEntryProps,
   ModalUpdateFunction,
   NewConfigProps,
 } from "../../constants/types";
 
-import type { ElementType } from "react";
+import type { ComponentType, ElementType } from "react";
 
 import React, {
   memo,
@@ -24,19 +25,43 @@ import { BackHandler, Platform, StyleSheet, View } from "react-native";
 import { defaultConfig } from "../../constants/default-config";
 import { MagicModalHideReason } from "../../constants/types";
 import { magicModalRef } from "../../utils/magic-modal-handler";
-import { MagicModal } from "../magic-modal";
 import { MagicModalProvider } from "../magic-modal-provider";
 
 const generatePseudoRandomID = () =>
   Math.random().toString(36).slice(7).toUpperCase() + Date.now().toString();
 
-type ModalStackItem = {
+export type ModalStackItem = {
   id: string;
   component: ModalChildren;
   config: ModalProps;
   hideCallback: (value: unknown) => void;
   hideFunction: (props: unknown) => void;
+  /**
+   * Set by a `leaveStack` that wants the entry to stick around after it was
+   * dismissed. It is out of the stack for every other purpose from that point
+   * on: it can't be topmost, hidden again, or updated.
+   */
+  isExiting?: boolean;
 };
+
+/**
+ * What happens to an entry the moment it is dismissed.
+ *
+ * The React Native chrome has no exit animation, so it drops out of the stack
+ * on the spot. The browser chrome plays one, and a component that React has
+ * already unmounted cannot animate, so the browser portal swaps in a strategy
+ * that marks the entry instead and waits for `onExitFinished`.
+ */
+export type ModalStackLeave = (
+  modals: ModalStackItem[],
+  leaving: ModalStackItem,
+) => ModalStackItem[];
+
+const dropImmediately: ModalStackLeave = (modals, leaving) =>
+  modals.filter((modal) => modal.id !== leaving.id);
+
+const getLiveModals = (modals: ModalStackItem[]) =>
+  modals.filter((modal) => !modal.isExiting);
 
 /**
  * Hangs the stack-entry controls off the modal's own promise, so callers can
@@ -80,9 +105,19 @@ const createModalHandle = <T,>(
  * }
  * ```
  */
-export const createMagicModalPortal = (
-  FullWindowOverlay: ElementType,
-): React.FC =>
+export const createMagicModalPortal = ({
+  FullWindowOverlay,
+  StackEntry,
+  leaveStack = dropImmediately,
+}: {
+  FullWindowOverlay: ElementType;
+  /**
+   * The platform's modal chrome. Injected rather than imported so the browser
+   * bundle never reaches the Reanimated and gesture-handler one.
+   */
+  StackEntry: ComponentType<ModalStackEntryProps>;
+  leaveStack?: ModalStackLeave;
+}): React.FC =>
   memo(() => {
     const [modals, setModals] = React.useState<ModalStackItem[]>([]);
     const [fullWindowOverlayEnabled, setFullWindowOverlayEnabled] =
@@ -96,43 +131,62 @@ export const createMagicModalPortal = (
       setFullWindowOverlayEnabled(true);
     }, []);
 
-    const _hide = useCallback<GlobalHideFunction>((props, { modalID } = {}) => {
-      setModals((prevModals) => {
-        const currentModal = prevModals.find((modal) => modal.id === modalID);
-
-        if (!modalID) {
-          // eslint-disable-next-line no-console
-          console.warn(
-            "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
-          );
-        } else if (!currentModal) {
-          // eslint-disable-next-line no-console
-          console.log(
-            `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`,
-          );
-          return prevModals;
-        }
-
-        if (prevModals.length === 0) {
-          // eslint-disable-next-line no-console
-          console.log(
-            `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`,
-          );
-          return prevModals;
-        }
-
-        const safeModal = currentModal ?? prevModals.at(-1);
-
-        safeModal?.hideCallback(props);
-
-        return prevModals.filter((modal) => modal.id !== safeModal?.id);
-      });
+    const removeModal = useCallback((modalID: string) => {
+      setModals((prevModals) =>
+        prevModals.filter((modal) => modal.id !== modalID),
+      );
     }, []);
+
+    const _hide = useCallback<GlobalHideFunction>(
+      (props, { modalID } = {}) => {
+        setModals((prevModals) => {
+          const liveModals = getLiveModals(prevModals);
+          const currentModal = liveModals.find((modal) => modal.id === modalID);
+
+          if (!modalID) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
+            );
+          } else if (!currentModal) {
+            // eslint-disable-next-line no-console
+            console.log(
+              `[HIDE EVENT IGNORED] No modal found with id: ${modalID}. It might have already been hidden.`,
+            );
+            return prevModals;
+          }
+
+          if (liveModals.length === 0) {
+            // eslint-disable-next-line no-console
+            console.log(
+              `[HIDE EVENT IGNORED] No modals found in the stack to hide. It might have already been hidden.`,
+            );
+            return prevModals;
+          }
+
+          const safeModal = currentModal ?? liveModals.at(-1);
+
+          if (!safeModal) {
+            return prevModals;
+          }
+
+          safeModal.hideCallback(props);
+
+          return leaveStack(prevModals, safeModal);
+        });
+      },
+      // `leaveStack` closes over `createMagicModalPortal`'s argument, which is
+      // fixed for the lifetime of the component this returns. It is not a
+      // render value, so it is not a dependency.
+      [],
+    );
 
     const update = useCallback<GlobalUpdateFunction>(
       (newComponent, { modalID }) => {
         setModals((prevModals) => {
-          const currentModal = prevModals.find((modal) => modal.id === modalID);
+          const currentModal = getLiveModals(prevModals).find(
+            (modal) => modal.id === modalID,
+          );
 
           if (!currentModal) {
             // eslint-disable-next-line no-console
@@ -211,7 +265,7 @@ export const createMagicModalPortal = (
       const backHandler = BackHandler.addEventListener(
         "hardwareBackPress",
         () => {
-          const lastModal = modals.at(-1);
+          const lastModal = getLiveModals(modals).at(-1);
 
           if (!lastModal) {
             return false;
@@ -249,12 +303,12 @@ export const createMagicModalPortal = (
     );
 
     const hideAll = useCallback(() => {
-      setModals((prevModals) => {
-        for (const modal of prevModals) {
+      setModals((prevModals) =>
+        getLiveModals(prevModals).reduce((remaining, modal) => {
           modal.hideCallback({ reason: MagicModalHideReason.GLOBAL_HIDE_ALL });
-        }
-        return [];
-      });
+          return leaveStack(remaining, modal);
+        }, prevModals),
+      );
     }, []);
 
     useImperativeHandle(magicModalRef, () => ({
@@ -266,32 +320,50 @@ export const createMagicModalPortal = (
     }));
 
     const modalList = useMemo(() => {
-      return modals.map(({ id, component, config, hideFunction }, index) => {
-        return (
-          <MagicModalProvider key={id} hide={hideFunction}>
-            <MagicModal config={config} isTopmost={index === modals.length - 1}>
-              {component}
-            </MagicModal>
-          </MagicModalProvider>
-        );
-      });
-    }, [modals]);
+      // A dismissed entry that is still animating out is no longer part of the
+      // stack, so the one underneath becomes topmost right away rather than
+      // waiting for the animation.
+      const topmostID = getLiveModals(modals).at(-1)?.id;
+
+      return modals.map(
+        ({ id, component, config, hideFunction, isExiting }) => {
+          return (
+            <MagicModalProvider key={id} hide={hideFunction}>
+              <StackEntry
+                config={config}
+                isExiting={Boolean(isExiting)}
+                isTopmost={id === topmostID}
+                onExitFinished={() => {
+                  removeModal(id);
+                }}
+              >
+                {component}
+              </StackEntry>
+            </MagicModalProvider>
+          );
+        },
+      );
+    }, [modals, removeModal]);
 
     const Overlay =
       fullWindowOverlayEnabled && Platform.OS === "ios"
         ? FullWindowOverlay
         : React.Fragment;
 
+    // Entries on their way out do not keep the portal in the accessibility
+    // tree: as far as a screen reader is concerned they are already gone.
+    const hasLiveModals = getLiveModals(modals).length > 0;
+
     /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
      the modal will have zIndex issues on react-navigation modals. */
     return (
       <Overlay>
         <View
-          accessibilityElementsHidden={modals.length === 0}
-          accessibilityViewIsModal={modals.length > 0}
-          aria-hidden={modals.length === 0}
+          accessibilityElementsHidden={!hasLiveModals}
+          accessibilityViewIsModal={hasLiveModals}
+          aria-hidden={!hasLiveModals}
           importantForAccessibility={
-            modals.length > 0 ? "auto" : "no-hide-descendants"
+            hasLiveModals ? "auto" : "no-hide-descendants"
           }
           style={[StyleSheet.absoluteFill, styles.wrapper]}
           testID="magic-modal-portal"
