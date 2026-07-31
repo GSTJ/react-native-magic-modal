@@ -1,7 +1,7 @@
 <p align="center">
   <img
     alt="A rating flow moving from magicModal.show to a typed close result"
-    src="https://raw.githubusercontent.com/GSTJ/magic-modal/main/media/magic-modal-demo.gif"
+    src="https://assets.gabrieltaveira.dev/magic-modal/demo.gif"
   />
 </p>
 
