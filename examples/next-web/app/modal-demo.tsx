@@ -3,6 +3,7 @@
 import type { HideReturn } from "magic-modal";
 
 import { useState } from "react";
+
 import {
   MagicModalHideReason,
   MagicModalPortal,
@@ -34,7 +35,11 @@ const ConfirmationModal = () => {
       <p className="eyebrow">UNIVERSAL FLOW</p>
       <h2 id="fixture-modal-title">Ship the web build?</h2>
       <p>The same promise contract is available on web, iOS, and Android.</p>
-      <button data-testid="confirm-modal" onClick={() => hide({ confirmed: true })} type="button">
+      <button
+        data-testid="confirm-modal"
+        onClick={() => hide({ confirmed: true })}
+        type="button"
+      >
         Confirm
       </button>
       <button
@@ -99,7 +104,11 @@ export const ModalDemo = () => {
       <button data-testid="open-modal" onClick={open} type="button">
         Open modal
       </button>
-      <button data-testid="open-swipeable" onClick={openSwipeable} type="button">
+      <button
+        data-testid="open-swipeable"
+        onClick={openSwipeable}
+        type="button"
+      >
         Open swipeable modal
       </button>
       <output data-testid="modal-result">{result}</output>
