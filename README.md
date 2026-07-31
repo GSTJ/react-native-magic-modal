@@ -13,7 +13,7 @@ are closed.
 | `videos/pr336-native-sanity-ios.mp4` | #336 | `feat/web-dom-native` @ `14a24f5` |
 | `videos/pr336-web.mp4` | #336 | `feat/web-dom-native` @ `14a24f5` |
 | `frames/pr338-code-before.png` | #338 | `main` @ `326b018` |
-| `frames/pr338-code-after.png` | #338 | `feat/demo-video-generator` @ `69f8e84` |
+| `frames/pr338-code-after.png` | #338 | `feat/demo-video-generator` @ `b9c3095` |
 
 The iOS videos are `xcrun simctl io recordVideo` on a booted iPhone 17 Pro
 (iOS 26.5) running the kitchen-sink example built Release, driven by Maestro
