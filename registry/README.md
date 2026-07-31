@@ -78,7 +78,7 @@ pnpm docs:dev
 Preview the install from another project with a `components.json` file:
 
 ```bash
-pnpm dlx shadcn@4.16.0 add http://localhost:3000/react-native-magic-modal/r/magic-modal.json --dry-run
+pnpm dlx shadcn@4.16.0 add http://localhost:3000/r/magic-modal.json --dry-run
 ```
 
 Drop `--dry-run` to copy the component. The target comes from
