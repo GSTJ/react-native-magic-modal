@@ -1,5 +1,26 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [10.2.0](https://github.com/GSTJ/magic-modal/compare/magic-modal-10.1.1...magic-modal-10.2.0) (2026-07-31)
+
+### :hammer: Bug Fixes :hammer:
+
+* **release:** match BREAKING CHANGE only as a real footer, and ship the README ([#345](https://github.com/GSTJ/magic-modal/issues/345)) ([cc087c8](https://github.com/GSTJ/magic-modal/commit/cc087c8f4f4444a2e4fc28acbd3c2a7d446b37c2)), references [#336](https://github.com/GSTJ/magic-modal/issues/336) [#336](https://github.com/GSTJ/magic-modal/issues/336) [#336](https://github.com/GSTJ/magic-modal/issues/336)
+* **release:** skip the burned 11.0.0 when computing the next version ([#347](https://github.com/GSTJ/magic-modal/issues/347)) ([ee4434e](https://github.com/GSTJ/magic-modal/commit/ee4434ed86341215037cc18ec363c4aa7180b41b))
+* **release:** stop the shim deprecating its own latest version ([#346](https://github.com/GSTJ/magic-modal/issues/346)) ([a5a5ee9](https://github.com/GSTJ/magic-modal/commit/a5a5ee912a163f9a214b5de5798316ccb2778e56)), references [#345](https://github.com/GSTJ/magic-modal/issues/345)
+
+### :stars: New Features :stars:
+
+* **demo-video:** commit the remotion demo generator, rebrand it, and publish to R2 ([#338](https://github.com/GSTJ/magic-modal/issues/338)) ([33c805a](https://github.com/GSTJ/magic-modal/commit/33c805abba5b5124dbd816738566b9966a28068b)), references [#328](https://github.com/GSTJ/magic-modal/issues/328) [#335](https://github.com/GSTJ/magic-modal/issues/335)
+* **modal:** make the React Native peers optional and slim the web install to one package ([#349](https://github.com/GSTJ/magic-modal/issues/349)) ([cb47b4a](https://github.com/GSTJ/magic-modal/commit/cb47b4a76a678980d5d4c61573d1b292d2622d70))
+
+### :curly_loop: What a drag! :curly_loop:
+
+* **release:** sync magic modal version with npm 11.0.0 ([#344](https://github.com/GSTJ/magic-modal/issues/344)) ([9ef35c9](https://github.com/GSTJ/magic-modal/commit/9ef35c94760b8800550d9b69f92e9b3cc4409567))
+
+### :books: Documentation :books:
+
+* **readme:** serve the demo hero from R2 ([#348](https://github.com/GSTJ/magic-modal/issues/348)) ([cc94a2f](https://github.com/GSTJ/magic-modal/commit/cc94a2fe768ba6afc818c0f5bfcbca671cf41cb9))
+
 ## [10.1.1](https://github.com/GSTJ/magic-modal/compare/magic-modal-10.1.0...magic-modal-10.1.1) (2026-07-31)
 
 ### :hammer: Bug Fixes :hammer:
