@@ -30,6 +30,7 @@
     "start": "turbo run start",
     "test": "turbo run test",
     "changelog:check": "turbo run changelog:check --filter=magic-modal",
+    "release:check": "turbo run release:check --filter=magic-modal",
     "build": "turbo run build",
     "release": "turbo run release --filter=magic-modal && pnpm --filter react-native-magic-modal run release",
     "docs": "pnpm --filter magic-modal build && pnpm --filter @magic-modal/docs build",

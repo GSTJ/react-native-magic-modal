@@ -35,10 +35,13 @@ jobs:
       # a synthetic history of every commit type through the real changelog
       # preset and fails if a breaking change goes missing — including one
       # hanging off a hidden type, which is how a `ci!:` would vanish.
+      # release:check drives the real .release-it.js against a throwaway repo
+      # at 10.1.1 and fails if the next major computes 11.0.0, which npm can
+      # never accept again (unpublished on magic-modal, occupied on the shim).
       #
       # One `extra-command`, so they're chained. `&&` short-circuits, which is
-      # what we want: either failing fails the job.
-      extra-command: pnpm run doctor && pnpm run changelog:check
+      # what we want: any failing fails the job.
+      extra-command: pnpm run doctor && pnpm run changelog:check && pnpm run release:check
 
   # main's ruleset requires a check literally named "👮‍♂️ Typecheck, Healthcheck,
   # Lint and Format". A called workflow always reports as

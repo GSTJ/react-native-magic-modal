@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+
 import createPreset from "conventional-changelog-conventionalcommits";
 
 // One list, used three times: as the preset the plugin loads, to build the
@@ -87,9 +89,22 @@ const preset =
     /** @type {unknown} */ (await createPreset({ types }))
   );
 
+// The conventional-changelog plugin is loaded through the subclass in
+// tools/skip-burned-versions.mjs, which remaps a computed version npm would
+// refuse (11.0.0 is burned on both packages) to one it accepts. Same plugin,
+// same options, one override; that file has the whole story.
+//
+// The key is an absolute path on purpose. release-it resolves relative plugin
+// paths against process.cwd(), not against this config file, and
+// tools/burned-version-check.mjs runs this exact config from a throwaway repo
+// in a temp dir — a `./tools/...` key would resolve there and load nothing.
+const SKIP_BURNED_PLUGIN = fileURLToPath(
+  new URL("tools/skip-burned-versions.mjs", import.meta.url),
+);
+
 export default {
   plugins: {
-    "@release-it/conventional-changelog": {
+    [SKIP_BURNED_PLUGIN]: {
       infile: "CHANGELOG.md",
       header: "# 🦄 Magic Modal Changelog 🪄",
       // Where the recommended bump starts counting from. Without it,
