@@ -9,7 +9,7 @@ const presetSite = defineMagicDocs({
   description:
     "Open a modal from any async flow, await its typed result, and keep concurrent prompts in one ordered stack across web, iOS, and Android.",
   repository: "https://github.com/GSTJ/magic-modal",
-  siteUrl: "https://gstj.github.io/magic-modal",
+  siteUrl: "https://magic-modal.gabrieltaveira.dev",
   packageName: "react-native-magic-modal",
   docsPath: "/docs",
 });
