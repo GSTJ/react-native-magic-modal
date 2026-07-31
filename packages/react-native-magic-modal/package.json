@@ -1,0 +1,96 @@
+{
+  "name": "react-native-magic-modal",
+  "version": "9.2.0",
+  "description": "The former name of magic-modal. Depends on it and re-exports it, so this package stays a drop-in alias. 🦄",
+  "keywords": [
+    "android",
+    "expo",
+    "ios",
+    "magic-modal",
+    "modal",
+    "nextjs",
+    "react-native",
+    "react-native-web",
+    "web"
+  ],
+  "homepage": "https://magic-modal.gabrieltaveira.dev/",
+  "bugs": {
+    "url": "https://github.com/GSTJ/magic-modal/issues"
+  },
+  "license": "MIT",
+  "author": "Gabriel Taveira <gabrielstaveira@gmail.com> (https://github.com/GSTJ)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GSTJ/magic-modal.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "react-native": "./dist/index.react-native.js",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "react-native": {
+        "require": {
+          "types": "./dist/index.react-native.d.cts",
+          "default": "./dist/index.react-native.cjs"
+        },
+        "import": {
+          "types": "./dist/index.react-native.d.ts",
+          "default": "./dist/index.react-native.js"
+        }
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "bunchee && node tools/check-shim-build.mjs",
+    "lint": "oxlint --report-unused-disable-directives",
+    "lint:fix": "oxlint --report-unused-disable-directives --fix",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "test": "node tools/sync-manifest.mjs --check",
+    "release": "node tools/release.mjs"
+  },
+  "dependencies": {
+    "magic-modal": "workspace:*"
+  },
+  "devDependencies": {
+    "bunchee": "^6.0.3",
+    "magic-oxfmt-config": "^1.2.0",
+    "magic-oxlint-config": "^1.2.0",
+    "magic-tsconfig": "^1.2.0",
+    "oxfmt": "0.60.0",
+    "oxlint": "1.75.0",
+    "typescript": "^5.7.2"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-native": ">=0.81.0",
+    "react-native-gesture-handler": ">=2.20.0",
+    "react-native-reanimated": ">=4.1.0",
+    "react-native-screens": ">=4.19.0",
+    "react-native-worklets": ">=0.5.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native-screens": {
+      "optional": true
+    }
+  }
+}
