@@ -13,7 +13,8 @@ are closed.
 | `videos/pr336-native-sanity-ios.mp4` | #336 | `feat/web-dom-native` @ `14a24f5` |
 | `videos/pr336-web.mp4` | #336 | `feat/web-dom-native` @ `14a24f5` |
 | `frames/pr338-code-before.png` | #338 | `main` @ `326b018` |
-| `frames/pr338-code-after.png` | #338 | `feat/demo-video-generator` @ `b9c3095` |
+| `frames/pr338-code-after.png` | #338 | `feat/demo-video-generator` @ `75acccc` |
+| `frames/pr338-social-card.png` | #338 | `feat/demo-video-generator` @ `75acccc` |
 
 The iOS videos are `xcrun simctl io recordVideo` on a booted iPhone 17 Pro
 (iOS 26.5) running the kitchen-sink example built Release, driven by Maestro
@@ -32,6 +33,12 @@ untouched — the recording only scales the page's animation timelines.
 
 `frames/` holds stills pulled out of those same files.
 
-The two #338 frames are the odd ones out: nothing was recorded for them. They are
-`media/magic-modal-demo-poster.png` — frame 130 of the Remotion composition — as
-it stands on each branch, copied over unedited. No crop, no scaling.
+The #338 frames are the odd ones out: nothing was recorded for them. The before
+and after are frame 130 of the Remotion composition as it stands on each branch,
+copied over unedited — no crop, no scaling. The before is `main`'s committed
+poster, which was that frame; the after is pulled out of the encode, because the
+branch no longer commits a 16:9 poster.
+
+`pr338-social-card.png` is not a frame of anything. It is the whole of the new
+1280x640 `MagicModalSocial` composition, which is what the branch ships in place
+of that poster.
