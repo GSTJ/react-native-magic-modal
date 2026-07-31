@@ -301,7 +301,7 @@ const CodePanel: React.FC = () => {
         </div>
         <div style={{ paddingLeft: 68 }}>
           <span style={{ color: COLORS.paper }}>RatingModal</span>
-          <span style={{ color: COLORS.paper }}>).promise;</span>
+          <span style={{ color: COLORS.paper }}>);</span>
         </div>
       </div>
 
@@ -358,7 +358,7 @@ const CodePanel: React.FC = () => {
             )}
           />
         </svg>
-        promise pending
+        awaiting the handle
       </div>
     </Interactive.Div>
   );
@@ -794,7 +794,7 @@ const ThanksSheet: React.FC = () => {
           color: "#645f57",
         }}
       >
-        The promise resolves with the result.
+        The handle resolves with the result.
       </div>
     </div>
   );
@@ -1077,6 +1077,7 @@ const InstallCard: React.FC = () => {
         }}
       >
         <span style={{ color: COLORS.roseDark }}>pnpm add </span>
+        {/* v10: rename this to `magic-modal` once the npm rename ships. */}
         react-native-magic-modal
       </div>
       <div
