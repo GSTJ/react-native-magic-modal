@@ -19,9 +19,14 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
 } from "react";
 import { BackHandler, Platform, StyleSheet, View } from "react-native";
 
+import {
+  ANIMATION_DURATION_IN_MS,
+  OVERLAY_UNMOUNT_GRACE_IN_MS,
+} from "../../constants/animations";
 import { defaultConfig } from "../../constants/default-config";
 import { MagicModalHideReason } from "../../constants/types";
 import { magicModalRef } from "../../utils/magic-modal-handler";
@@ -122,6 +127,12 @@ export const createMagicModalPortal = ({
     const [modals, setModals] = React.useState<ModalStackItem[]>([]);
     const [fullWindowOverlayEnabled, setFullWindowOverlayEnabled] =
       React.useState(true);
+    // Mounting the overlay permanently creates a native UIWindow that owns the
+    // accessibility tree even with an empty stack, so it is mounted on demand.
+    const [isOverlayMounted, setIsOverlayMounted] = React.useState(false);
+    // The exit timing of whatever is currently on the stack, kept so the
+    // unmount delay is still readable once the stack is empty.
+    const exitTimingRef = useRef(ANIMATION_DURATION_IN_MS);
 
     const disableFullWindowOverlay = useCallback(() => {
       setFullWindowOverlayEnabled(false);
@@ -238,6 +249,9 @@ export const createMagicModalPortal = ({
           },
         } satisfies ModalStackItem;
 
+        // Batched with the stack update, so the overlay and the modal land in
+        // the same commit and the entering animation runs once, inside it.
+        setIsOverlayMounted(true);
         setModals((prevModals) => [...prevModals, newModal]);
 
         return createModalHandle<T>(hidePromise, {
@@ -256,6 +270,48 @@ export const createMagicModalPortal = ({
       },
       [_hide, update],
     );
+
+    /**
+     * Keeps the overlay alive through the closing animation.
+     *
+     * A hidden entry leaves state immediately, but its Reanimated `exiting`
+     * animation is still playing. Unmounting the overlay right then tears down
+     * the native window mid-animation: the closing modal blinks, drops out of
+     * the top layer, and loses focus. So the unmount waits out the exit timing
+     * of whatever was on the stack.
+     *
+     * Anything that repopulates the stack, a `show` during the wait included,
+     * changes `modals` and cancels the pending unmount through the cleanup, so
+     * back-to-back modals never blink.
+     *
+     * The count is of live entries, matching `hasLiveModals` below: an entry
+     * the browser chrome parks as `isExiting` is already off the stack for
+     * every other purpose. It reads the same on the overlay's own path, which
+     * is iOS-only and where the native chrome drops entries on the spot, and it
+     * keeps the wait timed off the config on either chrome.
+     */
+    useEffect(() => {
+      const liveModals = getLiveModals(modals);
+
+      if (liveModals.length > 0) {
+        exitTimingRef.current = Math.max(
+          ...liveModals.map((modal) => modal.config.animationOutTiming),
+        );
+        return;
+      }
+
+      if (!isOverlayMounted) {
+        return;
+      }
+
+      const timeout = setTimeout(() => {
+        setIsOverlayMounted(false);
+      }, exitTimingRef.current + OVERLAY_UNMOUNT_GRACE_IN_MS);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    }, [isOverlayMounted, modals]);
 
     useEffect(() => {
       if (Platform.OS === "web") {
@@ -346,7 +402,7 @@ export const createMagicModalPortal = ({
     }, [modals, removeModal]);
 
     const Overlay =
-      fullWindowOverlayEnabled && Platform.OS === "ios"
+      fullWindowOverlayEnabled && isOverlayMounted && Platform.OS === "ios"
         ? FullWindowOverlay
         : React.Fragment;
 
@@ -354,8 +410,9 @@ export const createMagicModalPortal = ({
     // tree: as far as a screen reader is concerned they are already gone.
     const hasLiveModals = getLiveModals(modals).length > 0;
 
-    /* This needs to always be rendered, if we make it conditionally render based on ModalContent too,
-     the modal will have zIndex issues on react-navigation modals. */
+    /* The View below stays rendered whether or not there are modals: making it
+     conditional on ModalContent gives the modal zIndex issues on
+     react-navigation modals. Only the overlay wrapper comes and goes. */
     return (
       <Overlay>
         <View
