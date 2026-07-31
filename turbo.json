@@ -38,6 +38,9 @@
     "changelog:check": {
       "cache": false
     },
+    "release:check": {
+      "cache": false
+    },
     "typecheck": {
       "dependsOn": ["^topo", "^build"]
     },

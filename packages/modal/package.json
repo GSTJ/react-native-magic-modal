@@ -69,6 +69,7 @@
     "prepack": "pnpm run copy:readme",
     "test": "jest",
     "changelog:check": "node tools/changelog-check.mjs",
+    "release:check": "node tools/burned-version-check.mjs",
     "release": "release-it --ci"
   },
   "devDependencies": {
