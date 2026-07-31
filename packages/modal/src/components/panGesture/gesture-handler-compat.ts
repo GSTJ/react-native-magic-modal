@@ -93,7 +93,7 @@ export const hasPanGestureHook =
 
 const missingPanGestureHook = (): never => {
   throw new Error(
-    "react-native-magic-modal called usePanGesture, which requires react-native-gesture-handler 3.x. This is a bug: the hook-based swipe surface should only render when hasPanGestureHook is true.",
+    "magic-modal called usePanGesture, which requires react-native-gesture-handler 3.x. This is a bug: the hook-based swipe surface should only render when hasPanGestureHook is true.",
   );
 };
 

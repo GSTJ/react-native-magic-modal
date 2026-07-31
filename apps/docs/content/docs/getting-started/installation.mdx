@@ -30,6 +30,16 @@ sets.
   />
 </Cards>
 
+<Callout type="info" title="The package is now called magic-modal">
+  It used to be `react-native-magic-modal`. That name still resolves to the same
+  code: it is published as a thin package that depends on `magic-modal` and
+  re-exports it, released from the same commit at the same version. Existing
+  installs keep receiving updates and nothing needs to change today. New
+  projects should install `magic-modal`, and moving over is a dependency swap
+  plus a find-and-replace on the import specifier — the exported API is
+  identical.
+</Callout>
+
 ## Expo
 
 Add Magic Modal with the project's package manager:
@@ -38,28 +48,28 @@ Add Magic Modal with the project's package manager:
   <Tab value="pnpm">
 
 ```bash
-pnpm add react-native-magic-modal
+pnpm add magic-modal
 ```
 
   </Tab>
   <Tab value="npm">
 
 ```bash
-npm install react-native-magic-modal
+npm install magic-modal
 ```
 
   </Tab>
   <Tab value="Yarn">
 
 ```bash
-yarn add react-native-magic-modal
+yarn add magic-modal
 ```
 
   </Tab>
   <Tab value="Bun">
 
 ```bash
-bun add react-native-magic-modal
+bun add magic-modal
 ```
 
   </Tab>
@@ -103,28 +113,28 @@ React and React DOM come with Next.js. Add Magic Modal and its browser runtime:
   <Tab value="pnpm">
 
 ```bash
-pnpm add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+pnpm add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
   </Tab>
   <Tab value="npm">
 
 ```bash
-npm install react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+npm install magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
   </Tab>
   <Tab value="Yarn">
 
 ```bash
-yarn add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+yarn add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
   </Tab>
   <Tab value="Bun">
 
 ```bash
-bun add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+bun add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
   </Tab>
@@ -138,7 +148,7 @@ transpilation list, and Client Component root.
 Install the package and native peers:
 
 ```bash
-pnpm add react-native-magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
+pnpm add magic-modal react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
 ```
 
 Add the Worklets Babel plugin last:

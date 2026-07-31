@@ -63,7 +63,7 @@ export type IModal = {
  *   MagicModalHideReason,
  *   magicModal,
  *   useMagicModal,
- * } from "react-native-magic-modal";
+ * } from "magic-modal";
  *
  * const ExampleModal = () => {
  *   const { hide } = useMagicModal<{ message: string }>();

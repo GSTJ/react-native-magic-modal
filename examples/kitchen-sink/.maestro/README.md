@@ -1,6 +1,6 @@
 # Maestro E2E Flows — kitchen-sink
 
-End-to-end smoke tests for the `react-native-magic-modal` kitchen-sink example
+End-to-end smoke tests for the `magic-modal` kitchen-sink example
 app, executed with [Maestro](https://maestro.mobile.dev).
 
 ## Flows

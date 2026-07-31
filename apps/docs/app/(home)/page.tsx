@@ -125,7 +125,7 @@ export default function HomePage() {
           <ArrowUpRight aria-hidden="true" size={14} />
         </a>
         <a
-          href="https://www.npmjs.com/package/react-native-magic-modal"
+          href="https://www.npmjs.com/package/magic-modal"
           rel="noreferrer"
           target="_blank"
         >
@@ -513,7 +513,7 @@ export default function HomePage() {
             Releases
           </a>
           <a
-            href="https://www.npmjs.com/package/react-native-magic-modal"
+            href="https://www.npmjs.com/package/magic-modal"
             rel="noreferrer"
             target="_blank"
           >

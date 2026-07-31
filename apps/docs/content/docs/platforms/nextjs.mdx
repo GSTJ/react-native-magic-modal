@@ -17,28 +17,28 @@ React and React DOM already come with a Next.js application. Add Magic Modal and
   <Tab value="pnpm">
 
 ```bash
-pnpm add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+pnpm add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
   </Tab>
   <Tab value="npm">
 
 ```bash
-npm install react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+npm install magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
   </Tab>
   <Tab value="Yarn">
 
 ```bash
-yarn add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+yarn add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
   </Tab>
   <Tab value="Bun">
 
 ```bash
-bun add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+bun add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
   </Tab>
@@ -97,7 +97,7 @@ The portal and imperative ref use client-side React state. Keep them in one Clie
 
 import type { ReactNode } from "react";
 
-import { MagicModalPortal } from "react-native-magic-modal";
+import { MagicModalPortal } from "magic-modal";
 
 export function MagicModalShell({ children }: { children: ReactNode }) {
   return (
@@ -141,14 +141,10 @@ Any component that calls `magicModal`, uses `useMagicModal`, or owns interactive
 ```tsx title="app/confirmation.tsx"
 "use client";
 
-import type { HideReturn } from "react-native-magic-modal";
+import type { HideReturn } from "magic-modal";
 
 import { useState } from "react";
-import {
-  MagicModalHideReason,
-  magicModal,
-  useMagicModal,
-} from "react-native-magic-modal";
+import { MagicModalHideReason, magicModal, useMagicModal } from "magic-modal";
 
 import "./confirmation.css";
 

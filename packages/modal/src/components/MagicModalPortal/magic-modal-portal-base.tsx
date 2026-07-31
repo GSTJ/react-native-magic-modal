@@ -96,7 +96,7 @@ const createModalHandle = <T,>(
  *
  * ```tsx
  * import { GestureHandlerRootView } from "react-native-gesture-handler";
- * import { MagicModalPortal } from 'react-native-magic-modal';
+ * import { MagicModalPortal } from 'magic-modal';
  *
  * export default function App() {
  *   return (
@@ -157,7 +157,7 @@ export const createMagicModalPortal = ({
           if (!modalID) {
             // eslint-disable-next-line no-console
             console.warn(
-              "[DEPRECATED] react-native-magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
+              "[DEPRECATED] magic-modal deprecated 'hide' usage:\nCalling magicModal.hide without a modal ID is deprecated and will be removed in future versions.\nPlease provide a modal id to hide or use the preferred `useMagicModal` hook inside the modal to hide itself.\nDefaulting to hiding the last modal in the stack.",
             );
           } else if (!currentModal) {
             // eslint-disable-next-line no-console

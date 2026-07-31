@@ -1,10 +1,10 @@
 import type { ExpoConfig } from "expo/config";
 
 export default {
-  name: "react-native-magic-modal-example",
-  slug: "react-native-magic-modal-example",
+  name: "magic-modal-example",
+  slug: "magic-modal-example",
   scheme: "magic-modal",
-  description: "Example app for react-native-magic-modal",
+  description: "Example app for magic-modal",
   version: "1.0.0",
   web: {
     output: "static",

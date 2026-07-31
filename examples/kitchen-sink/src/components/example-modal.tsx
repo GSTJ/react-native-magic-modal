@@ -2,7 +2,7 @@
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { useMagicModal } from "react-native-magic-modal";
+import { useMagicModal } from "magic-modal";
 
 import { showToast } from "./toast";
 

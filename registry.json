@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "react-native-magic-modal",
+  "name": "magic-modal",
   "homepage": "https://magic-modal.gabrieltaveira.dev/",
   "items": [
     {
@@ -9,7 +9,7 @@
       "title": "Magic Modal Dialog",
       "description": "A typed Expo and React Native dialog surface with accessible semantics and backdrop cancellation.",
       "author": "Gabriel Taveira <gabrielstaveira@gmail.com>",
-      "dependencies": ["react-native-magic-modal@^9.1.0"],
+      "dependencies": ["magic-modal@^9.1.0"],
       "files": [
         {
           "path": "registry/magic-modal.tsx",
@@ -21,7 +21,7 @@
       "categories": ["react-native", "expo", "dialog", "modal"],
       "meta": {
         "platforms": ["android", "ios", "web"],
-        "package": "react-native-magic-modal"
+        "package": "magic-modal"
       }
     }
   ]

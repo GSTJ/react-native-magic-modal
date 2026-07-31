@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 
-import { magicModal, useMagicModal } from "react-native-magic-modal";
+import { magicModal, useMagicModal } from "magic-modal";
 
 type KeyboardAvoidingModalProps = {
   initialText?: string;

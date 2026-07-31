@@ -5,7 +5,7 @@
     "jsx": "react-native",
     "noEmit": true,
     "paths": {
-      "react-native-magic-modal": ["packages/modal/src/index.ts"]
+      "magic-modal": ["packages/modal/src/index.ts"]
     },
     "strict": true
   },

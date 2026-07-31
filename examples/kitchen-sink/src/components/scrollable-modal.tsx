@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { magicModal } from "react-native-magic-modal";
+import { magicModal } from "magic-modal";
 
 const items = Array.from({ length: 20 }, (_, index) => `Item ${index + 1}`);
 

@@ -2,11 +2,7 @@
 
 /* eslint-disable react-perf/jsx-no-new-function-as-prop -- Modal choices close over the value returned to the caller. */
 
-import type {
-  HideReturn,
-  ModalChildren,
-  NewConfigProps,
-} from "react-native-magic-modal";
+import type { HideReturn, ModalChildren, NewConfigProps } from "magic-modal";
 
 import React, {
   useCallback,
@@ -21,7 +17,7 @@ import {
   MagicModalPortal,
   magicModal,
   useMagicModal,
-} from "react-native-magic-modal";
+} from "magic-modal";
 
 type StackEntry = {
   id: string;

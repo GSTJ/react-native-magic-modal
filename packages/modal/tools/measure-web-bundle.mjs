@@ -77,7 +77,7 @@ const summarizeInputs = (metafile) => {
 
   for (const [file, { bytes }] of Object.entries(metafile.inputs)) {
     const match = /node_modules\/((?:@[^/]+\/)?[^/]+)\//.exec(file);
-    const name = match?.[1] ?? "react-native-magic-modal";
+    const name = match?.[1] ?? "magic-modal";
     byPackage.set(name, (byPackage.get(name) ?? 0) + bytes);
   }
 

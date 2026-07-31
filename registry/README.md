@@ -2,7 +2,7 @@
 
 This directory is the source for a custom shadcn registry item. It copies a
 React Native component into the consumer's project and adds
-`react-native-magic-modal` as a dependency. It is separate from the official
+`magic-modal` as a dependency. It is separate from the official
 shadcn registry directory.
 
 The component renders the dialog surface. `MagicModalPortal` owns the backdrop,
@@ -11,7 +11,7 @@ stack, animation, and promise lifecycle. Mount the portal once in the app root:
 ```tsx
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { MagicModalPortal } from "react-native-magic-modal";
+import { MagicModalPortal } from "magic-modal";
 
 export default function RootLayout() {
   return (
@@ -32,7 +32,7 @@ npx expo install react-native-gesture-handler react-native-reanimated react-nati
 The copied component includes a typed action result and a cancellation result:
 
 ```tsx
-import { MagicModalHideReason } from "react-native-magic-modal";
+import { MagicModalHideReason } from "magic-modal";
 
 import { showMagicModal } from "@/components/magic-modal";
 
@@ -88,7 +88,7 @@ Once these files are on the public default branch, the same source registry can
 be addressed through GitHub:
 
 ```bash
-pnpm dlx shadcn@4.16.0 add GSTJ/react-native-magic-modal/magic-modal
+pnpm dlx shadcn@4.16.0 add GSTJ/magic-modal/magic-modal
 ```
 
 That command uses shadcn's public GitHub registry flow. It does not list this
