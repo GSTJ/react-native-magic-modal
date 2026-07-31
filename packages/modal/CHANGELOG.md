@@ -1,5 +1,23 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [9.2.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-9.1.0...magic-modal-9.2.0) (2026-07-31)
+
+### :hammer: Bug Fixes :hammer:
+
+* **ci:** ship the README in the npm tarball ([#318](https://github.com/GSTJ/react-native-magic-modal/issues/318)) ([c511b69](https://github.com/GSTJ/react-native-magic-modal/commit/c511b6972db3c9d6c9cc4feeff816821beb96f53)), references [react-native-magic-modal#release](https://github.com/react-native-magic-modal/issues/release)
+* **docs:** polish interactive demos and responsive frames ([#317](https://github.com/GSTJ/react-native-magic-modal/issues/317)) ([2f95cd4](https://github.com/GSTJ/react-native-magic-modal/commit/2f95cd4a9360d6aeb5c956359a4cff8f7dd2d61c))
+* **docs:** stop the footer column clipping between 701px and 812px ([#319](https://github.com/GSTJ/react-native-magic-modal/issues/319)) ([40cfb2f](https://github.com/GSTJ/react-native-magic-modal/commit/40cfb2fab4904c694ee4e18411174d42f26ebe37))
+
+### :stars: New Features :stars:
+
+* **modal:** return an awaitable handle from magicModal.show ([#328](https://github.com/GSTJ/react-native-magic-modal/issues/328)) ([aa1434b](https://github.com/GSTJ/react-native-magic-modal/commit/aa1434ba443bd2830489bd741fce3af277a30c37))
+
+### :curly_loop: What a drag! :curly_loop:
+
+* **deps:** update dependency @types/node to v26.1.2 ([#323](https://github.com/GSTJ/react-native-magic-modal/issues/323)) ([c50e271](https://github.com/GSTJ/react-native-magic-modal/commit/c50e27157da3652bf392e39faea09e2345b59d67))
+* **deps:** update dependency postcss to v8.5.24 ([#326](https://github.com/GSTJ/react-native-magic-modal/issues/326)) ([ea1b942](https://github.com/GSTJ/react-native-magic-modal/commit/ea1b9425d3a292fa3eb5c1a8a7480901314ac882))
+* **release:** sync magic modal version with npm 9.1.0 ([#316](https://github.com/GSTJ/react-native-magic-modal/issues/316)) ([f7d88ba](https://github.com/GSTJ/react-native-magic-modal/commit/f7d88ba1231ed4708f11b5ce9c93cadd8d2d2d34))
+
 ## [9.1.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-9.0.1...magic-modal-9.1.0) (2026-07-29)
 
 ### :hammer: Bug Fixes :hammer:
