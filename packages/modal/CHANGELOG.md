@@ -12,31 +12,6 @@
   it, so an existing install resolves to the same code; npm shows a deprecation
   notice on it pointing here. Install `magic-modal` and update the import
   specifier.
-  ```
-
-  This is the v10 gate. Merging it computes a `major` bump (verified
-  through the repo's own `conventional-recommended-bump` preset) and
-  renames the published package, so it merges last, after the in-flight v9
-  work.
-
-  The package renames to `magic-modal`. The old name stays alive as a
-  lockstep alias: `packages/react-native-magic-modal` depends on
-  `magic-modal` at `workspace:*` (pnpm rewrites it to the exact version at
-  pack time) and every entry is `export * from "magic-modal"`, mirroring
-  the export map condition for condition. `import.meta.resolve` probes
-  confirm both the default and `react-native` conditions forward to the
-  same files as importing `magic-modal` directly, and a tsc probe confirms
-  the types forward (a wrong `Direction` value errors instead of
-  collapsing to `any`).
-
-  Release wiring: the root `release` script publishes `magic-modal` via
-  release-it, then runs the alias's `tools/release.mjs`, which syncs the
-  version, publishes with `pnpm publish` (npm would ship the unrewritten
-  `workspace:*`), and runs `npm deprecate` on the old name after every
-  publish. The deprecate is per-publish rather than a one-off because npm
-  resolves the range when the command runs: a single deprecate at v10
-  would leave every later alias version, the one installs actually resolve
-  to, without the notice.
 
 ### :hammer: Bug Fixes :hammer:
 
