@@ -1,0 +1,32 @@
+{
+  "name": "@magic-modal/demo-video",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Remotion source for the README demo video, GIF and poster in media/",
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "dev": "remotion studio",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
+    "render": "remotion render MagicModalDemo ../../media/magic-modal-demo.mp4",
+    "render:all": "pnpm run render && pnpm run render:gif && pnpm run render:poster",
+    "render:gif": "remotion ffmpeg -y -i ../../media/magic-modal-demo.mp4 -filter_complex \"scale=960:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -r 12 -t 15 ../../media/magic-modal-demo.gif",
+    "render:poster": "remotion still MagicModalDemo ../../media/magic-modal-demo-poster.png --frame=130"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.500",
+    "@remotion/fonts": "4.0.500",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.500"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "magic-oxfmt-config": "^1.2.0",
+    "magic-tsconfig": "^1.2.0",
+    "oxfmt": "0.60.0",
+    "typescript": "^5.7.2"
+  }
+}
