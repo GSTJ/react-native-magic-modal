@@ -52,8 +52,7 @@ function DeletePostModal() {
 const result = await magicModal
   .show<Confirmation>(() => (
     <DeletePostModal />
-  ))
-  .promise;
+  ));
 
 if (
   result.reason === INTENTIONAL_HIDE &&
@@ -72,15 +71,13 @@ const examples: Example[] = [
   confirmExample,
   {
     code: `const account = await magicModal
-  .show<Account>(() => <AccountPicker />)
-  .promise;
+  .show<Account>(() => <AccountPicker />);
 
 if (account.reason === INTENTIONAL_HIDE) {
   await magicModal
     .show(() => (
       <AccountDetails account={account.data} />
-    ))
-    .promise;
+    ));
 }`,
     file: "account-flow.tsx",
     id: "follow-up",
@@ -89,17 +86,17 @@ if (account.reason === INTENTIONAL_HIDE) {
     type: "follow-up",
   },
   {
-    code: `const { update, promise } = magicModal.show(
+    code: `const handle = magicModal.show(
   () => <UploadModal progress={0} />
 );
 
 upload.onProgress((progress) => {
-  update(() => (
+  handle.update(() => (
     <UploadModal progress={progress} />
   ));
 });
 
-await promise;`,
+await handle;`,
     file: "upload.tsx",
     id: "update",
     label: "Advanced content replacement",

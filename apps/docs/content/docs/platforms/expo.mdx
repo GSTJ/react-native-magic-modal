@@ -200,7 +200,7 @@ export async function askForRating() {
   const result = await magicModal.show<RatingResult>(RatingModal, {
     accessibilityLabel: "Rate your experience",
     swipeDirection: "down",
-  }).promise;
+  });
 
   if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
     return result.data.rating;

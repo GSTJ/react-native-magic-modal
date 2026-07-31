@@ -12,7 +12,7 @@ export type ModalChildren = React.FC;
 export type Direction = "up" | "down" | "left" | "right";
 
 /**
- * The discriminated result resolved by `magicModal.show<T>().promise`.
+ * The discriminated result resolved by `magicModal.show<T>()`.
  * `data` exists only when the modal was intentionally hidden.
  */
 export type HideReturn<T> =
@@ -154,11 +154,53 @@ export enum MagicModalHideReason {
   GLOBAL_HIDE_ALL = "GLOBAL_HIDE_ALL",
 }
 
+/**
+ * What `magicModal.show<T>()` hands back: the modal's result promise, with the
+ * controls for that stack entry hanging off it.
+ *
+ * Await it directly to get the {@link HideReturn}, or keep it around to drive
+ * the modal while it is open.
+ *
+ * ```tsx
+ * const handle = magicModal.show<Confirmation>(ConfirmationModal);
+ * handle.update(() => <ConfirmationModal step={2} />);
+ * const result = await handle;
+ * ```
+ *
+ * The controls live on the promise object itself, so anything that adopts the
+ * handle hands back a plain promise without them. Returning it from an `async`
+ * function is the common case:
+ *
+ * ```tsx
+ * // `modalID`, `update` and `hide` are gone from what the caller receives.
+ * const open = async () => magicModal.show(ConfirmationModal);
+ * ```
+ *
+ * Return the handle from a non-async function, or await it where you open it.
+ */
+export type ModalHandle<T> = Promise<HideReturn<T>> & {
+  /** Identifies this stack entry for `magicModal.hide` and `magicModal.update`. */
+  modalID: string;
+
+  /** Swaps the content of this modal while it stays open. */
+  update: (next: ModalChildren) => void;
+
+  /**
+   * Closes this modal from outside it, resolving the handle with
+   * {@link MagicModalHideReason.INTENTIONAL_HIDE} and `data`. Inside modal
+   * content, prefer `hide` from `useMagicModal`.
+   */
+  hide: (data?: T) => void;
+
+  /**
+   * @deprecated await the handle directly. Kept as an alias of the handle
+   * itself so existing `const { promise } = magicModal.show(...)` code keeps
+   * working.
+   */
+  promise: Promise<HideReturn<T>>;
+};
+
 export type GlobalShowFunction = <T>(
   newComponent: ModalChildren,
   newConfig?: NewConfigProps,
-) => {
-  promise: Promise<HideReturn<T>>;
-  modalID: string;
-  update: ModalUpdateFunction;
-};
+) => ModalHandle<T>;

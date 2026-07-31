@@ -41,8 +41,9 @@ const showModal = async () => {
     magicModal.hide("close timeout", { modalID: modalResponse.modalID });
   }, 2000);
 
+  // The handle is the promise, so awaiting it gives the hide result.
   // eslint-disable-next-line no-console
-  console.log("Modal closed with response:", await modalResponse.promise);
+  console.log("Modal closed with response:", await modalResponse);
 };
 
 type ModalResponse = {
@@ -64,6 +65,7 @@ const showReplacingModals = async () => {
     { modalID: modalResponse.modalID },
   );
 
+  // `.promise` still works here, and is the same object as the handle.
   const res = await modalResponse.promise;
 
   if (res.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
@@ -95,23 +97,23 @@ const showZoomInModal = () => {
 };
 
 const showUpdatingModal = async () => {
-  const { modalID, update } = magicModal.show(() => (
-    <ExampleModal body="Closing in 3..." />
-  ));
+  // The handle carries the controls for this entry, so nothing here needs the
+  // modal ID.
+  const modal = magicModal.show(() => <ExampleModal body="Closing in 3..." />);
 
   await wait(1000);
-  update(() => <ExampleModal body="Closing in 2..." />);
+  modal.update(() => <ExampleModal body="Closing in 2..." />);
 
   await wait(1000);
-  update(() => <ExampleModal body="Closing in 1..." />);
+  modal.update(() => <ExampleModal body="Closing in 1..." />);
 
   await wait(1000);
-  magicModal.hide(undefined, { modalID });
+  modal.hide();
 };
 
 const showNoFullWindowOverlayModal = async () => {
   magicModal.disableFullWindowOverlay();
-  await magicModal.show(() => <ExampleModal />).promise;
+  await magicModal.show(() => <ExampleModal />);
   magicModal.enableFullWindowOverlay();
 };
 

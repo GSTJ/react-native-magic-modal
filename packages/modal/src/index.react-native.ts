@@ -4,6 +4,7 @@ export {
   type HideReturn,
   type NewConfigProps,
   type ModalChildren,
+  type ModalHandle,
   type Direction,
   type ModalProps,
 } from "./constants/types";

@@ -56,7 +56,7 @@ The active modal consumes the Android back action and closes by default. Handle 
 the caller:
 
 ```tsx
-const result = await magicModal.show<CheckoutResult>(CheckoutModal).promise;
+const result = await magicModal.show<CheckoutResult>(CheckoutModal);
 
 switch (result.reason) {
   case MagicModalHideReason.INTENTIONAL_HIDE:

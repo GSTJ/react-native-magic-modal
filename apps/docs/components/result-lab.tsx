@@ -63,9 +63,8 @@ const createResult = (reason: CloseReason): HideReturn<Answer> =>
     : { reason };
 
 const pendingCode = {
-  closing:
-    "const result = await handle.promise;\n// waiting for the close animation",
-  open: "const result = await handle.promise;\n// waiting for a close",
+  closing: "const result = await handle;\n// waiting for the close animation",
+  open: "const result = await handle;\n// waiting for a close",
 } as const;
 
 const formatResultCode = (result: HideReturn<Answer>) => {

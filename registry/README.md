@@ -36,7 +36,7 @@ import { MagicModalHideReason } from "react-native-magic-modal";
 
 import { showMagicModal } from "@/components/magic-modal";
 
-const { promise } = showMagicModal({
+const result = await showMagicModal({
   title: "Delete this project?",
   description: "This cannot be undone.",
   actions: [
@@ -47,8 +47,6 @@ const { promise } = showMagicModal({
     },
   ],
 });
-
-const result = await promise;
 
 if (result.reason === MagicModalHideReason.BACKDROP_PRESS) {
   // The user pressed outside the dialog.
