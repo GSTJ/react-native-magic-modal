@@ -5,17 +5,32 @@ import { build } from "esbuild";
 /**
  * What a web app actually downloads for this package.
  *
- * The published browser entry still imports from `react-native`, which a web
- * bundler aliases to `react-native-web`, so the file size on disk says nothing
- * about the cost. Bundling it the way a real app does — alias applied, React
- * external because the app already has it, production defines so dev-only
- * branches drop — is the only number worth budgeting against.
+ * The file size on disk says nothing about the cost, so this bundles the
+ * browser entry the way a real app does: React external because the app already
+ * has it, production defines so dev-only branches drop, minified.
+ *
+ * `withReactNativeAlias` applies the `react-native` -> `react-native-web`
+ * alias every react-native-web app configures. The browser entry stopped
+ * importing react-native in v10.1, so it changes nothing — which is the point of
+ * being able to turn it off. Measuring both ways is how the build proves the
+ * browser bundle does not depend on that alias being there, and therefore that
+ * a web-only app needs neither package installed.
  */
 export const measureWebBundle = async ({
   entry = new URL("../dist/index.js", import.meta.url).pathname,
+  withReactNativeAlias = true,
 } = {}) => {
+  // Annotated, and hoisted out of the call, because esbuild infers its result
+  // type from the shape of the options object it is handed. A ternary in there
+  // widens `alias` to a union and takes `metafile` and `outputFiles` down with
+  // it.
+  /** @type {Record<string, string>} */
+  const alias = withReactNativeAlias
+    ? { "react-native": "react-native-web" }
+    : {};
+
   const result = await build({
-    alias: { "react-native": "react-native-web" },
+    alias,
     bundle: true,
     define: {
       __DEV__: "false",
@@ -90,9 +105,13 @@ const isRunDirectly =
 
 if (isRunDirectly) {
   const { gzip, metafile, minified } = await measureWebBundle();
+  const withoutAlias = await measureWebBundle({ withReactNativeAlias: false });
 
   console.log(`minified: ${formatBytes(minified)} (${minified} bytes)`);
   console.log(`gzipped:  ${formatBytes(gzip)} (${gzip} bytes)`);
+  console.log(
+    `\nwithout the react-native -> react-native-web alias: ${formatBytes(withoutAlias.minified)} minified, ${formatBytes(withoutAlias.gzip)} gzipped`,
+  );
   console.log("\nsource bytes per package");
 
   for (const entry of summarizeInputs(metafile)) {

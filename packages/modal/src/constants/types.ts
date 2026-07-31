@@ -1,7 +1,3 @@
-import type Animated from "react-native-reanimated";
-
-import type { StyleProp, ViewStyle } from "react-native";
-
 /** A component factory rendered as the body of a modal stack entry. */
 export type ModalChildren = React.FC;
 
@@ -25,7 +21,17 @@ export type HideReturn<T> =
     }
   | { reason: MagicModalHideReason.INTENTIONAL_HIDE; data: T };
 
-export type ModalProps = {
+/**
+ * Every modal option whose type is the same on every platform.
+ *
+ * The style-typed options are not here, because they are not the same: the
+ * React Native entry types `style` as `StyleProp<ViewStyle>` and takes
+ * Reanimated `entering`/`exiting` builders, while the browser entry types
+ * `style` as `React.CSSProperties` and has no Reanimated to build from. Each
+ * entry point declares its own `ModalProps` on top of this — see
+ * `types.react-native.ts` and `types.browser.ts`.
+ */
+export type ModalConfigCommon = {
   /**
    * Accessible name announced for the modal container.
    *
@@ -81,13 +87,6 @@ export type ModalProps = {
   onBackdropPress: (({ hide }: { hide: HookHideFunction }) => void) | undefined;
 
   /**
-   * Custom React Native style for the animated modal container.
-   * @default {}
-   * @example { backgroundColor: 'red', padding: 10 }
-   */
-  style: StyleProp<ViewStyle>;
-
-  /**
    * Damping factor for the swipe gesture.
    * @default 0.2
    */
@@ -106,39 +105,33 @@ export type ModalProps = {
    * @default 500
    */
   swipeVelocityThreshold: number;
-} & {
-  /**
-   * Reanimated entering animation for the modal content.
-   *
-   * React Native only. The browser entry has no Reanimated in it, so it plays
-   * its own CSS-timed entrance built from `swipeDirection` and
-   * `animationInTiming` and ignores this.
-   * @default undefined
-   * @platform ios, android
-   */
-  entering?: React.ComponentProps<typeof Animated.View>["entering"];
+};
 
-  /**
-   * Reanimated exiting animation for the modal content.
-   *
-   * React Native only, and only on iOS and Android for the same reason as
-   * {@link ModalProps.entering}.
-   * @default undefined
-   * @platform ios, android
-   */
-  exiting?: React.ComponentProps<typeof Animated.View>["exiting"];
+/**
+ * The config the portal, the handler and the stack move around.
+ *
+ * Deliberately not the public `ModalProps`: nothing between `magicModal.show`
+ * and the platform's chrome reads a style-typed option, so nothing in between
+ * needs to know which platform's types are in play. The chrome that does read
+ * them narrows this to its own entry's `ModalProps`.
+ */
+export type ModalProps = ModalConfigCommon & {
+  style?: unknown;
+  entering?: unknown;
+  exiting?: unknown;
 };
 
 /**
  * What the portal hands each entry in the modal stack.
  *
- * `magic-modal.tsx` and `magic-modal.browser.tsx` both satisfy this; the portal
- * is handed whichever one the platform's entry point pulled in. The last two
- * fields only ever move on the browser chrome — see `createMagicModalPortal`.
+ * `magic-modal.tsx` and `magic-modal.browser.tsx` both satisfy this, each with
+ * its own `TConfig`; the portal is handed whichever one the platform's entry
+ * point pulled in. The last two fields only ever move on the browser chrome —
+ * see `createMagicModalPortal`.
  */
-export type ModalStackEntryProps = {
+export type ModalStackEntryProps<TConfig extends ModalProps = ModalProps> = {
   children: ModalChildren;
-  config: ModalProps;
+  config: TConfig;
   /** True while the entry is dismissed but still playing its exit animation. */
   isExiting: boolean;
   isTopmost: boolean;
@@ -172,7 +165,12 @@ export type DisableFullWindowOverlayFunction = () => void;
 
 export type HookHideFunction = <T>(props: HideReturn<T>) => void;
 
-/** Per-modal overrides accepted by `magicModal.show`. */
+/**
+ * Per-modal overrides accepted by `magicModal.show`.
+ *
+ * The exported one is per entry point, because {@link ModalProps} is. This is
+ * the internal, platform-agnostic shape.
+ */
 export type NewConfigProps = Partial<ModalProps>;
 
 /** Explains why a modal promise resolved. */

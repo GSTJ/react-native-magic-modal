@@ -10,14 +10,21 @@ const browserOutputFiles = ["dist/index.runtime.js", "dist/index.runtime.cjs"];
 const privateScreensImport = "react-native-screens/src/";
 
 /**
- * Every native-only package the browser entry has to stay clear of.
+ * Every React Native package the browser entry has to stay clear of.
  *
- * The three animation and gesture packages are the expensive ones: together
- * they were 62% of what a web app downloaded for this library before the
+ * `react-native` itself is on the list as of v10.1. The browser chrome renders
+ * plain DOM elements, so a web app needs neither react-native nor
+ * react-native-web installed, and neither one is 84% of its download any more.
+ * The animation and gesture packages went in the release before, when the
  * browser chrome grew its own Web Animations API and Pointer Events
- * implementation. Screens has been out since the portal split.
+ * implementation.
+ *
+ * `react-native` matching is anchored on the quote that follows it, so
+ * `react-native-magic-modal` in a doc example is not a hit.
  */
 const nativeOnlyPackages = [
+  "react-native",
+  "react-native-web",
   "react-native-gesture-handler",
   "react-native-reanimated",
   "react-native-screens",
@@ -26,12 +33,12 @@ const nativeOnlyPackages = [
 
 /**
  * The gzipped ceiling for what a web app downloads, measured the way
- * `measure-web-bundle.mjs` measures it. Set roughly 20% above the real number,
- * so ordinary changes pass and anything that drags a native package back in
- * fails loudly. Re-run `node tools/measure-web-bundle.mjs` and move it
+ * `measure-web-bundle.mjs` measures it. Set roughly 25% above the real number,
+ * so ordinary changes pass and anything that drags a React Native package back
+ * in fails loudly. Re-run `node tools/measure-web-bundle.mjs` and move it
  * deliberately.
  */
-const gzipBudgetInBytes = 40_000;
+const gzipBudgetInBytes = 6_800;
 const packageJSON = JSON.parse(
   await readFile(new URL("../package.json", import.meta.url), {
     encoding: "utf8",
@@ -114,7 +121,7 @@ for (const { output, outputFile } of browserOutputs) {
 
     if (reference.test(code)) {
       throw new Error(
-        `${outputFile} imports ${packageName}, which is native-only. The browser chrome in src/components/magic-modal.browser.tsx exists so the web entry never needs it.`,
+        `${outputFile} imports ${packageName}, which is React Native only. The browser chrome in src/components/magic-modal.browser.tsx renders DOM elements so the web entry never needs it.`,
       );
     }
   }
@@ -124,8 +131,18 @@ for (const { output, outputFile } of browserOutputs) {
 // browser entry the way a web bundler does catches the rest: a package pulled in
 // through a re-export, a `.web.js` variant, or anything else that arrives
 // without its name appearing in the output.
+//
+// Measured twice. With the `react-native` -> `react-native-web` alias, because
+// that is what a react-native-web app configures and the number has to hold
+// there. Without it, because a web-only app has neither package installed, and
+// a bundle that only stays small because an alias redirected something is not
+// actually independent of it.
 const { gzip, metafile, minified } = await measureWebBundle();
-const resolvedInputs = Object.keys(metafile.inputs);
+const withoutAlias = await measureWebBundle({ withReactNativeAlias: false });
+const resolvedInputs = [
+  ...Object.keys(metafile.inputs),
+  ...Object.keys(withoutAlias.metafile.inputs),
+];
 
 for (const packageName of nativeOnlyPackages) {
   const pulledIn = resolvedInputs.find((input) =>
@@ -134,14 +151,45 @@ for (const packageName of nativeOnlyPackages) {
 
   if (pulledIn) {
     throw new Error(
-      `Bundling the browser entry pulls in ${packageName} (${pulledIn}), which is native-only.`,
+      `Bundling the browser entry pulls in ${packageName} (${pulledIn}), which is React Native only.`,
     );
   }
+}
+
+if (gzip !== withoutAlias.gzip) {
+  throw new Error(
+    `The browser entry is ${formatBytes(gzip)} gzipped with the react-native alias and ${formatBytes(withoutAlias.gzip)} without it. It resolves something through react-native-web, so a web-only app cannot drop the dependency.`,
+  );
 }
 
 if (gzip > gzipBudgetInBytes) {
   throw new Error(
     `The browser entry gzips to ${formatBytes(gzip)}, over the ${formatBytes(gzipBudgetInBytes)} budget. Run \`node tools/measure-web-bundle.mjs\` to see what grew.`,
+  );
+}
+
+// Server rendering imports the module before anything has a DOM. A `document`
+// or `window` read at module scope is a crash in a Next.js server component,
+// and it is the kind of thing that only shows up in someone else's build.
+// Resolved through a URL rather than a bare specifier: `dist` is this script's
+// own input, so it does not exist when `typecheck` runs and tsc would report
+// the literal as an unresolvable module. Turbo runs the two tasks side by side.
+const { MagicModalPortal } = await import(
+  new URL("../dist/index.js", import.meta.url).href
+);
+const { createElement } = await import("react");
+const { renderToStaticMarkup } = await import("react-dom/server");
+const serverMarkup = renderToStaticMarkup(createElement(MagicModalPortal));
+
+if (!serverMarkup.includes('data-testid="magic-modal-portal"')) {
+  throw new Error(
+    `The browser entry rendered no portal on the server. Got: ${serverMarkup}`,
+  );
+}
+
+if (!serverMarkup.includes("<style>")) {
+  throw new Error(
+    "The server-rendered portal carries no stylesheet, so a modal would paint unstyled before hydration.",
   );
 }
 
@@ -199,5 +247,6 @@ console.log(
   `✓ Web package boundary: runtime guard loads first, browser omits ${nativeOnlyPackages.join(", ")}`,
 );
 console.log(
-  `✓ Web bundle: ${formatBytes(minified)} minified, ${formatBytes(gzip)} gzipped (budget ${formatBytes(gzipBudgetInBytes)})`,
+  `✓ Web bundle: ${formatBytes(minified)} minified, ${formatBytes(gzip)} gzipped (budget ${formatBytes(gzipBudgetInBytes)}), identical without the react-native alias`,
 );
+console.log("✓ Web SSR: the portal and its stylesheet render without a DOM");

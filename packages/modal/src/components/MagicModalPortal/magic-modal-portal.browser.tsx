@@ -1,8 +1,13 @@
 import type { ModalStackLeave } from "./magic-modal-portal-base";
 
 import { MagicModal } from "../magic-modal.browser";
-import { FullWindowOverlay } from "./full-window-overlay.browser";
+import {
+  FullWindowOverlay,
+  isFullWindowOverlaySupported,
+} from "./full-window-overlay.browser";
 import { createMagicModalPortal } from "./magic-modal-portal-base";
+import { PortalContainer } from "./portal-container.browser";
+import { subscribeToSystemBack } from "./system-back.browser";
 
 /**
  * Keeps a dismissed entry mounted so its exit animation has something to play
@@ -18,12 +23,16 @@ const markExiting: ModalStackLeave = (modals, leaving) =>
   );
 
 /**
- * Browser portal. FullWindowOverlay is a fragment here because it is an
- * iOS-only capability, and the chrome is the Web Animations API one, so
- * nothing in this graph reaches Reanimated, gesture-handler or Worklets.
+ * Browser portal. Every piece the platform decides is the DOM one here: plain
+ * elements for the container, no full-window overlay, no hardware back button,
+ * and the Web Animations API chrome. Nothing in this graph reaches
+ * react-native, react-native-web, Reanimated, gesture-handler or Worklets.
  */
 export const MagicModalPortal = createMagicModalPortal({
   FullWindowOverlay,
+  isFullWindowOverlaySupported,
+  PortalContainer,
   StackEntry: MagicModal,
   leaveStack: markExiting,
+  subscribeToSystemBack,
 });

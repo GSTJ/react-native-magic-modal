@@ -213,9 +213,27 @@ its visible heading, controls, form labels, and status messages.
 }
 ```
 
+The modal container itself takes CSS through the `style` option:
+
+```tsx
+magicModal.show(ConfirmationModal, {
+  style: { justifyContent: "flex-end", paddingInline: 16 },
+});
+```
+
+<Callout type="warn" title="`style` is CSS on the web as of v10.1">
+  It used to be `StyleProp<ViewStyle>`, translated at runtime by React Native
+  Web. The browser bundle has no React Native Web in it any more, so `style` is
+  `React.CSSProperties` here: one object, no arrays, and CSS property names —
+  `paddingInline` rather than `paddingHorizontal`, `boxShadow` rather than
+  `shadowColor`. See [Container
+  style](/docs/reference/modal-props#container-style) for the full list. The
+  React Native entry is unchanged.
+</Callout>
+
 <Callout type="info" title="Use a CSS class for complex responsive styles">
-  React Native Web accepts shared `StyleSheet` values. A web-only modal can also
-  render semantic HTML and use a CSS class when it needs media queries or
+  Inline `style` cannot express a media query. A web-only modal can render
+  semantic HTML and reach for a CSS class when it needs one, or any other
   browser-specific styling.
 </Callout>
 

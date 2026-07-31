@@ -48,10 +48,15 @@ const nativeOutputs = [
 ];
 
 /**
- * The packages the browser entry exists to avoid. Reanimated, gesture-handler
- * and Worklets were 62% of the web bundle before it grew its own chrome.
+ * The packages the browser entry exists to avoid.
+ *
+ * Reanimated, gesture-handler and Worklets were 62% of the web bundle before it
+ * grew its own chrome; react-native-web and its style pipeline were 84% of what
+ * was left. A web-only application installs none of them.
  */
 const nativeOnlyPackages = [
+  "react-native",
+  "react-native-web",
   "react-native-gesture-handler",
   "react-native-reanimated",
   "react-native-screens",
@@ -59,7 +64,7 @@ const nativeOnlyPackages = [
 ];
 
 describe("built browser entry", () => {
-  it.each(browserOutputs)("keeps native-only packages out of %s", (file) => {
+  it.each(browserOutputs)("keeps React Native packages out of %s", (file) => {
     const output = readDist(file);
 
     for (const packageName of nativeOnlyPackages) {
@@ -73,30 +78,46 @@ describe("built browser entry", () => {
     }
   });
 
-  it.each(browserOutputs)("ships the Web Animations chrome in %s", (file) => {
+  it.each(browserOutputs)("ships the DOM chrome in %s", (file) => {
     const output = readDist(file);
+    // Comments go first: several of them name the very things being asserted
+    // absent, because they explain why those things are gone.
+    const code = stripComments(output);
 
     // The browser chrome drives motion by hand rather than through Reanimated's
     // animated components, so neither helper can be in here.
-    expect(output).not.toContain("createAnimatedComponent");
-    expect(output).not.toContain("useAnimatedStyle");
+    expect(code).not.toContain("createAnimatedComponent");
+    expect(code).not.toContain("useAnimatedStyle");
+    // Nor lay out through react-native-web's style pipeline, which is what a
+    // `StyleSheet.create` call would reach.
+    expect(code).not.toContain("StyleSheet.create");
     // The tree itself is unchanged, which is what keeps the test IDs and the
     // accessibility contract identical across platforms.
-    expect(output).toContain("magic-modal-motion-layer");
-    expect(output).toContain("magic-modal-animation-layer");
+    expect(code).toContain("magic-modal-motion-layer");
+    expect(code).toContain("magic-modal-animation-layer");
+    // The layout react-native-web used to compile, shipped as static CSS.
+    expect(code).toContain("magic-modal-box-none");
   });
 
-  it("only reaches react-native, which a web bundler aliases", () => {
+  it("reaches nothing but react", () => {
     const imported = [
       ...stripComments(readDist("index.runtime.js")).matchAll(
         /from\s*['"]([^'".][^'"]*)['"]/g,
       ),
     ].map(([, specifier]) => specifier);
 
-    expect([...new Set(imported)].sort()).toStrictEqual([
-      "react",
-      "react-native",
-    ]);
+    expect([...new Set(imported)].sort()).toStrictEqual(["react"]);
+  });
+
+  it("declares the web style prop as CSS, not a React Native style", () => {
+    const types = readDist("index.d.ts");
+
+    expect(types).toContain("style: CSSProperties");
+    expect(types).not.toContain("StyleProp<ViewStyle>;");
+    // A web consumer has no react-native types installed, so the browser
+    // declaration file cannot reference any.
+    expect(importsPackage(types, "react-native")).toBe(false);
+    expect(importsPackage(types, "react-native-reanimated")).toBe(false);
   });
 });
 
@@ -115,4 +136,11 @@ describe("built React Native entry", () => {
       expect(readDist(file)).not.toContain("react-native-screens/src/");
     },
   );
+
+  it("keeps the React Native style prop", () => {
+    const types = readDist("index.react-native.d.ts");
+
+    expect(types).toContain("style: StyleProp<ViewStyle>");
+    expect(types).not.toContain("style: CSSProperties");
+  });
 });

@@ -11,7 +11,7 @@ import type {
   NewConfigProps,
 } from "../../constants/types";
 
-import type { ComponentType, ElementType } from "react";
+import type { ComponentType, ElementType, ReactNode } from "react";
 
 import React, {
   memo,
@@ -21,7 +21,6 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import { BackHandler, Platform, StyleSheet, View } from "react-native";
 
 import {
   ANIMATION_DURATION_IN_MS,
@@ -64,6 +63,29 @@ export type ModalStackLeave = (
 
 const dropImmediately: ModalStackLeave = (modals, leaving) =>
   modals.filter((modal) => modal.id !== leaving.id);
+
+/**
+ * The portal's outermost box: full-bleed, transparent to presses, and in or out
+ * of the accessibility tree depending on whether anything is open.
+ *
+ * Injected because it is a `View` on React Native and a `div` on the web, and
+ * because the browser one also carries the chrome's stylesheet.
+ */
+export type PortalContainerProps = {
+  children: ReactNode;
+  hasLiveModals: boolean;
+};
+
+/**
+ * Subscribes to the platform's system back action, returning an unsubscribe.
+ *
+ * Android's hardware back on React Native; nothing at all in a browser, where
+ * the equivalent gesture is Escape and the chrome's focus trap already owns it.
+ * The handler returns true when it consumed the press.
+ */
+export type SystemBackSubscription = (
+  onSystemBack: () => boolean,
+) => () => void;
 
 const getLiveModals = (modals: ModalStackItem[]) =>
   modals.filter((modal) => !modal.isExiting);
@@ -110,18 +132,31 @@ const createModalHandle = <T,>(
  * }
  * ```
  */
-export const createMagicModalPortal = ({
+export const createMagicModalPortal = <
+  TConfig extends ModalProps = ModalProps,
+>({
   FullWindowOverlay,
+  isFullWindowOverlaySupported,
+  PortalContainer,
   StackEntry,
   leaveStack = dropImmediately,
+  subscribeToSystemBack,
 }: {
   FullWindowOverlay: ElementType;
   /**
-   * The platform's modal chrome. Injected rather than imported so the browser
-   * bundle never reaches the Reanimated and gesture-handler one.
+   * Whether the platform has a full-window overlay at all. True only on iOS,
+   * and injected so this file needs no `Platform` to work that out.
    */
-  StackEntry: ComponentType<ModalStackEntryProps>;
+  isFullWindowOverlaySupported: boolean;
+  PortalContainer: ComponentType<PortalContainerProps>;
+  /**
+   * The platform's modal chrome. Injected rather than imported so the browser
+   * bundle never reaches the Reanimated and gesture-handler one, and so this
+   * file — which both platforms share — needs no react-native of its own.
+   */
+  StackEntry: ComponentType<ModalStackEntryProps<TConfig>>;
   leaveStack?: ModalStackLeave;
+  subscribeToSystemBack: SystemBackSubscription;
 }): React.FC =>
   memo(() => {
     const [modals, setModals] = React.useState<ModalStackItem[]>([]);
@@ -314,38 +349,31 @@ export const createMagicModalPortal = ({
     }, [isOverlayMounted, modals]);
 
     useEffect(() => {
-      if (Platform.OS === "web") {
-        return;
-      }
+      return subscribeToSystemBack(() => {
+        const lastModal = getLiveModals(modals).at(-1);
 
-      const backHandler = BackHandler.addEventListener(
-        "hardwareBackPress",
-        () => {
-          const lastModal = getLiveModals(modals).at(-1);
+        if (!lastModal) {
+          return false;
+        }
 
-          if (!lastModal) {
-            return false;
-          }
+        if (lastModal.config.onBackButtonPress) {
+          lastModal.config.onBackButtonPress({
+            hide: (props) => {
+              _hide(props, { modalID: lastModal.id });
+            },
+          });
+        } else {
+          _hide(
+            { reason: MagicModalHideReason.BACK_BUTTON_PRESS },
+            { modalID: lastModal.id },
+          );
+        }
 
-          if (lastModal.config.onBackButtonPress) {
-            lastModal.config.onBackButtonPress({
-              hide: (props) => {
-                _hide(props, { modalID: lastModal.id });
-              },
-            });
-          } else {
-            _hide(
-              { reason: MagicModalHideReason.BACK_BUTTON_PRESS },
-              { modalID: lastModal.id },
-            );
-          }
-
-          return true;
-        },
-      );
-      return () => {
-        backHandler.remove();
-      };
+        return true;
+      });
+      // `subscribeToSystemBack` closes over `createMagicModalPortal`'s
+      // argument, which is fixed for the lifetime of the component this
+      // returns. It is not a render value, so it is not a dependency.
     }, [_hide, modals]);
 
     const hide = useCallback<GlobalHideFunction>(
@@ -386,7 +414,11 @@ export const createMagicModalPortal = ({
           return (
             <MagicModalProvider key={id} hide={hideFunction}>
               <StackEntry
-                config={config}
+                // The stack is platform-agnostic and stores the neutral
+                // `ModalProps`. Which platform's style-typed options are in
+                // there was decided by the entry point that supplied the
+                // chrome, and the chrome is the only thing that reads them.
+                config={config as TConfig}
                 isExiting={Boolean(isExiting)}
                 isTopmost={id === topmostID}
                 onExitFinished={() => {
@@ -402,7 +434,9 @@ export const createMagicModalPortal = ({
     }, [modals, removeModal]);
 
     const Overlay =
-      fullWindowOverlayEnabled && isOverlayMounted && Platform.OS === "ios"
+      fullWindowOverlayEnabled &&
+      isOverlayMounted &&
+      isFullWindowOverlaySupported
         ? FullWindowOverlay
         : React.Fragment;
 
@@ -415,24 +449,9 @@ export const createMagicModalPortal = ({
      react-navigation modals. Only the overlay wrapper comes and goes. */
     return (
       <Overlay>
-        <View
-          accessibilityElementsHidden={!hasLiveModals}
-          accessibilityViewIsModal={hasLiveModals}
-          aria-hidden={!hasLiveModals}
-          importantForAccessibility={
-            hasLiveModals ? "auto" : "no-hide-descendants"
-          }
-          style={[StyleSheet.absoluteFill, styles.wrapper]}
-          testID="magic-modal-portal"
-        >
+        <PortalContainer hasLiveModals={hasLiveModals}>
           {modalList}
-        </View>
+        </PortalContainer>
       </Overlay>
     );
   });
-
-const styles = StyleSheet.create({
-  wrapper: {
-    pointerEvents: "box-none",
-  },
-});

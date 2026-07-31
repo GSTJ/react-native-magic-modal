@@ -1,4 +1,7 @@
 import type { HideReturn } from "../constants/types";
+import type { NewConfigProps } from "../constants/types.browser";
+
+import type { CSSProperties } from "react";
 
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
@@ -8,8 +11,10 @@ import { magicModal } from "../utils/magic-modal-handler";
 import { MagicModalPortal } from "./MagicModalPortal/magic-modal-portal.browser";
 
 /**
- * The browser chrome, rendered in jsdom with `react-native` aliased to
- * react-native-web — the substitution every web app makes.
+ * The browser chrome, rendered in jsdom.
+ *
+ * There is no react-native-web underneath any more: the chrome renders `div`s
+ * and reads `window`, so jsdom is the whole environment it needs.
  *
  * jsdom has no Web Animations API, so `Element.animate` is faked here with an
  * animation whose `finished` promise this suite resolves by hand. That is the
@@ -76,7 +81,10 @@ const query = (selector: string) => document.querySelectorAll(selector);
 const stackEntries = () =>
   query('[data-testid="magic-modal-stack-entry"]').length;
 
-const dialog = () => document.querySelector('[role="dialog"]');
+const dialog = () => document.querySelector<HTMLElement>('[role="dialog"]');
+
+const byTestID = (testID: string) =>
+  document.querySelector<HTMLElement>(`[data-testid="${testID}"]`);
 
 const render = async () => {
   await act(async () => {
@@ -96,7 +104,7 @@ const ModalContent = () => (
  * from an `async` helper would make the helper adopt it — `await show()` would
  * then hang until something dismissed the modal.
  */
-const show = async (config?: Parameters<typeof magicModal.show>[1]) => {
+const show = async (config?: NewConfigProps) => {
   let handle: Promise<HideReturn<unknown>> | undefined;
 
   await act(async () => {
@@ -112,15 +120,11 @@ beforeAll(() => {
   // jsdom does not implement the Web Animations API at all.
   Element.prototype.animate = fakeAnimate;
 
-  // jsdom lays nothing out, so `document.documentElement` measures 0x0 and
-  // react-native-web's `useWindowDimensions` reports a zero-sized window. The
-  // swipe reads it to work out how far off screen is, so give it a viewport.
-  Object.defineProperty(document.documentElement, "clientHeight", {
-    value: viewport.height,
-  });
-  Object.defineProperty(document.documentElement, "clientWidth", {
-    value: viewport.width,
-  });
+  // The swipe reads the viewport to work out how far off screen is. jsdom's
+  // defaults are already 1024x768; pinning them keeps the arithmetic below
+  // readable and independent of the jsdom version.
+  window.innerHeight = viewport.height;
+  window.innerWidth = viewport.width;
 });
 
 beforeEach(() => {
@@ -146,6 +150,66 @@ describe("browser chrome", () => {
     expect(dialog()?.getAttribute("aria-label")).toBe("Confirm");
     expect(dialog()?.getAttribute("aria-modal")).toBe("true");
     expect(stackEntries()).toBe(1);
+  });
+
+  it("renders plain DOM elements, not react-native-web components", async () => {
+    await render();
+    await show();
+
+    for (const testID of [
+      "magic-modal-portal",
+      "magic-modal-stack-entry",
+      "magic-modal-backdrop",
+      "magic-modal-motion-layer",
+      "magic-modal-animation-layer",
+      "magic-modal-dialog",
+    ]) {
+      expect(byTestID(testID)?.tagName).toBe("DIV");
+    }
+
+    // The layout react-native-web used to compile at runtime, as one static
+    // stylesheet the portal renders. A single copy for the whole application.
+    const stylesheets = [...query("style")].filter(({ textContent }) =>
+      textContent?.includes("magic-modal-box-none"),
+    );
+
+    expect(stylesheets).toHaveLength(1);
+  });
+
+  it("applies the CSS style prop to the modal's own box", async () => {
+    await render();
+    await show({ style: { background: "white", padding: 24 } });
+
+    const dialogStyle = byTestID("magic-modal-dialog")?.style;
+
+    expect(dialogStyle?.background).toBe("white");
+    // React writes a unitless number the way it does everywhere else.
+    expect(dialogStyle?.padding).toBe("24px");
+    expect(byTestID("magic-modal-animation-layer")?.style.padding).toBe("24px");
+  });
+
+  it("warns once about a React Native style instead of applying it", async () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      await render();
+      // The array form TypeScript now rejects, arriving from untyped
+      // JavaScript. It cannot mean anything to a DOM `style` attribute.
+      await show({ style: [{ padding: 10 }] as unknown as CSSProperties });
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0]?.[0]).toContain("React.CSSProperties");
+      expect(byTestID("magic-modal-dialog")?.getAttribute("style")).toBeNull();
+
+      // Once per process, however many modals repeat the mistake.
+      await show({
+        style: { paddingHorizontal: 10 } as unknown as CSSProperties,
+      });
+
+      expect(warn).toHaveBeenCalledTimes(1);
+    } finally {
+      warn.mockRestore();
+    }
   });
 
   it("plays an entrance built from the direction and the configured timing", async () => {
@@ -317,7 +381,7 @@ describe("swipe-to-dismiss", () => {
     await render();
     await show({ swipeDirection: "left" });
 
-    expect((dialog() as HTMLElement | null)?.style.touchAction).toBe("pan-y");
+    expect(dialog()?.style.touchAction).toBe("pan-y");
   });
 
   it("leaves the browser alone when the swipe is disabled", async () => {
@@ -326,7 +390,7 @@ describe("swipe-to-dismiss", () => {
 
     // jsdom has no `touch-action` in its CSS model, so an untouched property
     // reads back as undefined rather than the empty string a browser gives.
-    expect((dialog() as HTMLElement | null)?.style.touchAction).toBeFalsy();
+    expect(dialog()?.style.touchAction).toBeFalsy();
 
     await flick(dialog()!, { time: 100, y: 300 });
 
@@ -342,12 +406,8 @@ describe("swipe-to-dismiss", () => {
       firePointer(dialog()!, "pointermove", { time: 200, x: 100, y: 400 });
     });
 
-    const motion = document.querySelector<HTMLElement>(
-      '[data-testid="magic-modal-motion-layer"]',
-    );
-    const backdrop = document.querySelector<HTMLElement>(
-      '[data-testid="magic-modal-backdrop"]',
-    );
+    const motion = byTestID("magic-modal-motion-layer");
+    const backdrop = byTestID("magic-modal-backdrop");
 
     expect(motion?.style.transform).toBe("translate3d(0px, 300px, 0)");
     // The backdrop clears in step with the drag: 300px of a 768px screen.
@@ -380,9 +440,7 @@ describe("swipe-to-dismiss", () => {
 
     expect(query('[role="dialog"]')).toHaveLength(1);
 
-    const motion = document.querySelector<HTMLElement>(
-      '[data-testid="magic-modal-motion-layer"]',
-    );
+    const motion = byTestID("magic-modal-motion-layer");
 
     expect(motion?.style.transform).toBe("translate3d(0px, 0px, 0)");
   });
@@ -392,9 +450,7 @@ describe("swipe-to-dismiss", () => {
     await show({ swipeDirection: "down" });
 
     const onClick = jest.fn();
-    const button = document.querySelector<HTMLElement>(
-      '[data-testid="modal-button"]',
-    );
+    const button = byTestID("modal-button");
     button?.addEventListener("click", onClick);
 
     await flick(dialog()!, { time: 2000, y: 300 });

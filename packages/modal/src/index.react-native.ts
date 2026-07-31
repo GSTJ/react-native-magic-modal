@@ -1,12 +1,25 @@
+import type { ModalProps } from "./constants/types.react-native";
+import type { MagicModalAPI } from "./utils/magic-modal-handler";
+
+import { magicModal as magicModalCore } from "./utils/magic-modal-handler";
+
 export { MagicModalPortal } from "./components/MagicModalPortal/magic-modal-portal";
 export {
   MagicModalHideReason,
   type HideReturn,
-  type NewConfigProps,
   type ModalChildren,
   type ModalHandle,
   type Direction,
-  type ModalProps,
 } from "./constants/types";
-export { magicModal } from "./utils/magic-modal-handler";
+export type {
+  ModalProps,
+  NewConfigProps,
+} from "./constants/types.react-native";
 export { useMagicModal } from "./components/magic-modal-provider";
+
+/**
+ * The imperative modal API, typed for React Native: `style` is a
+ * `StyleProp<ViewStyle>`, and {@link ModalProps.entering} and
+ * {@link ModalProps.exiting} take Reanimated builders.
+ */
+export const magicModal: MagicModalAPI<ModalProps> = magicModalCore;
