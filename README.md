@@ -1,33 +1,51 @@
-<h1 align="center">React Native Magic Modal</h1>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/header/graph.svg?title=React+Native+Magic+Modal&amp;subtitle=Awaitable%2C+type-safe+modals+for+React+Native+and+web&amp;logo=react&amp;mode=dark&amp;border=false" />
+    <img alt="React Native Magic Modal" src="https://shieldcn.dev/header/graph.svg?title=React+Native+Magic+Modal&amp;subtitle=Awaitable%2C+type-safe+modals+for+React+Native+and+web&amp;logo=react&amp;mode=light&amp;border=false" />
+  </picture>
+</p>
 
 <p align="center">Mount one portal. Open a modal from any async flow and await a typed result on Expo, React Native, or the web.</p>
 
-<img
-  alt="A rating flow moving from magicModal.show to a typed close result"
-  src="https://raw.githubusercontent.com/GSTJ/react-native-magic-modal/main/media/magic-modal-demo.gif"
-/>
-
 <p align="center">
-  <a aria-label="NPM Version" href="https://www.npmjs.com/package/react-native-magic-modal">
-    <img alt="" src="https://img.shields.io/npm/v/react-native-magic-modal.svg?label=NPM&logo=npm&style=for-the-badge&color=0470FF&logoColor=white">
-  </a>
-  <a aria-label="NPM Download Count" href="https://www.npmjs.com/package/react-native-magic-modal">
-    <img alt="" src="https://img.shields.io/npm/dt/react-native-magic-modal?label=Downloads&style=for-the-badge&color=67ACF3">
-  </a>
-  <a aria-label="License" href="https://www.npmjs.com/package/react-native-magic-modal">
-    <img alt="" src="https://img.shields.io/npm/l/react-native-magic-modal?style=for-the-badge&color=F9DBBC">
-  </a>
+  <a aria-label="npm version" href="https://www.npmjs.com/package/react-native-magic-modal"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/npm/react-native-magic-modal.svg?variant=branded&amp;size=xs" />
+    <img alt="npm version" src="https://shieldcn.dev/npm/react-native-magic-modal.svg?variant=branded&amp;size=xs&amp;mode=light" />
+  </picture></a>
+  <a aria-label="npm downloads" href="https://www.npmjs.com/package/react-native-magic-modal"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/npm/react-native-magic-modal/downloads.svg?variant=branded&amp;size=xs" />
+    <img alt="npm downloads" src="https://shieldcn.dev/npm/react-native-magic-modal/downloads.svg?variant=branded&amp;size=xs&amp;mode=light" />
+  </picture></a>
+  <a aria-label="GitHub stars" href="https://github.com/GSTJ/react-native-magic-modal/stargazers"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/stars.svg?variant=branded&amp;size=xs" />
+    <img alt="GitHub stars" src="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/stars.svg?variant=branded&amp;size=xs&amp;mode=light" />
+  </picture></a>
+  <a aria-label="license" href="https://github.com/GSTJ/react-native-magic-modal/blob/main/LICENSE"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/license.svg?variant=branded&amp;size=xs" />
+    <img alt="license" src="https://shieldcn.dev/github/GSTJ/react-native-magic-modal/license.svg?variant=branded&amp;size=xs&amp;mode=light" />
+  </picture></a>
 </p>
+
 <p align="center">
   <a href="https://gstj.github.io/react-native-magic-modal/docs/">Docs</a> | <a href="https://github.com/gstj/react-native-magic-modal">GitHub</a> | <a href="https://gstj.github.io/react-native-magic-modal/docs/faq/">FAQ</a> | <a href="https://medium.com/@gabrieltaveira/you-have-been-using-react-native-modals-wrong-9b8c17de2f96">Article</a>
 </p>
 
+<p align="center">
+  <img
+    alt="A rating flow moving from magicModal.show to a typed close result"
+    src="https://raw.githubusercontent.com/GSTJ/react-native-magic-modal/main/media/magic-modal-demo.gif"
+  />
+</p>
+
 ## How it works
 
-`MagicModalPortal` owns a stack near the application root. Each `show()` call pushes one entry and
-returns an awaitable handle: a `Promise<HideReturn<T>>` carrying that entry's `modalID`, `update`,
-and `hide`. The modal calls `hide(data)` through
-`useMagicModal<T>()`. The caller resumes with submitted data or the exact dismissal reason.
+1. `MagicModalPortal` owns the modal stack. Mount it once, near the root.
+2. `magicModal.show()` pushes one entry and returns an awaitable handle.
+3. `useMagicModal().hide(data)` closes that entry with typed data.
+4. The handle resolves to `HideReturn<T>`, including the close reason.
+
+The handle is the promise itself, carrying that entry's `modalID`, `update`, and `hide`. The caller
+resumes with submitted data or the exact dismissal reason.
 
 ```tsx
 const result = await magicModal.show<ConfirmationResult>(ConfirmationModal, {
@@ -49,7 +67,7 @@ can open above the current modal without mixing their results.
 
 ## Installation
 
-Use the command for the runtime you ship. Expo chooses versions compatible with the installed SDK.
+Expo chooses versions compatible with the installed SDK.
 
 ### Expo Web
 
@@ -181,7 +199,7 @@ promise.
 
 ### Can a modal contain a ScrollView?
 
-Yes. Disable swipe dismissal so the gestures do not compete:
+Yes. Disable swipe dismissal:
 
 ```tsx
 magicModal.show(ScrollableModal, {
@@ -189,7 +207,7 @@ magicModal.show(ScrollableModal, {
 });
 ```
 
-Magic Modal does not implement snap points or nested scrolling.
+Magic Modal doesn't implement snap points or nested scrolling.
 
 ### How do I close a modal from outside its component?
 
