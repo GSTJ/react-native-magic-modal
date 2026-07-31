@@ -3,7 +3,7 @@ import { MagicModalHideReason } from "react-native-magic-modal";
 import { showMagicModal } from "../magic-modal";
 
 export async function typecheckMagicModalResult() {
-  const { promise } = showMagicModal({
+  const handle = showMagicModal({
     title: "Delete this project?",
     actions: [
       {
@@ -14,7 +14,7 @@ export async function typecheckMagicModalResult() {
     ],
   });
 
-  const result = await promise;
+  const result = await handle;
 
   if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE && result.data.type === "action") {
     const action: "delete" = result.data.value;

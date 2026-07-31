@@ -71,7 +71,7 @@ export const ModalDemo = () => {
       swipeDirection: undefined,
     });
 
-    setResult(describeResult(await entry.promise));
+    setResult(describeResult(await entry));
   };
 
   return (

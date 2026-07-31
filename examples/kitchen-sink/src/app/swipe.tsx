@@ -36,7 +36,7 @@ const SwipeScreen = () => {
 
     const result = await magicModal.show(() => <ExampleModal />, {
       swipeDirection,
-    }).promise;
+    });
 
     setReasons((previous) => ({
       ...previous,

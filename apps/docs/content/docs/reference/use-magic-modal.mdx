@@ -59,7 +59,7 @@ function ConfirmationModal() {
 export async function requestPublishApproval() {
   const result = await magicModal.show<Confirmation>(ConfirmationModal, {
     accessibilityLabel: "Confirm release publication",
-  }).promise;
+  });
 
   if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
     return result.data.approved;
@@ -78,12 +78,12 @@ reason and no `data`. Use `try`/`catch` for errors from the async work that foll
 
 ## Hook or imperative API
 
-| Situation                                               | API                                     |
-| ------------------------------------------------------- | --------------------------------------- |
-| The current modal closes itself                         | `useMagicModal<T>().hide(data)`         |
-| Application code opens a modal and waits for its result | `magicModal.show<T>(component).promise` |
-| Code outside the modal closes one known entry           | `magicModal.hide(data, { modalID })`    |
-| A logout or reset boundary clears the stack             | `magicModal.hideAll()`                  |
+| Situation                                               | API                                   |
+| ------------------------------------------------------- | ------------------------------------- |
+| The current modal closes itself                         | `useMagicModal<T>().hide(data)`       |
+| Application code opens a modal and waits for its result | `await magicModal.show<T>(component)` |
+| Code outside the modal closes one known entry           | `magicModal.hide(data, { modalID })`  |
+| A logout or reset boundary clears the stack             | `magicModal.hideAll()`                |
 
 For a modal that returns no data:
 

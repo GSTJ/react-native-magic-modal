@@ -3,7 +3,7 @@ title: Hide results
 description: Narrow the close reason to safely distinguish submitted data from cancellation.
 ---
 
-Every `show<T>().promise` resolves to `HideReturn<T>`:
+Every `show<T>()` resolves to `HideReturn<T>`:
 
 ```ts
 type HideReturn<T> =
@@ -25,7 +25,7 @@ Check the reason before reading `data`:
 ```tsx
 const result = await magicModal.show<FormValues>(FormModal, {
   accessibilityLabel: "Edit profile",
-}).promise;
+});
 
 if (result.reason === MagicModalHideReason.INTENTIONAL_HIDE) {
   await save(result.data);

@@ -13,7 +13,7 @@ Pass a localized `accessibilityLabel` with each modal:
 const result = await magicModal.show<ConfirmationResult>(ConfirmationModal, {
   accessibilityLabel: "Confirm account deletion",
   swipeDirection: undefined,
-}).promise;
+});
 ```
 
 The label names the dialog for assistive technology. Keep a matching visible heading inside the
@@ -108,7 +108,7 @@ Handle every close path in the caller:
 ```tsx
 const result = await magicModal.show<FormResult>(FormModal, {
   accessibilityLabel: "Create profile",
-}).promise;
+});
 
 switch (result.reason) {
   case MagicModalHideReason.INTENTIONAL_HIDE:

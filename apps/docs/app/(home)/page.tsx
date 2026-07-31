@@ -309,24 +309,24 @@ export default function HomePage() {
             What <code>magicModal.show()</code> returns
           </h2>
           <p>
-            Await the typed close result or target this stack entry by ID. The
-            advanced <code>update()</code> API replaces progress controlled
-            outside the modal.
+            The returned handle is itself the promise, so await it directly, or
+            target this stack entry by ID. The advanced <code>update()</code>{" "}
+            API replaces progress controlled outside the modal.
           </p>
         </div>
 
         <div className="mm-show-object" data-reveal>
-          <pre aria-label="The object returned by magicModal.show">
+          <pre aria-label="The handle returned by magicModal.show">
             <code>
-              <span>{"{"}</span>
-              {"\n  "}
-              <b>promise</b>
-              {": Promise<HideReturn<T>>;"}
+              <span>{"Promise<HideReturn<T>> & {"}</span>
               {"\n  "}
               <b>modalID</b>: string;
               {"\n  "}
               <b>update</b>
               {": (next: React.FC) => void;"}
+              {"\n  "}
+              <b>hide</b>
+              {": (data?: T) => void;"}
               {"\n"}
               <span>{"}"}</span>
             </code>
@@ -337,7 +337,7 @@ export default function HomePage() {
         <dl className="mm-show-ledger">
           <div data-reveal>
             <dt>
-              <code>promise</code>
+              <code>await handle</code>
               <span>01</span>
             </dt>
             <dd>Resolves when this entry closes.</dd>

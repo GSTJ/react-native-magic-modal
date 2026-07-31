@@ -389,7 +389,7 @@ export const OriginFlow = () => {
               <b>const</b> rating = <b>await</b> magicModal
               {"\n"}
               <i />
-              {"  "}.show&lt;RatingAnswer&gt;(RatingModal).promise;
+              {"  "}.show&lt;RatingAnswer&gt;(RatingModal);
             </span>
             <span
               className={activeCodeClass(activeIndex, 1)}
@@ -419,7 +419,7 @@ export const OriginFlow = () => {
               {"    "}? FeedbackModal : StoreReviewModal
               {"\n"}
               <i />
-              ).promise;
+              );
             </span>
             <span
               className={activeCodeClass(activeIndex, 3)}
@@ -429,7 +429,7 @@ export const OriginFlow = () => {
               <b>await</b> magicModal
               {"\n"}
               <i />
-              {"  "}.show(ThanksModal).promise;
+              {"  "}.show(ThanksModal);
             </span>
             <span
               className={activeCodeClass(activeIndex, 4)}

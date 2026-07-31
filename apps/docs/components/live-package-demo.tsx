@@ -352,7 +352,7 @@ export const LivePackageDemo = () => {
         [{ ...entry, result: "PENDING" }, ...current].slice(0, 6),
       );
 
-      void handle.promise.then((result) => {
+      void handle.then((result) => {
         setActiveEntries((current) =>
           current.filter(({ id }) => id !== handle.modalID),
         );
@@ -379,7 +379,7 @@ export const LivePackageDemo = () => {
       modalConfig,
     );
 
-    await notification.promise;
+    await notification;
   }, [showTracked]);
 
   const runRatingFlow = useCallback(
@@ -405,7 +405,7 @@ export const LivePackageDemo = () => {
         await openNotification();
       }
 
-      const ratingResult = await rating.promise;
+      const ratingResult = await rating;
 
       if (ratingResult.reason !== MagicModalHideReason.INTENTIONAL_HIDE) {
         record({
@@ -425,7 +425,7 @@ export const LivePackageDemo = () => {
           FeedbackPrompt,
           modalConfig,
         );
-        const feedbackResult = await feedback.promise;
+        const feedbackResult = await feedback;
 
         detail =
           feedbackResult.reason === MagicModalHideReason.INTENTIONAL_HIDE
@@ -437,7 +437,7 @@ export const LivePackageDemo = () => {
           StorePrompt,
           modalConfig,
         );
-        const storeResult = await store.promise;
+        const storeResult = await store;
 
         detail =
           storeResult.reason === MagicModalHideReason.INTENTIONAL_HIDE &&
@@ -451,7 +451,7 @@ export const LivePackageDemo = () => {
         createThanksPrompt(detail),
         modalConfig,
       );
-      await thanks.promise;
+      await thanks;
       setRatingRunning(false);
     },
     [openNotification, ratingRunning, record, showTracked, updateRunning],
@@ -475,7 +475,7 @@ export const LivePackageDemo = () => {
     );
     let resolved = false;
 
-    void handle.promise.then(() => {
+    void handle.then(() => {
       resolved = true;
     });
 
@@ -504,7 +504,7 @@ export const LivePackageDemo = () => {
       Promise.resolve(),
     );
 
-    await handle.promise;
+    await handle;
     setUpdateRunning(false);
   }, [ratingRunning, record, showTracked, updateRunning]);
 
@@ -638,7 +638,7 @@ export const LivePackageDemo = () => {
             <pre>
               <code>
                 <span>const</span> result = <span>await</span> <b>magicModal</b>
-                {"\n  "}.show(RatingPrompt){"\n  "}.promise
+                {"\n  "}.show(RatingPrompt)
               </code>
             </pre>
             <footer>
