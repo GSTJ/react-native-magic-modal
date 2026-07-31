@@ -10,10 +10,10 @@
     "dev": "remotion studio",
     "format": "oxfmt --check .",
     "format:fix": "oxfmt .",
-    "render": "remotion render MagicModalDemo ../../media/magic-modal-demo.mp4",
-    "render:all": "pnpm run render && pnpm run render:gif && pnpm run render:poster",
-    "render:gif": "remotion ffmpeg -y -i ../../media/magic-modal-demo.mp4 -filter_complex \"scale=960:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -r 12 -t 15 ../../media/magic-modal-demo.gif",
-    "render:poster": "remotion still MagicModalDemo ../../media/magic-modal-demo-poster.png --frame=130"
+    "render:all": "pnpm run render:gif && pnpm run render:poster",
+    "render:gif": "pnpm run render:intermediate && remotion ffmpeg -y -i out/intermediate.mp4 -filter_complex \"scale=960:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -r 12 -t 15 ../../media/magic-modal-demo.gif",
+    "render:intermediate": "remotion render MagicModalDemo out/intermediate.mp4",
+    "render:poster": "remotion still MagicModalSocial ../../media/magic-modal-social.png"
   },
   "dependencies": {
     "@remotion/cli": "4.0.500",

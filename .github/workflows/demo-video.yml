@@ -1,7 +1,12 @@
 name: 🎬 Demo Video
 
-# Re-renders apps/demo-video and overwrites three objects in R2. It writes
+# Re-renders apps/demo-video and overwrites two objects in R2. It writes
 # nothing back to the repository.
+#
+# The mp4 is not one of them. Remotion renders video, and the GIF recipe is a
+# second ffmpeg pass over that encode, so an mp4 exists on the runner — but it
+# is an intermediate, not a deliverable. It stays in the package's gitignored
+# out/ and is thrown away with the runner.
 #
 # media/ stays committed and stays the fallback: this job does not update it, so
 # a source change that lands here leaves the tree's copy behind until someone
@@ -17,7 +22,7 @@ on:
       - "apps/demo-video/**"
   workflow_dispatch:
 
-# Two overlapping runs would race each other writing the same three objects.
+# Two overlapping runs would race each other writing the same two objects.
 concurrency:
   group: render-demo-video
   cancel-in-progress: false
@@ -110,7 +115,7 @@ jobs:
       - name: 🔍 Report what was rendered
         run: |
           set -euo pipefail
-          for f in media/magic-modal-demo.mp4 media/magic-modal-demo.gif media/magic-modal-demo-poster.png; do
+          for f in media/magic-modal-demo.gif media/magic-modal-social.png; do
             echo "$f $(stat -c%s "$f") bytes  sha256=$(sha256sum "$f" | cut -d' ' -f1)"
           done
 
@@ -131,9 +136,8 @@ jobs:
               --cache-control "$ASSET_CACHE_CONTROL"
           }
 
-          put demo.mp4 media/magic-modal-demo.mp4 "video/mp4"
           put demo.gif media/magic-modal-demo.gif "image/gif"
-          put demo-poster.png media/magic-modal-demo-poster.png "image/png"
+          put social.png media/magic-modal-social.png "image/png"
 
       # wrangler reporting "Upload complete" is not evidence, and neither is a
       # 200. Read the objects back over HTTPS from the custom domain and check
@@ -173,8 +177,7 @@ jobs:
           # else. Cloudflare caches responses from an R2 custom domain,
           # including the 404s from before an object existed, so the bare URL
           # can lag a fresh upload. The README must link the bare URL.
-          check demo.mp4 media/magic-modal-demo.mp4 "video/mp4"
           check demo.gif media/magic-modal-demo.gif "image/gif"
-          check demo-poster.png media/magic-modal-demo-poster.png "image/png"
+          check social.png media/magic-modal-social.png "image/png"
 
-          echo "all three objects match the ones this run built"
+          echo "both objects match the ones this run built"
