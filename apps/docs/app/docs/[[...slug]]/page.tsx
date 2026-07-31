@@ -57,7 +57,7 @@ export async function generateMetadata(
   if (!page) notFound();
 
   const canonicalUrl = publicPaths.url(page.url);
-  const socialImage = publicPaths.url("/og.svg");
+  const socialImage = publicPaths.url("/og.png");
 
   return {
     alternates: {
@@ -66,7 +66,7 @@ export async function generateMetadata(
     description: page.data.description,
     openGraph: {
       description: page.data.description,
-      images: [{ alt: site.name, height: 630, url: socialImage, width: 1200 }],
+      images: [{ alt: site.name, height: 640, url: socialImage, width: 1280 }],
       siteName: site.name,
       title: page.data.title,
       type: "article",
