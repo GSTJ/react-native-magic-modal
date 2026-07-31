@@ -28,7 +28,7 @@
     "format:fix": {
       "cache": false
     },
-    // `build` and not `^build`: react-native-magic-modal's suite asserts the
+    // `build` and not `^build`: magic-modal's suite asserts the
     // platform split against its own dist, and the package has no workspace
     // dependencies for `^build` to reach.
     "test": {
@@ -47,7 +47,7 @@
     // packages/modal/README.md is gitignored and only exists once
     // `copy:readme` generates it, so the publish has to depend on it.
     // `^copy:readme` would ask for the task in this package's dependencies, and
-    // react-native-magic-modal has no workspace dependencies, so that resolves
+    // magic-modal has no workspace dependencies, so that resolves
     // to nothing.
     //
     // Uncached because publishing is a one-shot side effect with nothing on

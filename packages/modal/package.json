@@ -1,5 +1,5 @@
 {
-  "name": "react-native-magic-modal",
+  "name": "magic-modal",
   "version": "9.2.0",
   "description": "A magic modal that can be used imperatively from anywhere! 🦄",
   "keywords": [
@@ -9,6 +9,7 @@
     "modal",
     "nextjs",
     "react-native",
+    "react-native-magic-modal",
     "react-native-web",
     "web"
   ],

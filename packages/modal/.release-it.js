@@ -144,8 +144,8 @@ export default {
     tag: true,
     // We intentionally do NOT push the release commit/tag back to main from
     // CI. The repository's GH_PAT secret (dated 2024) is currently rejected
-    // by branch protection ("Permission to GSTJ/react-native-magic-modal.git
-    // denied to GSTJ"), which causes the entire publish workflow to fail
+    // by branch protection ("Permission to GSTJ/magic-modal.git denied to
+    // GSTJ"), which causes the entire publish workflow to fail
     // AFTER npm publish has already happened — leaving npm and main out of
     // sync and bricking the workflow forever after.
     //
