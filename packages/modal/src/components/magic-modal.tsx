@@ -43,15 +43,12 @@ import { TOUCH_SLOP } from "../constants/gestures";
 import { MagicModalHideReason } from "../constants/types";
 import { useInternalMagicModal } from "./magic-modal-provider";
 import { styles } from "./MagicModalPortal/magic-modal-portal.styles";
+import { MODAL_DIALOG_TEST_ID, useWebModalFocus } from "./modal-accessibility";
 import {
   getDialogAccessibilityProps,
   getStackEntryAccessibilityProps,
 } from "./nativeModal/modal-accessibility";
 import { PanGestureSurface } from "./panGesture";
-import {
-  MODAL_DIALOG_TEST_ID,
-  useWebModalFocus,
-} from "./webModal/modal-accessibility";
 
 export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 

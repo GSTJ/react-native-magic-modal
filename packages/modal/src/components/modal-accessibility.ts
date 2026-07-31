@@ -1,4 +1,4 @@
-import type { ModalChildren } from "../../constants/types";
+import type { ModalChildren } from "../constants/types";
 
 import { useEffect } from "react";
 

@@ -4,7 +4,7 @@ import type { ViewProps } from "react-native";
  * The React Native chrome's accessibility props.
  *
  * The same contract the browser chrome states in
- * `webModal/modal-accessibility.ts`, expressed in React Native props instead of
+ * `modal-accessibility.ts`, expressed in React Native props instead of
  * DOM attributes: `accessibilityElementsHidden` for VoiceOver,
  * `importantForAccessibility` for TalkBack, `onAccessibilityEscape` for the
  * iOS two-finger scrub, plus the `aria-*` names react-native-web reads.

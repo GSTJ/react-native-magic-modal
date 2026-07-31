@@ -18,7 +18,7 @@ import {
   getStackEntryAriaHidden,
   MODAL_DIALOG_TEST_ID,
   useWebModalFocus,
-} from "./webModal/modal-accessibility";
+} from "./modal-accessibility";
 import { resolveModalStyle } from "./webModal/modal-style-prop";
 import { classes, MODAL_CLASS } from "./webModal/modal-styles";
 import {
