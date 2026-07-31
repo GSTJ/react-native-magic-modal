@@ -1,7 +1,7 @@
 import { copyFile, mkdir, readdir, writeFile } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 
-export const deploymentBasePath = "/react-native-magic-modal";
+export const deploymentBasePath = "/magic-modal";
 
 export const legacyRedirects = {
   "enums/MagicModalHideReason.html": "/docs/reference/hide-results/",
