@@ -106,7 +106,45 @@ export type ModalProps = {
    * @default 500
    */
   swipeVelocityThreshold: number;
-} & Pick<React.ComponentProps<typeof Animated.View>, "entering" | "exiting">;
+} & {
+  /**
+   * Reanimated entering animation for the modal content.
+   *
+   * React Native only. The browser entry has no Reanimated in it, so it plays
+   * its own CSS-timed entrance built from `swipeDirection` and
+   * `animationInTiming` and ignores this.
+   * @default undefined
+   * @platform ios, android
+   */
+  entering?: React.ComponentProps<typeof Animated.View>["entering"];
+
+  /**
+   * Reanimated exiting animation for the modal content.
+   *
+   * React Native only, and only on iOS and Android for the same reason as
+   * {@link ModalProps.entering}.
+   * @default undefined
+   * @platform ios, android
+   */
+  exiting?: React.ComponentProps<typeof Animated.View>["exiting"];
+};
+
+/**
+ * What the portal hands each entry in the modal stack.
+ *
+ * `magic-modal.tsx` and `magic-modal.browser.tsx` both satisfy this; the portal
+ * is handed whichever one the platform's entry point pulled in. The last two
+ * fields only ever move on the browser chrome — see `createMagicModalPortal`.
+ */
+export type ModalStackEntryProps = {
+  children: ModalChildren;
+  config: ModalProps;
+  /** True while the entry is dismissed but still playing its exit animation. */
+  isExiting: boolean;
+  isTopmost: boolean;
+  /** Drops the entry from the stack. Call it once the exit has finished. */
+  onExitFinished: () => void;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GenericFunction = (props: any) => any;

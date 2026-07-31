@@ -356,8 +356,84 @@ try {
     "the backdrop dismissal result",
   );
 
+  // Swipe-to-dismiss, driven through the browser's own input pipeline.
+  //
+  // This is the part jsdom cannot reach. The chrome listens for Pointer Events
+  // and decides on release velocity, so it needs a real event stream with real
+  // timestamps — `Input.dispatchMouseEvent` produces exactly that, and Chrome
+  // synthesises the pointer events from it the same way a mouse would.
+  await evaluate(`document.querySelector('[data-testid="open-swipeable"]').click(); true`);
+  await waitFor(
+    () => evaluate(`Boolean(document.querySelector('[data-testid="swipeable-body"]'))`),
+    "the swipeable modal",
+  );
+
+  const dragOrigin = await evaluate(`(() => {
+    const { height, left, top, width } = document
+      .querySelector('[data-testid="swipeable-body"]')
+      .getBoundingClientRect();
+
+    return { x: Math.round(left + width / 2), y: Math.round(top + height / 2) };
+  })()`);
+
+  const dispatchDrag = async () => {
+    const step = 60;
+    const steps = 6;
+    // Seconds since the epoch, which is the unit Input.dispatchMouseEvent
+    // takes. Stepping a frame at a time puts the release velocity near
+    // 3500px/s, seven times the 500px/s threshold, and does not depend on how
+    // fast this script happens to run.
+    let timestamp = Date.now() / 1000;
+
+    const dispatch = (type, index, buttons) =>
+      devTools.send("Input.dispatchMouseEvent", {
+        button: "left",
+        buttons,
+        clickCount: 1,
+        timestamp,
+        type,
+        x: dragOrigin.x,
+        y: dragOrigin.y + step * index,
+      });
+
+    await dispatch("mousePressed", 0, 1);
+
+    // Awaited one at a time on purpose. Queued together, Chrome delivers them
+    // to the page coalesced into a single move, and one sample is not a
+    // velocity.
+    for (let index = 1; index <= steps; index++) {
+      timestamp += 1 / 60;
+      // eslint-disable-next-line no-await-in-loop -- see above: each move has to reach the page separately
+      await dispatch("mouseMoved", index, 1);
+    }
+
+    timestamp += 1 / 60;
+    await dispatch("mouseReleased", steps, 0);
+  };
+
+  await dispatchDrag();
+  await waitFor(
+    () =>
+      evaluate(
+        `document.querySelector('[data-testid="modal-result"]').textContent === "SWIPE_COMPLETE" && !document.querySelector('[role="dialog"]')`,
+      ),
+    "the swipe dismissal result",
+  );
+
+  // The exit animation runs before the entry is dropped, so nothing is left in
+  // the tree once it settles. Web had no exit animation at all before the
+  // browser chrome landed, and the holdover that makes one possible is the
+  // easiest part of it to leave leaking mounted entries.
+  await waitFor(
+    () =>
+      evaluate(
+        `document.querySelectorAll('[data-testid="magic-modal-stack-entry"]').length === 0`,
+      ),
+    "the dismissed entry to finish leaving",
+  );
+
   console.log(
-    "✓ Next.js browser smoke: dialog semantics, stack isolation, focus, Escape, and backdrop",
+    "✓ Next.js browser smoke: dialog semantics, stack isolation, focus, Escape, backdrop, and swipe dismissal",
   );
 } finally {
   devTools?.close();

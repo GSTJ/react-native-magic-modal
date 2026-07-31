@@ -1,11 +1,37 @@
 import { readFile } from "node:fs/promises";
 
+import { formatBytes, measureWebBundle } from "./measure-web-bundle.mjs";
+
 const nativeOutputFiles = [
   "dist/index.react-native.runtime.js",
   "dist/index.react-native.runtime.cjs",
 ];
 const browserOutputFiles = ["dist/index.runtime.js", "dist/index.runtime.cjs"];
 const privateScreensImport = "react-native-screens/src/";
+
+/**
+ * Every native-only package the browser entry has to stay clear of.
+ *
+ * The three animation and gesture packages are the expensive ones: together
+ * they were 62% of what a web app downloaded for this library before the
+ * browser chrome grew its own Web Animations API and Pointer Events
+ * implementation. Screens has been out since the portal split.
+ */
+const nativeOnlyPackages = [
+  "react-native-gesture-handler",
+  "react-native-reanimated",
+  "react-native-screens",
+  "react-native-worklets",
+];
+
+/**
+ * The gzipped ceiling for what a web app downloads, measured the way
+ * `measure-web-bundle.mjs` measures it. Set roughly 20% above the real number,
+ * so ordinary changes pass and anything that drags a native package back in
+ * fails loudly. Re-run `node tools/measure-web-bundle.mjs` and move it
+ * deliberately.
+ */
+const gzipBudgetInBytes = 40_000;
 const packageJSON = JSON.parse(
   await readFile(new URL("../package.json", import.meta.url), {
     encoding: "utf8",
@@ -65,14 +91,58 @@ const browserOutputs = await Promise.all(
   })),
 );
 
+/**
+ * bunchee keeps source comments, and several of them quote import statements in
+ * examples. Dropping comments before the search is what separates "the browser
+ * bundle imports gesture-handler" from "a doc comment shows how to mount the
+ * root view".
+ *
+ * @param {string} source
+ */
+const stripComments = (source) =>
+  source.replaceAll(/\/\*[\S\s]*?\*\//g, "").replaceAll(/^\s*\/\/.*$/gm, "");
+
 for (const { output, outputFile } of browserOutputs) {
-  if (
-    output.includes("from 'react-native-screens'") ||
-    output.includes('require("react-native-screens")') ||
-    output.includes("require('react-native-screens')")
-  ) {
-    throw new Error(`${outputFile} includes the native-only screens package.`);
+  const code = stripComments(output);
+
+  for (const packageName of nativeOnlyPackages) {
+    // Matches the import and require forms bunchee emits, plus deep imports of
+    // each.
+    const reference = new RegExp(
+      String.raw`(?:from\s*|require\s*\(\s*)(['"])${packageName}(?:/[^'"]*)?\1`,
+    );
+
+    if (reference.test(code)) {
+      throw new Error(
+        `${outputFile} imports ${packageName}, which is native-only. The browser chrome in src/components/magic-modal.browser.tsx exists so the web entry never needs it.`,
+      );
+    }
   }
+}
+
+// The regexes above only see what survived into the emitted file. Resolving the
+// browser entry the way a web bundler does catches the rest: a package pulled in
+// through a re-export, a `.web.js` variant, or anything else that arrives
+// without its name appearing in the output.
+const { gzip, metafile, minified } = await measureWebBundle();
+const resolvedInputs = Object.keys(metafile.inputs);
+
+for (const packageName of nativeOnlyPackages) {
+  const pulledIn = resolvedInputs.find((input) =>
+    input.includes(`node_modules/${packageName}/`),
+  );
+
+  if (pulledIn) {
+    throw new Error(
+      `Bundling the browser entry pulls in ${packageName} (${pulledIn}), which is native-only.`,
+    );
+  }
+}
+
+if (gzip > gzipBudgetInBytes) {
+  throw new Error(
+    `The browser entry gzips to ${formatBytes(gzip)}, over the ${formatBytes(gzipBudgetInBytes)} budget. Run \`node tools/measure-web-bundle.mjs\` to see what grew.`,
+  );
 }
 
 const entrypointOutputs = await Promise.all(
@@ -126,5 +196,8 @@ if (!packageJSON.peerDependenciesMeta["react-native-screens"].optional) {
 }
 
 console.log(
-  "✓ Web package boundary: runtime guard loads first and browser omits screens",
+  `✓ Web package boundary: runtime guard loads first, browser omits ${nativeOnlyPackages.join(", ")}`,
+);
+console.log(
+  `✓ Web bundle: ${formatBytes(minified)} minified, ${formatBytes(gzip)} gzipped (budget ${formatBytes(gzipBudgetInBytes)})`,
 );

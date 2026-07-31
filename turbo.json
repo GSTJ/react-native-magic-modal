@@ -28,8 +28,11 @@
     "format:fix": {
       "cache": false
     },
+    // `build` and not `^build`: react-native-magic-modal's suite asserts the
+    // platform split against its own dist, and the package has no workspace
+    // dependencies for `^build` to reach.
     "test": {
-      "dependsOn": ["^topo"],
+      "dependsOn": ["^topo", "build"],
       "cache": false
     },
     "changelog:check": {
