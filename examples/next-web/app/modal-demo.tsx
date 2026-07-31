@@ -1,6 +1,6 @@
 "use client";
 
-import type { HideReturn } from "react-native-magic-modal";
+import type { HideReturn } from "magic-modal";
 
 import { useState } from "react";
 import {
@@ -8,7 +8,7 @@ import {
   MagicModalPortal,
   magicModal,
   useMagicModal,
-} from "react-native-magic-modal";
+} from "magic-modal";
 
 type Confirmation = { confirmed: true };
 

@@ -6,10 +6,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "react-native-magic-modal": [
-        "../../packages/modal/src/index.react-native.ts"
-      ],
-      "react-native-magic-modal/*": ["../../packages/modal/src/*"]
+      "magic-modal": ["../../packages/modal/src/index.react-native.ts"],
+      "magic-modal/*": ["../../packages/modal/src/*"]
     }
   },
   "include": ["."],

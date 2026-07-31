@@ -1,10 +1,10 @@
 /* eslint-disable react-native/no-color-literals */
-import type { Direction } from "react-native-magic-modal";
+import type { Direction } from "magic-modal";
 
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { magicModal, MagicModalHideReason } from "react-native-magic-modal";
+import { magicModal, MagicModalHideReason } from "magic-modal";
 
 import { ExampleModal } from "@/components/example-modal";
 

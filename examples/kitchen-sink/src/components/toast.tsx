@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { StatusBar } from "expo-status-bar";
 
-import { magicModal, useMagicModal } from "react-native-magic-modal";
+import { magicModal, useMagicModal } from "magic-modal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Toast = () => {

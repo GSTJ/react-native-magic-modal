@@ -6,7 +6,7 @@ build, client hydration, opening a modal, and resolving a backdrop dismissal.
 Run it from the repository root:
 
 ```bash
-pnpm --filter react-native-magic-modal build
+pnpm --filter magic-modal build
 pnpm --filter @magic-modal/next-web build
 pnpm --filter @magic-modal/next-web typecheck
 pnpm --filter @magic-modal/next-web smoke:browser
