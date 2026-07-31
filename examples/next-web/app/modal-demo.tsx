@@ -61,6 +61,14 @@ const describeResult = (result: HideReturn<Confirmation>) => {
   return result.reason;
 };
 
+const SwipeableModal = () => (
+  <section className="modal-card">
+    <p className="eyebrow">GESTURE FLOW</p>
+    <h2>Swipe me away</h2>
+    <p data-testid="swipeable-body">Drag downwards to dismiss.</p>
+  </section>
+);
+
 export const ModalDemo = () => {
   const [result, setResult] = useState("WAITING");
 
@@ -74,10 +82,25 @@ export const ModalDemo = () => {
     setResult(describeResult(await entry));
   };
 
+  // The only fixture with the gesture armed. Everything else disables it so a
+  // stray drag during the other checks cannot dismiss anything.
+  const openSwipeable = async () => {
+    setResult("OPEN");
+    const entry = magicModal.show<Confirmation>(SwipeableModal, {
+      accessibilityLabel: "Swipe me away",
+      swipeDirection: "down",
+    });
+
+    setResult(describeResult(await entry.promise));
+  };
+
   return (
     <div className="fixture-root">
       <button data-testid="open-modal" onClick={open} type="button">
         Open modal
+      </button>
+      <button data-testid="open-swipeable" onClick={openSwipeable} type="button">
+        Open swipeable modal
       </button>
       <output data-testid="modal-result">{result}</output>
       <MagicModalPortal />
