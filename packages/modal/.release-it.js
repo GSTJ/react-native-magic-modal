@@ -5,7 +5,7 @@ import createPreset from "conventional-changelog-conventionalcommits";
 // It lives in tools/changelog-preset.mjs so the check can't pass against a
 // policy the release doesn't use — that file also explains what each `effect`
 // buys.
-import { TYPES as types } from "./tools/changelog-preset.mjs";
+import { PARSER_OPTS, TYPES as types } from "./tools/changelog-preset.mjs";
 
 // Squash-merging a PR puts the PR description in the commit body, and Renovate
 // PR descriptions quote the upstream project's changelog verbatim. Several
@@ -117,6 +117,18 @@ export default {
       // Bump path only. The changelog generator takes `gitRawCommitsOpts`, not
       // this, so the rendered notes are unaffected.
       commitsOpts: { format: "%B%n-hash-%n%H%n-authorName-%n%an" },
+      // Both paths through this plugin load the preset by name, which means
+      // upstream's parser options, which means upstream's forgiving note
+      // pattern. `tools/changelog-preset.mjs` explains what that pattern let
+      // through and what 11.0.0 cost. Passing the options explicitly is what
+      // gets the strict pattern onto the bump path (`bumper.commits`) and the
+      // changelog path (`generator.commits`); both spread these over the
+      // preset's own, so nothing else in the parser config is lost.
+      //
+      // The `dropQuotedNotes` guard below is the other half and stays: this
+      // narrows what *looks* like a note, that drops notes a bot quoted from
+      // someone else's changelog. Neither subsumes the other.
+      parserOpts: PARSER_OPTS,
       whatBump: (/** @type {ParsedCommit[]} */ commits) =>
         preset.whatBump(commits.map(dropQuotedNotes)),
       preset: {

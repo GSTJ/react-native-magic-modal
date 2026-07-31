@@ -1,6 +1,6 @@
 {
   "name": "magic-modal",
-  "version": "11.0.0",
+  "version": "10.1.1",
   "description": "A magic modal that can be used imperatively from anywhere! 🦄",
   "keywords": [
     "android",
@@ -66,6 +66,7 @@
     "format:fix": "oxfmt .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "copy:readme": "shx cp ../../README.md ./README.md",
+    "prepack": "pnpm run copy:readme",
     "test": "jest",
     "changelog:check": "node tools/changelog-check.mjs",
     "release": "release-it --ci"

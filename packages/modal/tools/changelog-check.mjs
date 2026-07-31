@@ -20,9 +20,14 @@
 //      has to surface
 //   3. the recommended bump respects `effect`, so a release of nothing but
 //      `build:` and `chore:` commits cannot come out a minor
+//   4. a breaking note is only taken from a real footer, so prose that merely
+//      starts a line with the words "breaking change" cannot compute a major
 //
 // Then it renders the same history through a sabotaged type list and fails if
-// *that* passes. An assertion that cannot fail is worth nothing.
+// *that* passes. An assertion that cannot fail is worth nothing. (4) carries
+// its own control of the same kind: the prose case is re-run through
+// upstream's default note pattern and has to come out a major there, which is
+// what makes it a regression test rather than a restatement.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -31,7 +36,7 @@ import { fileURLToPath } from "node:url";
 
 import { Bumper } from "conventional-recommended-bump";
 
-import preset, { TYPES } from "./changelog-preset.mjs";
+import preset, { PARSER_OPTS, TYPES } from "./changelog-preset.mjs";
 
 const here = import.meta.dirname;
 const presetPath = join(here, "changelog-preset.mjs");
@@ -173,13 +178,21 @@ const render = (configPath) =>
  * The release type conventional-recommended-bump lands on for `commits`, read
  * through the real preset. `null` means "nothing here warrants a release".
  *
+ * `parserOpts` defaults to the shipped options and is only overridden by the
+ * control in (4), which needs upstream's defaults to prove the strict note
+ * pattern is the thing doing the work. Passing them explicitly mirrors
+ * `.release-it.js`: `loadPreset` by name gets upstream's parser options, so
+ * without this the check would be measuring a config the release never uses.
+ *
  * @param {string[]} commits
+ * @param {Record<string, unknown> | null} [parserOpts]
  * @returns {Promise<string | null>}
  */
-const bumpFor = (commits) =>
+const bumpFor = (commits, parserOpts = PARSER_OPTS) =>
   inThrowawayRepo(commits, "before", async (repo) => {
     const bumper = new Bumper(repo);
     bumper.loadPreset({ name: "conventionalcommits", types: TYPES });
+    if (parserOpts) bumper.commits({}, parserOpts);
     // Same double cast .release-it.js needs: the preset publishes
     // `createPreset(config?): {}`, so its own return type doesn't describe the
     // `whatBump` it demonstrably returns. `bump()` is typed as a union whose
@@ -279,6 +292,97 @@ expect(
   bumps.hiddenOnly === null,
 );
 
+// 4. A breaking note comes from a footer, not from prose.
+//
+// The body below is the shape that published 11.0.0. Squash-merging #336 put
+// the PR description in the commit body re-wrapped at ~72 columns, and the wrap
+// started a line with "breaking change on `style` typing.". Upstream's note
+// pattern is case-insensitive and accepts a space where the colon belongs, so
+// it read that as a footer and the release computed a major off a commit that
+// said, in the same paragraph, that it was a minor.
+//
+// The `!` marker and a genuine uppercase footer both still have to work, or
+// this would just be a switch that turns breaking changes off.
+const PROSE_BODY = [
+  "feat(modal): cut the web bundle by 83% going full DOM",
+  "",
+  "This is the companion to the rename, which has since shipped as v10.0.0;",
+  "this lands on top of it as v10.1.0. It also carries the web-only",
+  "breaking change on `style` typing.",
+].join("\n");
+
+const notes = {
+  prose: await bumpFor([PROSE_BODY]),
+  proseUnderDefaults: await bumpFor([PROSE_BODY], null),
+  footer: await bumpFor([
+    "feat: add a thing\n\nBREAKING CHANGE: the old API is gone",
+  ]),
+  hyphenFooter: await bumpFor([
+    "feat: add a thing\n\nBREAKING-CHANGE: the old API is gone",
+  ]),
+  marker: await bumpFor(["feat!: drop the old API"]),
+  // Both of these are why the pattern is anchored and case-sensitive. A
+  // lowercase footer is a convention the writer did not follow, and an indented
+  // or bulleted one is what quoting someone else's changelog produces.
+  lowercaseFooter: await bumpFor([
+    "feat: add a thing\n\nbreaking change: gone",
+  ]),
+  indentedFooter: await bumpFor([
+    "feat: add a thing\n\n  BREAKING CHANGE: the old API is gone",
+  ]),
+  bulletedFooter: await bumpFor([
+    "feat: add a thing\n\n* BREAKING CHANGE: the old API is gone",
+  ]),
+};
+
+expect(
+  `wrapped prose starting "breaking change" is not a major (got ${notes.prose})`,
+  notes.prose === "minor",
+);
+expect(
+  "a real BREAKING CHANGE: footer is still a major",
+  notes.footer === "major",
+);
+expect(
+  "a real BREAKING-CHANGE: footer is still a major",
+  notes.hyphenFooter === "major",
+);
+expect("a `!` subject marker is still a major", notes.marker === "major");
+expect(
+  `a lowercase "breaking change:" footer is not a major (got ${notes.lowercaseFooter})`,
+  notes.lowercaseFooter === "minor",
+);
+expect(
+  `an indented BREAKING CHANGE: is not a major (got ${notes.indentedFooter})`,
+  notes.indentedFooter === "minor",
+);
+expect(
+  `a bulleted BREAKING CHANGE: is not a major (got ${notes.bulletedFooter})`,
+  notes.bulletedFooter === "minor",
+);
+
+// Control for the four assertions above. Under upstream's default note pattern
+// the prose body has to come out a major, or the strict pattern is not what is
+// holding the line and these assertions prove nothing.
+expect(
+  `control: prose computes a major under the default note pattern (got ${notes.proseUnderDefaults})`,
+  notes.proseUnderDefaults === "major",
+);
+
+// The rendered changelog has to agree with the bump. A note the writer picks up
+// prints a BREAKING CHANGES section whatever the bump did.
+const proseRendering = await inThrowawayRepo([PROSE_BODY], "after", (repo) =>
+  execFileSync(
+    process.execPath,
+    [cliPath, "--config", presetPath, "--release-count", "0", "--stdout"],
+    { cwd: repo, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 },
+  ),
+);
+expect(
+  "wrapped prose renders no BREAKING CHANGES section",
+  !/^### .*BREAKING CHANGES$/m.test(proseRendering),
+);
+
 if (failures.length > 0) {
   console.error("changelog preset check FAILED:");
   for (const failure of failures) console.error(`  - ${failure}`);
@@ -319,6 +423,9 @@ if (sabotagedFailures.length === 0) {
 
 console.log(
   `changelog preset check passed (${COMMITS.length} synthetic commits, 3 breaking; bumps: feat!=${bumps.breaking}, feat=${bumps.feature}, fix=${bumps.fix}, changelog-only=${bumps.changelogOnly}, hidden-only=${bumps.hiddenOnly})`,
+);
+console.log(
+  `note pattern check passed (prose=${notes.prose}, footer=${notes.footer}, hyphen-footer=${notes.hyphenFooter}, marker=${notes.marker}, lowercase=${notes.lowercaseFooter}, indented=${notes.indentedFooter}, bulleted=${notes.bulletedFooter}; control: prose under upstream defaults=${notes.proseUnderDefaults})`,
 );
 console.log(
   `negative control passed (hiding the visible types breaks ${sabotagedFailures.length} assertions: ${sabotagedFailures.join(", ")})`,
