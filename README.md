@@ -57,8 +57,10 @@ pnpm add magic-modal
 npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-dom react-native-web @expo/metro-runtime
 ```
 
-Read the [Expo guide](https://magic-modal.gabrieltaveira.dev/docs/platforms/expo/) for the
-portal and web command.
+Expo Web bundles through Metro under the `react-native` condition, so it loads the native entry and
+takes the same peers as iOS and Android. The browser-only install is the Next.js one below. Read the
+[Expo guide](https://magic-modal.gabrieltaveira.dev/docs/platforms/expo/) for the portal and web
+command.
 
 ### Expo iOS
 
@@ -78,15 +80,17 @@ iOS and Android use the same native dependency set. The
 [native guide](https://magic-modal.gabrieltaveira.dev/docs/platforms/ios-android/) covers
 pods, Android back handling, and iOS overlays.
 
-### Next.js
+### Next.js and other browser-only React apps
 
 ```bash
-pnpm add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+pnpm add magic-modal
 ```
 
-Copy the validated alias, extension order, and Client Component setup from the
-[Next.js guide](https://magic-modal.gabrieltaveira.dev/docs/platforms/nextjs/). A runnable
-App Router consumer lives in [`examples/next-web`](examples/next-web).
+That is the whole install. The web entry ships with zero React Native dependencies, so a browser
+application needs no bundler alias and no gesture or animation peer. The native entries use the full
+React Native stack, which is why the Expo commands above install more. Copy the Client Component
+setup from the [Next.js guide](https://magic-modal.gabrieltaveira.dev/docs/platforms/nextjs/). A
+runnable App Router consumer lives in [`examples/next-web`](examples/next-web).
 
 For bare React Native, follow the
 [installation guide](https://magic-modal.gabrieltaveira.dev/docs/getting-started/installation/).
@@ -161,7 +165,7 @@ accessibility escape action. TypeScript exposes `data` after the caller narrows 
 ## Documentation
 
 - [Expo Web, iOS, and Android](https://magic-modal.gabrieltaveira.dev/docs/platforms/expo/)
-- [Next.js and React Native Web](https://magic-modal.gabrieltaveira.dev/docs/platforms/nextjs/)
+- [Next.js and web](https://magic-modal.gabrieltaveira.dev/docs/platforms/nextjs/)
 - [Modal flows and stacks](https://magic-modal.gabrieltaveira.dev/docs/guides/modal-flows/)
 - [Hide results](https://magic-modal.gabrieltaveira.dev/docs/reference/hide-results/)
 - [Accessibility](https://magic-modal.gabrieltaveira.dev/docs/guides/accessibility/)
