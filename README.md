@@ -113,8 +113,11 @@ export default function App() {
 }
 ```
 
-With Expo Router, put the same structure in the root `app/_layout.tsx`. Next.js mounts the portal
-inside a Client Component as shown in the [web setup](https://magic-modal.gabrieltaveira.dev/docs/platforms/nextjs/).
+With Expo Router, put the same structure in the root `app/_layout.tsx`.
+
+A browser application mounts `MagicModalPortal` inside a Client Component and nothing else. There is
+no `GestureHandlerRootView`, because there is no Gesture Handler in the browser bundle. Copy the
+shell from the [web setup](https://magic-modal.gabrieltaveira.dev/docs/platforms/nextjs/).
 
 ## Return typed data
 
@@ -156,6 +159,10 @@ export async function confirmRelease() {
   return result.data;
 }
 ```
+
+That modal is the React Native one. The browser entry renders DOM, so the same modal on the web is a
+`<section>` with `<h2>` and `<button>` and imports nothing from React Native. The result contract is
+identical either way.
 
 Backdrop presses, completed swipes, system-dismiss actions, and `hideAll()` resolve the same promise
 with distinct reasons. System dismissal includes Android back, web Escape, and the native
@@ -218,4 +225,4 @@ and read the [contributing guide](CONTRIBUTING.md).
 
 ## License
 
-React Native Magic Modal is licensed under the [MIT License](LICENSE).
+Magic Modal is licensed under the [MIT License](LICENSE).
