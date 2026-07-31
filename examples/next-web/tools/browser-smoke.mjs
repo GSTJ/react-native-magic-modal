@@ -1,8 +1,8 @@
+import { spawn } from "node:child_process";
 import { mkdtemp, rm } from "node:fs/promises";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { spawn } from "node:child_process";
 
 const host = "127.0.0.1";
 
@@ -64,7 +64,9 @@ const findChrome = async () => {
     }
   }
 
-  throw new Error("Chrome was not found. Set CHROME_BIN to run the browser smoke check.");
+  throw new Error(
+    "Chrome was not found. Set CHROME_BIN to run the browser smoke check.",
+  );
 };
 
 const connectDevTools = async (url) => {
@@ -193,7 +195,10 @@ try {
     return true;
   })()`);
   await waitFor(
-    () => evaluate(`document.querySelector('[data-testid="modal-result"]').textContent === "OPEN"`),
+    () =>
+      evaluate(
+        `document.querySelector('[data-testid="modal-result"]').textContent === "OPEN"`,
+      ),
     "the click handler",
   );
   await waitFor(
@@ -219,7 +224,9 @@ try {
     modalSemantics.label !== "Ship the web build?" ||
     modalSemantics.modal !== "true"
   ) {
-    throw new Error(`Unexpected modal semantics: ${JSON.stringify(modalSemantics)}`);
+    throw new Error(
+      `Unexpected modal semantics: ${JSON.stringify(modalSemantics)}`,
+    );
   }
 
   await waitFor(
@@ -249,7 +256,9 @@ try {
   })()`);
   await waitFor(
     () =>
-      evaluate(`document.querySelectorAll('[data-testid="magic-modal-stack-entry"]').length === 2`),
+      evaluate(
+        `document.querySelectorAll('[data-testid="magic-modal-stack-entry"]').length === 2`,
+      ),
     "the nested stack entry",
   );
 
@@ -273,12 +282,16 @@ try {
     stackSemantics.label !== "One more check" ||
     stackSemantics.topHidden !== null
   ) {
-    throw new Error(`Unexpected stack semantics: ${JSON.stringify(stackSemantics)}`);
+    throw new Error(
+      `Unexpected stack semantics: ${JSON.stringify(stackSemantics)}`,
+    );
   }
 
   await waitFor(
     () =>
-      evaluate(`document.activeElement === document.querySelector('[data-testid="close-nested"]')`),
+      evaluate(
+        `document.activeElement === document.querySelector('[data-testid="close-nested"]')`,
+      ),
     "focus in the nested stack entry",
   );
 
@@ -339,7 +352,9 @@ try {
     "the Escape dismissal and restored focus",
   );
 
-  await evaluate(`document.querySelector('[data-testid="open-modal"]').click(); true`);
+  await evaluate(
+    `document.querySelector('[data-testid="open-modal"]').click(); true`,
+  );
   await waitFor(
     () =>
       evaluate(
@@ -347,7 +362,9 @@ try {
       ),
     "the second modal",
   );
-  await evaluate(`document.querySelector('[data-testid="magic-modal-backdrop"]').click(); true`);
+  await evaluate(
+    `document.querySelector('[data-testid="magic-modal-backdrop"]').click(); true`,
+  );
   await waitFor(
     () =>
       evaluate(
@@ -362,9 +379,14 @@ try {
   // and decides on release velocity, so it needs a real event stream with real
   // timestamps — `Input.dispatchMouseEvent` produces exactly that, and Chrome
   // synthesises the pointer events from it the same way a mouse would.
-  await evaluate(`document.querySelector('[data-testid="open-swipeable"]').click(); true`);
+  await evaluate(
+    `document.querySelector('[data-testid="open-swipeable"]').click(); true`,
+  );
   await waitFor(
-    () => evaluate(`Boolean(document.querySelector('[data-testid="swipeable-body"]'))`),
+    () =>
+      evaluate(
+        `Boolean(document.querySelector('[data-testid="swipeable-body"]'))`,
+      ),
     "the swipeable modal",
   );
 
