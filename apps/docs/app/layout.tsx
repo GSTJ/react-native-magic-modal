@@ -9,13 +9,13 @@ import { publicPaths, site } from "@/lib/site";
 import "./global.css";
 
 const presetMetadata = createMagicDocsMetadata(site);
-const socialImage = publicPaths.url("/og.svg");
+const socialImage = publicPaths.url("/og.png");
 
 export const metadata: Metadata = {
   ...presetMetadata,
   openGraph: {
     ...presetMetadata.openGraph,
-    images: [{ alt: site.name, height: 630, url: socialImage, width: 1200 }],
+    images: [{ alt: site.name, height: 640, url: socialImage, width: 1280 }],
   },
   twitter: {
     ...presetMetadata.twitter,

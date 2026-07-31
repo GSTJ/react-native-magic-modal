@@ -69,6 +69,8 @@ web-build/
 **/.source/
 *.tsbuildinfo
 /apps/docs/public/r/
+# Copied in from media/ by apps/docs/scripts/copy-og-image.mjs.
+/apps/docs/public/og.png
 
 **/*/ios
 **/*/android

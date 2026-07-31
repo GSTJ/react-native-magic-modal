@@ -9,8 +9,8 @@
     "format": "oxfmt --check .",
     "format:fix": "oxfmt .",
     "lint": "oxlint --report-unused-disable-directives",
-    "prebuild": "pnpm --workspace-root registry:build",
-    "predev": "pnpm --workspace-root registry:build",
+    "prebuild": "pnpm --workspace-root registry:build && node scripts/copy-og-image.mjs",
+    "predev": "pnpm --workspace-root registry:build && node scripts/copy-og-image.mjs",
     "start": "serve out",
     "test": "node --test test/*.test.mjs",
     "typecheck": "pnpm --workspace-root registry:typecheck && fumadocs-mdx && next typegen && fumadocs-mdx && tsc --noEmit"
