@@ -9,7 +9,7 @@
 
 <p align="center">
   <a aria-label="npm version" href="https://www.npmjs.com/package/magic-modal"><img alt="npm version" src="https://shieldcn.dev/npm/magic-modal.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
-  <a aria-label="npm downloads" href="https://www.npmjs.com/package/magic-modal"><img alt="npm downloads" src="https://shieldcn.dev/npm/magic-modal/downloads.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
+  <a aria-label="npm downloads" href="https://www.npmjs.com/package/react-native-magic-modal"><img alt="npm downloads" src="https://shieldcn.dev/npm/react-native-magic-modal/downloads.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
   <a aria-label="GitHub stars" href="https://github.com/GSTJ/magic-modal/stargazers"><img alt="GitHub stars" src="https://shieldcn.dev/github/GSTJ/magic-modal/stars.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
   <a aria-label="license" href="https://github.com/GSTJ/magic-modal/blob/main/LICENSE"><img alt="license" src="https://shieldcn.dev/github/GSTJ/magic-modal/license.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
 </p>
