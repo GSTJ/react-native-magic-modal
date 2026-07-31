@@ -159,9 +159,19 @@ jobs:
           #   - its subject marks a breaking change with `!` before the colon
           #     (`feat!:`, `fix(deps)!:`), which conventional-commits treats as
           #     a major on its own, with or without a footer,
-          #   - its body contains a line starting with `BREAKING CHANGE:`
-          #     or `BREAKING-CHANGE:` (the conventional-commits footer) AND a
+          #   - its body contains a line starting with `BREAKING CHANGE: `
+          #     or `BREAKING-CHANGE: ` (the conventional-commits footer) AND a
           #     human wrote it.
+          #
+          # That footer match is uppercase, anchored, and requires the colon
+          # AND the space after it, which is the same strict form
+          # `packages/modal/tools/changelog-preset.mjs` pins `notesPattern` to.
+          # The two have to agree: this probe decides whether a release runs,
+          # the preset decides how big it is, and 11.0.0 is what it looks like
+          # when they disagree. There, prose reading "breaking change on
+          # `style` typing." fell out of a re-wrapped PR body. This probe
+          # correctly ignored it and the preset did not, so the release ran on
+          # the `(modal)` scope and then computed a major off the prose.
           # We can't use `git log --grep` here because that searches the
           # entire commit message; a PR description that mentions
           # "BREAKING CHANGE" in prose would falsely match. Iterate
@@ -195,7 +205,7 @@ jobs:
             case "$author" in
               'renovate[bot]'|'dependabot[bot]'|'github-actions[bot]') continue ;;
             esac
-            if printf '%s' "$body" | grep -qE '^BREAKING[- ]CHANGE:'; then
+            if printf '%s' "$body" | grep -qE '^BREAKING[- ]CHANGE: '; then
               QUALIFY="${QUALIFY}${subject}"$'\n'
             fi
           done <<< "$COMMITS"
