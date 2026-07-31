@@ -17,12 +17,72 @@ magicModal.show(() => <SettingsModal />, {
 ## Modal options
 
 <auto-type-table
-  path="../../../../../packages/modal/src/constants/types.ts"
+  path="../../../../../packages/modal/src/constants/types.react-native.ts"
   name="NewConfigProps"
 />
 
 `NewConfigProps` is the partial override accepted by `show`. The exported `ModalProps` type is the
 fully resolved internal shape after defaults are applied.
+
+## Container style
+
+`style` is the one option whose type is not the same on every platform, because a React Native style
+and a CSS declaration are not the same thing.
+
+<Tabs groupId="platform" items={["React Native", "Web"]} persist>
+  <Tab value="React Native">
+
+```ts
+style: StyleProp<ViewStyle>;
+```
+
+```tsx
+magicModal.show(() => <SheetModal />, {
+  style: { justifyContent: "flex-end", paddingHorizontal: 16 },
+});
+```
+
+  </Tab>
+  <Tab value="Web">
+
+```ts
+style: React.CSSProperties;
+```
+
+```tsx
+magicModal.show(() => <SheetModal />, {
+  style: { justifyContent: "flex-end", paddingInline: 16 },
+});
+```
+
+  </Tab>
+</Tabs>
+
+<Callout type="warn" title="Breaking change in v10.1 (web only)">
+  The web entry used to type `style` as `StyleProp<ViewStyle>` and let React
+  Native Web translate it at runtime. It is `React.CSSProperties` now, because
+  there is no React Native Web in the browser bundle to translate anything.
+
+Most modals need no change: `justifyContent`, `margin`, `padding`, `backgroundColor` and unitless
+numbers all mean the same thing in both. Four things do change on web:
+
+| Was                                          | Now                                 |
+| -------------------------------------------- | ----------------------------------- |
+| `style: [base, override]`                    | `style: { ...base, ...override }`   |
+| `paddingHorizontal`, `marginVertical`, ...   | `paddingInline`, `marginBlock`, ... |
+| `shadowColor` / `shadowOffset` / `elevation` | `boxShadow`                         |
+| `transform: [{ translateY: 8 }]`             | `transform: "translateY(8px)"`      |
+
+`entering` and `exiting` are gone from the web type as well. They take Reanimated builders, the
+browser bundle has no Reanimated, and they were already documented as ignored there.
+
+A React Native style that slips past TypeScript is not applied on web, and logs one migration
+warning in development.
+
+</Callout>
+
+The React Native entry is unchanged, so a shared config object typed against it needs splitting
+before a web build can use it.
 
 ## Direction
 

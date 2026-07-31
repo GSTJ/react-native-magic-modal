@@ -1,4 +1,5 @@
 import type { ModalStackEntryProps } from "../constants/types";
+import type { ModalProps } from "../constants/types.browser";
 
 import React, {
   memo,
@@ -8,18 +9,18 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 
 import { defaultDirection } from "../constants/default-config";
 import { MagicModalHideReason } from "../constants/types";
 import { useInternalMagicModal } from "./magic-modal-provider";
-import { styles } from "./MagicModalPortal/magic-modal-portal.styles";
 import {
-  getDialogAccessibilityProps,
-  getStackEntryAccessibilityProps,
+  getDialogAriaProps,
+  getStackEntryAriaHidden,
   MODAL_DIALOG_TEST_ID,
   useWebModalFocus,
 } from "./webModal/modal-accessibility";
+import { resolveModalStyle } from "./webModal/modal-style-prop";
+import { classes, MODAL_CLASS } from "./webModal/modal-styles";
 import {
   getContentEnterKeyframes,
   getContentExitKeyframes,
@@ -27,16 +28,22 @@ import {
   runWebAnimation,
 } from "./webModal/modal-transitions";
 import { useSwipeDismiss } from "./webModal/use-swipe-dismiss";
+import { useViewportSize } from "./webModal/use-viewport-size";
 
 /**
  * The browser modal chrome.
  *
- * The same tree, test IDs and accessibility semantics as the React Native
- * chrome in `magic-modal.tsx`, driven by the Web Animations API and Pointer
- * Events instead of Reanimated and gesture-handler. Nothing this file reaches
- * imports react-native-reanimated, react-native-gesture-handler,
- * react-native-worklets or react-native-screens, and
- * `tools/check-web-build.mjs` fails the build if that stops being true.
+ * The same layers, the same test IDs and the same accessibility contract as the
+ * React Native chrome in `magic-modal.tsx`, built out of `div`s, static CSS,
+ * the Web Animations API and Pointer Events.
+ *
+ * Nothing this file reaches imports react-native. That is the point of it:
+ * react-native-web and its style pipeline were 84% of what a web app
+ * downloaded for this library, to render five nested boxes and centre one of
+ * them. `tools/check-web-build.mjs` fails the build if an import creeps back.
+ *
+ * Nothing here touches `document` or `window` at module scope either, so a
+ * Next.js server component can import the package.
  *
  * Unlike the native chrome, this one plays an exit animation. It leans on the
  * portal keeping a dismissed entry in the stack until `onExitFinished` fires.
@@ -46,21 +53,6 @@ import { useSwipeDismiss } from "./webModal/use-swipe-dismiss";
 const useIsomorphicLayoutEffect =
   typeof document === "undefined" ? useEffect : useLayoutEffect;
 
-/**
- * react-native-web hands host refs the DOM node itself but types them as the
- * React Native component. This is the one place that conversion happens.
- */
-const asElement = (node: unknown) => (node ?? null) as HTMLElement | null;
-
-const useElementRef = () => {
-  const ref = useRef<HTMLElement | null>(null);
-  const setRef = useCallback((node: unknown) => {
-    ref.current = asElement(node);
-  }, []);
-
-  return [ref, setRef] as const;
-};
-
 export const MagicModal = memo(
   ({
     config,
@@ -68,21 +60,24 @@ export const MagicModal = memo(
     isExiting,
     isTopmost,
     onExitFinished,
-  }: ModalStackEntryProps) => {
+  }: ModalStackEntryProps<ModalProps>) => {
     const { hide } = useInternalMagicModal();
-    const [dialogNode, setDialogNode] = React.useState<View | null>(null);
+    const [dialogNode, setDialogNode] = React.useState<HTMLDivElement | null>(
+      null,
+    );
     const { onBackButtonPress } = config;
-    const { height, width } = useWindowDimensions();
+    const { height, width } = useViewportSize();
 
-    const [backdropLayerRef, setBackdropLayerRef] = useElementRef();
-    const [backdropRef, setBackdropRef] = useElementRef();
-    const [contentRef, setContentRef] = useElementRef();
-    const [motionRef, setMotionRef] = useElementRef();
+    const backdropLayerRef = useRef<HTMLDivElement | null>(null);
+    const backdropRef = useRef<HTMLDivElement | null>(null);
+    const contentRef = useRef<HTMLDivElement | null>(null);
+    const motionRef = useRef<HTMLDivElement | null>(null);
 
     /** Set once a committed swipe has taken the content off screen. */
     const hasSwipedAwayRef = useRef(false);
 
     const direction = config.swipeDirection ?? defaultDirection;
+    const style = resolveModalStyle(config.style);
 
     const onBackdropPress = useMemo(() => {
       return config.onBackdropPress
@@ -116,7 +111,7 @@ export const MagicModal = memo(
     useSwipeDismiss({
       backdropRef,
       dampingFactor: config.dampingFactor,
-      dialogNode: asElement(dialogNode),
+      dialogNode,
       direction: config.swipeDirection,
       dismissDuration: config.animationOutTiming,
       height,
@@ -150,7 +145,7 @@ export const MagicModal = memo(
           animation.cancel();
         }
       };
-    }, [backdropLayerRef, contentRef]);
+    }, []);
 
     const exitDuration = config.animationOutTiming;
 
@@ -196,76 +191,76 @@ export const MagicModal = memo(
       return () => {
         isCancelled = true;
       };
-    }, [backdropLayerRef, contentRef, exitDuration, isExiting]);
+    }, [exitDuration, isExiting]);
 
     const isBackdropVisible = !config.hideBackdrop;
-    const stackEntryAccessibilityProps =
-      getStackEntryAccessibilityProps(isTopmost);
-    const dialogAccessibilityProps = getDialogAccessibilityProps({
+    const isBackdropPressable = isBackdropVisible && !isExiting;
+    const dialogAriaProps = getDialogAriaProps({
       accessibilityLabel: config.accessibilityLabel,
       isTopmost,
-      onSystemDismiss,
     });
 
     return (
-      <View
-        {...stackEntryAccessibilityProps}
-        style={[StyleSheet.absoluteFill, styles.pointerEventsBoxNone]}
-        testID="magic-modal-stack-entry"
+      <div
+        aria-hidden={getStackEntryAriaHidden(isTopmost)}
+        className={classes(
+          MODAL_CLASS.entry,
+          isTopmost ? MODAL_CLASS.boxNone : MODAL_CLASS.none,
+        )}
+        data-testid="magic-modal-stack-entry"
       >
-        <View
-          pointerEvents={isBackdropVisible && !isExiting ? "auto" : "none"}
-          ref={setBackdropLayerRef}
-          style={styles.backdropContainer}
+        <div
+          className={classes(
+            MODAL_CLASS.backdropLayer,
+            !isBackdropPressable && MODAL_CLASS.none,
+          )}
+          ref={backdropLayerRef}
         >
-          <Pressable
-            accessibilityElementsHidden
-            accessible={false}
+          <div
             aria-hidden
-            disabled={!isBackdropVisible}
-            importantForAccessibility="no-hide-descendants"
-            ref={setBackdropRef}
-            testID="magic-modal-backdrop"
-            style={[
-              styles.backdrop,
-              // eslint-disable-next-line react-native/no-inline-styles, react-native/no-color-literals
-              {
-                backgroundColor: isBackdropVisible
-                  ? config.backdropColor
-                  : "transparent",
-              },
-            ]}
-            onPress={onBackdropPress}
+            className={MODAL_CLASS.backdrop}
+            data-testid="magic-modal-backdrop"
+            ref={backdropRef}
+            role="presentation"
+            // The backdrop colour is configuration, so it cannot live in the
+            // static stylesheet. The two rules below are react-native's, and
+            // this is a `div`.
+            // eslint-disable-next-line react-native/no-inline-styles, react-native/no-color-literals
+            style={{
+              backgroundColor: isBackdropVisible
+                ? config.backdropColor
+                : "transparent",
+            }}
+            // A `div` rather than a `button`: the backdrop is `aria-hidden`,
+            // and a focusable element inside an `aria-hidden` subtree is a trap
+            // for keyboard and screen reader users. Escape is the keyboard's
+            // way out, and it is handled by the focus trap.
+            onClick={isBackdropPressable ? onBackdropPress : undefined}
           />
-        </View>
-        <View
-          pointerEvents="box-none"
-          ref={setMotionRef}
-          style={styles.overlay}
-          testID="magic-modal-motion-layer"
+        </div>
+        <div
+          className={classes(MODAL_CLASS.layer, MODAL_CLASS.boxNone)}
+          data-testid="magic-modal-motion-layer"
+          ref={motionRef}
         >
-          <View
-            pointerEvents="box-none"
-            ref={setContentRef}
-            style={[styles.overlay, config.style]}
-            testID="magic-modal-animation-layer"
+          <div
+            className={classes(MODAL_CLASS.layer, MODAL_CLASS.boxNone)}
+            data-testid="magic-modal-animation-layer"
+            ref={contentRef}
+            style={style}
           >
-            <View
-              {...dialogAccessibilityProps}
-              collapsable={false}
+            <div
+              {...dialogAriaProps}
+              className={classes(MODAL_CLASS.layer, MODAL_CLASS.boxNone)}
+              data-testid={MODAL_DIALOG_TEST_ID}
               ref={setDialogNode}
-              style={[
-                styles.childrenWrapper,
-                config.style,
-                styles.pointerEventsBoxNone,
-              ]}
-              testID={MODAL_DIALOG_TEST_ID}
+              style={style}
             >
               <Children />
-            </View>
-          </View>
-        </View>
-      </View>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   },
 );

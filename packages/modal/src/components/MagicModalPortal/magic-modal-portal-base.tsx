@@ -132,7 +132,9 @@ const createModalHandle = <T,>(
  * }
  * ```
  */
-export const createMagicModalPortal = ({
+export const createMagicModalPortal = <
+  TConfig extends ModalProps = ModalProps,
+>({
   FullWindowOverlay,
   isFullWindowOverlaySupported,
   PortalContainer,
@@ -152,7 +154,7 @@ export const createMagicModalPortal = ({
    * bundle never reaches the Reanimated and gesture-handler one, and so this
    * file — which both platforms share — needs no react-native of its own.
    */
-  StackEntry: ComponentType<ModalStackEntryProps>;
+  StackEntry: ComponentType<ModalStackEntryProps<TConfig>>;
   leaveStack?: ModalStackLeave;
   subscribeToSystemBack: SystemBackSubscription;
 }): React.FC =>
@@ -412,7 +414,11 @@ export const createMagicModalPortal = ({
           return (
             <MagicModalProvider key={id} hide={hideFunction}>
               <StackEntry
-                config={config}
+                // The stack is platform-agnostic and stores the neutral
+                // `ModalProps`. Which platform's style-typed options are in
+                // there was decided by the entry point that supplied the
+                // chrome, and the chrome is the only thing that reads them.
+                config={config as TConfig}
                 isExiting={Boolean(isExiting)}
                 isTopmost={id === topmostID}
                 onExitFinished={() => {

@@ -1,7 +1,5 @@
 import type { ModalChildren } from "../../constants/types";
 
-import type { View, ViewProps } from "react-native";
-
 import { useEffect } from "react";
 
 /**
@@ -9,9 +7,12 @@ import { useEffect } from "react";
  *
  * `useWebModalFocus` is a no-op wherever there is no `document`, which is every
  * native runtime. It lives here rather than in either chrome because the
- * browser chrome and the React Native one both need it: react-native-web apps
- * and React Native Web-in-Expo builds reach the DOM through the native chrome
- * too.
+ * browser chrome and the React Native one both need it: a react-native-web app
+ * reaches the DOM through the React Native chrome too.
+ *
+ * Nothing in this file imports react-native, not even for a type. The browser
+ * graph is checked for that, and the React Native chrome's own props are built
+ * next door in `nativeModal/modal-accessibility.ts`.
  */
 
 export const MODAL_DIALOG_TEST_ID = "magic-modal-dialog";
@@ -40,47 +41,33 @@ const focusFirstElement = (dialog: HTMLElement) => {
   target.focus();
 };
 
-export const getStackEntryAccessibilityProps = (
-  isTopmost: boolean,
-): Pick<
-  ViewProps,
-  | "accessibilityElementsHidden"
-  | "aria-hidden"
-  | "importantForAccessibility"
-  | "pointerEvents"
-> => ({
-  accessibilityElementsHidden: !isTopmost,
-  "aria-hidden": !isTopmost,
-  importantForAccessibility: isTopmost ? "auto" : "no-hide-descendants",
-  pointerEvents: isTopmost ? "box-none" : "none",
-});
-
-export const getDialogAccessibilityProps = ({
+/**
+ * The dialog's ARIA attributes, for a chrome that renders DOM elements.
+ *
+ * Only the topmost entry is a dialog. The ones under it keep their DOM nodes —
+ * dropping them would unmount their content — and give up every attribute that
+ * would put them in the accessibility tree.
+ *
+ * `undefined` rather than `false` throughout, because React omits an undefined
+ * attribute where `aria-modal={false}` would render `aria-modal="false"` and
+ * announce a second, non-modal dialog.
+ */
+export const getDialogAriaProps = ({
   accessibilityLabel,
   isTopmost,
-  onSystemDismiss,
 }: {
   accessibilityLabel: string | undefined;
   isTopmost: boolean;
-  onSystemDismiss: () => void;
-}): Pick<
-  ViewProps,
-  | "accessibilityLabel"
-  | "accessibilityViewIsModal"
-  | "aria-modal"
-  | "importantForAccessibility"
-  | "onAccessibilityEscape"
-  | "role"
-  | "tabIndex"
-> => ({
-  accessibilityLabel: isTopmost ? accessibilityLabel : undefined,
-  accessibilityViewIsModal: isTopmost,
+}) => ({
+  "aria-label": isTopmost ? accessibilityLabel : undefined,
   "aria-modal": isTopmost ? true : undefined,
-  importantForAccessibility: isTopmost ? "auto" : "no-hide-descendants",
-  onAccessibilityEscape: isTopmost ? onSystemDismiss : undefined,
   role: isTopmost ? "dialog" : undefined,
   tabIndex: isTopmost ? -1 : undefined,
 });
+
+/** `aria-hidden` for a stack entry: set on every entry below the top one. */
+export const getStackEntryAriaHidden = (isTopmost: boolean) =>
+  isTopmost ? undefined : true;
 
 export const useWebModalFocus = ({
   childrenIdentity,
@@ -89,7 +76,7 @@ export const useWebModalFocus = ({
   onSystemDismiss,
 }: {
   childrenIdentity: ModalChildren;
-  dialogNode: View | null;
+  dialogNode: HTMLElement | null;
   isTopmost: boolean;
   onSystemDismiss: () => void;
 }) => {
@@ -98,7 +85,7 @@ export const useWebModalFocus = ({
       return;
     }
 
-    const dialog = dialogNode as unknown as HTMLElement | null;
+    const dialog = dialogNode;
     const focusToRestore =
       document.activeElement instanceof HTMLElement
         ? document.activeElement
@@ -147,7 +134,7 @@ export const useWebModalFocus = ({
       return;
     }
 
-    const dialog = dialogNode as unknown as HTMLElement | null;
+    const dialog = dialogNode;
 
     if (!dialog) {
       return;

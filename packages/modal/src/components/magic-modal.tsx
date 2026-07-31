@@ -6,7 +6,8 @@
  * says to switch it off locally when it misbehaves rather than contort the code.
  */
 
-import type { Direction, ModalChildren, ModalProps } from "../constants/types";
+import type { Direction, ModalChildren } from "../constants/types";
+import type { ModalProps } from "../constants/types.react-native";
 import type { SwipeGestureSpec } from "./panGesture";
 
 import React, { memo, useCallback, useMemo } from "react";
@@ -42,10 +43,12 @@ import { TOUCH_SLOP } from "../constants/gestures";
 import { MagicModalHideReason } from "../constants/types";
 import { useInternalMagicModal } from "./magic-modal-provider";
 import { styles } from "./MagicModalPortal/magic-modal-portal.styles";
-import { PanGestureSurface } from "./panGesture";
 import {
   getDialogAccessibilityProps,
   getStackEntryAccessibilityProps,
+} from "./nativeModal/modal-accessibility";
+import { PanGestureSurface } from "./panGesture";
+import {
   MODAL_DIALOG_TEST_ID,
   useWebModalFocus,
 } from "./webModal/modal-accessibility";
@@ -115,7 +118,10 @@ export const MagicModal = memo(
 
     useWebModalFocus({
       childrenIdentity: Children,
-      dialogNode,
+      // react-native-web hands host refs the DOM node itself but types them as
+      // the React Native component. On a real device this is null-checked
+      // `document` away inside the hook and never dereferenced.
+      dialogNode: dialogNode as unknown as HTMLElement | null,
       isTopmost,
       onSystemDismiss,
     });

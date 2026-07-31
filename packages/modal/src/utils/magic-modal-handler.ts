@@ -4,16 +4,17 @@ import type {
   GlobalHideAllFunction,
   GlobalHideFunction,
   GlobalShowFunction,
+  ModalChildren,
+  ModalHandle,
+  ModalProps,
 } from "../constants/types";
 
 import React from "react";
 
 import {
-  // HideReturn and ModalHandle are used in JS Doc
+  // HideReturn is used in JS Doc
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   HideReturn,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ModalHandle,
 } from "../constants/types";
 
 export const magicModalRef = React.createRef<IModal>();
@@ -54,6 +55,26 @@ export type IModal = {
   hideAll: typeof hideAll;
   enableFullWindowOverlay: typeof enableFullWindowOverlay;
   disableFullWindowOverlay: typeof disableFullWindowOverlay;
+};
+
+/**
+ * The `magicModal` object, with `show` typed against one platform's config.
+ *
+ * There is one runtime object and one stack. What differs between the entry
+ * points is the type of the style-typed options `show` accepts:
+ * `StyleProp<ViewStyle>` on React Native, `React.CSSProperties` in the browser.
+ * Each `index.*.ts` re-exports the same object under this type with its own
+ * `ModalProps`, and each ships its own `.d.ts`, so an application only ever
+ * sees the one it resolved.
+ */
+export type MagicModalAPI<TConfig extends ModalProps> = Omit<
+  typeof magicModal,
+  "show"
+> & {
+  show: <T>(
+    newComponent: ModalChildren,
+    newConfig?: Partial<TConfig>,
+  ) => ModalHandle<T>;
 };
 
 /**
