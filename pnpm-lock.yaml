@@ -277,6 +277,12 @@ importers:
       '@types/react-dom':
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.17)
+      magic-oxfmt-config:
+        specifier: ^1.2.0
+        version: 1.2.0(oxfmt@0.60.0)
+      oxfmt:
+        specifier: 0.60.0
+        version: 0.60.0
       typescript:
         specifier: ^5.7.2
         version: 5.9.3

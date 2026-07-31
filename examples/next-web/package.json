@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
     "smoke:browser": "node tools/browser-smoke.mjs",
     "start": "next start",
     "typecheck": "tsc --noEmit"
@@ -18,6 +20,8 @@
     "@types/node": "^26.1.1",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
+    "magic-oxfmt-config": "^1.2.0",
+    "oxfmt": "0.60.0",
     "typescript": "^5.7.2"
   }
 }
