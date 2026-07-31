@@ -9,28 +9,28 @@ Add Magic Modal once:
   <Tab value="pnpm">
 
 ```bash
-pnpm add react-native-magic-modal
+pnpm add magic-modal
 ```
 
   </Tab>
   <Tab value="npm">
 
 ```bash
-npm install react-native-magic-modal
+npm install magic-modal
 ```
 
   </Tab>
   <Tab value="Yarn">
 
 ```bash
-yarn add react-native-magic-modal
+yarn add magic-modal
 ```
 
   </Tab>
   <Tab value="Bun">
 
 ```bash
-bun add react-native-magic-modal
+bun add magic-modal
 ```
 
   </Tab>
@@ -102,7 +102,7 @@ Mount one `MagicModalPortal` after the router and keep it inside `GestureHandler
 ```tsx title="app/_layout.tsx"
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { MagicModalPortal } from "react-native-magic-modal";
+import { MagicModalPortal } from "magic-modal";
 
 export default function RootLayout() {
   return (
@@ -129,7 +129,7 @@ Use React Native primitives in content that runs on every Expo target:
 
 ```tsx title="components/rating-modal.tsx"
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useMagicModal } from "react-native-magic-modal";
+import { useMagicModal } from "magic-modal";
 
 export type RatingResult = {
   rating: number;
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
 Open it from shared application code:
 
 ```tsx
-import { MagicModalHideReason, magicModal } from "react-native-magic-modal";
+import { MagicModalHideReason, magicModal } from "magic-modal";
 
 import { RatingModal, type RatingResult } from "./rating-modal";
 

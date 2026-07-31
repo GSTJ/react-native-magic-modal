@@ -8,7 +8,7 @@ description: Mount one portal near the application root.
 it inside `GestureHandlerRootView`. A web-only Next.js shell mounts the portal directly.
 
 ```tsx title="App.tsx"
-import { MagicModalPortal } from "react-native-magic-modal";
+import { MagicModalPortal } from "magic-modal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
@@ -30,7 +30,7 @@ The root layout is usually the clearest place for both components:
 
 ```tsx title="app/_layout.tsx"
 import { Stack } from "expo-router";
-import { MagicModalPortal } from "react-native-magic-modal";
+import { MagicModalPortal } from "magic-modal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {

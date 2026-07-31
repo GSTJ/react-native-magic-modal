@@ -8,8 +8,8 @@
 <p align="center">Mount one portal. Open a modal from any async flow and await a typed result on Expo, React Native, or the web.</p>
 
 <p align="center">
-  <a aria-label="npm version" href="https://www.npmjs.com/package/react-native-magic-modal"><img alt="npm version" src="https://shieldcn.dev/npm/react-native-magic-modal.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
-  <a aria-label="npm downloads" href="https://www.npmjs.com/package/react-native-magic-modal"><img alt="npm downloads" src="https://shieldcn.dev/npm/react-native-magic-modal/downloads.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
+  <a aria-label="npm version" href="https://www.npmjs.com/package/magic-modal"><img alt="npm version" src="https://shieldcn.dev/npm/magic-modal.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
+  <a aria-label="npm downloads" href="https://www.npmjs.com/package/magic-modal"><img alt="npm downloads" src="https://shieldcn.dev/npm/magic-modal/downloads.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
   <a aria-label="GitHub stars" href="https://github.com/GSTJ/magic-modal/stargazers"><img alt="GitHub stars" src="https://shieldcn.dev/github/GSTJ/magic-modal/stars.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
   <a aria-label="license" href="https://github.com/GSTJ/magic-modal/blob/main/LICENSE"><img alt="license" src="https://shieldcn.dev/github/GSTJ/magic-modal/license.svg?variant=branded&amp;size=xs&amp;mode=light" /></a>
 </p>
@@ -53,7 +53,7 @@ Expo chooses versions compatible with the installed SDK.
 ### Expo Web
 
 ```bash
-pnpm add react-native-magic-modal
+pnpm add magic-modal
 npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-dom react-native-web @expo/metro-runtime
 ```
 
@@ -63,14 +63,14 @@ portal and web command.
 ### Expo iOS
 
 ```bash
-pnpm add react-native-magic-modal
+pnpm add magic-modal
 npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
 ```
 
 ### Expo Android
 
 ```bash
-pnpm add react-native-magic-modal
+pnpm add magic-modal
 npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets react-native-screens
 ```
 
@@ -81,7 +81,7 @@ pods, Android back handling, and iOS overlays.
 ### Next.js
 
 ```bash
-pnpm add react-native-magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
+pnpm add magic-modal react-native react-native-web react-native-gesture-handler react-native-reanimated react-native-worklets
 ```
 
 Copy the validated alias, extension order, and Client Component setup from the
@@ -97,7 +97,7 @@ Expo and native applications mount one portal inside `GestureHandlerRootView`:
 
 ```tsx
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { MagicModalPortal } from "react-native-magic-modal";
+import { MagicModalPortal } from "magic-modal";
 
 export default function App() {
   return (
@@ -118,7 +118,7 @@ Use the same result type in `show<T>()` and `useMagicModal<T>()`:
 
 ```tsx
 import { Pressable, Text, View } from "react-native";
-import { MagicModalHideReason, magicModal, useMagicModal } from "react-native-magic-modal";
+import { MagicModalHideReason, magicModal, useMagicModal } from "magic-modal";
 
 type ConfirmationResult = {
   confirmed: boolean;

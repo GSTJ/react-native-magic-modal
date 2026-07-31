@@ -22,7 +22,7 @@
     <g transform="translate(0 268)">
       <rect width="420" height="58" fill="#191714" stroke="#4d4840"/>
       <text x="20" y="37" fill="#c4af88" font-family="monospace" font-size="17">$</text>
-      <text x="47" y="37" fill="#f2ede3" font-family="monospace" font-size="16">pnpm add react-native-magic-modal</text>
+      <text x="47" y="37" fill="#f2ede3" font-family="monospace" font-size="16">pnpm add magic-modal</text>
     </g>
   </g>
 

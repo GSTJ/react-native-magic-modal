@@ -1,9 +1,9 @@
 export const projectMetadataConfig = {
-  githubApi: "https://api.github.com/repos/GSTJ/react-native-magic-modal",
+  githubApi: "https://api.github.com/repos/GSTJ/magic-modal",
   npmDownloadsApi:
-    "https://api.npmjs.org/downloads/point/last-week/react-native-magic-modal",
-  npmPackage: "react-native-magic-modal",
-  npmRegistryApi: "https://registry.npmjs.org/react-native-magic-modal/latest",
+    "https://api.npmjs.org/downloads/point/last-week/magic-modal",
+  npmPackage: "magic-modal",
+  npmRegistryApi: "https://registry.npmjs.org/magic-modal/latest",
   repository: "https://github.com/GSTJ/magic-modal",
 } as const;
 

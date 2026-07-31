@@ -1,4 +1,4 @@
-import { MagicModalHideReason } from "react-native-magic-modal";
+import { MagicModalHideReason } from "magic-modal";
 
 import { showMagicModal } from "../magic-modal";
 

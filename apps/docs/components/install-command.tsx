@@ -12,26 +12,26 @@ import { Check, Copy } from "lucide-react";
 
 const packageManagers = [
   {
-    args: "add react-native-magic-modal",
-    command: "pnpm add react-native-magic-modal",
+    args: "add magic-modal",
+    command: "pnpm add magic-modal",
     id: "pnpm",
     label: "pnpm",
   },
   {
-    args: "install react-native-magic-modal",
-    command: "npm install react-native-magic-modal",
+    args: "install magic-modal",
+    command: "npm install magic-modal",
     id: "npm",
     label: "npm",
   },
   {
-    args: "add react-native-magic-modal",
-    command: "yarn add react-native-magic-modal",
+    args: "add magic-modal",
+    command: "yarn add magic-modal",
     id: "yarn",
     label: "Yarn",
   },
   {
-    args: "add react-native-magic-modal",
-    command: "bun add react-native-magic-modal",
+    args: "add magic-modal",
+    command: "bun add magic-modal",
     id: "bun",
     label: "Bun",
   },

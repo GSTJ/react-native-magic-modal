@@ -1,6 +1,6 @@
 "use client";
 
-import type { HideReturn } from "react-native-magic-modal";
+import type { HideReturn } from "magic-modal";
 
 import type { MouseEvent, PointerEvent } from "react";
 
@@ -16,7 +16,7 @@ import {
   Star,
   Wifi,
 } from "lucide-react";
-import { MagicModalHideReason } from "react-native-magic-modal";
+import { MagicModalHideReason } from "magic-modal";
 
 type Branch = "feedback" | "store" | null;
 type FlowStep = "rating" | "feedback" | "store" | "thanks" | "done";

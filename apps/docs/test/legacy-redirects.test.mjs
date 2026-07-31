@@ -23,16 +23,11 @@ test("keeps every public TypeDoc route alive", () => {
 });
 
 test("renders a GitHub Pages-aware redirect without losing the hash", () => {
-  const html = renderRedirect(
-    "/docs/reference/modal-props/",
-    "/react-native-magic-modal",
-    { "#swipedirection": "#direction" },
-  );
+  const html = renderRedirect("/docs/reference/modal-props/", "/magic-modal", {
+    "#swipedirection": "#direction",
+  });
 
-  assert.match(
-    html,
-    /react-native-magic-modal\/docs\/reference\/modal-props\//,
-  );
+  assert.match(html, /magic-modal\/docs\/reference\/modal-props\//);
   assert.match(html, /location\.hash/);
   assert.match(html, /location\.search/);
   assert.match(html, /#direction/);

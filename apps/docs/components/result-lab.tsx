@@ -1,12 +1,12 @@
 "use client";
 
-import type { HideReturn } from "react-native-magic-modal";
+import type { HideReturn } from "magic-modal";
 
 import type { AnimationEvent, MouseEvent, PointerEvent } from "react";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { MagicModalHideReason } from "react-native-magic-modal";
+import { MagicModalHideReason } from "magic-modal";
 
 import { SyntaxCode } from "@/components/syntax-code";
 

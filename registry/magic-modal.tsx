@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from "react";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
-import type { NewConfigProps } from "react-native-magic-modal";
+import type { NewConfigProps } from "magic-modal";
 
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { magicModal, useMagicModal } from "react-native-magic-modal";
+import { magicModal, useMagicModal } from "magic-modal";
 
 export type MagicModalDialogAction<T> = {
   label: string;
