@@ -1,5 +1,60 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [11.0.0](https://github.com/GSTJ/magic-modal/compare/magic-modal-10.0.0...magic-modal-11.0.0) (2026-07-31)
+
+### ⚠ BREAKING CHANGES
+
+* **modal:** on `style` typing.
+
+  Measured (esbuild, minified; identical with and without a react-native
+  alias, and the build guard fails if they ever differ):
+
+  | | minified | gzip |
+  |---|---|---|
+  | before | 96.3 KB | 32.2 KB |
+  | after | 13.9 KB | 5.3 KB |
+
+  Of the removed weight, react-native-web's style pipeline (styleq,
+  inline-style-prefixer, normalize-colors, postcss-value-parser) was 59%;
+  its components and event system the other 41%. A real `next build` of
+  examples/next-web drops 23.8 KB gzip of client JS.
+
+  Breaking on the web entry only, and shipping in a minor per this repo's
+  versioning policy (patch never breaks, minor may, major is reserved for
+  era-defining refactors like the v10 rename). The title carries no `!`
+  and there is no `BREAKING-CHANGE` footer anywhere in this description,
+  so the squash commit computes a minor:
+
+  - `ModalProps["style"]` and `NewConfigProps["style"]`:
+  `StyleProp<ViewStyle>` -> `React.CSSProperties`. RN style objects
+  (arrays, registered handles, RN-only keys) are detected at runtime and
+  warn once in dev with a migration table instead of being applied.
+  - `entering`/`exiting` removed from the web type (Reanimated builders,
+  already ignored on web).
+  - `dist/index.d.ts` no longer references react-native or reanimated
+  types; the native entry's types are unchanged.
+  - Two observable DOM changes: the backdrop is now `role="presentation"`,
+  and elements carry stable `magic-modal-*` class names instead of RNW's
+  generated `css-*` ones. CSS targeting RNW internals breaks; targeting
+  the new class names is supportable.
+
+### :hammer: Bug Fixes :hammer:
+
+* **docs:** show the download count people actually recognize ([#342](https://github.com/GSTJ/magic-modal/issues/342)) ([b8f9a3f](https://github.com/GSTJ/magic-modal/commit/b8f9a3f4c6ab54da4f4dfea71c0054b077f2f6c5)), references [#335](https://github.com/GSTJ/magic-modal/issues/335)
+* **release:** drop the em-dashes from the deprecate message ([#340](https://github.com/GSTJ/magic-modal/issues/340)) ([62ce629](https://github.com/GSTJ/magic-modal/commit/62ce629a0f4c1efcb5b7fff437257f1d57228aa3))
+
+### :stars: New Features :stars:
+
+* **modal:** cut the web bundle by 83% (32.2 -> 5.3 KB gzip) going full DOM ([#336](https://github.com/GSTJ/magic-modal/issues/336)) ([89ae965](https://github.com/GSTJ/magic-modal/commit/89ae965cad6ab47632710ccd873474ac9a28681e)), references [#329](https://github.com/GSTJ/magic-modal/issues/329)
+
+### :curly_loop: What a drag! :curly_loop:
+
+* **release:** sync magic modal version with npm 10.0.0 ([#339](https://github.com/GSTJ/magic-modal/issues/339)) ([c1b97e6](https://github.com/GSTJ/magic-modal/commit/c1b97e603b61b9adc1fcc423b714dc7ec671d7df))
+
+### :books: Documentation :books:
+
+* **changelog:** drop the PR body that leaked into the 10.0.0 breaking note ([#341](https://github.com/GSTJ/magic-modal/issues/341)) ([d9ee771](https://github.com/GSTJ/magic-modal/commit/d9ee771486a04ee531e624d859bcd8a66b130a35)), references [#339](https://github.com/GSTJ/magic-modal/issues/339) [#339](https://github.com/GSTJ/magic-modal/issues/339)
+
 ## [10.0.0](https://github.com/GSTJ/magic-modal/compare/magic-modal-9.2.0...magic-modal-10.0.0) (2026-07-31)
 
 ### ⚠ BREAKING CHANGES
