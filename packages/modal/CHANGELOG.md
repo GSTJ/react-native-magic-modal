@@ -1,5 +1,65 @@
 # 🦄 Magic Modal Changelog 🪄
 
+## [10.0.0](https://github.com/GSTJ/magic-modal/compare/magic-modal-9.2.0...magic-modal-10.0.0) (2026-07-31)
+
+### ⚠ BREAKING CHANGES
+
+* **modal:** this package is now `magic-modal` on npm, renamed from
+  `react-native-magic-modal`. The library is universal: since #334 the browser
+  bundle carries no Reanimated, gesture-handler or worklets, and the
+  `react-native` prefix no longer fits what ships. `react-native-magic-modal`
+  keeps shipping at the same version, depending on `magic-modal` and re-exporting
+  it, so an existing install resolves to the same code; npm shows a deprecation
+  notice on it pointing here. Install `magic-modal` and update the import
+  specifier.
+  ```
+
+  This is the v10 gate. Merging it computes a `major` bump (verified
+  through the repo's own `conventional-recommended-bump` preset) and
+  renames the published package, so it merges last, after the in-flight v9
+  work.
+
+  The package renames to `magic-modal`. The old name stays alive as a
+  lockstep alias: `packages/react-native-magic-modal` depends on
+  `magic-modal` at `workspace:*` (pnpm rewrites it to the exact version at
+  pack time) and every entry is `export * from "magic-modal"`, mirroring
+  the export map condition for condition. `import.meta.resolve` probes
+  confirm both the default and `react-native` conditions forward to the
+  same files as importing `magic-modal` directly, and a tsc probe confirms
+  the types forward (a wrong `Direction` value errors instead of
+  collapsing to `any`).
+
+  Release wiring: the root `release` script publishes `magic-modal` via
+  release-it, then runs the alias's `tools/release.mjs`, which syncs the
+  version, publishes with `pnpm publish` (npm would ship the unrewritten
+  `workspace:*`), and runs `npm deprecate` on the old name after every
+  publish. The deprecate is per-publish rather than a one-off because npm
+  resolves the range when the command runs: a single deprecate at v10
+  would leave every later alias version, the one installs actually resolve
+  to, without the notice.
+
+### :hammer: Bug Fixes :hammer:
+
+* **docs:** serve the site from magic-modal.gabrieltaveira.dev ([#337](https://github.com/GSTJ/magic-modal/issues/337)) ([2e9790e](https://github.com/GSTJ/magic-modal/commit/2e9790ee5d9b663c8515b43e42aba91db75d577b)), references [#333](https://github.com/GSTJ/magic-modal/issues/333) [#335](https://github.com/GSTJ/magic-modal/issues/335)
+* **docs:** update links to the renamed magic-modal repo ([#333](https://github.com/GSTJ/magic-modal/issues/333)) ([e4d1665](https://github.com/GSTJ/magic-modal/commit/e4d1665be279fa91c9fe0c49a6360ab1a520bde6))
+* **modal:** mount the iOS overlay only while modals are on screen ([#329](https://github.com/GSTJ/magic-modal/issues/329)) ([8577b56](https://github.com/GSTJ/magic-modal/commit/8577b56b7cddd1178a20440c5e4134705c806c4a)), references [#328](https://github.com/GSTJ/magic-modal/issues/328)
+
+### :stars: New Features :stars:
+
+* **modal:** cut the web bundle by 82% (176.6 -> 32.2 KB gzip) ([#334](https://github.com/GSTJ/magic-modal/issues/334)) ([326b018](https://github.com/GSTJ/magic-modal/commit/326b01857e51ad655d9436892fc83cdaa48b8ea9))
+
+### :dash: Code Improvements :dash:
+
+* **modal:** rename the published package to magic-modal ([#335](https://github.com/GSTJ/magic-modal/issues/335)) ([4141a57](https://github.com/GSTJ/magic-modal/commit/4141a57fc7ca1a89e86eacedd0a7dfcd8b94f58d)), references [#333](https://github.com/GSTJ/magic-modal/issues/333) [#332](https://github.com/GSTJ/magic-modal/issues/332) [#334](https://github.com/GSTJ/magic-modal/issues/334) [#334](https://github.com/GSTJ/magic-modal/issues/334) [#337](https://github.com/GSTJ/magic-modal/issues/337) [#329](https://github.com/GSTJ/magic-modal/issues/329) [#332](https://github.com/GSTJ/magic-modal/issues/332) [#333](https://github.com/GSTJ/magic-modal/issues/333) [#337](https://github.com/GSTJ/magic-modal/issues/337) [#334](https://github.com/GSTJ/magic-modal/issues/334) [#329](https://github.com/GSTJ/magic-modal/issues/329)
+
+### :curly_loop: What a drag! :curly_loop:
+
+* **release:** sync magic modal version with npm 9.2.0 ([#332](https://github.com/GSTJ/magic-modal/issues/332)) ([97178c8](https://github.com/GSTJ/magic-modal/commit/97178c8e009e29b39946d08230ea27ecab23d945))
+
+### :books: Documentation :books:
+
+* README with demo GIF and link updates ([8fffdfd](https://github.com/GSTJ/magic-modal/commit/8fffdfde25769fa5884539c794ecfba957f7da56))
+
 ## [9.2.0](https://github.com/GSTJ/react-native-magic-modal/compare/magic-modal-9.1.0...magic-modal-9.2.0) (2026-07-31)
 
 ### :hammer: Bug Fixes :hammer:
