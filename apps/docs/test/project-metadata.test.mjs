@@ -9,6 +9,7 @@ import {
   mergeProjectMetadataSnapshots,
   parseProjectMetadataCache,
   projectAgeInYears,
+  projectMetadataConfig,
 } from "../lib/project-metadata.ts";
 
 const jsonResponse = (payload, status = 200) =>
@@ -19,14 +20,14 @@ const jsonResponse = (payload, status = 200) =>
 
 test("collects project metadata without rounding or fallback metrics", async () => {
   const fetcher = (url) => {
-    if (url.includes("api.github.com")) {
+    if (url === projectMetadataConfig.githubApi) {
       return jsonResponse({
         created_at: "2022-02-21T10:00:00Z",
         license: { spdx_id: "MIT" },
         stargazers_count: 641,
       });
     }
-    if (url.includes("downloads/point")) {
+    if (url === projectMetadataConfig.npmDownloadsApi) {
       return jsonResponse({ downloads: 3950 });
     }
     return jsonResponse({ version: "9.0.1" });
@@ -96,14 +97,14 @@ test("uses null when every source fails", async () => {
 test("rejects invalid metrics from successful responses", async () => {
   const snapshot = await fetchProjectMetadata({
     fetcher: (url) => {
-      if (url.includes("api.github.com")) {
+      if (url === projectMetadataConfig.githubApi) {
         return jsonResponse({
           created_at: "sometime",
           license: { spdx_id: "NOASSERTION" },
           stargazers_count: -1,
         });
       }
-      if (url.includes("downloads/point")) {
+      if (url === projectMetadataConfig.npmDownloadsApi) {
         return jsonResponse({ downloads: "many" });
       }
       return jsonResponse({ version: "latest" });
