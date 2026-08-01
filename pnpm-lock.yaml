@@ -49,8 +49,8 @@ importers:
         specifier: 19.2.0
         version: 19.2.0(react@19.2.0)
       remotion:
-        specifier: 4.0.500
-        version: 4.0.500(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: 4.0.501
+        version: 4.0.501(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     devDependencies:
       '@types/react':
         specifier: ^19.2.17
@@ -8139,12 +8139,6 @@ packages:
 
   remark@15.0.1:
     resolution: {integrity: sha512-Eht5w30ruCXgFmxVUSlNWQ9iiimq07URKeFS3hNc8cUWy1llX4KDWfyEDZRycMc+znsN9Ux5/tJ/BFdgdOwA3A==}
-
-  remotion@4.0.500:
-    resolution: {integrity: sha512-pMSW1YIkEB8UuM471JGyWklMoH1GBxQKAK36XpDy3z1yixritBLGt/KQsuv4n6k5eXxf37joEvXMbXqz20HZgg==}
-    peerDependencies:
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
 
   remotion@4.0.501:
     resolution: {integrity: sha512-jNv0TvxEsNL4B7aPqy16x+5oBUrJVGL33Lr1xZc4B7HAn5c7AQYMxKVZk15lEilSQBQwap+53fSYbzAIlOwCmg==}
@@ -18130,11 +18124,6 @@ snapshots:
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
-
-  remotion@4.0.500(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
-    dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
 
   remotion@4.0.501(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
