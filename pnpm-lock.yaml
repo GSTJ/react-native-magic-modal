@@ -49,8 +49,8 @@ importers:
         specifier: 19.2.0
         version: 19.2.0(react@19.2.0)
       remotion:
-        specifier: 4.0.501
-        version: 4.0.501(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: 4.0.502
+        version: 4.0.502(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     devDependencies:
       '@types/react':
         specifier: ^19.2.17

@@ -20,7 +20,7 @@
     "@remotion/fonts": "4.0.501",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "remotion": "4.0.501"
+    "remotion": "4.0.502"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",
