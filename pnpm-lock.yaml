@@ -79,9 +79,6 @@ importers:
       '@fontsource/instrument-serif':
         specifier: 5.3.0
         version: 5.3.0
-      '@orama/orama':
-        specifier: ^3.1.18
-        version: 3.1.18
       fumadocs-core:
         specifier: 16.14.0
         version: 16.14.0(@mdx-js/mdx@3.1.1(supports-color@8.1.1))(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/react@19.2.17)(lucide-react@1.28.0(react@19.2.0))(next@16.2.12(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.1.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(supports-color@8.1.1)(zod@4.4.3)
@@ -118,6 +115,9 @@ importers:
       server-only:
         specifier: 0.0.1
         version: 0.0.1
+      zbsearch:
+        specifier: ^3.3.4
+        version: 3.3.4
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.3.3
@@ -2231,10 +2231,6 @@ packages:
 
   '@octokit/types@16.0.0':
     resolution: {integrity: sha512-sKq+9r1Mm4efXW1FCk7hFSeJo4QKreL/tTbR0rz/qx/r1Oa2VV83LTA/H/MuCOX7uCIJmQVRKBcbmWoySjAnSg==}
-
-  '@orama/orama@3.1.18':
-    resolution: {integrity: sha512-a61ljmRVVyG5MC/698C8/FfFDw5a8LOIvyOLW5fztgUXqUpc1jOfQzOitSCbge657OgXXThmY3Tk8fpiDb4UcA==}
-    engines: {node: '>= 20.0.0'}
 
   '@oxfmt/binding-android-arm-eabi@0.60.0':
     resolution: {integrity: sha512-1q4q4Jc8FlOMVojEisyFAVyl8h1yawNv6phjgmhGVEDeyeOdsSnSr9x0+D4mOnEKvpO5L4mxKZ/DP9X6U3A/Mw==}
@@ -11432,8 +11428,6 @@ snapshots:
   '@octokit/types@16.0.0':
     dependencies:
       '@octokit/openapi-types': 27.0.0
-
-  '@orama/orama@3.1.18': {}
 
   '@oxfmt/binding-android-arm-eabi@0.60.0':
     optional: true
