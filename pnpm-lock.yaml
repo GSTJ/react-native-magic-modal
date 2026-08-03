@@ -40,8 +40,8 @@ importers:
         specifier: 4.0.503
         version: 4.0.503(@swc/core@1.15.47(@swc/helpers@0.5.23))(@swc/helpers@0.5.23)(clean-css@5.3.3)(lightningcss@1.32.0)(postcss@8.5.25)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(supports-color@8.1.1)(typescript@5.9.3)(uglify-js@3.19.3)
       '@remotion/fonts':
-        specifier: 4.0.502
-        version: 4.0.502(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: 4.0.503
+        version: 4.0.503(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -3166,8 +3166,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@remotion/fonts@4.0.502':
-    resolution: {integrity: sha512-6f88GaMLTD3sfiaU8roe7FriC5BHlleYOLeMlDMXNxwKGvDmXhspVTbM/Snxqh0tZRWdG0I1RQTXPSkoMl5BTg==}
+  '@remotion/fonts@4.0.503':
+    resolution: {integrity: sha512-UvQquQ84Yp5kipB2QnXdJtuJBdMD9BClHGt2TWd9vWk6uaYm3aXg449gcM3XBpjCewgl4CR1trh9+nWr6RSyHQ==}
 
   '@remotion/licensing@4.0.503':
     resolution: {integrity: sha512-2au285LmzXpZwmUCbrj3k4gkCMk9GKBh4BlskP4nkE1PIvau77Vli3J6imTf5lMX+esHAVEyQw16e5RDwwWsiA==}
@@ -12258,9 +12258,9 @@ snapshots:
   '@remotion/compositor-win32-x64-msvc@4.0.503':
     optional: true
 
-  '@remotion/fonts@4.0.502(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@remotion/fonts@4.0.503(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
-      remotion: 4.0.502(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      remotion: 4.0.503(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     transitivePeerDependencies:
       - react
       - react-dom
