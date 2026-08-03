@@ -72,7 +72,7 @@
     "magic-modal": "workspace:*"
   },
   "devDependencies": {
-    "bunchee": "^6.0.3",
+    "bunchee": "^7.0.0",
     "magic-oxfmt-config": "^1.2.0",
     "magic-oxlint-config": "^2.0.0",
     "magic-tsconfig": "^1.2.0",
