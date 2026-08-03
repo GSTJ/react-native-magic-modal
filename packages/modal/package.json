@@ -77,7 +77,7 @@
     "@testing-library/react-native": "^13.3.0",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.2.18",
-    "bunchee": "^6.0.3",
+    "bunchee": "^7.0.0",
     "conventional-changelog": "^8.1.0",
     "conventional-changelog-conventionalcommits": "^10.2.1",
     "conventional-recommended-bump": "^12.1.0",
