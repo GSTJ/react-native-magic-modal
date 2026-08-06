@@ -5,9 +5,13 @@ on:
       - main
   # Also run on main itself. Publish was the only workflow watching main, so a
   # merge that broke lint or format stayed green until the next PR inherited it.
+  # Renovate uses `prCreation: not-pending`, so its branches need this push run
+  # before the bot can open a PR. Without it, they sit on the dependency
+  # dashboard forever because no status check can start.
   push:
     branches:
       - main
+      - "renovate/**"
 
 # Reads the tree and nothing else. The pnpm and turbo caches go through the
 # Actions cache service on the runtime token. Declared here because a called
