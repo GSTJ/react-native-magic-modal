@@ -25,7 +25,7 @@
     "fumadocs-ui": "npm:@fumadocs/base-ui@16.14.0",
     "gsap": "3.15.0",
     "lucide-react": "^1.25.0",
-    "magic-docs": "1.0.0",
+    "magic-docs": "1.0.5",
     "magic-modal": "workspace:*",
     "next": "16.2.12",
     "react": "19.2.0",
